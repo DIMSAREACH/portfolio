@@ -9,18 +9,20 @@ const navItems = [
   { label: 'Experience', href: '#experience' },
   { label: 'Projects', href: '#projects' },
   { label: 'Education', href: '#education' },
+  { label: 'Volunteer', href: '#volunteer' },
   { label: 'Contact', href: '#contact' },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
       const sections = navItems.map(item => document.querySelector(item.href));
-      const scrollPosition = window.scrollY + 200;
-
+      const scrollPosition = window.scrollY + 120;
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
         if (section && section.offsetTop <= scrollPosition) {
@@ -29,74 +31,92 @@ export default function Navbar() {
         }
       }
     };
-
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full transition-all duration-300 nav-blur">
+    <header className={`sticky top-0 z-50 w-full transition-all duration-300 nav-blur ${scrolled ? 'shadow-sm' : ''}`}>
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo / Brand Name */}
-          <div className="flex-shrink-0">
-            <a href="#home" className="text-xl font-heading font-bold text-gradient tracking-tight">
-              Sareach.Dev
-            </a>
-          </div>
+          {/* Logo */}
+          <a href="#home" className="flex items-center space-x-2 group">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-xs font-bold shadow-md group-hover:shadow-indigo-500/30 transition-shadow duration-300">
+              SD
+            </span>
+            <span className="text-lg font-heading font-bold text-slate-900 dark:text-white tracking-tight">
+              Sareach<span className="text-gradient">.dev</span>
+            </span>
+          </a>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-6">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className={`text-sm font-medium transition-colors duration-200 ${
+                className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                   activeSection === item.href.slice(1)
-                    ? 'text-indigo-600 dark:text-brand-teal'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
+                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/40'
                 }`}
               >
                 {item.label}
+                {activeSection === item.href.slice(1) && (
+                  <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 h-0.5 w-3/4 rounded-full bg-indigo-500" />
+                )}
               </a>
             ))}
-            <span className="h-4 w-px bg-brand-lightBorder dark:bg-brand-darkBorder" />
-            <ThemeToggle />
           </nav>
 
-          {/* Mobile Menu & Theme Toggle */}
-          <div className="flex items-center space-x-3 md:hidden">
+          {/* Right Actions */}
+          <div className="flex items-center gap-2">
             <ThemeToggle />
+            <a
+              href="#contact"
+              className="hidden md:inline-flex items-center px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 rounded-xl shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all duration-200"
+            >
+              Hire Me
+            </a>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-xl border border-brand-lightBorder dark:border-brand-darkBorder bg-white/80 dark:bg-brand-darkSecondary/80 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-              aria-label="Toggle Menu"
+              className="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="Toggle menu"
             >
               {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Drawer Overlay */}
-      {isOpen && (
-        <div className="md:hidden glass-card absolute top-16 left-0 w-full border-t border-brand-lightBorder dark:border-brand-darkBorder py-4 px-6 space-y-3 z-50">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={() => setIsOpen(false)}
-              className={`block py-2 text-base font-medium rounded-xl px-3 transition-colors ${
-                activeSection === item.href.slice(1)
-                  ? 'bg-indigo-50 dark:bg-brand-darkSecondary/80 text-indigo-600 dark:text-brand-teal'
-                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
-              }`}
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
-      )}
+        {/* Mobile Menu */}
+        {isOpen && (
+          <div className="md:hidden border-t border-slate-200/50 dark:border-slate-800/50 py-4 space-y-1">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                className={`block px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  activeSection === item.href.slice(1)
+                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/40'
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
+            <div className="pt-2 px-4">
+              <a
+                href="#contact"
+                onClick={() => setIsOpen(false)}
+                className="block text-center px-4 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-indigo-500 to-violet-600 rounded-xl"
+              >
+                Hire Me
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
     </header>
   );
 }

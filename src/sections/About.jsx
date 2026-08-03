@@ -1,88 +1,135 @@
 import React from 'react';
-import { MapPin, Globe, Award, GraduationCap } from 'lucide-react';
+import { MapPin, Globe, Heart, Briefcase } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+
+const highlights = [
+  {
+    icon: Briefcase,
+    color: 'indigo',
+    title: 'AI Data Specialist',
+    desc: '9 months at Digital Divide Data — 99% annotation accuracy on ML pipelines.',
+  },
+  {
+    icon: Globe,
+    color: 'violet',
+    title: '4th Year CS Student',
+    desc: 'Bachelor of Computer Science at Norton University, Phnom Penh.',
+  },
+  {
+    icon: Heart,
+    color: 'pink',
+    title: 'Volunteer Mentor',
+    desc: 'Mentored youth in coding, digital entrepreneurship, and tech events.',
+  },
+];
+
+const colorMap = {
+  indigo: 'bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 border-indigo-500/15',
+  violet: 'bg-violet-500/10 text-violet-500 dark:text-violet-400 border-violet-500/15',
+  pink: 'bg-pink-500/10 text-pink-500 dark:text-pink-400 border-pink-500/15',
+};
 
 export default function About() {
   return (
-    <section id="about" className="py-24 bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-300">
+    <section id="about" className="py-24 sm:py-32 bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-        {/* Section Title */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-4xl font-heading font-extrabold text-slate-900 dark:text-white tracking-tight">
-            About Me
-          </h2>
-          <div className="mt-3.5 h-1.5 w-16 bg-brand-gradient rounded-full mx-auto" />
-          <p className="mt-4 text-base text-slate-600 dark:text-slate-400">
-            Get to know my professional journey, location, and background.
+
+        {/* Section Header */}
+        <div className="text-center mb-20">
+          <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-3">
+            Get to know me
+          </p>
+          <h2 className="section-heading">About Me</h2>
+          <div className="section-divider" />
+          <p className="section-subtitle">
+            My professional journey, background, and what drives me.
           </p>
         </div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-          {/* Bio column */}
-          <div className="lg:col-span-7 space-y-8">
-            <h3 className="text-2xl font-heading font-bold text-slate-900 dark:text-white tracking-tight">
-              My Passion & Professional Background
-            </h3>
-            <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-              {personalInfo.bio}
-            </p>
-            <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-              Currently in my fourth year of Computer Science study, I've spent substantial time refining my ability to build clean RESTful backends (Django, DRF) combined with responsive, reactive interfaces (React.js, Tailwind CSS). I'm highly interested in AI-powered tools, automation pipelines, and robust database modeling.
-            </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          {/* Bio Column */}
+          <div className="space-y-8">
+            <div className="space-y-5 text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p>{personalInfo.bio}</p>
+              <p>
+                Currently in my fourth year of Computer Science study, I've spent substantial time refining 
+                my ability to build clean RESTful backends with <span className="font-semibold text-indigo-600 dark:text-indigo-400">Django &amp; DRF</span> combined 
+                with responsive interfaces using <span className="font-semibold text-indigo-600 dark:text-indigo-400">React.js &amp; Tailwind CSS</span>. I'm highly interested 
+                in AI-powered tools, automation pipelines, and robust database modeling.
+              </p>
+            </div>
 
-            {/* Quick Details Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-              <div className="flex items-center space-x-4 p-5 rounded-2xl border border-slate-200/50 dark:border-slate-800/80 bg-white/40 dark:bg-[#0f172a]/30 backdrop-blur-md transition-all duration-300 hover:border-indigo-500/20">
-                <MapPin className="h-6 w-6 text-indigo-600 dark:text-brand-teal flex-shrink-0" />
+            {/* Quick Info Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex items-start gap-4 p-4.5 rounded-2xl glass-card">
+                <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex-shrink-0">
+                  <MapPin className="h-5 w-5" />
+                </div>
                 <div>
-                  <span className="block text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Location</span>
-                  <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">{personalInfo.location}</span>
+                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Location</p>
+                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 leading-snug">
+                    Phnom Penh, Cambodia
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-4 p-5 rounded-2xl border border-slate-200/50 dark:border-slate-800/80 bg-white/40 dark:bg-[#0f172a]/30 backdrop-blur-md transition-all duration-300 hover:border-indigo-500/20">
-                <Globe className="h-6 w-6 text-indigo-600 dark:text-brand-teal flex-shrink-0" />
-                <div>
-                  <span className="block text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Languages</span>
-                  <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                    {personalInfo.languages.map(l => `${l.name} (${l.level})`).join(', ')}
-                  </span>
+              <div className="flex items-start gap-4 p-4.5 rounded-2xl glass-card">
+                <div className="p-2.5 rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400 flex-shrink-0">
+                  <Globe className="h-5 w-5" />
                 </div>
+                <div>
+                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Languages</p>
+                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                    {personalInfo.languages.map(l => `${l.name} (${l.level})`).join(' · ')}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Tech Stack Pills */}
+            <div>
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Core Stack</p>
+              <div className="flex flex-wrap gap-2">
+                {['React.js', 'Django', 'DRF', 'PostgreSQL', 'MySQL', 'Tailwind CSS', 'Python', 'JavaScript'].map(tech => (
+                  <span key={tech} className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/50">
+                    {tech}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Side Info Cards: Highlights */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="p-6 rounded-2xl glass-card glass-card-hover relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-bl-full pointer-events-none" />
-              <div className="flex items-start space-x-5">
-                <div className="p-3.5 rounded-xl bg-indigo-500/10 text-indigo-500 dark:text-indigo-400">
-                  <GraduationCap className="h-7 w-7" />
+          {/* Highlights Column */}
+          <div className="space-y-5">
+            {highlights.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <div key={i} className="glass-card glass-card-hover p-6 rounded-2xl relative overflow-hidden group">
+                  {/* Decorative corner */}
+                  <div className={`absolute top-0 right-0 w-20 h-20 rounded-bl-full opacity-40 ${colorMap[item.color].split(' ')[0]}`} />
+                  <div className="flex items-start gap-4 relative z-10">
+                    <div className={`p-3.5 rounded-xl border flex-shrink-0 ${colorMap[item.color]}`}>
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-heading font-bold text-slate-900 dark:text-white tracking-tight mb-1.5">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-heading text-lg font-bold text-slate-800 dark:text-slate-200 tracking-tight">4th Year Student</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
-                    Studying Bachelor of Computer Science at Norton University, Phnom Penh.
-                  </p>
-                </div>
-              </div>
-            </div>
+              );
+            })}
 
-            <div className="p-6 rounded-2xl glass-card glass-card-hover relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-bl-full pointer-events-none" />
-              <div className="flex items-start space-x-5">
-                <div className="p-3.5 rounded-xl bg-purple-500/10 text-purple-500 dark:text-purple-400">
-                  <Award className="h-7 w-7" />
-                </div>
-                <div>
-                  <h4 className="font-heading text-lg font-bold text-slate-800 dark:text-slate-200 tracking-tight">AI Annotation background</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
-                    Professional experience working with machine learning OCR validation pipelines.
-                  </p>
-                </div>
-              </div>
+            {/* Open-to-Work Banner */}
+            <div className="p-6 rounded-2xl bg-gradient-to-r from-indigo-500 via-violet-600 to-indigo-700 text-white relative overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.1),transparent)] pointer-events-none" />
+              <p className="text-xs font-bold uppercase tracking-widest text-indigo-200 mb-2">Currently</p>
+              <p className="text-lg font-heading font-bold leading-snug">Open to full-time roles &amp; internship opportunities</p>
+              <p className="text-sm text-indigo-200 mt-2">Available in Phnom Penh · Remote-friendly</p>
             </div>
           </div>
         </div>

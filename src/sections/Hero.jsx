@@ -1,102 +1,171 @@
 import React, { useState } from 'react';
-import { ArrowUpRight, Download, Mail } from 'lucide-react';
+import { ArrowUpRight, Download, Mail, Github, Linkedin, ChevronDown } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
 export default function Hero() {
   const [imageError, setImageError] = useState(false);
 
-  return (
-    <section id="home" className="relative w-full py-24 md:py-36 flex items-center justify-center overflow-hidden grid-blueprint">
-      {/* Decorative floating gradient glow elements in background */}
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-indigo-500/15 dark:bg-indigo-500/10 blur-[90px] pointer-events-none animate-float-slow" />
-      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-96 h-96 rounded-full bg-purple-500/15 dark:bg-violet-500/10 blur-[100px] pointer-events-none animate-float-delayed" />
+  const stats = [
+    { value: '3+', label: 'Years Coding' },
+    { value: '5+', label: 'Projects Built' },
+    { value: '99%', label: 'Data Accuracy' },
+  ];
 
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12 w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          {/* Left Column: Heading and Tagline */}
-          <div className="lg:col-span-7 text-center lg:text-left space-y-8 animate-slide-up">
-            <div className="inline-flex items-center space-x-2 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800/40 rounded-full py-1.5 px-4">
-              <span className="h-2 w-2 rounded-full bg-indigo-600 dark:bg-brand-teal animate-pulse" />
-              <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300 tracking-wide uppercase">
-                Available for Full-Time Roles & Internships
+  return (
+    <section
+      id="home"
+      className="relative w-full min-h-[calc(100vh-64px)] flex items-center overflow-hidden bg-white dark:bg-[#090d16] dot-grid"
+    >
+      {/* Ambient gradient blobs */}
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full bg-indigo-500/8 dark:bg-indigo-500/5 blur-[120px] pointer-events-none animate-float" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full bg-violet-500/8 dark:bg-violet-500/5 blur-[100px] pointer-events-none animate-float-slow" />
+      <div className="absolute top-1/3 right-10 w-72 h-72 rounded-full bg-pink-500/6 dark:bg-pink-500/4 blur-[80px] pointer-events-none animate-float-alt" />
+
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12 w-full relative z-10 py-20 md:py-28">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+          {/* Left Column */}
+          <div className="space-y-8 text-center lg:text-left">
+            {/* Status badge */}
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50 dark:bg-emerald-950/30">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 tracking-wide uppercase">
+                Available for Full-Time &amp; Internship Roles
               </span>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-heading font-extrabold tracking-tight leading-[1.05] text-slate-900 dark:text-white">
-              Hi, I'm <span className="text-gradient">{personalInfo.name}</span>
-            </h1>
+            {/* Heading */}
+            <div className="space-y-3">
+              <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">
+                Hello, I'm
+              </p>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-heading font-black tracking-tight text-slate-900 dark:text-white leading-[1.05]">
+                <span className="text-gradient">{personalInfo.name}</span>
+              </h1>
+              <p className="text-xl sm:text-2xl font-heading font-semibold text-slate-700 dark:text-slate-200">
+                Full-Stack Developer &amp; AI Enthusiast
+              </p>
+            </div>
 
-            <p className="text-xl sm:text-2xl font-semibold text-slate-800 dark:text-slate-200 font-heading">
-              {personalInfo.title}
-            </p>
-
-            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+            {/* Bio */}
+            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl mx-auto lg:mx-0">
               {personalInfo.tagline}
             </p>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <a
                 href="#projects"
-                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 rounded-xl transition-all duration-300 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:-translate-y-0.5 group"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-white rounded-xl bg-gradient-to-r from-indigo-500 via-violet-600 to-indigo-600 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all duration-200 group"
               >
-                View Projects
-                <ArrowUpRight className="ml-2 h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                View My Work
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
-
               <a
                 href="/sareach-dim-cv.pdf"
                 download
-                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-brand-darkSecondary/30 hover:bg-slate-50 dark:hover:bg-[#0f172a]/60 rounded-xl transition-all duration-300 hover:-translate-y-0.5"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:-translate-y-0.5 transition-all duration-200 group"
               >
+                <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
                 Download CV
-                <Download className="ml-2 h-4 w-4" />
               </a>
+            </div>
 
+            {/* Social Links */}
+            <div className="flex items-center gap-4 justify-center lg:justify-start">
               <a
-                href="#contact"
-                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-sm font-bold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-brand-teal transition-all duration-300"
+                href={personalInfo.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
               >
-                Contact Me
+                <Github className="h-4.5 w-4.5" />
+                GitHub
               </a>
+              <span className="h-4 w-px bg-slate-300 dark:bg-slate-700" />
+              <a
+                href={personalInfo.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              >
+                <Linkedin className="h-4.5 w-4.5" />
+                LinkedIn
+              </a>
+              <span className="h-4 w-px bg-slate-300 dark:bg-slate-700" />
+              <a
+                href={`mailto:${personalInfo.email}`}
+                className="flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              >
+                <Mail className="h-4.5 w-4.5" />
+                Email Me
+              </a>
+            </div>
+
+            {/* Stats Row */}
+            <div className="flex items-center gap-8 justify-center lg:justify-start pt-2">
+              {stats.map((stat, i) => (
+                <div key={i} className="text-center lg:text-left">
+                  <div className="text-2xl font-heading font-black text-gradient">{stat.value}</div>
+                  <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Right Column: Visual Avatar / Profile Photo */}
-          <div className="lg:col-span-5 flex justify-center animate-fade-in">
+          {/* Right Column — Profile Photo */}
+          <div className="flex justify-center items-center">
             <div className="relative">
-              {/* Outer soft glowing shadow */}
-              <div className="absolute -inset-4 rounded-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 blur-xl opacity-40 dark:opacity-30 animate-pulse" />
-              
-              {/* Sharp Gradient Border Wrapper */}
-              <div className="relative p-1.5 rounded-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 shadow-2xl">
-                {/* Profile Image Circle */}
-                <div className="h-72 w-72 sm:h-96 sm:w-96 rounded-full overflow-hidden border-4 border-white dark:border-[#090d16] flex items-center justify-center bg-slate-100 dark:bg-[#0f172a]">
+              {/* Outer glow ring */}
+              <div className="absolute -inset-6 rounded-full bg-gradient-to-tr from-indigo-500 via-violet-500 to-pink-500 blur-2xl opacity-25 dark:opacity-20 animate-pulse" />
+
+              {/* Decorative orbit ring */}
+              <div className="absolute -inset-3 rounded-full border-2 border-dashed border-indigo-300/30 dark:border-indigo-500/20 animate-spin-slow" />
+
+              {/* Gradient border wrapper */}
+              <div className="relative p-[3px] rounded-full bg-gradient-to-tr from-indigo-500 via-violet-500 to-pink-500 shadow-2xl shadow-indigo-500/30">
+                <div className="h-72 w-72 sm:h-80 sm:w-80 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-900 border-4 border-white dark:border-[#090d16]">
                   {imageError ? (
-                    /* Fallback avatar visual using modern CSS vectors */
-                    <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-950 flex flex-col items-center justify-center p-6 text-center select-none">
-                      <div className="h-24 w-24 rounded-full bg-indigo-500/10 border border-indigo-400/20 flex items-center justify-center mb-4">
-                        <span className="text-4xl font-heading font-bold text-indigo-300">SD</span>
+                    <div className="w-full h-full bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-900 flex flex-col items-center justify-center select-none">
+                      <div className="h-20 w-20 rounded-full bg-indigo-500/10 border border-indigo-400/20 flex items-center justify-center mb-4">
+                        <span className="text-4xl font-heading font-black text-indigo-300">SD</span>
                       </div>
-                      <span className="text-lg font-heading font-semibold text-slate-200">Sareach Dim</span>
+                      <span className="text-base font-heading font-semibold text-slate-300">Sareach Dim</span>
                       <span className="text-xs text-indigo-400 mt-1">Full-Stack Developer</span>
-                      
-                      {/* Grid background effect */}
-                      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
                     </div>
                   ) : (
-                    /* Real image if loaded successfully */
                     <img
                       src="/assets/profile.jpg"
-                      alt="Sareach Dim"
-                      className="h-full w-full object-cover rounded-full"
+                      alt="Sareach Dim — Full-Stack Developer"
+                      className="w-full h-full object-cover"
                       onError={() => setImageError(true)}
                     />
                   )}
                 </div>
               </div>
+
+              {/* Floating skill badges */}
+              <div className="absolute -top-2 -right-4 sm:-right-8 glass px-3 py-2 rounded-xl shadow-lg border-0 text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-white/90 dark:bg-slate-900/90 animate-float">
+                React.js ⚛️
+              </div>
+              <div className="absolute -bottom-2 -left-4 sm:-left-10 glass px-3 py-2 rounded-xl shadow-lg border-0 text-xs font-bold text-violet-700 dark:text-violet-300 bg-white/90 dark:bg-slate-900/90 animate-float-alt">
+                Django 🐍
+              </div>
+              <div className="absolute top-1/2 -right-8 sm:-right-14 glass px-3 py-2 rounded-xl shadow-lg border-0 text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-white/90 dark:bg-slate-900/90 animate-float-slow">
+                PostgreSQL 🗄️
+              </div>
             </div>
           </div>
+
+        </div>
+
+        {/* Scroll hint */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-slate-400 dark:text-slate-600 hidden sm:flex">
+          <span className="text-[10px] font-semibold uppercase tracking-widest">Scroll</span>
+          <ChevronDown className="h-4 w-4 animate-bounce" />
         </div>
       </div>
     </section>

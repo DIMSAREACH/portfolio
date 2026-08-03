@@ -1,156 +1,157 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, Github, Linkedin } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
-export default function Contact() {
-  const [formState, setFormState] = useState({
-    name: '',
-    email: '',
-    message: '',
-    botcheck: '' // Honeypot field
-  });
+const contactMethods = [
+  {
+    icon: Mail,
+    label: 'Email',
+    value: 'dimsareach009@gmail.com',
+    href: 'mailto:dimsareach009@gmail.com',
+    color: 'indigo',
+  },
+  {
+    icon: Phone,
+    label: 'Phone',
+    value: '071 28 32 071',
+    href: 'tel:+85571283071',
+    color: 'violet',
+  },
+  {
+    icon: MapPin,
+    label: 'Location',
+    value: 'Phnom Penh, Cambodia',
+    href: 'https://www.google.com/maps/search/?api=1&query=Street+103+Phnom+Penh+Cambodia',
+    color: 'pink',
+  },
+];
 
-  const [status, setStatus] = useState('IDLE'); // IDLE, SUBMITTING, SUCCESS, ERROR
+const colorMap = {
+  indigo: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+  violet: 'bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20',
+  pink: 'bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/20',
+};
+
+export default function Contact() {
+  const [formState, setFormState] = useState({ name: '', email: '', message: '', botcheck: '' });
+  const [status, setStatus] = useState('IDLE');
   const [errors, setErrors] = useState({});
 
   const validate = () => {
-    let tempErrors = {};
-    if (!formState.name.trim()) tempErrors.name = 'Name is required';
+    const temp = {};
+    if (!formState.name.trim()) temp.name = 'Full name is required';
     if (!formState.email.trim()) {
-      tempErrors.email = 'Email is required';
+      temp.email = 'Email address is required';
     } else if (!/\S+@\S+\.\S+/.test(formState.email)) {
-      tempErrors.email = 'Email address is invalid';
+      temp.email = 'Enter a valid email address';
     }
-    if (!formState.message.trim()) tempErrors.message = 'Message is required';
-    setErrors(tempErrors);
-    return Object.keys(tempErrors).length === 0;
+    if (!formState.message.trim()) temp.message = 'Message is required';
+    setErrors(temp);
+    return Object.keys(temp).length === 0;
   };
 
-  const handleInputChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormState(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Trigger validation
     if (!validate()) return;
-
-    // Check honeypot
-    if (formState.botcheck) {
-      console.warn('Bot detected via honeypot');
-      setStatus('SUCCESS'); // Act successful to mislead bot
-      return;
-    }
-
+    if (formState.botcheck) { setStatus('SUCCESS'); return; }
     setStatus('SUBMITTING');
-
     try {
-      const endpoint = "https://formspree.io/f/xbdnnbje";
-
-      const response = await fetch(endpoint, {
+      const res = await fetch('https://formspree.io/f/xbdnnbje', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          name: formState.name,
-          email: formState.email,
-          message: formState.message
-        })
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ name: formState.name, email: formState.email, message: formState.message }),
       });
-
-      if (response.ok) {
+      if (res.ok) {
         setStatus('SUCCESS');
         setFormState({ name: '', email: '', message: '', botcheck: '' });
       } else {
-        setTimeout(() => {
-          setStatus('SUCCESS');
-          setFormState({ name: '', email: '', message: '', botcheck: '' });
-        }, 1000);
+        setStatus('ERROR');
       }
-    } catch (err) {
+    } catch {
       setStatus('ERROR');
     }
   };
 
   return (
-    <section id="contact" className="py-24 bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-300">
+    <section id="contact" className="py-24 sm:py-32 bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-        {/* Section Title */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-4xl font-heading font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Contact Me
-          </h2>
-          <div className="mt-3.5 h-1.5 w-16 bg-brand-gradient rounded-full mx-auto" />
-          <p className="mt-4 text-base text-slate-600 dark:text-slate-400">
-            Let's discuss full-stack opportunities, class management support, or collaboration ideas.
+
+        {/* Section Header */}
+        <div className="text-center mb-20">
+          <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-3">
+            Let's talk
+          </p>
+          <h2 className="section-heading">Contact Me</h2>
+          <div className="section-divider" />
+          <p className="section-subtitle">
+            Have an opportunity, project idea, or question? I'd love to hear from you.
           </p>
         </div>
 
-        {/* Form & Info Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-          {/* Left Column: Contact details */}
-          <div className="lg:col-span-5 space-y-8 animate-slide-up">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
+          {/* Left: Contact info + map */}
+          <div className="lg:col-span-2 space-y-6">
             <div className="space-y-4">
-              <h3 className="text-2xl font-heading font-bold text-slate-900 dark:text-white tracking-tight">
-                Get in Touch
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Have an opening, a question, or a project concept? Reach out using the form or direct coordinates below. I respond to inquiries within 24 hours.
-              </p>
+              {contactMethods.map((method) => {
+                const Icon = method.icon;
+                const style = colorMap[method.color];
+                return (
+                  <a
+                    key={method.label}
+                    href={method.href}
+                    target={method.icon === MapPin ? '_blank' : undefined}
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-4 p-5 rounded-2xl glass-card glass-card-hover group"
+                  >
+                    <div className={`p-3 rounded-xl border flex-shrink-0 ${style}`}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">{method.label}</p>
+                      <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors truncate">
+                        {method.value}
+                      </p>
+                    </div>
+                  </a>
+                );
+              })}
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4 p-4.5 rounded-2xl border border-slate-200/50 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/30 backdrop-blur-md transition hover:border-indigo-500/20">
-                <div className="p-3.5 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-brand-teal flex-shrink-0">
-                  <Mail className="h-5 w-5" />
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Email</span>
-                  <a
-                    href={`mailto:${personalInfo.email}`}
-                    className="text-sm font-semibold text-slate-850 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-brand-teal transition"
-                  >
-                    {personalInfo.email}
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-4 p-4.5 rounded-2xl border border-slate-200/50 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/30 backdrop-blur-md transition hover:border-indigo-500/20">
-                <div className="p-3.5 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-brand-teal flex-shrink-0">
-                  <Phone className="h-5 w-5" />
-                </div>
-                <div>
-                  <span className="block text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Phone</span>
-                  <a
-                    href={`tel:${personalInfo.phone.replace(/\s+/g, '')}`}
-                    className="text-sm font-semibold text-slate-855 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-brand-teal transition"
-                  >
-                    {personalInfo.phone}
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-4 p-4.5 rounded-2xl border border-slate-200/50 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/30 backdrop-blur-md transition hover:border-indigo-500/20">
-                <div className="p-3.5 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-brand-teal flex-shrink-0">
-                  <MapPin className="h-5 w-5" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <span className="block text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Location</span>
-                  <span className="text-xs font-semibold text-slate-850 dark:text-slate-200 block break-words">
-                    {personalInfo.location}
-                  </span>
-                </div>
+            {/* Social Links */}
+            <div className="glass-card p-5 rounded-2xl">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-4">Connect with me</p>
+              <div className="flex gap-3">
+                <a
+                  href={personalInfo.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 flex-1 justify-center p-3 rounded-xl bg-slate-100 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 hover:text-indigo-600 dark:hover:text-indigo-400 text-xs font-bold transition-all"
+                >
+                  <Github className="h-4 w-4" />
+                  GitHub
+                </a>
+                <a
+                  href={personalInfo.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 flex-1 justify-center p-3 rounded-xl bg-slate-100 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 hover:text-indigo-600 dark:hover:text-indigo-400 text-xs font-bold transition-all"
+                >
+                  <Linkedin className="h-4 w-4" />
+                  LinkedIn
+                </a>
               </div>
             </div>
 
-            {/* Embedded Google Map */}
-            <div className="w-full h-56 rounded-2xl overflow-hidden border border-slate-200/50 dark:border-slate-800/80 shadow-md">
+            {/* Map */}
+            <div className="rounded-2xl overflow-hidden border border-slate-200/50 dark:border-slate-800/50 shadow-sm h-48">
               <iframe
-                title="Sareach Dim Location Map"
+                title="Sareach Dim — Phnom Penh, Cambodia"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.2891391942475!2d104.902325!3d11.599182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310951664188f8df%3A0xe54c1f9643441a1!2sStreet%20103%2C%20Phnom%20Penh!5e0!3m2!1sen!2skh!4v1700000000000!5m2!1sen!2skh"
                 width="100%"
                 height="100%"
@@ -158,155 +159,144 @@ export default function Contact() {
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
+              />
             </div>
           </div>
 
-          {/* Right Column: Contact form */}
-          <div className="lg:col-span-7">
-            <div className="p-8 rounded-2xl glass-card">
+          {/* Right: Form */}
+          <div className="lg:col-span-3">
+            <div className="glass-card p-8 rounded-2xl">
               {status === 'SUCCESS' ? (
-                <div className="text-center py-12 space-y-4 animate-fade-in">
-                  <CheckCircle2 className="h-16 w-16 text-emerald-500 mx-auto" />
-                  <h4 className="text-xl font-heading font-bold text-slate-900 dark:text-white tracking-tight">
-                    Message Sent Successfully!
-                  </h4>
-                  <p className="text-sm text-slate-650 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
-                    Thank you for reaching out. I've received your request and will get back to you as soon as possible.
+                <div className="text-center py-16 space-y-4">
+                  <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle2 className="h-10 w-10 text-emerald-500" />
+                  </div>
+                  <h3 className="text-xl font-heading font-bold text-slate-900 dark:text-white tracking-tight">
+                    Message Sent! 🎉
+                  </h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
+                    Thank you for reaching out. I've received your message and will respond within 24 hours.
                   </p>
                   <button
                     onClick={() => setStatus('IDLE')}
-                    className="mt-6 inline-flex items-center justify-center px-6 py-3.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all duration-300 hover:shadow-lg shadow-indigo-500/20"
+                    className="mt-4 inline-flex items-center gap-2 px-6 py-3 text-sm font-bold text-white bg-gradient-to-r from-indigo-500 to-violet-600 rounded-xl shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/30 hover:-translate-y-0.5 transition-all duration-200"
                   >
                     Send another message
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Honeypot field (hidden from users) */}
+                <form onSubmit={handleSubmit} noValidate>
+                  {/* Honeypot */}
                   <div className="hidden" aria-hidden="true">
-                    <label htmlFor="botcheck">Do not fill this out if you are human:</label>
-                    <input
-                      type="text"
-                      name="botcheck"
-                      id="botcheck"
-                      value={formState.botcheck}
-                      onChange={handleInputChange}
-                      tabIndex="-1"
-                      autoComplete="off"
-                    />
+                    <input type="text" name="botcheck" value={formState.botcheck} onChange={handleChange} tabIndex="-1" autoComplete="off" />
                   </div>
 
-                  {/* Name field */}
-                  <div>
-                    <label htmlFor="name" className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      id="name"
-                      value={formState.name}
-                      onChange={handleInputChange}
-                      className={`w-full px-4.5 py-3.5 text-sm rounded-xl border bg-white/70 dark:bg-slate-900/40 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none transition-all duration-200 ${
-                        errors.name
-                          ? 'border-red-500 ring-4 ring-red-500/10'
-                          : 'border-slate-200/60 dark:border-slate-800/80 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10 dark:focus:ring-indigo-400/10'
-                      }`}
-                      placeholder="e.g. Sareach Dim"
-                    />
-                    {errors.name && (
-                      <p className="mt-2 text-xs text-red-500 flex items-center">
-                        <AlertCircle className="h-4 w-4 mr-1.5 flex-shrink-0" />
-                        {errors.name}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Email field */}
-                  <div>
-                    <label htmlFor="email" className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      value={formState.email}
-                      onChange={handleInputChange}
-                      className={`w-full px-4.5 py-3.5 text-sm rounded-xl border bg-white/70 dark:bg-slate-900/40 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none transition-all duration-200 ${
-                        errors.email
-                          ? 'border-red-500 ring-4 ring-red-500/10'
-                          : 'border-slate-200/60 dark:border-slate-800/80 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10 dark:focus:ring-indigo-400/10'
-                      }`}
-                      placeholder="e.g. dimsareach009@gmail.com"
-                    />
-                    {errors.email && (
-                      <p className="mt-2 text-xs text-red-500 flex items-center">
-                        <AlertCircle className="h-4 w-4 mr-1.5 flex-shrink-0" />
-                        {errors.email}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Message field */}
-                  <div>
-                    <label htmlFor="message" className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">
-                      Your Message
-                    </label>
-                    <textarea
-                      name="message"
-                      id="message"
-                      rows="5"
-                      value={formState.message}
-                      onChange={handleInputChange}
-                      className={`w-full px-4.5 py-3.5 text-sm rounded-xl border bg-white/70 dark:bg-slate-900/40 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none transition-all duration-200 resize-none ${
-                        errors.message
-                          ? 'border-red-500 ring-4 ring-red-500/10'
-                          : 'border-slate-200/60 dark:border-slate-800/80 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10 dark:focus:ring-indigo-400/10'
-                      }`}
-                      placeholder="What would you like to discuss?"
-                    />
-                    {errors.message && (
-                      <p className="mt-2 text-xs text-red-500 flex items-center">
-                        <AlertCircle className="h-4 w-4 mr-1.5 flex-shrink-0" />
-                        {errors.message}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Error Notification */}
-                  {status === 'ERROR' && (
-                    <div className="p-4 rounded-xl border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-950/10 text-xs text-red-600 dark:text-red-400 flex items-start">
-                      <AlertCircle className="h-4.5 w-4.5 mr-2.5 flex-shrink-0 mt-0.5" />
+                  <div className="space-y-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      {/* Name */}
                       <div>
-                        <span className="font-semibold block">Failed to send message</span>
-                        Please check your network connection and try again.
+                        <label htmlFor="name" className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">
+                          Full Name *
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={formState.name}
+                          onChange={handleChange}
+                          placeholder="Sareach Dim"
+                          className={`form-input ${errors.name ? 'error' : ''}`}
+                        />
+                        {errors.name && (
+                          <p className="mt-1.5 flex items-center gap-1.5 text-xs font-semibold text-red-500">
+                            <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
+                            {errors.name}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Email */}
+                      <div>
+                        <label htmlFor="email" className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">
+                          Email Address *
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formState.email}
+                          onChange={handleChange}
+                          placeholder="you@example.com"
+                          className={`form-input ${errors.email ? 'error' : ''}`}
+                        />
+                        {errors.email && (
+                          <p className="mt-1.5 flex items-center gap-1.5 text-xs font-semibold text-red-500">
+                            <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
+                            {errors.email}
+                          </p>
+                        )}
                       </div>
                     </div>
-                  )}
 
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={status === 'SUBMITTING'}
-                    className="w-full inline-flex items-center justify-center px-6 py-4 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 rounded-xl transition duration-300 shadow-md shadow-indigo-500/15 hover:shadow-lg hover:shadow-indigo-500/25 group hover:-translate-y-0.5"
-                  >
-                    {status === 'SUBMITTING' ? (
-                      <span className="flex items-center">
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Sending...
-                      </span>
-                    ) : (
-                      <>
-                        Send Message
-                        <Send className="ml-2 h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      </>
+                    {/* Message */}
+                    <div>
+                      <label htmlFor="message" className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">
+                        Your Message *
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        rows={6}
+                        value={formState.message}
+                        onChange={handleChange}
+                        placeholder="Hi Sareach, I'd love to discuss a full-stack opportunity..."
+                        className={`form-input resize-none ${errors.message ? 'error' : ''}`}
+                      />
+                      {errors.message && (
+                        <p className="mt-1.5 flex items-center gap-1.5 text-xs font-semibold text-red-500">
+                          <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
+                          {errors.message}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Error */}
+                    {status === 'ERROR' && (
+                      <div className="flex items-start gap-3 p-4 rounded-xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 text-xs text-red-600 dark:text-red-400">
+                        <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <span className="font-bold block">Failed to send message</span>
+                          Please check your connection and try again.
+                        </div>
+                      </div>
                     )}
-                  </button>
+
+                    {/* Submit */}
+                    <button
+                      type="submit"
+                      disabled={status === 'SUBMITTING'}
+                      className="w-full flex items-center justify-center gap-2.5 px-8 py-4 text-sm font-bold text-white bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 disabled:opacity-70 rounded-xl shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/30 hover:-translate-y-0.5 transition-all duration-200 group"
+                    >
+                      {status === 'SUBMITTING' ? (
+                        <>
+                          <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          </svg>
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          Send Message
+                          <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        </>
+                      )}
+                    </button>
+
+                    <p className="text-[11px] text-center text-slate-400 dark:text-slate-500">
+                      Your message is sent securely via Formspree. No data is stored by me.
+                    </p>
+                  </div>
                 </form>
               )}
             </div>
