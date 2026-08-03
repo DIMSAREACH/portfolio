@@ -49,7 +49,7 @@ export default function Contact() {
     try {
       // Formspree submission (or EmailJS/Custom Endpoint fallback)
       // If the user replaces with their own formspree endpoint like: "https://formspree.io/f/YOUR_ENDPOINT_ID"
-      const endpoint = "https://formspree.io/f/moqypnqk"; // Placeholder/mock endpoint
+      const endpoint = "https://formspree.io/f/xbdnnbje";
 
       const response = await fetch(endpoint, {
         method: 'POST',
