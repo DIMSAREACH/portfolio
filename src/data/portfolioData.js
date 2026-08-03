@@ -11,7 +11,7 @@ export const personalInfo = {
   email: "dimsareach009@gmail.com",
   phone: "071 28 32 071",
   github: "https://github.com/sareachdim",
-  linkedin: "https://linkedin.com/in/sareach-dim",
+  linkedin: "https://www.linkedin.com/in/dim-sareach-3aa6892b6",
 };
 
 export const skillsData = {
