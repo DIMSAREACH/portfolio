@@ -15,27 +15,56 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-brand-gradient-light dark:bg-brand-gradient;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400;
+  }
+
+  .text-gradient-teal {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-emerald-400;
   }
 
   .glass-card {
-    @apply bg-brand-lightSecondary/75 dark:bg-brand-darkSecondary/60 backdrop-blur-md border border-brand-lightBorder dark:border-brand-darkBorder shadow-sm;
+    @apply bg-white/70 dark:bg-[#0f172a]/60 backdrop-blur-lg border border-slate-200/50 dark:border-slate-800/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] transition-all duration-300;
+  }
+
+  .glass-card-hover {
+    @apply hover:border-indigo-500/40 dark:hover:border-indigo-400/40 hover:shadow-[0_20px_50px_rgba(99,102,241,0.06)] dark:hover:shadow-[0_20px_50px_rgba(99,102,241,0.15)] hover:-translate-y-1;
   }
 
   .nav-blur {
-    @apply bg-brand-lightBg/80 dark:bg-brand-darkBg/80 backdrop-blur-md border-b border-brand-lightBorder dark:border-brand-darkBorder;
+    @apply bg-white/70 dark:bg-[#090d16]/70 backdrop-blur-md border-b border-slate-200/30 dark:border-slate-900/30;
   }
+}
+
+/* Float Keyframes for background gradient blobs */
+@keyframes float {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+}
+
+.animate-float-slow {
+  animation: float 10s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 12s ease-in-out infinite 2s;
 }
 
 /* Page scroll bar styling */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-brand-lightBg dark:bg-brand-darkBg;
+  @apply bg-brand-lightBg dark:bg-[#090d16];
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 dark:bg-slate-800 rounded-full hover:bg-slate-400 dark:hover:bg-slate-700;
+  @apply bg-slate-200 dark:bg-slate-800 rounded-full border-2 border-transparent bg-clip-content hover:bg-slate-300 dark:hover:bg-slate-700;
 }
