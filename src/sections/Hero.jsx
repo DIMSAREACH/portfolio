@@ -65,33 +65,35 @@ export default function Hero() {
           {/* Right Column: Visual Avatar / Profile Photo */}
           <div className="lg:col-span-5 flex justify-center animate-fade-in">
             <div className="relative">
-              {/* Outer decorative rings */}
-              <div className="absolute -inset-4 rounded-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 blur-lg opacity-30 dark:opacity-20 animate-pulse" />
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 opacity-20" />
+              {/* Outer soft glowing shadow */}
+              <div className="absolute -inset-4 rounded-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 blur-xl opacity-40 dark:opacity-30 animate-pulse" />
               
-              {/* Profile Image Wrap */}
-              <div className="relative h-72 w-72 sm:h-96 sm:w-96 rounded-full border-4 border-white dark:border-slate-900 overflow-hidden shadow-2xl flex items-center justify-center bg-slate-100 dark:bg-[#0f172a]">
-                {imageError ? (
-                  /* Fallback avatar visual using modern CSS vectors */
-                  <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-950 flex flex-col items-center justify-center p-6 text-center select-none">
-                    <div className="h-24 w-24 rounded-full bg-indigo-500/10 border border-indigo-400/20 flex items-center justify-center mb-4">
-                      <span className="text-4xl font-heading font-bold text-indigo-300">SD</span>
+              {/* Sharp Gradient Border Wrapper */}
+              <div className="relative p-1.5 rounded-full bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 shadow-2xl">
+                {/* Profile Image Circle */}
+                <div className="h-72 w-72 sm:h-96 sm:w-96 rounded-full overflow-hidden border-4 border-white dark:border-[#090d16] flex items-center justify-center bg-slate-100 dark:bg-[#0f172a]">
+                  {imageError ? (
+                    /* Fallback avatar visual using modern CSS vectors */
+                    <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-950 flex flex-col items-center justify-center p-6 text-center select-none">
+                      <div className="h-24 w-24 rounded-full bg-indigo-500/10 border border-indigo-400/20 flex items-center justify-center mb-4">
+                        <span className="text-4xl font-heading font-bold text-indigo-300">SD</span>
+                      </div>
+                      <span className="text-lg font-heading font-semibold text-slate-200">Sareach Dim</span>
+                      <span className="text-xs text-indigo-400 mt-1">Full-Stack Developer</span>
+                      
+                      {/* Grid background effect */}
+                      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
                     </div>
-                    <span className="text-lg font-heading font-semibold text-slate-200">Sareach Dim</span>
-                    <span className="text-xs text-indigo-400 mt-1">Full-Stack Developer</span>
-                    
-                    {/* Grid background effect */}
-                    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-                  </div>
-                ) : (
-                  /* Real image if loaded successfully */
-                  <img
-                    src="/assets/profile.jpg"
-                    alt="Sareach Dim"
-                    className="absolute inset-0 h-full w-full object-cover"
-                    onError={() => setImageError(true)}
-                  />
-                )}
+                  ) : (
+                    /* Real image if loaded successfully */
+                    <img
+                      src="/assets/profile.jpg"
+                      alt="Sareach Dim"
+                      className="h-full w-full object-cover rounded-full"
+                      onError={() => setImageError(true)}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
