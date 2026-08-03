@@ -3,7 +3,7 @@ export const personalInfo = {
   title: "Final-Year Computer Science Student | Full-Stack Developer",
   tagline: "A results-driven full-stack developer passionate about building AI-powered web applications and solving complex digital problems.",
   bio: "I am a final-year Computer Science student at Norton University with hands-on experience in full-stack web development and AI document annotation. Having worked inside data workflows and class leadership structures, I excel at bridging the gap between clean code, database performance, and effective team coordination.",
-  location: "Phnom Penh, Cambodia",
+  location: "ផ្ទះលេខ 092 G ផ្លូវ 103 ភូមិបាក់ទូក សង្កាត់ទួលសង្កែទី១ ខណ្ឌឫស្សីកែវ រាជធានីភ្នំពេញ",
   languages: [
     { name: "Khmer", level: "Fluent" },
     { name: "English", level: "Intermediate" }

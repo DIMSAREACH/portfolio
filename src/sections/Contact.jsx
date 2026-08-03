@@ -149,6 +149,20 @@ export default function Contact() {
                 </div>
               </div>
             </div>
+
+            {/* Embedded Google Map */}
+            <div className="w-full h-56 rounded-2xl overflow-hidden border border-brand-lightBorder dark:border-brand-darkBorder shadow-sm mt-6">
+              <iframe
+                title="Sareach Dim Location Map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.2891391942475!2d104.902325!3d11.599182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310951664188f8df%3A0xe54c1f9643441a1!2sStreet%20103%2C%20Phnom%20Penh!5e0!3m2!1sen!2skh!4v1700000000000!5m2!1sen!2skh"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
           </div>
 
           {/* Right Column: Contact form */}
