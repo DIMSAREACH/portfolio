@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Code2, Layout, Server, Database, Wrench, Sparkles } from 'lucide-react';
 import { skillsData } from '../data/portfolioData';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 const categories = [
   {
@@ -67,13 +68,18 @@ const categories = [
 
 export default function Skills() {
   const [hoveredKey, setHoveredKey] = useState(null);
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: gridRef, isVisible: gridVisible } = useScrollReveal({ threshold: 0.1 });
 
   return (
     <section id="skills" className="py-24 sm:py-32 bg-white dark:bg-[#090d16] transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
 
         {/* Section Header */}
-        <div className="text-center mb-20">
+        <div
+          ref={headerRef}
+          className={`reveal ${headerVisible ? 'visible' : ''} text-center mb-20`}
+        >
           <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-3">
             What I know
           </p>
@@ -85,8 +91,11 @@ export default function Skills() {
         </div>
 
         {/* Skills Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((cat) => {
+        <div
+          ref={gridRef}
+          className={`reveal ${gridVisible ? 'visible' : ''} grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6`}
+        >
+          {categories.map((cat, index) => {
             const Icon = cat.icon;
             const skills = skillsData[cat.key];
             const isHovered = hoveredKey === cat.key;
@@ -96,7 +105,7 @@ export default function Skills() {
                 key={cat.key}
                 onMouseEnter={() => setHoveredKey(cat.key)}
                 onMouseLeave={() => setHoveredKey(null)}
-                className="glass-card glass-card-hover p-7 rounded-2xl group"
+                className={`glass-card glass-card-hover p-7 rounded-2xl group transition-all duration-500 delay-${index * 100}`}
               >
                 {/* Card Header */}
                 <div className="flex items-center gap-4 mb-6">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Heart, Calendar, MapPin, Users } from 'lucide-react';
 import { volunteerData } from '../data/portfolioData';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 const accentColors = [
   { icon: 'bg-pink-500/10 text-pink-500 border border-pink-500/20', badge: 'bg-pink-50 dark:bg-pink-950/30 text-pink-700 dark:text-pink-300', dot: 'bg-pink-500' },
@@ -8,12 +9,18 @@ const accentColors = [
 ];
 
 export default function Volunteer() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: gridRef, isVisible: gridVisible } = useScrollReveal({ threshold: 0.1 });
+
   return (
     <section id="volunteer" className="py-24 sm:py-32 bg-white dark:bg-[#090d16] transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
 
         {/* Section Header */}
-        <div className="text-center mb-20">
+        <div
+          ref={headerRef}
+          className={`reveal ${headerVisible ? 'visible' : ''} text-center mb-20`}
+        >
           <p className="text-sm font-bold text-pink-600 dark:text-pink-400 uppercase tracking-[0.2em] mb-3">
             Giving back
           </p>
@@ -25,11 +32,17 @@ export default function Volunteer() {
         </div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div
+          ref={gridRef}
+          className={`reveal ${gridVisible ? 'visible' : ''} grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto`}
+        >
           {volunteerData.map((vol, index) => {
             const accent = accentColors[index % accentColors.length];
             return (
-              <div key={index} className="glass-card glass-card-hover p-8 rounded-2xl relative overflow-hidden group">
+              <div
+                key={index}
+                className={`glass-card glass-card-hover p-8 rounded-2xl relative overflow-hidden group transition-all duration-500 delay-${index * 150}`}
+              >
                 {/* Decorative blob */}
                 <div className={`absolute -top-8 -right-8 w-32 h-32 rounded-full ${accent.dot} opacity-5 group-hover:opacity-10 transition-opacity`} />
 

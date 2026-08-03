@@ -1,6 +1,7 @@
 import React from 'react';
 import { Briefcase, Calendar, MapPin, ChevronRight } from 'lucide-react';
 import { experienceData } from '../data/portfolioData';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 const accentColors = [
   { dot: 'bg-indigo-500', glow: 'shadow-indigo-500/50', ring: 'ring-indigo-500/30', tag: 'bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300' },
@@ -9,12 +10,18 @@ const accentColors = [
 ];
 
 export default function Experience() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: timelineRef, isVisible: timelineVisible } = useScrollReveal({ threshold: 0.1 });
+
   return (
     <section id="experience" className="py-24 sm:py-32 bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
 
         {/* Section Header */}
-        <div className="text-center mb-20">
+        <div
+          ref={headerRef}
+          className={`reveal ${headerVisible ? 'visible' : ''} text-center mb-20`}
+        >
           <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-3">
             My journey
           </p>
@@ -26,7 +33,10 @@ export default function Experience() {
         </div>
 
         {/* Timeline */}
-        <div className="relative max-w-4xl mx-auto">
+        <div
+          ref={timelineRef}
+          className={`reveal ${timelineVisible ? 'visible' : ''} relative max-w-4xl mx-auto`}
+        >
           {/* Vertical line */}
           <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500/0 via-indigo-500/30 to-indigo-500/0 md:-translate-x-px" />
 
@@ -35,7 +45,10 @@ export default function Experience() {
             const isEven = index % 2 === 0;
 
             return (
-              <div key={index} className={`relative flex items-start gap-6 md:gap-12 mb-12 last:mb-0 ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+              <div
+                key={index}
+                className={`relative flex items-start gap-6 md:gap-12 mb-12 last:mb-0 transition-all duration-500 delay-${index * 150} ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+              >
                 {/* Timeline dot */}
                 <div className="absolute left-6 md:left-1/2 md:-translate-x-1/2 top-6 z-10">
                   <div className={`h-4 w-4 rounded-full ${accent.dot} shadow-lg ${accent.glow} ring-4 ${accent.ring} ring-offset-2 ring-offset-slate-50 dark:ring-offset-[#0b0f19]`} />

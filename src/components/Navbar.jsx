@@ -40,10 +40,14 @@ export default function Navbar() {
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <a href="#home" className="flex items-center space-x-2 group">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-xs font-bold shadow-md group-hover:shadow-indigo-500/30 transition-shadow duration-300">
-              SD
-            </span>
+          <a href="#home" className="flex items-center space-x-2.5 group">
+            <div className="h-10 w-10 overflow-hidden rounded-xl border border-slate-200/50 dark:border-slate-800/80 bg-white shadow-sm flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+              <img
+                src="/assets/logo.png"
+                alt="Sareach Dim Logo"
+                className="h-full w-full object-cover"
+              />
+            </div>
             <span className="text-lg font-heading font-bold text-slate-900 dark:text-white tracking-tight">
               Sareach<span className="text-gradient">.dev</span>
             </span>
@@ -70,7 +74,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <ThemeToggle />
             <a
               href="#contact"
@@ -78,6 +82,16 @@ export default function Navbar() {
             >
               Hire Me
             </a>
+            
+            {/* Rounded Profile Avatar */}
+            <div className="h-9 w-9 rounded-full overflow-hidden border-2 border-indigo-500/20 shadow-sm flex-shrink-0 hover:scale-105 transition-transform duration-300">
+              <img
+                src="/assets/profile.jpg"
+                alt="Sareach Dim Profile"
+                className="h-full w-full object-cover object-top"
+              />
+            </div>
+
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -86,6 +100,7 @@ export default function Navbar() {
               {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
+
         </div>
 
         {/* Mobile Menu */}

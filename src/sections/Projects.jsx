@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Github, ExternalLink, Code2, Layers } from 'lucide-react';
 import { projectsData } from '../data/portfolioData';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 const categoryColors = {
   'Full Stack': { bg: 'bg-indigo-500/10 dark:bg-indigo-500/10', text: 'text-indigo-600 dark:text-indigo-400', border: 'border-indigo-500/20' },
@@ -18,6 +19,9 @@ const categories = ['All', 'Full Stack', 'Frontend', 'Backend'];
 
 export default function Projects() {
   const [filter, setFilter] = useState('All');
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: filtersRef, isVisible: filtersVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: gridRef, isVisible: gridVisible } = useScrollReveal({ threshold: 0.1 });
 
   const filteredProjects = filter === 'All'
     ? projectsData
@@ -28,7 +32,10 @@ export default function Projects() {
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
 
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div
+          ref={headerRef}
+          className={`reveal ${headerVisible ? 'visible' : ''} text-center mb-16`}
+        >
           <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-3">
             What I've built
           </p>
@@ -40,7 +47,10 @@ export default function Projects() {
         </div>
 
         {/* Filter tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
+        <div
+          ref={filtersRef}
+          className={`reveal stagger-1 ${filtersVisible ? 'visible' : ''} flex flex-wrap items-center justify-center gap-2 mb-12`}
+        >
           {categories.map((cat) => (
             <button
               key={cat}
@@ -58,13 +68,16 @@ export default function Projects() {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div
+          ref={gridRef}
+          className={`reveal stagger-2 ${gridVisible ? 'visible' : ''} grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8`}
+        >
           {filteredProjects.map((project, idx) => {
             const catStyle = categoryColors[project.category] || categoryColors['Full Stack'];
             return (
               <div
                 key={project.id}
-                className="glass-card glass-card-hover flex flex-col rounded-2xl overflow-hidden group"
+                className={`glass-card glass-card-hover flex flex-col rounded-2xl overflow-hidden group transition-all duration-500 delay-${idx * 100}`}
               >
                 {/* Visual Banner */}
                 <div className={`h-48 bg-gradient-to-br ${bannerGradients[idx % bannerGradients.length]} relative flex items-center justify-center overflow-hidden select-none`}>

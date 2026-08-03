@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, Github, Linkedin } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 const contactMethods = [
   {
@@ -36,6 +37,9 @@ export default function Contact() {
   const [formState, setFormState] = useState({ name: '', email: '', message: '', botcheck: '' });
   const [status, setStatus] = useState('IDLE');
   const [errors, setErrors] = useState({});
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: infoRef, isVisible: infoVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: formRef, isVisible: formVisible } = useScrollReveal({ threshold: 0.1 });
 
   const validate = () => {
     const temp = {};
@@ -83,7 +87,10 @@ export default function Contact() {
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
 
         {/* Section Header */}
-        <div className="text-center mb-20">
+        <div
+          ref={headerRef}
+          className={`reveal ${headerVisible ? 'visible' : ''} text-center mb-20`}
+        >
           <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-3">
             Let's talk
           </p>
@@ -96,7 +103,10 @@ export default function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
           {/* Left: Contact info + map */}
-          <div className="lg:col-span-2 space-y-6">
+          <div
+            ref={infoRef}
+            className={`reveal-left ${infoVisible ? 'visible' : ''} lg:col-span-2 space-y-6`}
+          >
             <div className="space-y-4">
               {contactMethods.map((method) => {
                 const Icon = method.icon;
@@ -164,8 +174,12 @@ export default function Contact() {
           </div>
 
           {/* Right: Form */}
-          <div className="lg:col-span-3">
+          <div
+            ref={formRef}
+            className={`reveal-right ${formVisible ? 'visible' : ''} lg:col-span-3`}
+          >
             <div className="glass-card p-8 rounded-2xl">
+
               {status === 'SUCCESS' ? (
                 <div className="text-center py-16 space-y-4">
                   <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-6">

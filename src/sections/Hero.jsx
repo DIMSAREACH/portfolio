@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ArrowUpRight, Download, Mail, Github, Linkedin, ChevronDown, FileText } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 export default function Hero() {
-  const [imageError, setImageError] = useState(false);
+  const [imageError, setImageError] = React.useState(false);
+  const { ref: badgeRef, isVisible: badgeVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: textRef, isVisible: textVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: photoRef, isVisible: photoVisible } = useScrollReveal({ threshold: 0.1 });
 
   const stats = [
     { value: '3+', label: 'Years Coding' },
@@ -26,11 +30,15 @@ export default function Hero() {
 
           {/* Left Column */}
           <div className="space-y-8 text-center lg:text-left">
+
             {/* Status badge */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50 dark:bg-emerald-950/30">
+            <div
+              ref={badgeRef}
+              className={`reveal ${badgeVisible ? 'visible' : ''} inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50 dark:bg-emerald-950/30`}
+            >
               <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
               </span>
               <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 tracking-wide uppercase">
                 Available for Full-Time &amp; Internship Roles
@@ -38,7 +46,10 @@ export default function Hero() {
             </div>
 
             {/* Heading */}
-            <div className="space-y-3">
+            <div
+              ref={textRef}
+              className={`reveal stagger-1 ${textVisible ? 'visible' : ''} space-y-3`}
+            >
               <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">
                 Hello, I'm
               </p>
@@ -51,12 +62,12 @@ export default function Hero() {
             </div>
 
             {/* Bio */}
-            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl mx-auto lg:mx-0">
+            <p className={`reveal stagger-2 ${textVisible ? 'visible' : ''} text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl mx-auto lg:mx-0`}>
               {personalInfo.tagline}
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+            <div className={`reveal stagger-3 ${textVisible ? 'visible' : ''} flex flex-col sm:flex-row gap-3 justify-center lg:justify-start`}>
               <a
                 href="#projects"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-white rounded-xl bg-gradient-to-r from-indigo-500 via-violet-600 to-indigo-600 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all duration-200 group"
@@ -69,20 +80,20 @@ export default function Hero() {
                 download="Sareach-Dim-CV.pdf"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-white rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all duration-200 group"
               >
-                <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
+                <FileText className="h-4 w-4" />
                 Download CV
               </a>
             </div>
 
             {/* Social Links */}
-            <div className="flex items-center gap-4 justify-center lg:justify-start">
+            <div className={`reveal stagger-4 ${textVisible ? 'visible' : ''} flex items-center gap-4 justify-center lg:justify-start`}>
               <a
                 href={personalInfo.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
               >
-                <Github className="h-4.5 w-4.5" />
+                <Github className="h-4 w-4" />
                 GitHub
               </a>
               <span className="h-4 w-px bg-slate-300 dark:bg-slate-700" />
@@ -92,7 +103,7 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
               >
-                <Linkedin className="h-4.5 w-4.5" />
+                <Linkedin className="h-4 w-4" />
                 LinkedIn
               </a>
               <span className="h-4 w-px bg-slate-300 dark:bg-slate-700" />
@@ -100,13 +111,13 @@ export default function Hero() {
                 href={`mailto:${personalInfo.email}`}
                 className="flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
               >
-                <Mail className="h-4.5 w-4.5" />
+                <Mail className="h-4 w-4" />
                 Email Me
               </a>
             </div>
 
             {/* Stats Row */}
-            <div className="flex items-center gap-8 justify-center lg:justify-start pt-2">
+            <div className={`reveal stagger-5 ${textVisible ? 'visible' : ''} flex items-center gap-8 justify-center lg:justify-start pt-2`}>
               {stats.map((stat, i) => (
                 <div key={i} className="text-center lg:text-left">
                   <div className="text-2xl font-heading font-black text-gradient">{stat.value}</div>
@@ -117,15 +128,13 @@ export default function Hero() {
           </div>
 
           {/* Right Column — Profile Photo */}
-          <div className="flex justify-center items-center">
+          <div
+            ref={photoRef}
+            className={`reveal-right ${photoVisible ? 'visible' : ''} flex justify-center items-center`}
+          >
             <div className="relative">
-              {/* Outer glow ring */}
               <div className="absolute -inset-6 rounded-full bg-gradient-to-tr from-indigo-500 via-violet-500 to-pink-500 blur-2xl opacity-25 dark:opacity-20 animate-pulse" />
-
-              {/* Decorative orbit ring */}
               <div className="absolute -inset-3 rounded-full border-2 border-dashed border-indigo-300/30 dark:border-indigo-500/20 animate-spin-slow" />
-
-              {/* Gradient border wrapper */}
               <div className="relative p-[3px] rounded-full bg-gradient-to-tr from-indigo-500 via-violet-500 to-pink-500 shadow-2xl shadow-indigo-500/30">
                 <div className="h-72 w-72 sm:h-80 sm:w-80 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 border-4 border-white dark:border-[#090d16]">
                   {imageError ? (
@@ -146,7 +155,6 @@ export default function Hero() {
                   )}
                 </div>
               </div>
-
               {/* Floating skill badges */}
               <div className="absolute -top-2 -right-4 sm:-right-8 glass px-3 py-2 rounded-xl shadow-lg border-0 text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-white/90 dark:bg-slate-900/90 animate-float">
                 React.js ⚛️
@@ -163,7 +171,7 @@ export default function Hero() {
         </div>
 
         {/* Scroll hint */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-slate-400 dark:text-slate-600 hidden sm:flex">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-1.5 text-slate-400 dark:text-slate-600">
           <span className="text-[10px] font-semibold uppercase tracking-widest">Scroll</span>
           <ChevronDown className="h-4 w-4 animate-bounce" />
         </div>

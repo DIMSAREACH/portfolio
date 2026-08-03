@@ -1,14 +1,22 @@
 import React from 'react';
 import { GraduationCap, Award, Calendar, CheckCircle2 } from 'lucide-react';
 import { educationData, certificationsData } from '../data/portfolioData';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 export default function EducationCertificates() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: eduRef, isVisible: eduVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: certRef, isVisible: certVisible } = useScrollReveal({ threshold: 0.1 });
+
   return (
     <section id="education" className="py-24 sm:py-32 bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
 
         {/* Section Header */}
-        <div className="text-center mb-20">
+        <div
+          ref={headerRef}
+          className={`reveal ${headerVisible ? 'visible' : ''} text-center mb-20`}
+        >
           <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-3">
             My background
           </p>
@@ -21,7 +29,10 @@ export default function EducationCertificates() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Education Column */}
-          <div className="space-y-8">
+          <div
+            ref={eduRef}
+            className={`reveal-left ${eduVisible ? 'visible' : ''} space-y-8`}
+          >
             <div className="flex items-center gap-3 mb-8">
               <div className="p-3 rounded-xl bg-indigo-500/10 text-indigo-500 border border-indigo-500/20">
                 <GraduationCap className="h-6 w-6" />
@@ -68,7 +79,10 @@ export default function EducationCertificates() {
           </div>
 
           {/* Certifications Column */}
-          <div className="space-y-8">
+          <div
+            ref={certRef}
+            className={`reveal-right ${certVisible ? 'visible' : ''} space-y-8`}
+          >
             <div className="flex items-center gap-3 mb-8">
               <div className="p-3 rounded-xl bg-violet-500/10 text-violet-500 border border-violet-500/20">
                 <Award className="h-6 w-6" />

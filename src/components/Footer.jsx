@@ -29,9 +29,13 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="space-y-4">
             <a href="#home" className="flex items-center gap-2.5 group w-fit">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-xs font-black shadow-md">
-                SD
-              </span>
+              <div className="h-9 w-9 overflow-hidden rounded-xl border border-slate-200/50 dark:border-slate-800/80 bg-white shadow-sm flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+                <img
+                  src="/assets/logo.png"
+                  alt="Sareach Dim Logo"
+                  className="h-full w-full object-cover"
+                />
+              </div>
               <span className="text-lg font-heading font-bold text-slate-900 dark:text-white">
                 Sareach<span className="text-gradient">.dev</span>
               </span>

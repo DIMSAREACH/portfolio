@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Globe, Heart, Briefcase, Download, FileText } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 const highlights = [
   {
@@ -30,12 +31,19 @@ const colorMap = {
 };
 
 export default function About() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: bioRef, isVisible: bioVisible } = useScrollReveal({ threshold: 0.1 });
+  const { ref: highlightsRef, isVisible: highlightsVisible } = useScrollReveal({ threshold: 0.1 });
+
   return (
     <section id="about" className="py-24 sm:py-32 bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
 
         {/* Section Header */}
-        <div className="text-center mb-20">
+        <div
+          ref={headerRef}
+          className={`reveal ${headerVisible ? 'visible' : ''} text-center mb-20`}
+        >
           <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-3">
             Get to know me
           </p>
@@ -48,7 +56,10 @@ export default function About() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Bio Column */}
-          <div className="space-y-8">
+          <div
+            ref={bioRef}
+            className={`reveal-left ${bioVisible ? 'visible' : ''} space-y-8`}
+          >
             <div className="space-y-5 text-base text-slate-600 dark:text-slate-400 leading-relaxed">
               <p>{personalInfo.bio}</p>
               <p>
@@ -119,7 +130,10 @@ export default function About() {
           </div>
 
           {/* Highlights Column */}
-          <div className="space-y-5">
+          <div
+            ref={highlightsRef}
+            className={`reveal-right ${highlightsVisible ? 'visible' : ''} space-y-5`}
+          >
             {highlights.map((item, i) => {
               const Icon = item.icon;
               return (
