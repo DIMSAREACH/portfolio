@@ -127,7 +127,7 @@ export default function Hero() {
 
               {/* Gradient border wrapper */}
               <div className="relative p-[3px] rounded-full bg-gradient-to-tr from-indigo-500 via-violet-500 to-pink-500 shadow-2xl shadow-indigo-500/30">
-                <div className="h-72 w-72 sm:h-80 sm:w-80 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-900 border-4 border-white dark:border-[#090d16]">
+                <div className="h-72 w-72 sm:h-80 sm:w-80 rounded-full overflow-hidden bg-[#2196f3] border-4 border-white dark:border-[#090d16]">
                   {imageError ? (
                     <div className="w-full h-full bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-900 flex flex-col items-center justify-center select-none">
                       <div className="h-20 w-20 rounded-full bg-indigo-500/10 border border-indigo-400/20 flex items-center justify-center mb-4">
@@ -140,7 +140,7 @@ export default function Hero() {
                     <img
                       src="/assets/profile.jpg"
                       alt="Sareach Dim — Full-Stack Developer"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain object-top"
                       onError={() => setImageError(true)}
                     />
                   )}
