@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowUpRight, Download, Mail } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
 export default function Hero() {
+  const [imageError, setImageError] = useState(false);
   return (
     <section id="home" className="relative w-full py-20 md:py-28 flex items-center justify-center overflow-hidden">
       {/* Decorative gradient glow elements in background */}
@@ -68,25 +69,27 @@ export default function Hero() {
               
               {/* Profile Image Wrap */}
               <div className="relative h-64 w-64 sm:h-80 sm:w-80 rounded-full border-4 border-white dark:border-brand-darkSecondary overflow-hidden shadow-xl glass-card flex items-center justify-center">
-                {/* Fallback avatar visual using modern CSS vectors */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-950 flex flex-col items-center justify-center p-6 text-center select-none">
-                  <div className="h-20 w-20 rounded-full bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center mb-3">
-                    <span className="text-3xl font-heading font-bold text-indigo-300">SD</span>
+                {imageError ? (
+                  /* Fallback avatar visual using modern CSS vectors */
+                  <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-950 flex flex-col items-center justify-center p-6 text-center select-none">
+                    <div className="h-20 w-20 rounded-full bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center mb-3">
+                      <span className="text-3xl font-heading font-bold text-indigo-300">SD</span>
+                    </div>
+                    <span className="text-sm font-heading font-semibold text-slate-200">Sareach Dim</span>
+                    <span className="text-xs text-indigo-400 mt-0.5">Full-Stack Developer</span>
+                    
+                    {/* Grid background effect */}
+                    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
                   </div>
-                  <span className="text-sm font-heading font-semibold text-slate-200">Sareach Dim</span>
-                  <span className="text-xs text-indigo-400 mt-0.5">Full-Stack Developer</span>
-                  
-                  {/* Grid background effect */}
-                  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
-                </div>
-
-                {/* Real image if user adds assets/profile.jpg later */}
-                <img
-                  src="/assets/profile.jpg"
-                  alt="Sareach Dim"
-                  className="absolute inset-0 h-full w-full object-cover opacity-0 hover:opacity-100 transition-opacity duration-300"
-                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                />
+                ) : (
+                  /* Real image if loaded successfully */
+                  <img
+                    src="/assets/profile.jpg"
+                    alt="Sareach Dim"
+                    className="absolute inset-0 h-full w-full object-cover"
+                    onError={() => setImageError(true)}
+                  />
+                )}
               </div>
             </div>
           </div>
