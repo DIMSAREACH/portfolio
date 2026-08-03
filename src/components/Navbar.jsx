@@ -41,7 +41,7 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <a href="#home" className="flex items-center space-x-2.5 group">
-            <div className="h-10 w-10 overflow-hidden rounded-xl border border-slate-200/50 dark:border-slate-800/80 bg-white shadow-sm flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+            <div className="h-10 w-10 overflow-hidden rounded-full border border-slate-200/50 dark:border-slate-800/80 bg-white shadow-sm flex items-center justify-center transition-all duration-300 group-hover:scale-105">
               <img
                 src="/assets/logo.png"
                 alt="Sareach Dim Logo"

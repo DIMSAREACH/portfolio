@@ -29,7 +29,7 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="space-y-4">
             <a href="#home" className="flex items-center gap-2.5 group w-fit">
-              <div className="h-9 w-9 overflow-hidden rounded-xl border border-slate-200/50 dark:border-slate-800/80 bg-white shadow-sm flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+              <div className="h-9 w-9 overflow-hidden rounded-full border border-slate-200/50 dark:border-slate-800/80 bg-white shadow-sm flex items-center justify-center transition-all duration-300 group-hover:scale-105">
                 <img
                   src="/assets/logo.png"
                   alt="Sareach Dim Logo"
