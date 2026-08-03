@@ -10,7 +10,7 @@ export const personalInfo = {
   ],
   email: "dimsareach009@gmail.com",
   phone: "071 28 32 071",
-  github: "https://github.com/sareachdim",
+  github: "https://github.com/DIMSAREACH",
   linkedin: "https://www.linkedin.com/in/dim-sareach-3aa6892b6",
 };
 

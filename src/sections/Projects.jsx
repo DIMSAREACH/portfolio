@@ -137,7 +137,7 @@ export default function Projects() {
         {/* GitHub CTA */}
         <div className="text-center mt-16">
           <a
-            href="https://github.com/sareachdim"
+            href="https://github.com/DIMSAREACH"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-3.5 text-sm font-bold text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:-translate-y-0.5 transition-all duration-200"
