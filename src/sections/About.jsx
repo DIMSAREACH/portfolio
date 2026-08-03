@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Globe, Heart, Briefcase } from 'lucide-react';
+import { MapPin, Globe, Heart, Briefcase, Download, FileText } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
 const highlights = [
@@ -96,6 +96,25 @@ export default function About() {
                   </span>
                 ))}
               </div>
+            </div>
+
+            {/* Download CV + Hire Me Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <a
+                href="/sareach-dim-cv.pdf"
+                download="Sareach-Dim-CV.pdf"
+                className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-sm font-bold text-white rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:-translate-y-0.5 transition-all duration-200 group"
+              >
+                <FileText className="h-4 w-4" />
+                Download My CV
+                <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
+              </a>
+              <a
+                href={`mailto:${personalInfo.email}`}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:-translate-y-0.5 transition-all duration-200"
+              >
+                Hire Me →
+              </a>
             </div>
           </div>
 

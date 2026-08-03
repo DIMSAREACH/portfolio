@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowUpRight, Download, Mail, Github, Linkedin, ChevronDown } from 'lucide-react';
+import { ArrowUpRight, Download, Mail, Github, Linkedin, ChevronDown, FileText } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
 export default function Hero() {
@@ -66,8 +66,8 @@ export default function Hero() {
               </a>
               <a
                 href="/sareach-dim-cv.pdf"
-                download
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:-translate-y-0.5 transition-all duration-200 group"
+                download="Sareach-Dim-CV.pdf"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-white rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all duration-200 group"
               >
                 <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
                 Download CV
