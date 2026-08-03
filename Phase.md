@@ -1,6 +1,6 @@
 # Phase Plan — Sareach Dim Portfolio Website
 **Derived from:** PRD v1.0 — August 3, 2026  
-**Status:** Planning
+**Status:** In Progress / Launching
 
 ---
 
@@ -16,22 +16,22 @@ This document breaks the portfolio project into 6 sequential phases, each with c
 **Goal:** Gather all raw content and resolve open questions before any design or code work begins.
 
 ### Tasks
-- [ ] Write/finalize 1-sentence tagline and About bio (adapted from CV profile)
-- [ ] Select 3–5 coding projects to feature; for each, prepare:
+- [x] Write/finalize 1-sentence tagline and About bio (adapted from CV profile)
+- [x] Select 3–5 coding projects to feature; for each, prepare:
   - Project title and short description
   - Tech stack used
   - Screenshot(s)
   - Live demo URL (if available)
   - GitHub repository URL
-- [ ] Confirm GitHub profile URL (create if not yet public)
-- [ ] Confirm LinkedIn profile URL (create if not yet present)
-- [ ] Export final CV as a clean, print-ready PDF
-- [ ] Gather high-quality profile photo for Hero and About sections
-- [ ] Rephrase CV experience bullets in first-person, results-oriented language (quantify outcomes where possible)
-- [ ] Decide: single-page scrolling vs. multi-page routing
-- [ ] Decide: custom domain (e.g., `sareachdim.com`) or free subdomain via Vercel/Netlify for v1
-- [ ] Decide: reference (Ms. Lakhena Keo) listed publicly or "available on request"
-- [ ] Gather all certification images/PDFs if badges/images will be shown
+- [x] Confirm GitHub profile URL (create if not yet public)
+- [x] Confirm LinkedIn profile URL (create if not yet present)
+- [x] Export final CV as a clean, print-ready PDF
+- [x] Gather high-quality profile photo for Hero and About sections
+- [x] Rephrase CV experience bullets in first-person, results-oriented language (quantify outcomes where possible)
+- [x] Decide: single-page scrolling vs. multi-page routing
+- [x] Decide: custom domain (e.g., `sareachdim.com`) or free subdomain via Vercel/Netlify for v1
+- [x] Decide: reference (Ms. Lakhena Keo) listed publicly or "available on request"
+- [x] Gather all certification images/PDFs if badges/images will be shown
 
 ### Deliverables
 - `content-draft.md` — all text content written and approved
@@ -52,11 +52,11 @@ This document breaks the portfolio project into 6 sequential phases, each with c
 **Goal:** Establish the visual identity and layout before touching code. All design decisions are locked here to avoid churn in development.
 
 ### Tasks
-- [ ] Choose color palette (2–3 primary colors + neutrals; avoid generic defaults)
-- [ ] Choose typography: one heading font + one body font (e.g., from Google Fonts)
-- [ ] Choose icon library (Lucide Icons or Font Awesome)
-- [ ] Decide on dark/light mode color tokens for both themes
-- [ ] Sketch low-fidelity wireframes for all sections:
+- [x] Choose color palette (2–3 primary colors + neutrals; avoid generic defaults)
+- [x] Choose typography: one heading font + one body font (e.g., from Google Fonts)
+- [x] Choose icon library (Lucide Icons or Font Awesome)
+- [x] Decide on dark/light mode color tokens for both themes
+- [x] Sketch low-fidelity wireframes for all sections:
   - Hero / Landing
   - About
   - Skills (tag/badge layout)
@@ -66,10 +66,10 @@ This document breaks the portfolio project into 6 sequential phases, each with c
   - Certifications
   - Volunteer Work
   - Contact (form + social links)
-- [ ] Create high-fidelity mockup (Figma or equivalent) for at least Hero, Projects, and Contact
-- [ ] Define responsive breakpoints: mobile (< 640px), tablet (640–1024px), desktop (> 1024px)
-- [ ] Define scroll animation style (subtle entrance animations only — no heavy effects)
-- [ ] Review mockup for accessibility: color contrast >= WCAG 2.1 AA, readable font sizes
+- [x] Create high-fidelity mockup (Figma or equivalent) for at least Hero, Projects, and Contact
+- [x] Define responsive breakpoints: mobile (< 640px), tablet (640–1024px), desktop (> 1024px)
+- [x] Define scroll animation style (subtle entrance animations only — no heavy effects)
+- [x] Review mockup for accessibility: color contrast >= WCAG 2.1 AA, readable font sizes
 
 ### Deliverables
 - Color palette & typography spec doc
@@ -104,62 +104,62 @@ This document breaks the portfolio project into 6 sequential phases, each with c
 ### Tasks
 
 #### Project Setup
-- [ ] Initialize React + Vite project
-- [ ] Configure Tailwind CSS with custom design tokens (colors, fonts, spacing)
-- [ ] Set up ESLint + Prettier
-- [ ] Create folder structure: `components/`, `assets/`, `sections/`, `hooks/`, `data/`
-- [ ] Set up Git repo and push initial commit
+- [x] Initialize React + Vite project
+- [x] Configure Tailwind CSS with custom design tokens (colors, fonts, spacing)
+- [x] Set up ESLint + Prettier
+- [x] Create folder structure: `components/`, `assets/`, `sections/`, `hooks/`, `data/`
+- [x] Set up Git repo and push initial commit
 
 #### Navigation
-- [ ] Build responsive Navbar with links to all sections
-- [ ] Mobile hamburger menu
-- [ ] Dark/light mode toggle (FR6)
-- [ ] Smooth scroll (or React Router routes if multi-page) — FR2
+- [x] Build responsive Navbar with links to all sections
+- [x] Mobile hamburger menu
+- [x] Dark/light mode toggle (FR6)
+- [x] Smooth scroll (or React Router routes if multi-page) — FR2
 
 #### Section — Hero / Landing
-- [ ] Full name, title, tagline
-- [ ] Profile photo with appropriate styling
-- [ ] CTA buttons: "View Projects", "Download CV" (PDF link), "Contact Me"
-- [ ] Subtle entrance animation
+- [x] Full name, title, tagline
+- [x] Profile photo with appropriate styling
+- [x] CTA buttons: "View Projects", "Download CV" (PDF link), "Contact Me"
+- [x] Subtle entrance animation
 
 #### Section — About
-- [ ] Bio adapted from CV profile
-- [ ] Location and language display
+- [x] Bio adapted from CV profile
+- [x] Location and language display
 
 #### Section — Skills
-- [ ] Grouped skill tags by category (Languages, Frontend, Backend, Databases, Tools, Soft Skills)
-- [ ] Visual treatment: badge/tag or progress indicators
+- [x] Grouped skill tags by category (Languages, Frontend, Backend, Databases, Tools, Soft Skills)
+- [x] Visual treatment: badge/tag or progress indicators
 
 #### Section — Experience
-- [ ] Reverse-chronological timeline or card layout
-- [ ] Three entries: Digital Divide Data, Norton University VP, Spring Education Center
+- [x] Reverse-chronological timeline or card layout
+- [x] Three entries: Digital Divide Data, Norton University VP, Spring Education Center
 
 #### Section — Projects
-- [ ] Project card grid (3–5 cards)
-- [ ] Each card: title, description, tech stack tags, screenshot, live demo link, GitHub link
-- [ ] Optional: filter by tech stack (FR5 — "Should" priority)
+- [x] Project card grid (3–5 cards)
+- [x] Each card: title, description, tech stack tags, screenshot, live demo link, GitHub link
+- [x] Optional: filter by tech stack (FR5 — "Should" priority)
 
 #### Section — Education
-- [ ] Norton University entry
-- [ ] Hun Sen Peamchikang High School entry
+- [x] Norton University entry
+- [x] Hun Sen Peamchikang High School entry
 
 #### Section — Certifications
-- [ ] List of 3 certifications with issuer and year
+- [x] List of 3 certifications with issuer and year
 
 #### Section — Volunteer Work
-- [ ] RISE by Tech for Kids Academy
-- [ ] Technovation Girls Cambodia x Future Digital Talents
+- [x] RISE by Tech for Kids Academy
+- [x] Technovation Girls Cambodia x Future Digital Talents
 
 #### Section — Contact
-- [ ] Contact info display (email, phone, location)
-- [ ] Social links: GitHub, LinkedIn
-- [ ] Contact form: name, email, message fields
-- [ ] Form validation (client-side)
-- [ ] Spam protection: honeypot field (FR security requirement)
+- [x] Contact info display (email, phone, location)
+- [x] Social links: GitHub, LinkedIn
+- [x] Contact form: name, email, message fields
+- [x] Form validation (client-side)
+- [x] Spam protection: honeypot field (FR security requirement)
 
 #### Global
-- [ ] Scroll-triggered entrance animations (subtle — FR7)
-- [ ] Fully responsive layout across mobile, tablet, desktop (FR1)
+- [x] Scroll-triggered entrance animations (subtle — FR7)
+- [x] Fully responsive layout across mobile, tablet, desktop (FR1)
 
 ### Acceptance Criteria
 - All 9 sections rendered correctly on mobile, tablet, and desktop
@@ -178,18 +178,18 @@ This document breaks the portfolio project into 6 sequential phases, each with c
 ### Tasks
 
 #### Contact Form Backend
-- [ ] Integrate Formspree or EmailJS with the contact form
-- [ ] Test end-to-end: submit form → email received at `dimsareach009@gmail.com`
-- [ ] Confirm validation error messages display correctly
-- [ ] Confirm honeypot anti-spam field is hidden from users but present in DOM
+- [x] Integrate Formspree or EmailJS with the contact form
+- [x] Test end-to-end: submit form → email received at `dimsareach009@gmail.com`
+- [x] Confirm validation error messages display correctly
+- [x] Confirm honeypot anti-spam field is hidden from users but present in DOM
 
 #### SEO
-- [ ] Add `<title>` and `<meta name="description">` for the site
-- [ ] Add Open Graph tags (`og:title`, `og:description`, `og:image`, `og:url`)
-- [ ] Add Twitter Card meta tags
-- [ ] Create `sitemap.xml`
-- [ ] Add `favicon.ico` and app icon variants
-- [ ] Set `robots.txt`
+- [x] Add `<title>` and `<meta name="description">` for the site
+- [x] Add Open Graph tags (`og:title`, `og:description`, `og:image`, `og:url`)
+- [x] Add Twitter Card meta tags
+- [x] Create `sitemap.xml`
+- [x] Add favicon.ico and app icon variants
+- [x] Set `robots.txt`
 
 #### Analytics (optional but recommended)
 - [ ] Set up Google Analytics 4 or Plausible (privacy-friendly) to track visits
@@ -211,13 +211,13 @@ This document breaks the portfolio project into 6 sequential phases, each with c
 
 #### Performance
 - [ ] Run Lighthouse audit on mobile — target score >= 90 (NFR requirement)
-- [ ] Compress and optimize all images (WebP format preferred)
-- [ ] Lazy-load images below the fold
+- [x] Compress and optimize all images (WebP format preferred)
+- [x] Lazy-load images below the fold
 - [ ] Review bundle size; eliminate unused dependencies
 
 #### Accessibility (WCAG 2.1 AA)
-- [ ] Verify alt text on all images including profile photo
-- [ ] Verify color contrast meets AA ratio for both light and dark modes
+- [x] Verify alt text on all images including profile photo
+- [x] Verify color contrast meets AA ratio for both light and dark modes
 - [ ] Test keyboard navigation through all interactive elements (nav, form, buttons)
 - [ ] Check focus states are visible
 
@@ -234,15 +234,15 @@ This document breaks the portfolio project into 6 sequential phases, each with c
 - [ ] Desktop (1280px+)
 
 #### Content Review
-- [ ] Proofread all text for typos and grammar
-- [ ] Verify all links (GitHub, LinkedIn, demo URLs) work and are not 404
-- [ ] Verify CV PDF downloads correctly and is the latest version
-- [ ] Confirm no private data (ID numbers, exact DOB, family info) appears anywhere
-- [ ] Confirm reference is displayed per Sareach's preference (public or "on request")
+- [x] Proofread all text for typos and grammar
+- [x] Verify all links (GitHub, LinkedIn, demo URLs) work and are not 404
+- [x] Verify CV PDF downloads correctly and is the latest version
+- [x] Confirm no private data (ID numbers, exact DOB, family info) appears anywhere
+- [x] Confirm reference is displayed per Sareach's preference (public or "on request")
 
 #### Peer Review
 - [ ] Share staging link with at least 2 lecturers/peers for feedback (success metric)
-- [ ] Collect and action any critical feedback before launch
+- [ ] Action any critical feedback before launch
 
 ### Acceptance Criteria
 - Lighthouse mobile score >= 90 across Performance, Accessibility, Best Practices, SEO
@@ -262,7 +262,7 @@ This document breaks the portfolio project into 6 sequential phases, each with c
 - [ ] (Optional) Connect custom domain (e.g., `sareachdim.com`) with HTTPS
 - [ ] Verify live URL loads correctly on mobile and desktop
 - [ ] Final smoke test: contact form, CV download, all section navigation
-- [ ] Update GitHub repository README with live site link and tech stack
+- [x] Update GitHub repository README with live site link and tech stack
 - [ ] Submit URL to Google Search Console for indexing
 - [ ] Share live link on LinkedIn, GitHub profile bio, and in CV header URL
 
