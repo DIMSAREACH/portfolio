@@ -5,7 +5,7 @@ import { educationData, certificationsData } from '../data/portfolioData';
 export default function EducationCertificates() {
   return (
     <section id="education" className="py-24 bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-300">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           {/* Education column */}
           <div className="lg:col-span-6 space-y-10">

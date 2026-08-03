@@ -6,12 +6,12 @@ export default function Hero() {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <section id="home" className="relative w-full py-24 md:py-36 flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative w-full py-24 md:py-36 flex items-center justify-center overflow-hidden grid-blueprint">
       {/* Decorative floating gradient glow elements in background */}
       <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-indigo-500/15 dark:bg-indigo-500/10 blur-[90px] pointer-events-none animate-float-slow" />
       <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-96 h-96 rounded-full bg-purple-500/15 dark:bg-violet-500/10 blur-[100px] pointer-events-none animate-float-delayed" />
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 w-full relative z-10">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           {/* Left Column: Heading and Tagline */}
           <div className="lg:col-span-7 text-center lg:text-left space-y-8 animate-slide-up">

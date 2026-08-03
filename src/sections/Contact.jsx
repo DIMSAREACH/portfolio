@@ -78,7 +78,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-24 bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-300">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
         {/* Section Title */}
         <div className="text-center max-w-3xl mx-auto mb-20">
           <h2 className="text-4xl font-heading font-extrabold text-slate-900 dark:text-white tracking-tight">

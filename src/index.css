@@ -33,6 +33,18 @@
   .nav-blur {
     @apply bg-white/70 dark:bg-[#090d16]/70 backdrop-blur-md border-b border-slate-200/30 dark:border-slate-900/30;
   }
+
+  /* Grid blueprint effect */
+  .grid-blueprint {
+    background-image: linear-gradient(to right, rgba(128, 128, 128, 0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(128, 128, 128, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .dark .grid-blueprint {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
 }
 
 /* Float Keyframes for background gradient blobs */

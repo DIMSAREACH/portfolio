@@ -36,7 +36,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full transition-all duration-300 nav-blur">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
         <div className="flex h-16 items-center justify-between">
           {/* Logo / Brand Name */}
           <div className="flex-shrink-0">

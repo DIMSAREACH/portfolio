@@ -7,7 +7,7 @@ export default function Footer() {
 
   return (
     <footer className="w-full border-t border-brand-lightBorder dark:border-brand-darkBorder bg-brand-lightSecondary dark:bg-brand-darkSecondary/40 py-12 transition-colors duration-300">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo & Tagline */}
           <div className="text-center md:text-left">

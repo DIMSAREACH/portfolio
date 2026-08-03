@@ -13,7 +13,7 @@ export default function Projects() {
 
   return (
     <section id="projects" className="py-24 bg-white dark:bg-[#090d16] transition-colors duration-300">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
         {/* Section Title */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-4xl font-heading font-extrabold text-slate-900 dark:text-white tracking-tight">
