@@ -18,7 +18,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative w-full min-h-[calc(100vh-64px)] flex items-center overflow-hidden bg-white dark:bg-[#090d16] dot-grid"
+      className="relative w-full min-h-[calc(100vh-64px)] flex items-center overflow-hidden colorful-bg dot-grid"
     >
       {/* Ambient gradient blobs */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full bg-indigo-500/8 dark:bg-indigo-500/5 blur-[120px] pointer-events-none animate-float" />

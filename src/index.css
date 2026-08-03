@@ -121,15 +121,27 @@
   }
 
   .nav-blur {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.4);
   }
 
   .dark .nav-blur {
-    background: rgba(9, 13, 22, 0.85);
-    border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+    background: rgba(9, 13, 22, 0.5);
+    border-bottom: 1px solid rgba(30, 41, 59, 0.4);
+  }
+
+  .colorful-bg {
+    background: linear-gradient(-45deg, #e0e7ff, #f3e8ff, #fce7f3, #e0f2fe);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+  }
+
+  .dark .colorful-bg {
+    background: linear-gradient(-45deg, #090d16, #0e121e, #1b193d, #0d121c);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
   }
 
   .dot-grid {
@@ -241,4 +253,10 @@
 .form-input.error {
   border-color: #ef4444;
   box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.08);
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
