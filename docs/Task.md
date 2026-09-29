@@ -3409,7 +3409,7 @@ frontend/src/app/core/services/
 
 ## FRONTEND-004 Create HTTP Interceptors
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 7
 - Dependencies:
@@ -3429,6 +3429,7 @@ Create HTTP interceptors for auth token attachment and error handling per PRD Se
 ```
 frontend/src/app/core/interceptors/auth.interceptor.ts
 frontend/src/app/core/interceptors/error.interceptor.ts
+frontend/src/app/core/interceptors/index.ts (barrel export)
 ```
 
 ### Implementation Steps
@@ -3450,14 +3451,14 @@ frontend/src/app/core/interceptors/error.interceptor.ts
 
 ### Acceptance Criteria
 
-- [ ] Auth token attached to API requests
-- [ ] 401 triggers token refresh and retry
-- [ ] Failed refresh redirects to login
-- [ ] Error messages shown for other errors
+- [x] Auth token attached to API requests
+- [x] 401 triggers token refresh and retry
+- [x] Failed refresh redirects to login
+- [x] Error messages shown for other errors
 
 ### Definition of Done
 
-- [ ] Interceptors created and registered
+- [x] Interceptors created and registered
 
 ---
 
@@ -5198,7 +5199,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] FRONTEND-001 Global styles and design system
 - [x] FRONTEND-002 TypeScript models
 - [x] FRONTEND-003 Core services
-- [ ] FRONTEND-004 HTTP interceptors
+- [x] FRONTEND-004 HTTP interceptors
 - [ ] FRONTEND-005 Route guards
 - [ ] FRONTEND-006 Shared UI components
 - [ ] FRONTEND-007 Shared pipes
