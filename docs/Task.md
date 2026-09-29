@@ -3776,7 +3776,7 @@ frontend/src/app/features/public/skills/skills.component.spec.ts
 
 ## PUBLIC-004 Create Experience Page
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 8
 - Dependencies:
@@ -3787,14 +3787,23 @@ frontend/src/app/features/public/skills/skills.component.spec.ts
 
 Create Experience page with timeline layout per PRD Section 8.4.
 
+### Files / Modules
+
+```
+frontend/src/app/features/public/experience/experience.component.ts
+frontend/src/app/features/public/experience/experience.component.spec.ts
+```
+
 ### Acceptance Criteria
 
-- [ ] Timeline or card layout, most recent first
-- [ ] "Present" label for current positions
+- [x] Timeline or card layout, most recent first
+- [x] "Present" label for current positions
+- [x] Filter by experience type and search support
+- [x] Responsive visual timeline and bilingual content
 
 ### Definition of Done
 
-- [ ] Experience page complete
+- [x] Experience page complete and unit tested
 
 ---
 
@@ -5088,7 +5097,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | Home Page | 8.1 | 8 | PUBLIC-001 | DONE |
 | About Page | 8.2 | 8 | PUBLIC-002 | DONE |
 | Skills Page | 8.3 | 8 | PUBLIC-003 | DONE |
-| Experience Page | 8.4 | 8 | PUBLIC-004 | TODO |
+| Experience Page | 8.4 | 8 | PUBLIC-004 | DONE |
 | Education Page | 8.5 | 8 | PUBLIC-005 | TODO |
 | Projects Page + Detail | 8.6-8.7 | 8 | PUBLIC-006 | TODO |
 | Blog Page + Detail | 8.8-8.9 | 8, 11 | PUBLIC-007, BLOG-001 | TODO |
@@ -5224,7 +5233,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] PUBLIC-001 Home page
 - [x] PUBLIC-002 About page
 - [x] PUBLIC-003 Skills page
-- [ ] PUBLIC-004 Experience page
+- [x] PUBLIC-004 Experience page
 - [ ] PUBLIC-005 Education page
 - [ ] PUBLIC-006 Project list and detail pages
 - [ ] PUBLIC-007 Blog list and detail pages
