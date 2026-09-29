@@ -1284,7 +1284,7 @@ backend/src/models/User.ts
 
 ## DB-003 Create Profile Model
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 2
 - Dependencies:
@@ -1341,14 +1341,14 @@ backend/src/models/Profile.ts
 
 ### Acceptance Criteria
 
-- [ ] Profile model created with all PRD Section 11.4 fields
-- [ ] Bilingual field structure works
-- [ ] Model compiles without errors
+- [x] Profile model created with all PRD Section 11.4 fields
+- [x] Bilingual field structure works
+- [x] Model compiles without errors
 
 ### Definition of Done
 
-- [ ] Model file created and exported
-- [ ] All fields match PRD specification
+- [x] Model file created and exported
+- [x] All fields match PRD specification
 
 ---
 
@@ -5141,7 +5141,7 @@ DEPLOY-001 → DOC-001 → QA-001
 ## Phase 2 — Database & Models
 - [x] DB-001 MongoDB connection
 - [x] DB-002 User model
-- [ ] DB-003 Profile model
+- [x] DB-003 Profile model
 - [ ] DB-004 Category model
 - [ ] DB-005 Project model
 - [ ] DB-006 Skill model
