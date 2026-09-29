@@ -2755,7 +2755,7 @@ backend/src/middleware/upload.middleware.ts
 
 ## API-013 Create Social Link CRUD
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 4
 - Dependencies:
@@ -2781,11 +2781,11 @@ backend/src/routes/admin/socialLink.routes.ts
 
 ### Acceptance Criteria
 
-- [ ] CRUD + reorder works
+- [x] CRUD + reorder works
 
 ### Definition of Done
 
-- [ ] Social link endpoints complete
+- [x] Social link endpoints complete
 
 ---
 
@@ -5177,7 +5177,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-010 Blog CRUD
 - [x] API-011 Message management
 - [x] API-012 Profile management
-- [ ] API-013 Social link CRUD
+- [x] API-013 Social link CRUD
 - [ ] API-014 Settings management
 - [ ] API-015 Dashboard stats
 - [ ] API-016 Media and CV management
