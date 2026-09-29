@@ -1,3 +1,5 @@
+import './express';
+
 /**
  * Shared Type Definitions for Developer Portfolio & CMS Platform
  */
