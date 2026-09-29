@@ -2202,7 +2202,7 @@ backend/package.json (verify seed script)
 
 ## API-001 Create Cloudinary Configuration and Service
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 4
 - Dependencies:
@@ -2244,15 +2244,15 @@ backend/src/services/cloudinary.service.ts
 
 ### Acceptance Criteria
 
-- [ ] Cloudinary configured with env credentials
-- [ ] Image upload returns URL and publicId
-- [ ] PDF upload works
-- [ ] Delete removes file from Cloudinary
+- [x] Cloudinary configured with env credentials
+- [x] Image upload returns URL and publicId
+- [x] PDF upload works
+- [x] Delete removes file from Cloudinary
 
 ### Definition of Done
 
-- [ ] Config and service created
-- [ ] Upload and delete functions work
+- [x] Config and service created
+- [x] Upload and delete functions work
 
 ---
 
@@ -5163,7 +5163,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] AUTH-006 Admin seed script
 
 ## Phase 4 — Admin API
-- [ ] API-001 Cloudinary config and service
+- [x] API-001 Cloudinary config and service
 - [ ] API-002 Upload middleware
 - [ ] API-003 Admin route infrastructure
 - [ ] API-004 Category CRUD
