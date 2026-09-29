@@ -2358,7 +2358,7 @@ backend/src/routes/index.ts (modify — mount admin routes)
 
 ## API-004 Create Category CRUD (Service, Controller, Validator, Routes)
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 4
 - Dependencies:
@@ -2413,15 +2413,15 @@ backend/src/routes/admin/index.ts (modify — mount category routes)
 
 ### Acceptance Criteria
 
-- [ ] All 4 CRUD operations work
-- [ ] Validation on create and update
-- [ ] Delete protection for referenced categories
-- [ ] Correct response format per PRD Section 13
+- [x] All 4 CRUD operations work
+- [x] Validation on create and update
+- [x] Delete protection for referenced categories
+- [x] Correct response format per PRD Section 13
 
 ### Definition of Done
 
-- [ ] All files created
-- [ ] Endpoints return correct data
+- [x] All files created
+- [x] Endpoints return correct data
 
 ---
 
@@ -5166,7 +5166,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-001 Cloudinary config and service
 - [x] API-002 Upload middleware
 - [x] API-003 Admin route infrastructure
-- [ ] API-004 Category CRUD
+- [x] API-004 Category CRUD
 - [ ] API-005 Project CRUD
 - [ ] API-006 Skill CRUD
 - [ ] API-007 Experience CRUD
