@@ -3299,7 +3299,7 @@ frontend/src/index.html (modify — add Google Fonts link)
 
 ## FRONTEND-002 Create TypeScript Models and Interfaces
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 7
 - Dependencies:
@@ -3338,12 +3338,12 @@ frontend/src/app/core/models/
 
 ### Acceptance Criteria
 
-- [ ] All entity interfaces created
-- [ ] Types match API response structure from PRD
+- [x] All entity interfaces created
+- [x] Types match API response structure from PRD
 
 ### Definition of Done
 
-- [ ] Models created and exported
+- [x] Models created and exported
 
 ---
 
@@ -5195,7 +5195,7 @@ DEPLOY-001 → DOC-001 → QA-001
 
 ## Phase 7 — Angular Foundation
 - [x] FRONTEND-001 Global styles and design system
-- [ ] FRONTEND-002 TypeScript models
+- [x] FRONTEND-002 TypeScript models
 - [ ] FRONTEND-003 Core services
 - [ ] FRONTEND-004 HTTP interceptors
 - [ ] FRONTEND-005 Route guards
