@@ -2906,7 +2906,7 @@ backend/src/validators/media.validator.ts
 
 ## API-017 Configure Swagger/OpenAPI Documentation
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 4
 - Dependencies:
@@ -2944,12 +2944,12 @@ backend/src/app.ts (modify — mount swagger UI)
 
 ### Acceptance Criteria
 
-- [ ] Swagger UI accessible at `/api/docs`
-- [ ] Shows API info and available endpoints
+- [x] Swagger UI accessible at `/api/docs`
+- [x] Shows API info and available endpoints
 
 ### Definition of Done
 
-- [ ] Swagger configured and accessible
+- [x] Swagger configured and accessible
 
 ---
 
@@ -5021,8 +5021,8 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] SETUP-001, SETUP-002, SETUP-003, SETUP-004
 - [x] BACKEND-001 through BACKEND-009
 - [x] DB-001, DB-002, DB-003, DB-004, DB-005, DB-006, DB-007, DB-008, DB-010, DB-011
-- [ ] AUTH-001 through AUTH-006
-- [ ] API-001 through API-003, API-004, API-005, API-006, API-007, API-008, API-010, API-011, API-012, API-015
+- [x] AUTH-001 through AUTH-006
+- [x] API-001 through API-003, API-004, API-005, API-006, API-007, API-008, API-010, API-011, API-012, API-015
 - [ ] PUB-002, PUB-003
 - [ ] SEED-001
 - [ ] FRONTEND-001 through FRONTEND-008
@@ -5182,7 +5182,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-014 Settings management
 - [x] API-015 Dashboard stats
 - [x] API-016 Media and CV management
-- [ ] API-017 Swagger documentation
+- [x] API-017 Swagger documentation
 
 ## Phase 5 — Public API
 - [ ] PUB-001 Email service

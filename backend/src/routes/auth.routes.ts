@@ -11,9 +11,37 @@ import {
 const router = Router();
 
 /**
- * @route   POST /api/v1/auth/login
- * @desc    Authenticate user and get access token + refresh token cookie
- * @access  Public (Rate limited: 5 req/15min)
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Authenticate user
+ *     description: Authenticates user credentials, sets an HTTP-only refresh token cookie, and returns a JWT access token.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: admin@example.com
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: Admin@123456
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Invalid email or password
  */
 router.post(
   '/login',
@@ -23,30 +51,80 @@ router.post(
 );
 
 /**
- * @route   POST /api/v1/auth/logout
- * @desc    Clear refresh token cookie
- * @access  Public
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Logout user
+ *     description: Clears the refresh token cookie.
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Logged out successfully
  */
 router.post('/logout', authController.logout);
 
 /**
- * @route   POST /api/v1/auth/refresh
- * @desc    Refresh access token using HTTP-only cookie
- * @access  Public (Cookie required)
+ * @swagger
+ * /auth/refresh:
+ *   post:
+ *     summary: Refresh access token
+ *     description: Issues a new JWT access token using the HTTP-only refresh token cookie.
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Access token refreshed
+ *       401:
+ *         description: Invalid or expired refresh token
  */
 router.post('/refresh', authController.refresh);
 
 /**
- * @route   GET /api/v1/auth/me
- * @desc    Get current authenticated user profile
- * @access  Private (JWT Bearer token required)
+ * @swagger
+ * /auth/me:
+ *   get:
+ *     summary: Get current user profile
+ *     description: Returns the authenticated user's profile details.
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile retrieved
+ *       401:
+ *         description: Unauthorized
  */
 router.get('/me', authenticate, authController.me);
 
 /**
- * @route   PATCH /api/v1/auth/change-password
- * @desc    Change current user's password
- * @access  Private (JWT Bearer token required)
+ * @swagger
+ * /auth/change-password:
+ *   patch:
+ *     summary: Change current user password
+ *     description: Updates the authenticated user's password.
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - currentPassword
+ *               - newPassword
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password updated successfully
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Incorrect current password
  */
 router.patch(
   '/change-password',

@@ -9,11 +9,17 @@ import { NotFoundError } from './utils/AppError';
 import { morganMiddleware } from './utils/logger';
 
 import apiRoutes from './routes';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './config/swagger';
 
 const app: Application = express();
 
-// 1. Security HTTP Headers
-app.use(helmet());
+// 1. Security HTTP Headers (CSP disabled to allow Swagger UI inline assets)
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
 
 // 2. CORS with configured origin whitelist and credentials
 app.use(cors(corsOptions));
@@ -29,7 +35,20 @@ app.use(morganMiddleware);
 // 5. Global API Rate Limiter
 app.use(globalLimiter);
 
-// 6. API Routes (/api/v1/*)
+// 6. Interactive OpenAPI/Swagger Documentation (API-017 / PRD Section 6.6)
+app.get('/api/docs.json', (_req: Request, res: Response) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+app.use(
+  '/api/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: 'Developer Portfolio API Documentation',
+  }),
+);
+
+// 7. API Routes (/api/v1/*)
 app.use('/api/v1', apiRoutes);
 
 // 7. 404 Handler for undefined routes
