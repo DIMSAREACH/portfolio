@@ -1204,7 +1204,7 @@ backend/src/server.ts (modify — connect before starting server)
 
 ## DB-002 Create User Model
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 2
 - Dependencies:
@@ -1268,17 +1268,17 @@ backend/src/models/User.ts
 
 ### Acceptance Criteria
 
-- [ ] User model created with all PRD Section 11.3 fields
-- [ ] Password hashed with bcrypt (12 salt rounds) on save
-- [ ] `comparePassword` method works
-- [ ] Email unique index defined
-- [ ] TypeScript interface exported
+- [x] User model created with all PRD Section 11.3 fields
+- [x] Password hashed with bcrypt (12 salt rounds) on save
+- [x] `comparePassword` method works
+- [x] Email unique index defined
+- [x] TypeScript interface exported
 
 ### Definition of Done
 
-- [ ] Model compiles and exports correctly
-- [ ] Pre-save hook hashes passwords
-- [ ] Instance method verifies passwords
+- [x] Model compiles and exports correctly
+- [x] Pre-save hook hashes passwords
+- [x] Instance method verifies passwords
 
 ---
 
@@ -5140,7 +5140,7 @@ DEPLOY-001 → DOC-001 → QA-001
 
 ## Phase 2 — Database & Models
 - [x] DB-001 MongoDB connection
-- [ ] DB-002 User model
+- [x] DB-002 User model
 - [ ] DB-003 Profile model
 - [ ] DB-004 Category model
 - [ ] DB-005 Project model
