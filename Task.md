@@ -461,7 +461,7 @@ portfolio/
 
 ## SETUP-006 Create Basic README.md
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 0
 - Dependencies:
@@ -505,13 +505,13 @@ portfolio/
 
 ### Acceptance Criteria
 
-- [ ] README.md exists at project root
-- [ ] Contains project description, tech stack, and setup instructions
-- [ ] References `.env.example` for environment configuration
+- [x] README.md exists at project root
+- [x] Contains project description, tech stack, and setup instructions
+- [x] References `.env.example` for environment configuration
 
 ### Definition of Done
 
-- [ ] README created and committed
+- [x] README created and committed
 
 ---
 
@@ -5125,7 +5125,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] SETUP-003 Create health check endpoint
 - [x] SETUP-004 Initialize Angular frontend
 - [x] SETUP-005 Create Docker Compose
-- [ ] SETUP-006 Create README.md
+- [x] SETUP-006 Create README.md
 
 ## Phase 1 — Backend Foundation
 - [ ] BACKEND-001 Environment configuration
