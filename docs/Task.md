@@ -2713,7 +2713,7 @@ backend/src/validators/message.validator.ts
 
 ## API-012 Create Profile Management Endpoints
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 4
 - Dependencies:
@@ -2738,17 +2738,18 @@ backend/src/validators/profile.validator.ts
 backend/src/services/profile.service.ts
 backend/src/controllers/admin/profile.controller.ts
 backend/src/routes/admin/profile.routes.ts
+backend/src/middleware/upload.middleware.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] GET returns profile
-- [ ] PUT upserts profile
-- [ ] Image upload works
+- [x] GET returns profile
+- [x] PUT upserts profile
+- [x] Image upload works
 
 ### Definition of Done
 
-- [ ] Profile endpoints complete
+- [x] Profile endpoints complete
 
 ---
 
@@ -5175,7 +5176,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-009 Certification CRUD
 - [x] API-010 Blog CRUD
 - [x] API-011 Message management
-- [ ] API-012 Profile management
+- [x] API-012 Profile management
 - [ ] API-013 Social link CRUD
 - [ ] API-014 Settings management
 - [ ] API-015 Dashboard stats

@@ -138,16 +138,27 @@ const multerProjectImages = multer({
   { name: 'screenshots', maxCount: 10 },
 ]);
 
+const multerProfileImages = multer({
+  storage,
+  limits: { fileSize: MAX_IMAGE_SIZE },
+  fileFilter: imageFileFilter,
+}).fields([
+  { name: 'profileImage', maxCount: 1 },
+  { name: 'aboutImage', maxCount: 1 },
+]);
+
 export const uploadSingleImage = wrapMulter(multerSingleImage);
 export const uploadMultipleImages = wrapMulter(multerMultipleImages);
 export const uploadPdf = wrapMulter(multerPdf);
 export const uploadProjectImages = wrapMulter(multerProjectImages);
+export const uploadProfileImages = wrapMulter(multerProfileImages);
 
 export default {
   uploadSingleImage,
   uploadMultipleImages,
   uploadPdf,
   uploadProjectImages,
+  uploadProfileImages,
   MAX_IMAGE_SIZE,
   MAX_PDF_SIZE,
 };
