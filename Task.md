@@ -58,7 +58,7 @@ Task.md      → Defines the EXACT actionable development tasks (this document)
 
 ## SETUP-001 Initialize Git Repository and Root Configuration
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 0
 - Dependencies:
@@ -124,7 +124,7 @@ portfolio/
 
 ## SETUP-002 Initialize Node.js/Express Backend with TypeScript
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 0
 - Dependencies:
@@ -192,19 +192,19 @@ backend/
 
 ### Acceptance Criteria
 
-- [ ] `npm run build` compiles without errors
-- [ ] `npm run dev` starts the server on port 3000
-- [ ] `tsconfig.json` has `strict: true`
-- [ ] `.env.example` contains all 19+ required environment variables
-- [ ] ESLint and Prettier are configured
-- [ ] All package.json scripts exist
+- [x] `npm run build` compiles without errors
+- [x] `npm run dev` starts the server on port 3000
+- [x] `tsconfig.json` has `strict: true`
+- [x] `.env.example` contains all 19+ required environment variables
+- [x] ESLint and Prettier are configured
+- [x] All package.json scripts exist
 
 ### Definition of Done
 
-- [ ] Backend project initialized with all dependencies
-- [ ] TypeScript compilation succeeds
-- [ ] Server starts and logs to console
-- [ ] No lint errors
+- [x] Backend project initialized with all dependencies
+- [x] TypeScript compilation succeeds
+- [x] Server starts and logs to console
+- [x] No lint errors
 
 ---
 
@@ -5120,8 +5120,8 @@ DEPLOY-001 → DOC-001 → QA-001
 # Master Task Checklist
 
 ## Phase 0 — Project Setup
-- [ ] SETUP-001 Initialize Git repository
-- [ ] SETUP-002 Initialize backend project
+- [x] SETUP-001 Initialize Git repository
+- [x] SETUP-002 Initialize backend project
 - [ ] SETUP-003 Create health check endpoint
 - [ ] SETUP-004 Initialize Angular frontend
 - [ ] SETUP-005 Create Docker Compose
