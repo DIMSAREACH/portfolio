@@ -3614,7 +3614,7 @@ frontend/src/app/shared/pipes/index.ts (barrel export)
 
 ## FRONTEND-008 Create Public Layout and Configure Routing
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 7
 - Dependencies:
@@ -3634,8 +3634,11 @@ Create the public layout component (header + router-outlet + footer) and configu
 
 ```
 frontend/src/app/features/public/public-layout/public-layout.component.ts
-frontend/src/app/app.routes.ts (create)
-frontend/src/app/app.config.ts (modify — add router providers)
+frontend/src/app/features/public/not-found/not-found.component.ts
+frontend/src/app/app.routes.ts
+frontend/src/app/app.config.ts
+frontend/src/app/app.component.html
+frontend/src/app/app.component.ts
 ```
 
 ### Implementation Steps
@@ -3643,20 +3646,20 @@ frontend/src/app/app.config.ts (modify — add router providers)
 1. Create `PublicLayoutComponent` with header, `<router-outlet>`, and footer.
 2. Configure `app.routes.ts`:
    - Public routes (lazy loaded): `''` → Home, `'about'`, `'skills'`, `'experience'`, `'education'`, `'projects'`, `'projects/:slug'`, `'blog'`, `'blog/:slug'`, `'achievements'`, `'contact'`
-   - Admin routes (lazy loaded, guarded): `'admin'` → lazy load admin module
+   - Admin routes (lazy loaded, guarded): `'admin/login'` (guarded with guestGuard) and `'admin'` (guarded with authGuard)
    - `'**'` → NotFoundComponent
-3. Configure `app.config.ts` with `provideRouter(routes)`, `provideHttpClient(withInterceptors([...]))`, `provideAnimations()`.
+3. Configure `app.config.ts` with `provideRouter(routes, withComponentInputBinding(), withViewTransitions(), withInMemoryScrolling(...))`, `provideHttpClient(withInterceptors([...]))`, `provideAnimationsAsync()`.
 
 ### Acceptance Criteria
 
-- [ ] Public layout renders header + content + footer
-- [ ] Routing navigates between pages
-- [ ] Admin routes are lazy-loaded and guarded
-- [ ] 404 route works
+- [x] Public layout renders header + content + footer
+- [x] Routing navigates between pages
+- [x] Admin routes are lazy-loaded and guarded
+- [x] 404 route works
 
 ### Definition of Done
 
-- [ ] Layout and routing configured
+- [x] Layout and routing configured, tested, and verified
 
 ---
 
@@ -5212,7 +5215,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] FRONTEND-005 Route guards
 - [x] FRONTEND-006 Shared UI components
 - [x] FRONTEND-007 Shared pipes
-- [ ] FRONTEND-008 Public layout and routing
+- [x] FRONTEND-008 Public layout and routing
 
 ## Phase 8 — Public Pages
 - [ ] PUBLIC-001 Home page
