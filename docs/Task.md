@@ -3744,7 +3744,7 @@ frontend/src/app/features/public/about/about.component.spec.ts
 
 ## PUBLIC-003 Create Skills Page
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 8
 - Dependencies:
@@ -3759,17 +3759,18 @@ Create Skills page with grouped category layout per PRD Section 8.3. No percenta
 
 ```
 frontend/src/app/features/public/skills/skills.component.ts
+frontend/src/app/features/public/skills/skills.component.spec.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] Skills grouped by category
-- [ ] Badge/chip layout (no progress bars)
-- [ ] Data from API
+- [x] Skills grouped by category
+- [x] Badge/chip layout (no progress bars)
+- [x] Data from API
 
 ### Definition of Done
 
-- [ ] Skills page complete
+- [x] Skills page complete and unit tested
 
 ---
 
@@ -5084,9 +5085,9 @@ DEPLOY-001 → DOC-001 → QA-001
 |----------------|-------------|------------|----------|--------|
 | Technology Stack | 6 | 0 | SETUP-001 through SETUP-006 | TODO |
 | System Architecture | 7 | 0-1 | SETUP-002, BACKEND-008, BACKEND-009 | TODO |
-| Home Page | 8.1 | 8 | PUBLIC-001 | TODO |
-| About Page | 8.2 | 8 | PUBLIC-002 | TODO |
-| Skills Page | 8.3 | 8 | PUBLIC-003 | TODO |
+| Home Page | 8.1 | 8 | PUBLIC-001 | DONE |
+| About Page | 8.2 | 8 | PUBLIC-002 | DONE |
+| Skills Page | 8.3 | 8 | PUBLIC-003 | DONE |
 | Experience Page | 8.4 | 8 | PUBLIC-004 | TODO |
 | Education Page | 8.5 | 8 | PUBLIC-005 | TODO |
 | Projects Page + Detail | 8.6-8.7 | 8 | PUBLIC-006 | TODO |
@@ -5221,8 +5222,8 @@ DEPLOY-001 → DOC-001 → QA-001
 
 ## Phase 8 — Public Pages
 - [x] PUBLIC-001 Home page
-- [ ] PUBLIC-002 About page
-- [ ] PUBLIC-003 Skills page
+- [x] PUBLIC-002 About page
+- [x] PUBLIC-003 Skills page
 - [ ] PUBLIC-004 Experience page
 - [ ] PUBLIC-005 Education page
 - [ ] PUBLIC-006 Project list and detail pages
