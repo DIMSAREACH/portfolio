@@ -1354,7 +1354,7 @@ backend/src/models/Profile.ts
 
 ## DB-004 Create Category Model
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 2
 - Dependencies:
@@ -1391,13 +1391,13 @@ backend/src/models/Category.ts
 
 ### Acceptance Criteria
 
-- [ ] Category model created per PRD Section 11.11
-- [ ] Slug unique index defined
-- [ ] Type enum validated
+- [x] Category model created per PRD Section 11.11
+- [x] Slug unique index defined
+- [x] Type enum validated
 
 ### Definition of Done
 
-- [ ] Model file created and compiled
+- [x] Model file created and compiled
 
 ---
 
@@ -5142,7 +5142,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] DB-001 MongoDB connection
 - [x] DB-002 User model
 - [x] DB-003 Profile model
-- [ ] DB-004 Category model
+- [x] DB-004 Category model
 - [ ] DB-005 Project model
 - [ ] DB-006 Skill model
 - [ ] DB-007 Experience model
