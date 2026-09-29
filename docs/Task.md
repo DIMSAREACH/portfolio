@@ -1586,7 +1586,7 @@ backend/src/models/Education.ts
 
 ## DB-009 Create Certification Model
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 2
 - Dependencies:
@@ -1613,12 +1613,12 @@ backend/src/models/Certification.ts
 
 ### Acceptance Criteria
 
-- [ ] Model matches PRD Section 11.9
-- [ ] Type enum validated
+- [x] Model matches PRD Section 11.9
+- [x] Type enum validated
 
 ### Definition of Done
 
-- [ ] Model file created
+- [x] Model file created
 
 ---
 
@@ -5147,7 +5147,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] DB-006 Skill model
 - [x] DB-007 Experience model
 - [x] DB-008 Education model
-- [ ] DB-009 Certification model
+- [x] DB-009 Certification model
 - [ ] DB-010 BlogPost model
 - [ ] DB-011 Message model
 - [ ] DB-012 Media model
