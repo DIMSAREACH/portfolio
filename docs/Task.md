@@ -3349,7 +3349,7 @@ frontend/src/app/core/models/
 
 ## FRONTEND-003 Create Core Services
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 7
 - Dependencies:
@@ -3376,7 +3376,8 @@ frontend/src/app/core/services/
 ├── auth.service.ts
 ├── theme.service.ts
 ├── language.service.ts
-└── notification.service.ts
+├── notification.service.ts
+└── index.ts (barrel export)
 ```
 
 ### Implementation Steps
@@ -3395,14 +3396,14 @@ frontend/src/app/core/services/
 
 ### Acceptance Criteria
 
-- [ ] All 5 services created
-- [ ] AuthService handles login/logout with Signals
-- [ ] ThemeService toggles theme and persists
-- [ ] Notification shows toast messages
+- [x] All 5 services created
+- [x] AuthService handles login/logout with Signals
+- [x] ThemeService toggles theme and persists
+- [x] Notification shows toast messages
 
 ### Definition of Done
 
-- [ ] Core services created and injectable
+- [x] Core services created and injectable
 
 ---
 
@@ -5196,7 +5197,7 @@ DEPLOY-001 → DOC-001 → QA-001
 ## Phase 7 — Angular Foundation
 - [x] FRONTEND-001 Global styles and design system
 - [x] FRONTEND-002 TypeScript models
-- [ ] FRONTEND-003 Core services
+- [x] FRONTEND-003 Core services
 - [ ] FRONTEND-004 HTTP interceptors
 - [ ] FRONTEND-005 Route guards
 - [ ] FRONTEND-006 Shared UI components
