@@ -2490,7 +2490,7 @@ backend/src/routes/admin/project.routes.ts
 
 ## API-006 Create Skill CRUD
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 4
 - Dependencies:
@@ -2512,12 +2512,12 @@ backend/src/routes/admin/skill.routes.ts
 
 ### Acceptance Criteria
 
-- [ ] GET, POST, PATCH, DELETE endpoints work
-- [ ] Validation enforced
+- [x] GET, POST, PATCH, DELETE endpoints work
+- [x] Validation enforced
 
 ### Definition of Done
 
-- [ ] Skill CRUD complete
+- [x] Skill CRUD complete
 
 ---
 
@@ -5168,7 +5168,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-003 Admin route infrastructure
 - [x] API-004 Category CRUD
 - [x] API-005 Project CRUD
-- [ ] API-006 Skill CRUD
+- [x] API-006 Skill CRUD
 - [ ] API-007 Experience CRUD
 - [ ] API-008 Education CRUD
 - [ ] API-009 Certification CRUD

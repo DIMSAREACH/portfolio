@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { authenticate, authorize } from '../../middleware/auth.middleware';
 import categoryRoutes from './category.routes';
 import projectRoutes from './project.routes';
+import skillRoutes from './skill.routes';
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.get('/', (_req: Request, res: Response) => {
 // Admin resource mounting points (Phase 4):
 router.use('/categories', categoryRoutes);       // API-004
 router.use('/projects', projectRoutes);           // API-005
-// router.use('/skills', skillRoutes);               // API-006
+router.use('/skills', skillRoutes);               // API-006
 // router.use('/experiences', experienceRoutes);     // API-007
 // router.use('/education', educationRoutes);         // API-008
 // router.use('/certifications', certRoutes);        // API-009
