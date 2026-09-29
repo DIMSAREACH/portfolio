@@ -2311,7 +2311,7 @@ backend/src/middleware/upload.middleware.ts
 
 ## API-003 Create Admin Route Infrastructure
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 4
 - Dependencies:
@@ -2345,14 +2345,14 @@ backend/src/routes/index.ts (modify — mount admin routes)
 
 ### Acceptance Criteria
 
-- [ ] Admin routes require authentication
-- [ ] Unauthenticated request returns 401
-- [ ] Non-admin role returns 403
-- [ ] Routes mounted at `/api/v1/admin`
+- [x] Admin routes require authentication
+- [x] Unauthenticated request returns 401
+- [x] Non-admin role returns 403
+- [x] Routes mounted at `/api/v1/admin`
 
 ### Definition of Done
 
-- [ ] Admin route index created and mounted
+- [x] Admin route index created and mounted
 
 ---
 
@@ -5165,7 +5165,7 @@ DEPLOY-001 → DOC-001 → QA-001
 ## Phase 4 — Admin API
 - [x] API-001 Cloudinary config and service
 - [x] API-002 Upload middleware
-- [ ] API-003 Admin route infrastructure
+- [x] API-003 Admin route infrastructure
 - [ ] API-004 Category CRUD
 - [ ] API-005 Project CRUD
 - [ ] API-006 Skill CRUD

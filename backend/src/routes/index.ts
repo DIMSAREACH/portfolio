@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 
 import authRoutes from './auth.routes';
+import adminRoutes from './admin';
 
 const router = Router();
 
@@ -18,8 +19,10 @@ router.get('/health', (_req: Request, res: Response) => {
 // Authentication & Authorization routes (Phase 3)
 router.use('/auth', authRoutes);
 
+// Core Admin API routes (Phase 4)
+router.use('/admin', adminRoutes);
+
 // Future Route Mounting Points:
 // router.use('/', publicRoutes);         // Phase 5 — Public API (Portfolio, Blog, Contact)
-// router.use('/admin', adminRoutes);     // Phase 4 — Admin API (Content Management)
 
 export default router;
