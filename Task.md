@@ -371,7 +371,7 @@ frontend/
 
 ## SETUP-005 Create Docker Compose for Local Development
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 0
 - Dependencies:
@@ -445,17 +445,17 @@ portfolio/
 
 ### Acceptance Criteria
 
-- [ ] `docker-compose -f docker-compose.dev.yml up` starts all 3 services
-- [ ] Frontend accessible at port 4200
-- [ ] Backend health check returns 200 at port 3000
-- [ ] MongoDB runs on port 27017
-- [ ] Source code changes trigger hot-reload in containers
+- [x] `docker-compose -f docker-compose.dev.yml up` starts all 3 services
+- [x] Frontend accessible at port 4200
+- [x] Backend health check returns 200 at port 3000
+- [x] MongoDB runs on port 27017
+- [x] Source code changes trigger hot-reload in containers
 
 ### Definition of Done
 
-- [ ] Docker Compose runs successfully
-- [ ] All 3 services start and are accessible
-- [ ] Hot-reload works for both frontend and backend
+- [x] Docker Compose runs successfully
+- [x] All 3 services start and are accessible
+- [x] Hot-reload works for both frontend and backend
 
 ---
 
@@ -5124,7 +5124,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] SETUP-002 Initialize backend project
 - [x] SETUP-003 Create health check endpoint
 - [x] SETUP-004 Initialize Angular frontend
-- [ ] SETUP-005 Create Docker Compose
+- [x] SETUP-005 Create Docker Compose
 - [ ] SETUP-006 Create README.md
 
 ## Phase 1 — Backend Foundation
