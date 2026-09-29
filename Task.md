@@ -262,7 +262,7 @@ backend/src/app.ts (modify)
 
 ## SETUP-004 Initialize Angular Frontend Project
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 0
 - Dependencies:
@@ -354,18 +354,18 @@ frontend/
 
 ### Acceptance Criteria
 
-- [ ] Angular project created with standalone components
-- [ ] Angular Material installed
-- [ ] Tailwind CSS configured and utility classes work
-- [ ] Environment files created with correct `apiUrl`
-- [ ] `ng serve` starts without errors
-- [ ] ESLint configured for Angular
+- [x] Angular project created with standalone components
+- [x] Angular Material installed
+- [x] Tailwind CSS configured and utility classes work
+- [x] Environment files created with correct `apiUrl`
+- [x] `ng serve` starts without errors
+- [x] ESLint configured for Angular
 
 ### Definition of Done
 
-- [ ] Frontend compiles and serves
-- [ ] Angular Material and Tailwind CSS are both functional
-- [ ] Environment files exist
+- [x] Frontend compiles and serves
+- [x] Angular Material and Tailwind CSS are both functional
+- [x] Environment files exist
 
 ---
 
@@ -5123,7 +5123,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] SETUP-001 Initialize Git repository
 - [x] SETUP-002 Initialize backend project
 - [x] SETUP-003 Create health check endpoint
-- [ ] SETUP-004 Initialize Angular frontend
+- [x] SETUP-004 Initialize Angular frontend
 - [ ] SETUP-005 Create Docker Compose
 - [ ] SETUP-006 Create README.md
 
