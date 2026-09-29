@@ -791,7 +791,7 @@ backend/src/utils/logger.ts
 
 ## BACKEND-005 Create Utility Functions
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 1
 - Dependencies:
@@ -847,17 +847,17 @@ backend/src/utils/readingTime.ts
 
 ### Acceptance Criteria
 
-- [ ] All 5 utilities created and exported
-- [ ] `catchAsync` forwards errors to next()
-- [ ] `apiResponse` matches PRD Section 13 format
-- [ ] `slugify` produces URL-friendly strings
-- [ ] `pagination` enforces min/max limits
-- [ ] `readingTime` calculates correct minutes
+- [x] All 5 utilities created and exported
+- [x] `catchAsync` forwards errors to next()
+- [x] `apiResponse` matches PRD Section 13 format
+- [x] `slugify` produces URL-friendly strings
+- [x] `pagination` enforces min/max limits
+- [x] `readingTime` calculates correct minutes
 
 ### Definition of Done
 
-- [ ] All utility files compile
-- [ ] Functions produce correct output for test cases
+- [x] All utility files compile
+- [x] Functions produce correct output for test cases
 
 ---
 
@@ -5132,7 +5132,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] BACKEND-002 Custom error classes
 - [x] BACKEND-003 Global error handler
 - [x] BACKEND-004 Logger and HTTP logging
-- [ ] BACKEND-005 Utility functions
+- [x] BACKEND-005 Utility functions
 - [ ] BACKEND-006 Validation and rate limiting
 - [ ] BACKEND-007 TypeScript type definitions
 - [ ] BACKEND-008 CORS and security headers
