@@ -1808,7 +1808,7 @@ backend/src/models/Settings.ts
 
 ## AUTH-001 Create JWT Token Utility
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 3
 - Dependencies:
@@ -1860,15 +1860,15 @@ backend/src/utils/jwt.ts
 
 ### Acceptance Criteria
 
-- [ ] Access token generation and verification work
-- [ ] Refresh token generation and verification work
-- [ ] Different secrets used for access and refresh
-- [ ] Expired tokens throw errors
+- [x] Access token generation and verification work
+- [x] Refresh token generation and verification work
+- [x] Different secrets used for access and refresh
+- [x] Expired tokens throw errors
 
 ### Definition of Done
 
-- [ ] JWT utility created and exported
-- [ ] Functions tested with valid and invalid inputs
+- [x] JWT utility created and exported
+- [x] Functions tested with valid and invalid inputs
 
 ---
 
@@ -5155,7 +5155,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] DB-014 Settings model
 
 ## Phase 3 — Authentication
-- [ ] AUTH-001 JWT token utility
+- [x] AUTH-001 JWT token utility
 - [ ] AUTH-002 Auth service
 - [ ] AUTH-003 Auth validators
 - [ ] AUTH-004 Auth controller and routes
