@@ -1956,7 +1956,7 @@ backend/src/services/auth.service.ts
 
 ## AUTH-003 Create Auth Validators
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 3
 - Dependencies:
@@ -1985,12 +1985,12 @@ backend/src/validators/auth.validator.ts
 
 ### Acceptance Criteria
 
-- [ ] Login validator checks email format and password presence
-- [ ] Change password validator enforces min 8 chars for new password
+- [x] Login validator checks email format and password presence
+- [x] Change password validator enforces min 8 chars for new password
 
 ### Definition of Done
 
-- [ ] Validator file created and exported
+- [x] Validator file created and exported
 
 ---
 
@@ -5157,7 +5157,7 @@ DEPLOY-001 → DOC-001 → QA-001
 ## Phase 3 — Authentication
 - [x] AUTH-001 JWT token utility
 - [x] AUTH-002 Auth service
-- [ ] AUTH-003 Auth validators
+- [x] AUTH-003 Auth validators
 - [ ] AUTH-004 Auth controller and routes
 - [ ] AUTH-005 Auth middleware
 - [ ] AUTH-006 Admin seed script
