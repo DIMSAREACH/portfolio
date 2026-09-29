@@ -54,10 +54,10 @@ portfolio/
 
 The repository is governed by the following master specifications:
 
-- **[PRD.md](PRD.md)** — Product Requirements Document (features, schemas, API specifications)
-- **[Plan.md](Plan.md)** — Architectural roadmap and dependency-aware implementation phases
-- **[Task.md](Task.md)** — Task tracker with acceptance criteria and definition of done
-- **[Design.md](Design.md)** — Design system, color palettes, typography, and UX guidelines
+- **[PRD.md](docs/PRD.md)** — Product Requirements Document (features, schemas, API specifications)
+- **[Plan.md](docs/Plan.md)** — Architectural roadmap and dependency-aware implementation phases
+- **[Task.md](docs/Task.md)** — Task tracker with acceptance criteria and definition of done
+- **[Design.md](docs/Design.md)** — Design system, color palettes, typography, and UX guidelines
 - **[Agent.md](Agent.md)** — Operating manual and coding standards for AI pair programming
 
 ---

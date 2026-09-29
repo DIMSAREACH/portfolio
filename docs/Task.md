@@ -521,7 +521,7 @@ portfolio/
 
 ## BACKEND-001 Create Environment Configuration Module
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 1
 - Dependencies:
@@ -575,16 +575,16 @@ backend/src/config/environment.ts
 
 ### Acceptance Criteria
 
-- [ ] Config module exports typed configuration
-- [ ] Missing critical vars cause clear startup error
-- [ ] Defaults applied for non-critical vars
-- [ ] No secrets logged to console
+- [x] Config module exports typed configuration
+- [x] Missing critical vars cause clear startup error
+- [x] Defaults applied for non-critical vars
+- [x] No secrets logged to console
 
 ### Definition of Done
 
-- [ ] `environment.ts` created and compiles
-- [ ] Required variable validation works
-- [ ] Imported by `server.ts` / `app.ts`
+- [x] `environment.ts` created and compiles
+- [x] Required variable validation works
+- [x] Imported by `server.ts` / `app.ts`
 
 ---
 
@@ -5128,7 +5128,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] SETUP-006 Create README.md
 
 ## Phase 1 — Backend Foundation
-- [ ] BACKEND-001 Environment configuration
+- [x] BACKEND-001 Environment configuration
 - [ ] BACKEND-002 Custom error classes
 - [ ] BACKEND-003 Global error handler
 - [ ] BACKEND-004 Logger and HTTP logging
