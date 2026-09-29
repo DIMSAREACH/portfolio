@@ -2959,7 +2959,7 @@ backend/src/app.ts (modify — mount swagger UI)
 
 ## PUB-001 Create Email Service
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 5
 - Dependencies:
@@ -2984,12 +2984,12 @@ backend/src/services/email.service.ts
 
 ### Acceptance Criteria
 
-- [ ] Email sends via SMTP
-- [ ] Failures handled gracefully (logged, not thrown)
+- [x] Email sends via SMTP
+- [x] Failures handled gracefully (logged, not thrown)
 
 ### Definition of Done
 
-- [ ] Email service created
+- [x] Email service created
 
 ---
 
@@ -5185,7 +5185,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-017 Swagger documentation
 
 ## Phase 5 — Public API
-- [ ] PUB-001 Email service
+- [x] PUB-001 Email service
 - [ ] PUB-002 Public API endpoints
 - [ ] PUB-003 Contact form endpoint
 - [ ] PUB-004 CV download endpoint
