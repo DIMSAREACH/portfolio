@@ -2670,7 +2670,7 @@ backend/src/routes/admin/blog.routes.ts
 
 ## API-011 Create Message Management Endpoints
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 4
 - Dependencies:
@@ -2696,17 +2696,18 @@ Implement admin message management per PRD Section 12.3 (Admin — Messages).
 backend/src/services/message.service.ts
 backend/src/controllers/admin/message.controller.ts
 backend/src/routes/admin/message.routes.ts
+backend/src/validators/message.validator.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] All message endpoints work
-- [ ] Read/unread toggle works
-- [ ] Archive works
+- [x] All message endpoints work
+- [x] Read/unread toggle works
+- [x] Archive works
 
 ### Definition of Done
 
-- [ ] Message management complete
+- [x] Message management complete
 
 ---
 
@@ -5173,7 +5174,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-008 Education CRUD
 - [x] API-009 Certification CRUD
 - [x] API-010 Blog CRUD
-- [ ] API-011 Message management
+- [x] API-011 Message management
 - [ ] API-012 Profile management
 - [ ] API-013 Social link CRUD
 - [ ] API-014 Settings management
