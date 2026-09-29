@@ -1468,7 +1468,7 @@ backend/src/models/Project.ts
 
 ## DB-006 Create Skill Model
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 2
 - Dependencies:
@@ -1498,12 +1498,12 @@ backend/src/models/Skill.ts
 
 ### Acceptance Criteria
 
-- [ ] Model matches PRD Section 11.6
-- [ ] Index defined
+- [x] Model matches PRD Section 11.6
+- [x] Index defined
 
 ### Definition of Done
 
-- [ ] Model file created and compiled
+- [x] Model file created and compiled
 
 ---
 
@@ -5144,7 +5144,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] DB-003 Profile model
 - [x] DB-004 Category model
 - [x] DB-005 Project model
-- [ ] DB-006 Skill model
+- [x] DB-006 Skill model
 - [ ] DB-007 Experience model
 - [ ] DB-008 Education model
 - [ ] DB-009 Certification model
