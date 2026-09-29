@@ -1,0 +1,447 @@
+<div class="relative overflow-hidden">
+  <!-- HERO SECTION -->
+  <section
+    class="relative pt-12 pb-20 md:pt-20 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto hero-glow"
+    aria-label="Hero Introduction"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <!-- Left Column: Copy & Actions -->
+      <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+        <!-- Availability Badge -->
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-xs font-semibold text-emerald-700 dark:text-emerald-300 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>{{ isKhmer() ? 'បើកទទួលការងារ និងគម្រោងថ្មីៗ' : 'Available for new opportunities' }}</span>
+        </div>
+
+        <!-- Name & Headline -->
+        <div class="space-y-3">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+            {{ isKhmer() ? 'សួស្តី ខ្ញុំគឺ' : "Hi, I'm" }}
+            <span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
+              {{ (profile()?.fullName | localize) || 'Dim Sareach' }}
+            </span>
+          </h1>
+
+          <p class="text-xl sm:text-2xl font-semibold text-slate-700 dark:text-slate-300" [class.font-khmer]="isKhmer()">
+            {{ (profile()?.title | localize) || 'Full Stack Software Engineer' }}
+          </p>
+        </div>
+
+        <!-- Short Introduction -->
+        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed" [class.font-khmer]="isKhmer()">
+          {{ (profile()?.introduction | localize) || 'Crafting performant web applications, elegant architectures, and delightful digital user experiences with modern technologies.' }}
+        </p>
+
+        <!-- Call to Action Buttons -->
+        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+          <a
+            routerLink="/projects"
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 shadow-md shadow-indigo-500/25 transition-all hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+            id="hero-view-projects-btn"
+          >
+            <span>{{ isKhmer() ? 'មើលគម្រោង' : 'View Projects' }}</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </a>
+
+          @if (settings()?.enableCvDownload !== false) {
+            <a
+              [href]="cvDownloadUrl"
+              target="_blank"
+              class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 shadow-sm transition-all hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-slate-400"
+              id="hero-download-cv-btn"
+            >
+              <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+              <span>{{ isKhmer() ? 'ទាញយកប្រវត្តិរូប (CV)' : 'Download CV' }}</span>
+            </a>
+          }
+
+          <a
+            routerLink="/contact"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+          >
+            <span>{{ isKhmer() ? 'ទំនាក់ទំនង' : 'Contact Me' }}</span>
+          </a>
+        </div>
+
+        <!-- Social Links Row -->
+        @if (socialLinks().length > 0) {
+          <div class="flex items-center justify-center lg:justify-start gap-3 pt-4">
+            @for (social of socialLinks(); track social._id) {
+              <a
+                [href]="social.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                [attr.aria-label]="social.label"
+                class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-300 dark:hover:border-indigo-700 hover:scale-105 transition-all shadow-sm"
+              >
+                <span class="sr-only">{{ social.label }}</span>
+                <!-- Platform specific icon fallback -->
+                <svg class="w-4 h-4 fill-currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                  <text x="12" y="16" font-size="11" text-anchor="middle" fill="currentColor" font-weight="bold">
+                    {{ social.platform.charAt(0).toUpperCase() }}
+                  </text>
+                </svg>
+              </a>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Right Column: Profile Visual Card -->
+      <div class="lg:col-span-5 flex justify-center">
+        <div class="relative group">
+          <!-- Gradient Aura Behind Image -->
+          <div class="absolute -inset-1.5 bg-gradient-to-tr from-indigo-600 to-pink-500 rounded-3xl blur-lg opacity-30 group-hover:opacity-50 transition duration-500"></div>
+
+          <!-- Card Container -->
+          <div class="relative w-72 h-80 sm:w-80 sm:h-96 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-700/80 bg-slate-100 dark:bg-slate-800 shadow-2xl flex items-center justify-center">
+            @if (profile()?.profileImage) {
+              <img
+                [src]="profile()!.profileImage"
+                [alt]="(profile()?.fullName | localize) || 'Dim Sareach'"
+                class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              />
+            } @else {
+              <!-- Fallback stylish avatar -->
+              <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 text-white p-6 text-center">
+                <span class="text-6xl font-black mb-2">DS</span>
+                <span class="text-lg font-bold">Dim Sareach</span>
+                <span class="text-xs text-indigo-100">Full Stack Engineer</span>
+              </div>
+            }
+          </div>
+
+          <!-- Floating Experience Pill -->
+          <div class="absolute -bottom-4 -left-4 sm:-left-6 px-4 py-2 rounded-2xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 shadow-xl flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
+              3+
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-800 dark:text-white">Years Experience</p>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400">Full Stack & AI</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PROJECTS SECTION -->
+  <section
+    class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-100 dark:border-slate-800/80"
+    id="featured-projects"
+    aria-label="Featured Projects"
+  >
+    <!-- Section Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">
+          {{ isKhmer() ? 'ស្នាដៃសំខាន់ៗ' : 'Portfolio Highlights' }}
+        </p>
+        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
+          {{ isKhmer() ? 'គម្រោងដែលបានជ្រើសរើស' : 'Featured Projects' }}
+        </h2>
+      </div>
+
+      <a
+        routerLink="/projects"
+        class="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 group"
+      >
+        <span>{{ isKhmer() ? 'មើលគម្រោងទាំងអស់' : 'View all projects' }}</span>
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Projects Grid -->
+    @if (isLoading()) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <app-skeleton-loader type="card" [count]="3"></app-skeleton-loader>
+      </div>
+    } @else if (featuredProjects().length > 0) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @for (project of featuredProjects(); track project._id) {
+          <article
+            class="project-card rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/60 overflow-hidden shadow-sm hover:shadow-xl flex flex-col group"
+          >
+            <!-- Project Image -->
+            <a [routerLink]="['/projects', project.slug]" class="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800 block">
+              @if (project.mainImage) {
+                <img
+                  [src]="project.mainImage"
+                  [alt]="project.title | localize"
+                  class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                />
+              } @else {
+                <div class="w-full h-full flex items-center justify-center bg-slate-200 dark:bg-slate-800 text-slate-400 font-bold text-lg">
+                  {{ project.title | localize }}
+                </div>
+              }
+              <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 shadow-sm">
+                Featured
+              </div>
+            </a>
+
+            <!-- Card Content -->
+            <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+              <div class="space-y-2">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <a [routerLink]="['/projects', project.slug]">
+                    {{ project.title | localize }}
+                  </a>
+                </h3>
+
+                <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed" [class.font-khmer]="isKhmer()">
+                  {{ (project.shortDescription | localize) | truncate: 120: true }}
+                </p>
+              </div>
+
+              <!-- Tech Tags & Footer Link -->
+              <div class="space-y-4 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+                <div class="flex flex-wrap gap-1.5">
+                  @for (tech of project.technologies.slice(0, 4); track tech) {
+                    <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium">
+                      {{ tech }}
+                    </span>
+                  }
+                  @if (project.technologies.length > 4) {
+                    <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-medium">
+                      +{{ project.technologies.length - 4 }}
+                    </span>
+                  }
+                </div>
+
+                <div class="flex items-center justify-between pt-1">
+                  <a
+                    [routerLink]="['/projects', project.slug]"
+                    class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline inline-flex items-center gap-1"
+                  >
+                    <span>{{ isKhmer() ? 'មើលព័ត៌មានលម្អិត' : 'Case Study' }}</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </a>
+
+                  <div class="flex items-center gap-2">
+                    @if (project.githubUrl) {
+                      <a
+                        [href]="project.githubUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="p-1.5 text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors"
+                        aria-label="View Source Code on GitHub"
+                      >
+                        <svg class="w-4 h-4 fill-currentColor" viewBox="0 0 24 24">
+                          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                      </a>
+                    }
+                    @if (project.liveUrl) {
+                      <a
+                        [href]="project.liveUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="p-1.5 text-slate-400 hover:text-indigo-600 transition-colors"
+                        aria-label="View Live Project Demo"
+                      >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                      </a>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <div class="text-center py-12 text-slate-500">
+        {{ isKhmer() ? 'មិនទាន់មានគម្រោងបង្ហាញនៅឡើយទេ' : 'No featured projects found.' }}
+      </div>
+    }
+  </section>
+
+  <!-- SKILLS OVERVIEW SECTION -->
+  <section
+    class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30 rounded-3xl"
+    aria-label="Technical Skills"
+  >
+    <div class="max-w-3xl mx-auto text-center mb-12">
+      <p class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">
+        {{ isKhmer() ? 'សមត្ថភាពបច្ចេកវិទ្យា' : 'Core Technologies' }}
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
+        {{ isKhmer() ? 'ជំនាញ និងបច្ចេកវិទ្យា' : 'Skills & Technologies' }}
+      </h2>
+      <p class="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-400">
+        {{ isKhmer() ? 'ឧបករណ៍ និងបច្ចេកវិទ្យាដែលខ្ញុំប្រើប្រាស់ដើម្បីបង្កើតប្រព័ន្ធប្រកបដោយប្រសិទ្ធភាព' : 'Tools and languages I utilize to architect reliable, scalable web applications.' }}
+      </p>
+    </div>
+
+    <!-- Skills Grouped Categories -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      @for (group of skillsGrouped(); track group.categoryName) {
+        <div class="p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-4">
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+            <span>{{ group.categoryName }}</span>
+          </h3>
+
+          <div class="flex flex-wrap gap-2">
+            @for (skill of group.skills; track skill._id) {
+              <span class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-slate-700 transition-colors">
+                {{ skill.name }}
+              </span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="text-center mt-10">
+      <a
+        routerLink="/skills"
+        class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300"
+      >
+        <span>{{ isKhmer() ? 'ស្វែងយល់បន្ថែមអំពីជំនាញទាំងអស់' : 'Explore full technical skill set' }}</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE SUMMARY SECTION -->
+  <section
+    class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-100 dark:border-slate-800/80"
+    aria-label="Work Experience"
+  >
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">
+          {{ isKhmer() ? 'ប្រវត្តិការងារ' : 'Career Path' }}
+        </p>
+        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
+          {{ isKhmer() ? 'បទពិសោធន៍ការងារ' : 'Work Experience' }}
+        </h2>
+      </div>
+
+      <a
+        routerLink="/experience"
+        class="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 group"
+      >
+        <span>{{ isKhmer() ? 'មើលប្រវត្តិការងារពេញលេញ' : 'View full timeline' }}</span>
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Timeline Entries -->
+    <div class="space-y-6">
+      @for (exp of experiences().slice(0, 3); track exp._id) {
+        <div class="p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row md:items-start justify-between gap-6">
+          <div class="space-y-2 flex-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+                {{ exp.title | localize }}
+              </h3>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/50">
+                {{ exp.organization | localize }}
+              </span>
+            </div>
+
+            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed" [class.font-khmer]="isKhmer()">
+              {{ exp.description | localize }}
+            </p>
+
+            @if (exp.technologies && exp.technologies.length > 0) {
+              <div class="flex flex-wrap gap-1.5 pt-2">
+                @for (tech of exp.technologies; track tech) {
+                  <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-medium">
+                    {{ tech }}
+                  </span>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="shrink-0 text-xs font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl self-start">
+            {{ formatYear(exp.startDate) }} &mdash; {{ exp.isCurrent ? (isKhmer() ? 'បច្ចុប្បន្ន' : 'Present') : formatYear(exp.endDate) }}
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- EDUCATION HIGHLIGHT SECTION -->
+  @if (latestEducation()) {
+    <section
+      class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-100 dark:border-slate-800/80"
+      aria-label="Education Background"
+    >
+      <div class="p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-indigo-50/30 dark:from-slate-900 dark:to-indigo-950/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="space-y-1">
+          <p class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+            {{ isKhmer() ? 'ការអប់រំ និងសញ្ញាបត្រ' : 'Education' }}
+          </p>
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
+            {{ latestEducation()!.degree | localize }} in {{ latestEducation()!.field | localize }}
+          </h3>
+          <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+            {{ latestEducation()!.institution | localize }} &bull; {{ latestEducation()!.startYear }} - {{ latestEducation()!.endYear || (isKhmer() ? 'បច្ចុប្បន្ន' : 'Present') }}
+          </p>
+        </div>
+
+        <a
+          routerLink="/education"
+          class="shrink-0 px-5 py-2.5 rounded-xl text-sm font-semibold text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 transition-colors shadow-sm"
+        >
+          {{ isKhmer() ? 'មើលព័ត៌មានលម្អិត' : 'View Education' }}
+        </a>
+      </div>
+    </section>
+  }
+
+  <!-- CONTACT INVITATION BANNER -->
+  <section
+    class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
+    aria-label="Contact Invitation"
+  >
+    <div
+      class="relative p-8 sm:p-12 md:p-16 rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-900 text-white shadow-2xl text-center space-y-6"
+    >
+      <!-- Background Decorative Blur Circles -->
+      <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-pink-500/20 blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-indigo-400/20 blur-3xl pointer-events-none"></div>
+
+      <div class="relative max-w-2xl mx-auto space-y-4">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
+          {{ isKhmer() ? 'តើលោកអ្នកមានគម្រោងថ្មីដែរឬទេ?' : "Let's build something exceptional together." }}
+        </h2>
+
+        <p class="text-base sm:text-lg text-indigo-100 max-w-xl mx-auto leading-relaxed">
+          {{ isKhmer() ? 'ខ្ញុំរីករាយនឹងសហការលើគម្រោងអភិវឌ្ឍន៍គេហទំព័រ ឬប្រព័ន្ធបច្ចេកវិទ្យាថ្មីៗ។' : 'Feel free to reach out for project inquiries, engineering collaborations, or just to connect.' }}
+        </p>
+
+        <div class="pt-4 flex flex-wrap justify-center gap-4">
+          <a
+            routerLink="/contact"
+            class="px-8 py-3.5 rounded-2xl text-sm font-bold text-indigo-950 bg-white hover:bg-indigo-50 active:bg-indigo-100 shadow-lg shadow-black/10 transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
+            id="home-contact-cta-btn"
+          >
+            {{ isKhmer() ? 'ផ្ញើសារមកកាន់ខ្ញុំ' : 'Get in Touch' }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

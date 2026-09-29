@@ -1,0 +1,20 @@
+/* Subtle background glow effect for hero section */
+.hero-glow {
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(99, 102, 241, 0.15) 0%,
+    rgba(168, 85, 247, 0.08) 35%,
+    transparent 70%
+  );
+}
+
+/* Card hover elevation and glow */
+.project-card {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+}

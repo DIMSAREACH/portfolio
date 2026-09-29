@@ -3669,7 +3669,7 @@ frontend/src/app/app.component.ts
 
 ## PUBLIC-001 Create Home Page
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 8
 - Dependencies:
@@ -3693,6 +3693,7 @@ Create the home page with all sections per PRD Section 8.1.
 ### Files / Modules
 
 ```
+frontend/src/app/core/services/portfolio.service.ts
 frontend/src/app/features/public/home/home.component.ts
 frontend/src/app/features/public/home/home.component.html
 frontend/src/app/features/public/home/home.component.css
@@ -3700,13 +3701,13 @@ frontend/src/app/features/public/home/home.component.css
 
 ### Acceptance Criteria
 
-- [ ] All PRD Section 8.1 sections present
-- [ ] Data fetched from API
-- [ ] Responsive layout
+- [x] All PRD Section 8.1 sections present
+- [x] Data fetched from API
+- [x] Responsive layout
 
 ### Definition of Done
 
-- [ ] Home page created and renders API data
+- [x] Home page created and renders API data
 
 ---
 
@@ -5218,7 +5219,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] FRONTEND-008 Public layout and routing
 
 ## Phase 8 — Public Pages
-- [ ] PUBLIC-001 Home page
+- [x] PUBLIC-001 Home page
 - [ ] PUBLIC-002 About page
 - [ ] PUBLIC-003 Skills page
 - [ ] PUBLIC-004 Experience page
