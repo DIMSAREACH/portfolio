@@ -2258,7 +2258,7 @@ backend/src/services/cloudinary.service.ts
 
 ## API-002 Create Upload Middleware
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 4
 - Dependencies:
@@ -2298,14 +2298,14 @@ backend/src/middleware/upload.middleware.ts
 
 ### Acceptance Criteria
 
-- [ ] Image upload accepts jpg/png/webp under 5MB
-- [ ] PDF upload accepts pdf under 10MB
-- [ ] Rejects unsupported MIME types
-- [ ] Rejects files over size limit
+- [x] Image upload accepts jpg/png/webp under 5MB
+- [x] PDF upload accepts pdf under 10MB
+- [x] Rejects unsupported MIME types
+- [x] Rejects files over size limit
 
 ### Definition of Done
 
-- [ ] Upload middleware created with multiple variants
+- [x] Upload middleware created with multiple variants
 
 ---
 
@@ -5164,7 +5164,7 @@ DEPLOY-001 → DOC-001 → QA-001
 
 ## Phase 4 — Admin API
 - [x] API-001 Cloudinary config and service
-- [ ] API-002 Upload middleware
+- [x] API-002 Upload middleware
 - [ ] API-003 Admin route infrastructure
 - [ ] API-004 Category CRUD
 - [ ] API-005 Project CRUD

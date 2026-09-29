@@ -80,6 +80,13 @@ export function errorHandler(
     isOperational = true;
   }
 
+  // 5. Multer Errors
+  if (err.name === 'MulterError') {
+    statusCode = 400;
+    message = err.message || 'File upload error';
+    isOperational = true;
+  }
+
   // Log non-operational or 500 server errors
   if (!isOperational || statusCode >= 500) {
     logger.error(`${err.name || 'Error'}: ${err.message}`, {
