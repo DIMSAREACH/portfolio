@@ -1,5 +1,13 @@
+@import './styles/_variables.css';
+@import './styles/_reset.css';
+@import './styles/_typography.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Global styles */
+/* Additional Global App Styles */
+html,
+body {
+  height: 100%;
+}

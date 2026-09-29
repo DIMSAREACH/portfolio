@@ -2,20 +2,51 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Frontend</title>
+    <title>Dimsa Reach | Full-Stack Developer Portfolio</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="description"
+      content="Developer Portfolio & Content Management Platform showcasing projects, technical blog posts, skills, and experience."
+    />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Google Fonts Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Google Fonts: Inter, Noto Sans Khmer, JetBrains Mono, Roboto, Material Symbols -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Khmer:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"
       rel="stylesheet"
     />
+
+    <!-- Anti-FOUC theme initialization script (PRD Section 16 & modern-web-guidance) -->
+    <script>
+      (function () {
+        try {
+          var savedTheme =
+            localStorage.getItem('portfolio_theme') || localStorage.getItem('theme');
+          var prefersDark =
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {
+          /* ignore storage access error */
+        }
+      })();
+    </script>
   </head>
   <body>
     <app-root></app-root>

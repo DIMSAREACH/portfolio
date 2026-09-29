@@ -3247,7 +3247,7 @@ backend/seeds/seed.ts (modify — extend with all collections)
 
 ## FRONTEND-001 Create Global Styles and Design System
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 7
 - Dependencies:
@@ -3286,14 +3286,14 @@ frontend/src/index.html (modify — add Google Fonts link)
 
 ### Acceptance Criteria
 
-- [ ] CSS custom properties defined for both themes
-- [ ] Google Fonts loading
-- [ ] Typography styles applied
-- [ ] Dark theme activates with `[data-theme="dark"]`
+- [x] CSS custom properties defined for both themes
+- [x] Google Fonts loading
+- [x] Typography styles applied
+- [x] Dark theme activates with `[data-theme="dark"]`
 
 ### Definition of Done
 
-- [ ] Design system CSS created
+- [x] Design system CSS created
 
 ---
 
@@ -5194,7 +5194,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] SEED-001 Complete seed script
 
 ## Phase 7 — Angular Foundation
-- [ ] FRONTEND-001 Global styles and design system
+- [x] FRONTEND-001 Global styles and design system
 - [ ] FRONTEND-002 TypeScript models
 - [ ] FRONTEND-003 Core services
 - [ ] FRONTEND-004 HTTP interceptors
