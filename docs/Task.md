@@ -2077,7 +2077,7 @@ backend/src/routes/index.ts (modify — mount auth routes)
 
 ## AUTH-005 Create Authentication and Authorization Middleware
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 3
 - Dependencies:
@@ -2121,15 +2121,15 @@ backend/src/middleware/auth.middleware.ts
 
 ### Acceptance Criteria
 
-- [ ] `authenticate` extracts and verifies token
-- [ ] `authenticate` sets `req.user`
-- [ ] `authorize('admin')` allows admin users
-- [ ] Missing token → 401
-- [ ] Wrong role → 403
+- [x] `authenticate` extracts and verifies token
+- [x] `authenticate` sets `req.user`
+- [x] `authorize('admin')` allows admin users
+- [x] Missing token → 401
+- [x] Wrong role → 403
 
 ### Definition of Done
 
-- [ ] Auth middleware created and exported
+- [x] Auth middleware created and exported
 
 ---
 
@@ -5159,7 +5159,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] AUTH-002 Auth service
 - [x] AUTH-003 Auth validators
 - [x] AUTH-004 Auth controller and routes
-- [ ] AUTH-005 Auth middleware
+- [x] AUTH-005 Auth middleware
 - [ ] AUTH-006 Admin seed script
 
 ## Phase 4 — Admin API
