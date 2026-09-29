@@ -1874,7 +1874,7 @@ backend/src/utils/jwt.ts
 
 ## AUTH-002 Create Auth Service
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 3
 - Dependencies:
@@ -1942,15 +1942,15 @@ backend/src/services/auth.service.ts
 
 ### Acceptance Criteria
 
-- [ ] Login returns access token and refresh token
-- [ ] Invalid credentials throw UnauthorizedError
-- [ ] Token refresh generates new access token
-- [ ] Password not included in user data
+- [x] Login returns access token and refresh token
+- [x] Invalid credentials throw UnauthorizedError
+- [x] Token refresh generates new access token
+- [x] Password not included in user data
 
 ### Definition of Done
 
-- [ ] Auth service created with all methods
-- [ ] Service compiles and methods are callable
+- [x] Auth service created with all methods
+- [x] Service compiles and methods are callable
 
 ---
 
@@ -5156,7 +5156,7 @@ DEPLOY-001 → DOC-001 → QA-001
 
 ## Phase 3 — Authentication
 - [x] AUTH-001 JWT token utility
-- [ ] AUTH-002 Auth service
+- [x] AUTH-002 Auth service
 - [ ] AUTH-003 Auth validators
 - [ ] AUTH-004 Auth controller and routes
 - [ ] AUTH-005 Auth middleware
