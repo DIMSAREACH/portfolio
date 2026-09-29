@@ -1772,7 +1772,7 @@ backend/src/models/SocialLink.ts
 
 ## DB-014 Create Settings Model
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 2
 - Dependencies:
@@ -1794,11 +1794,11 @@ backend/src/models/Settings.ts
 
 ### Acceptance Criteria
 
-- [ ] Model matches PRD Section 11.15
+- [x] Model matches PRD Section 11.15
 
 ### Definition of Done
 
-- [ ] Model file created
+- [x] Model file created
 
 ---
 
@@ -5016,8 +5016,8 @@ DEPLOY-001 → DOC-001 → QA-001
 ## MVP — Required (Minimum functional portfolio)
 
 - [x] SETUP-001, SETUP-002, SETUP-003, SETUP-004
-- [ ] BACKEND-001 through BACKEND-009
-- [ ] DB-001, DB-002, DB-003, DB-004, DB-005, DB-006, DB-007, DB-008, DB-010, DB-011
+- [x] BACKEND-001 through BACKEND-009
+- [x] DB-001, DB-002, DB-003, DB-004, DB-005, DB-006, DB-007, DB-008, DB-010, DB-011
 - [ ] AUTH-001 through AUTH-006
 - [ ] API-001 through API-003, API-004, API-005, API-006, API-007, API-008, API-010, API-011, API-012, API-015
 - [ ] PUB-002, PUB-003
@@ -5031,8 +5031,8 @@ DEPLOY-001 → DOC-001 → QA-001
 
 ## Post-MVP — V1 Polish
 
-- [ ] SETUP-005, SETUP-006
-- [ ] DB-009, DB-012, DB-013, DB-014
+- [x] SETUP-005, SETUP-006
+- [x] DB-009, DB-012, DB-013, DB-014
 - [ ] API-009, API-013, API-014, API-016, API-017
 - [ ] PUB-001, PUB-004
 - [ ] ADMIN-004 (reusable components refinement), ADMIN-009, ADMIN-011 (remaining sections)
@@ -5152,7 +5152,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] DB-011 Message model
 - [x] DB-012 Media model
 - [x] DB-013 SocialLink model
-- [ ] DB-014 Settings model
+- [x] DB-014 Settings model
 
 ## Phase 3 — Authentication
 - [ ] AUTH-001 JWT token utility
