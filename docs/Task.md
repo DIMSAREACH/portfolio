@@ -1996,7 +1996,7 @@ backend/src/validators/auth.validator.ts
 
 ## AUTH-004 Create Auth Controller and Routes
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 3
 - Dependencies:
@@ -2061,17 +2061,17 @@ backend/src/routes/index.ts (modify — mount auth routes)
 
 ### Acceptance Criteria
 
-- [ ] All 5 auth endpoints working per PRD Section 12.1
-- [ ] Refresh token set as HTTP-only cookie
-- [ ] Login rate limiting applied (5 per 15 min)
-- [ ] Me and change-password require authentication
-- [ ] cookie-parser added to Express
+- [x] All 5 auth endpoints working per PRD Section 12.1
+- [x] Refresh token set as HTTP-only cookie
+- [x] Login rate limiting applied (5 per 15 min)
+- [x] Me and change-password require authentication
+- [x] cookie-parser added to Express
 
 ### Definition of Done
 
-- [ ] Controller and routes created
-- [ ] Auth routes mounted and accessible
-- [ ] Cookie handling works
+- [x] Controller and routes created
+- [x] Auth routes mounted and accessible
+- [x] Cookie handling works
 
 ---
 
@@ -5158,7 +5158,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] AUTH-001 JWT token utility
 - [x] AUTH-002 Auth service
 - [x] AUTH-003 Auth validators
-- [ ] AUTH-004 Auth controller and routes
+- [x] AUTH-004 Auth controller and routes
 - [ ] AUTH-005 Auth middleware
 - [ ] AUTH-006 Admin seed script
 

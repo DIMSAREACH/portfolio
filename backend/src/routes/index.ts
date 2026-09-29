@@ -1,5 +1,7 @@
 import { Router, Request, Response } from 'express';
 
+import authRoutes from './auth.routes';
+
 const router = Router();
 
 /**
@@ -13,8 +15,10 @@ router.get('/health', (_req: Request, res: Response) => {
   });
 });
 
+// Authentication & Authorization routes (Phase 3)
+router.use('/auth', authRoutes);
+
 // Future Route Mounting Points:
-// router.use('/auth', authRoutes);      // Phase 3 — Authentication & Authorization
 // router.use('/', publicRoutes);         // Phase 5 — Public API (Portfolio, Blog, Contact)
 // router.use('/admin', adminRoutes);     // Phase 4 — Admin API (Content Management)
 

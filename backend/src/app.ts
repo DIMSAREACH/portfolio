@@ -1,6 +1,7 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import corsOptions from './config/cors';
 import { globalLimiter } from './middleware/rateLimiter.middleware';
 import errorHandler from './middleware/errorHandler.middleware';
@@ -17,9 +18,10 @@ app.use(helmet());
 // 2. CORS with configured origin whitelist and credentials
 app.use(cors(corsOptions));
 
-// 3. Request body parsers with 10MB limit (SEC-013)
+// 3. Request body & cookie parsers with 10MB limit (SEC-013)
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(cookieParser());
 
 // 4. HTTP Request Logger
 app.use(morganMiddleware);
