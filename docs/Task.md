@@ -2523,7 +2523,7 @@ backend/src/routes/admin/skill.routes.ts
 
 ## API-007 Create Experience CRUD
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 4
 - Dependencies:
@@ -2545,11 +2545,11 @@ backend/src/routes/admin/experience.routes.ts
 
 ### Acceptance Criteria
 
-- [ ] All CRUD operations work
+- [x] All CRUD operations work
 
 ### Definition of Done
 
-- [ ] Experience CRUD complete
+- [x] Experience CRUD complete
 
 ---
 
@@ -5169,7 +5169,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-004 Category CRUD
 - [x] API-005 Project CRUD
 - [x] API-006 Skill CRUD
-- [ ] API-007 Experience CRUD
+- [x] API-007 Experience CRUD
 - [ ] API-008 Education CRUD
 - [ ] API-009 Certification CRUD
 - [ ] API-010 Blog CRUD
