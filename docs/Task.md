@@ -3464,7 +3464,7 @@ frontend/src/app/core/interceptors/index.ts (barrel export)
 
 ## FRONTEND-005 Create Route Guards
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 7
 - Dependencies:
@@ -3478,27 +3478,33 @@ Create route guards for protecting admin routes per PRD Section 10.3.
 
 - **AuthGuard**: Protects `/admin/*` routes — redirects to `/admin/login` if not authenticated
 - **RoleGuard**: Verifies user role (for future extensibility)
+- **GuestGuard**: Prevents authenticated users from accessing guest-only routes like `/admin/login`
 
 ### Files / Modules
 
 ```
 frontend/src/app/core/guards/auth.guard.ts
 frontend/src/app/core/guards/role.guard.ts
+frontend/src/app/core/guards/guest.guard.ts
+frontend/src/app/core/guards/index.ts (barrel export)
 ```
 
 ### Implementation Steps
 
-1. **AuthGuard**: Functional `CanActivateFn`. Check `authService.isAuthenticated()`. If false: redirect to `/admin/login` with return URL.
+1. **AuthGuard**: Functional `CanActivateFn`. Check `authService.isAuthenticated()`. If false: attempt silent refresh, redirect to `/admin/login` with return URL if unauthenticated.
 2. **RoleGuard**: Functional `CanActivateFn`. Check `authService.currentUser()?.role` against required role.
+3. **GuestGuard**: Functional `CanActivateFn`. Check if user is authenticated; redirect to `/admin/dashboard` if so.
 
 ### Acceptance Criteria
 
-- [ ] Unauthenticated users redirected to login
-- [ ] Authenticated users can access admin routes
+- [x] Unauthenticated users redirected to login
+- [x] Authenticated users can access admin routes
+- [x] Role restrictions enforced
+- [x] Logged-in users redirected away from login to dashboard
 
 ### Definition of Done
 
-- [ ] Guards created
+- [x] Guards created and unit tested
 
 ---
 
@@ -5200,7 +5206,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] FRONTEND-002 TypeScript models
 - [x] FRONTEND-003 Core services
 - [x] FRONTEND-004 HTTP interceptors
-- [ ] FRONTEND-005 Route guards
+- [x] FRONTEND-005 Route guards
 - [ ] FRONTEND-006 Shared UI components
 - [ ] FRONTEND-007 Shared pipes
 - [ ] FRONTEND-008 Public layout and routing
