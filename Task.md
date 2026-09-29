@@ -210,7 +210,7 @@ backend/
 
 ## SETUP-003 Create Health Check Endpoint
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 0
 - Dependencies:
@@ -249,14 +249,14 @@ backend/src/app.ts (modify)
 
 ### Acceptance Criteria
 
-- [ ] `GET /api/v1/health` returns 200 with JSON `{ status: "ok", timestamp: "..." }`
-- [ ] No authentication required
-- [ ] Server continues to start normally
+- [x] `GET /api/v1/health` returns 200 with JSON `{ status: "ok", timestamp: "..." }`
+- [x] No authentication required
+- [x] Server continues to start normally
 
 ### Definition of Done
 
-- [ ] Health check endpoint working
-- [ ] Verified via curl or HTTP client
+- [x] Health check endpoint working
+- [x] Verified via curl or HTTP client
 
 ---
 
@@ -5122,7 +5122,7 @@ DEPLOY-001 → DOC-001 → QA-001
 ## Phase 0 — Project Setup
 - [x] SETUP-001 Initialize Git repository
 - [x] SETUP-002 Initialize backend project
-- [ ] SETUP-003 Create health check endpoint
+- [x] SETUP-003 Create health check endpoint
 - [ ] SETUP-004 Initialize Angular frontend
 - [ ] SETUP-005 Create Docker Compose
 - [ ] SETUP-006 Create README.md
