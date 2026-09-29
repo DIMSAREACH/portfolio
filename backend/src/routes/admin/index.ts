@@ -11,6 +11,7 @@ import messageRoutes from './message.routes';
 import profileRoutes from './profile.routes';
 import socialLinkRoutes from './socialLink.routes';
 import settingsRoutes from './settings.routes';
+import dashboardRoutes from './dashboard.routes';
 
 const router = Router();
 
@@ -40,7 +41,8 @@ router.use('/messages', messageRoutes);           // API-011
 router.use('/profile', profileRoutes);             // API-012
 router.use('/social-links', socialLinkRoutes);     // API-013
 router.use('/settings', settingsRoutes);           // API-014
-// router.use('/stats', statsRoutes);                 // API-015
+router.use('/dashboard', dashboardRoutes);         // API-015
+router.use('/stats', dashboardRoutes);             // API-015 alias
 // router.use('/media', mediaRoutes);                 // API-016
 
 export default router;

@@ -2823,7 +2823,7 @@ backend/src/routes/admin/settings.routes.ts
 
 ## API-015 Create Dashboard Stats Endpoint
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 4
 - Dependencies:
@@ -2851,12 +2851,12 @@ backend/src/routes/admin/dashboard.routes.ts
 
 ### Acceptance Criteria
 
-- [ ] Stats endpoint returns correct counts
-- [ ] Requires authentication
+- [x] Stats endpoint returns correct counts
+- [x] Requires authentication
 
 ### Definition of Done
 
-- [ ] Dashboard stats endpoint working
+- [x] Dashboard stats endpoint working
 
 ---
 
@@ -5179,7 +5179,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-012 Profile management
 - [x] API-013 Social link CRUD
 - [x] API-014 Settings management
-- [ ] API-015 Dashboard stats
+- [x] API-015 Dashboard stats
 - [ ] API-016 Media and CV management
 - [ ] API-017 Swagger documentation
 
