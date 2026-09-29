@@ -863,7 +863,7 @@ backend/src/utils/readingTime.ts
 
 ## BACKEND-006 Create Validation and Rate Limiting Middleware
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 1
 - Dependencies:
@@ -914,16 +914,16 @@ backend/src/middleware/rateLimiter.middleware.ts
 
 ### Acceptance Criteria
 
-- [ ] Validation middleware returns 400 with field-level error details
-- [ ] Global rate limiter configured
-- [ ] Login rate limiter: 5 attempts / 15 min
-- [ ] Contact rate limiter: 5 requests / hour
-- [ ] Rate limit response is JSON format
+- [x] Validation middleware returns 400 with field-level error details
+- [x] Global rate limiter configured
+- [x] Login rate limiter: 5 attempts / 15 min
+- [x] Contact rate limiter: 5 requests / hour
+- [x] Rate limit response is JSON format
 
 ### Definition of Done
 
-- [ ] Both middleware files created
-- [ ] Exported and ready for route use
+- [x] Both middleware files created
+- [x] Exported and ready for route use
 
 ---
 
@@ -5133,7 +5133,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] BACKEND-003 Global error handler
 - [x] BACKEND-004 Logger and HTTP logging
 - [x] BACKEND-005 Utility functions
-- [ ] BACKEND-006 Validation and rate limiting
+- [x] BACKEND-006 Validation and rate limiting
 - [ ] BACKEND-007 TypeScript type definitions
 - [ ] BACKEND-008 CORS and security headers
 - [ ] BACKEND-009 Route structure
