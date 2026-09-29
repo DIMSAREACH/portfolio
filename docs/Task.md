@@ -590,7 +590,7 @@ backend/src/config/environment.ts
 
 ## BACKEND-002 Create Custom Error Classes
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 1
 - Dependencies:
@@ -645,14 +645,14 @@ backend/src/utils/AppError.ts
 
 ### Acceptance Criteria
 
-- [ ] All 7 error classes created
-- [ ] Each has correct statusCode
-- [ ] All extend AppError → Error
+- [x] All 7 error classes created
+- [x] Each has correct statusCode
+- [x] All extend AppError → Error
 
 ### Definition of Done
 
-- [ ] Error classes compile and export correctly
-- [ ] Can be instantiated with custom messages
+- [x] Error classes compile and export correctly
+- [x] Can be instantiated with custom messages
 
 ---
 
@@ -5129,7 +5129,7 @@ DEPLOY-001 → DOC-001 → QA-001
 
 ## Phase 1 — Backend Foundation
 - [x] BACKEND-001 Environment configuration
-- [ ] BACKEND-002 Custom error classes
+- [x] BACKEND-002 Custom error classes
 - [ ] BACKEND-003 Global error handler
 - [ ] BACKEND-004 Logger and HTTP logging
 - [ ] BACKEND-005 Utility functions
