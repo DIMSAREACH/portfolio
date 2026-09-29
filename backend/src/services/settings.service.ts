@@ -1,5 +1,6 @@
 import Settings, { ISettings, ICvFile } from '../models/Settings';
 import { BilingualField } from '../types';
+import { NotFoundError } from '../utils/AppError';
 
 export interface UpdateSettingsDto {
   siteTitle?: BilingualField;
@@ -87,6 +88,19 @@ export class SettingsService {
       ...data,
     });
     return await settings.save();
+  }
+
+  /**
+   * Get active CV URL for download and atomically increment cvDownloadCount
+   */
+  async downloadCv(): Promise<string> {
+    const settings = await Settings.findOne();
+    if (!settings || !settings.enableCvDownload || !settings.cvFile?.url) {
+      throw new NotFoundError('CV file is not available for download');
+    }
+
+    await Settings.updateOne({ _id: settings._id }, { $inc: { cvDownloadCount: 1 } });
+    return settings.cvFile.url;
   }
 }
 

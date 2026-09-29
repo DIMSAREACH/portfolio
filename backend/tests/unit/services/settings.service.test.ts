@@ -91,4 +91,61 @@ describe('SettingsService', () => {
       expect(result.enableCvDownload).toBe(false);
     });
   });
+
+  describe('downloadCv', () => {
+    it('should return CV url and increment download count when CV is available and downloads are enabled', async () => {
+      const settingsWithCv: any = {
+        _id: '6abc2f77ed5966aa1b87e233',
+        enableCvDownload: true,
+        cvFile: {
+          url: 'https://res.cloudinary.com/demo/image/upload/v12345/portfolio/cv/my_cv.pdf',
+          fileName: 'my_cv.pdf',
+          publicId: 'portfolio/cv/my_cv',
+        },
+      };
+
+      jest.spyOn(Settings, 'findOne').mockResolvedValue(settingsWithCv as any);
+      jest.spyOn(Settings, 'updateOne').mockResolvedValue({ modifiedCount: 1 } as any);
+
+      const url = await settingsService.downloadCv();
+
+      expect(url).toBe(settingsWithCv.cvFile.url);
+      expect(Settings.updateOne).toHaveBeenCalledWith(
+        { _id: settingsWithCv._id },
+        { $inc: { cvDownloadCount: 1 } },
+      );
+    });
+
+    it('should throw NotFoundError if settings do not exist', async () => {
+      jest.spyOn(Settings, 'findOne').mockResolvedValue(null as any);
+
+      await expect(settingsService.downloadCv()).rejects.toThrow('CV file is not available for download');
+    });
+
+    it('should throw NotFoundError if enableCvDownload is false', async () => {
+      const settingsDisabled: any = {
+        _id: '6abc2f77ed5966aa1b87e233',
+        enableCvDownload: false,
+        cvFile: {
+          url: 'https://res.cloudinary.com/demo/cv.pdf',
+        },
+      };
+
+      jest.spyOn(Settings, 'findOne').mockResolvedValue(settingsDisabled as any);
+
+      await expect(settingsService.downloadCv()).rejects.toThrow('CV file is not available for download');
+    });
+
+    it('should throw NotFoundError if cvFile is missing or has no url', async () => {
+      const settingsNoCv: any = {
+        _id: '6abc2f77ed5966aa1b87e233',
+        enableCvDownload: true,
+        cvFile: undefined,
+      };
+
+      jest.spyOn(Settings, 'findOne').mockResolvedValue(settingsNoCv as any);
+
+      await expect(settingsService.downloadCv()).rejects.toThrow('CV file is not available for download');
+    });
+  });
 });

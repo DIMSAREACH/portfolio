@@ -3127,7 +3127,7 @@ backend/src/routes/public.routes.ts (modify — add POST /contact)
 
 ## PUB-004 Create CV Download Endpoint
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 5
 - Dependencies:
@@ -3156,13 +3156,13 @@ backend/src/routes/public.routes.ts (modify — add GET /cv/download)
 
 ### Acceptance Criteria
 
-- [ ] CV download redirects to file URL
-- [ ] Download counter incremented
-- [ ] Returns 404 if no CV available
+- [x] CV download redirects to file URL
+- [x] Download counter incremented
+- [x] Returns 404 if no CV available
 
 ### Definition of Done
 
-- [ ] CV download working
+- [x] CV download working
 
 ---
 
@@ -5188,7 +5188,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] PUB-001 Email service
 - [x] PUB-002 Public API endpoints
 - [x] PUB-003 Contact form endpoint
-- [ ] PUB-004 CV download endpoint
+- [x] PUB-004 CV download endpoint
 
 ## Phase 6 — Seed Data
 - [ ] SEED-001 Complete seed script

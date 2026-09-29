@@ -13,6 +13,7 @@ import {
   getSocialLinks,
   getPublicSettings,
   submitContactForm,
+  downloadCv,
 } from '../controllers/public.controller';
 import { contactLimiter } from '../middleware/rateLimiter.middleware';
 import { validate } from '../middleware/validate.middleware';
@@ -59,5 +60,8 @@ router.post(
   validate(contactFormValidator),
   submitContactForm,
 );
+
+// CV Download (PUB-004)
+router.get('/cv/download', downloadCv);
 
 export default router;

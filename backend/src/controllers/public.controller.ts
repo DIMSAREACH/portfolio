@@ -261,3 +261,13 @@ export const submitContactForm = catchAsync(async (req: Request, res: Response) 
   );
 });
 
+/**
+ * 14. GET /api/v1/cv/download
+ * Redirect to active CV file URL and atomically increment download count
+ */
+export const downloadCv = catchAsync(async (_req: Request, res: Response) => {
+  const fileUrl = await settingsService.downloadCv();
+  return res.redirect(fileUrl);
+});
+
+
