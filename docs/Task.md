@@ -658,7 +658,7 @@ backend/src/utils/AppError.ts
 
 ## BACKEND-003 Create Global Error Handler Middleware
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 1
 - Dependencies:
@@ -711,18 +711,18 @@ backend/src/middleware/errorHandler.middleware.ts
 
 ### Acceptance Criteria
 
-- [ ] Returns correct JSON format per PRD Section 13.3
-- [ ] Mongoose validation errors → 400 with field details
-- [ ] Mongoose duplicate key → 409
-- [ ] JWT errors → 401
-- [ ] No stack traces in production
-- [ ] Generic message for non-operational errors in production
+- [x] Returns correct JSON format per PRD Section 13.3
+- [x] Mongoose validation errors → 400 with field details
+- [x] Mongoose duplicate key → 409
+- [x] JWT errors → 401
+- [x] No stack traces in production
+- [x] Generic message for non-operational errors in production
 
 ### Definition of Done
 
-- [ ] Error handler middleware created
-- [ ] Handles all specified error types
-- [ ] Registered in `app.ts`
+- [x] Error handler middleware created
+- [x] Handles all specified error types
+- [x] Registered in `app.ts`
 
 ---
 
@@ -5130,7 +5130,7 @@ DEPLOY-001 → DOC-001 → QA-001
 ## Phase 1 — Backend Foundation
 - [x] BACKEND-001 Environment configuration
 - [x] BACKEND-002 Custom error classes
-- [ ] BACKEND-003 Global error handler
+- [x] BACKEND-003 Global error handler
 - [ ] BACKEND-004 Logger and HTTP logging
 - [ ] BACKEND-005 Utility functions
 - [ ] BACKEND-006 Validation and rate limiting
