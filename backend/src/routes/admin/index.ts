@@ -12,6 +12,8 @@ import profileRoutes from './profile.routes';
 import socialLinkRoutes from './socialLink.routes';
 import settingsRoutes from './settings.routes';
 import dashboardRoutes from './dashboard.routes';
+import mediaRoutes from './media.routes';
+import cvRoutes from './cv.routes';
 
 const router = Router();
 
@@ -43,6 +45,7 @@ router.use('/social-links', socialLinkRoutes);     // API-013
 router.use('/settings', settingsRoutes);           // API-014
 router.use('/dashboard', dashboardRoutes);         // API-015
 router.use('/stats', dashboardRoutes);             // API-015 alias
-// router.use('/media', mediaRoutes);                 // API-016
+router.use('/media', mediaRoutes);                 // API-016
+router.use('/cv', cvRoutes);                       // API-016
 
 export default router;

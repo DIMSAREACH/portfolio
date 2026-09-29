@@ -147,11 +147,30 @@ const multerProfileImages = multer({
   { name: 'aboutImage', maxCount: 1 },
 ]);
 
+const multerMediaFile = multer({
+  storage,
+  limits: { fileSize: MAX_IMAGE_SIZE },
+  fileFilter: imageFileFilter,
+}).fields([
+  { name: 'file', maxCount: 1 },
+  { name: 'image', maxCount: 1 },
+]);
+
 export const uploadSingleImage = wrapMulter(multerSingleImage);
 export const uploadMultipleImages = wrapMulter(multerMultipleImages);
 export const uploadPdf = wrapMulter(multerPdf);
 export const uploadProjectImages = wrapMulter(multerProjectImages);
 export const uploadProfileImages = wrapMulter(multerProfileImages);
+export const uploadMediaFile = (req: Request, res: Response, next: NextFunction): void => {
+  wrapMulter(multerMediaFile)(req, res, (err) => {
+    if (err) return next(err);
+    const files = req.files as { file?: Express.Multer.File[]; image?: Express.Multer.File[] } | undefined;
+    if (files) {
+      req.file = files.file?.[0] || files.image?.[0];
+    }
+    next();
+  });
+};
 
 export default {
   uploadSingleImage,
@@ -159,6 +178,7 @@ export default {
   uploadPdf,
   uploadProjectImages,
   uploadProfileImages,
+  uploadMediaFile,
   MAX_IMAGE_SIZE,
   MAX_PDF_SIZE,
 };

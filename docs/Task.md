@@ -2862,7 +2862,7 @@ backend/src/routes/admin/dashboard.routes.ts
 
 ## API-016 Create Media and CV Management Endpoints
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 4
 - Dependencies:
@@ -2889,17 +2889,18 @@ backend/src/controllers/admin/media.controller.ts
 backend/src/routes/admin/media.routes.ts
 backend/src/controllers/admin/cv.controller.ts
 backend/src/routes/admin/cv.routes.ts
+backend/src/validators/media.validator.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] Media upload/list/delete works
-- [ ] CV upload/delete works
-- [ ] Files stored in Cloudinary
+- [x] Media upload/list/delete works
+- [x] CV upload/delete works
+- [x] Files stored in Cloudinary
 
 ### Definition of Done
 
-- [ ] Media and CV endpoints complete
+- [x] Media and CV endpoints complete
 
 ---
 
@@ -5180,7 +5181,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-013 Social link CRUD
 - [x] API-014 Settings management
 - [x] API-015 Dashboard stats
-- [ ] API-016 Media and CV management
+- [x] API-016 Media and CV management
 - [ ] API-017 Swagger documentation
 
 ## Phase 5 — Public API
