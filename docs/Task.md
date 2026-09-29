@@ -3809,7 +3809,7 @@ frontend/src/app/features/public/experience/experience.component.spec.ts
 
 ## PUBLIC-005 Create Education Page
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 8
 - Dependencies:
@@ -3820,13 +3820,23 @@ frontend/src/app/features/public/experience/experience.component.spec.ts
 
 Create Education page per PRD Section 8.5.
 
+### Files / Modules
+
+```
+frontend/src/app/features/public/education/education.component.ts
+frontend/src/app/features/public/education/education.component.spec.ts
+```
+
 ### Acceptance Criteria
 
-- [ ] Education entries displayed
+- [x] Education entries displayed
+- [x] Degree, institution, field, years, GPA, and extracurricular activities
+- [x] Certifications & credentials section integrated
+- [x] Bilingual English & Khmer localization
 
 ### Definition of Done
 
-- [ ] Education page complete
+- [x] Education page complete and unit tested
 
 ---
 
@@ -5098,7 +5108,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | About Page | 8.2 | 8 | PUBLIC-002 | DONE |
 | Skills Page | 8.3 | 8 | PUBLIC-003 | DONE |
 | Experience Page | 8.4 | 8 | PUBLIC-004 | DONE |
-| Education Page | 8.5 | 8 | PUBLIC-005 | TODO |
+| Education Page | 8.5 | 8 | PUBLIC-005 | DONE |
 | Projects Page + Detail | 8.6-8.7 | 8 | PUBLIC-006 | TODO |
 | Blog Page + Detail | 8.8-8.9 | 8, 11 | PUBLIC-007, BLOG-001 | TODO |
 | Achievements Page | 8.10 | 8 | PUBLIC-008 | TODO |
@@ -5234,7 +5244,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] PUBLIC-002 About page
 - [x] PUBLIC-003 Skills page
 - [x] PUBLIC-004 Experience page
-- [ ] PUBLIC-005 Education page
+- [x] PUBLIC-005 Education page
 - [ ] PUBLIC-006 Project list and detail pages
 - [ ] PUBLIC-007 Blog list and detail pages
 - [ ] PUBLIC-008 Achievements, Contact, and 404 pages
