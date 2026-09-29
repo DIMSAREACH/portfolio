@@ -1135,7 +1135,7 @@ backend/src/app.ts (modify — mount routes)
 
 ## DB-001 Create MongoDB Connection Module
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 2
 - Dependencies:
@@ -1188,17 +1188,17 @@ backend/src/server.ts (modify — connect before starting server)
 
 ### Acceptance Criteria
 
-- [ ] MongoDB connects on server startup
-- [ ] Connection success logged
-- [ ] Connection errors handled gracefully
-- [ ] Graceful shutdown closes connection
-- [ ] No hardcoded connection strings
+- [x] MongoDB connects on server startup
+- [x] Connection success logged
+- [x] Connection errors handled gracefully
+- [x] Graceful shutdown closes connection
+- [x] No hardcoded connection strings
 
 ### Definition of Done
 
-- [ ] Database module created
-- [ ] Server connects to MongoDB on startup
-- [ ] Graceful shutdown implemented
+- [x] Database module created
+- [x] Server connects to MongoDB on startup
+- [x] Graceful shutdown implemented
 
 ---
 
@@ -5139,7 +5139,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] BACKEND-009 Route structure
 
 ## Phase 2 — Database & Models
-- [ ] DB-001 MongoDB connection
+- [x] DB-001 MongoDB connection
 - [ ] DB-002 User model
 - [ ] DB-003 Profile model
 - [ ] DB-004 Category model
