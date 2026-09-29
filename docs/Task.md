@@ -728,7 +728,7 @@ backend/src/middleware/errorHandler.middleware.ts
 
 ## BACKEND-004 Create Logger and HTTP Request Logging
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 1
 - Dependencies:
@@ -776,16 +776,16 @@ backend/src/utils/logger.ts
 
 ### Acceptance Criteria
 
-- [ ] Winston logger created with environment-based configuration
-- [ ] Morgan integrated with Winston
-- [ ] JSON format in production, colorized in development
-- [ ] Log level configurable via environment
+- [x] Winston logger created with environment-based configuration
+- [x] Morgan integrated with Winston
+- [x] JSON format in production, colorized in development
+- [x] Log level configurable via environment
 
 ### Definition of Done
 
-- [ ] Logger module created and exported
-- [ ] Morgan middleware exported
-- [ ] Both registered in `app.ts`
+- [x] Logger module created and exported
+- [x] Morgan middleware exported
+- [x] Both registered in `app.ts`
 
 ---
 
@@ -5131,7 +5131,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] BACKEND-001 Environment configuration
 - [x] BACKEND-002 Custom error classes
 - [x] BACKEND-003 Global error handler
-- [ ] BACKEND-004 Logger and HTTP logging
+- [x] BACKEND-004 Logger and HTTP logging
 - [ ] BACKEND-005 Utility functions
 - [ ] BACKEND-006 Validation and rate limiting
 - [ ] BACKEND-007 TypeScript type definitions

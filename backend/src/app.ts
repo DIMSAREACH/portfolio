@@ -2,12 +2,14 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import errorHandler from './middleware/errorHandler.middleware';
 import { NotFoundError } from './utils/AppError';
+import { morganMiddleware } from './utils/logger';
 
 const app: Application = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(morganMiddleware);
 
 app.get('/api/v1/health', (_req: Request, res: Response) => {
   res.status(200).json({

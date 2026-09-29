@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { FieldError } from '../utils/AppError';
 import config from '../config/environment';
+import logger from '../utils/logger';
 
 export interface ErrorResponse {
   success: false;
@@ -77,6 +78,14 @@ export function errorHandler(
     statusCode = 401;
     message = 'Your token has expired. Please log in again.';
     isOperational = true;
+  }
+
+  // Log non-operational or 500 server errors
+  if (!isOperational || statusCode >= 500) {
+    logger.error(`${err.name || 'Error'}: ${err.message}`, {
+      statusCode,
+      stack: err.stack,
+    });
   }
 
   // Non-operational errors in production should not leak internal details
