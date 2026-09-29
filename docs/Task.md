@@ -1671,7 +1671,7 @@ backend/src/models/BlogPost.ts
 
 ## DB-011 Create Message Model
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 2
 - Dependencies:
@@ -1696,11 +1696,11 @@ backend/src/models/Message.ts
 
 ### Acceptance Criteria
 
-- [ ] Model matches PRD Section 11.12
+- [x] Model matches PRD Section 11.12
 
 ### Definition of Done
 
-- [ ] Model file created
+- [x] Model file created
 
 ---
 
@@ -5149,7 +5149,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] DB-008 Education model
 - [x] DB-009 Certification model
 - [x] DB-010 BlogPost model
-- [ ] DB-011 Message model
+- [x] DB-011 Message model
 - [ ] DB-012 Media model
 - [ ] DB-013 SocialLink model
 - [ ] DB-014 Settings model
