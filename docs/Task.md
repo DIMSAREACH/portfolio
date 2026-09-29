@@ -1624,7 +1624,7 @@ backend/src/models/Certification.ts
 
 ## DB-010 Create BlogPost Model
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 2
 - Dependencies:
@@ -1659,13 +1659,13 @@ backend/src/models/BlogPost.ts
 
 ### Acceptance Criteria
 
-- [ ] Model matches PRD Section 11.10
-- [ ] Reading time calculated on save
-- [ ] Slug auto-generated
+- [x] Model matches PRD Section 11.10
+- [x] Reading time calculated on save
+- [x] Slug auto-generated
 
 ### Definition of Done
 
-- [ ] Model file created with hooks
+- [x] Model file created with hooks
 
 ---
 
@@ -5148,7 +5148,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] DB-007 Experience model
 - [x] DB-008 Education model
 - [x] DB-009 Certification model
-- [ ] DB-010 BlogPost model
+- [x] DB-010 BlogPost model
 - [ ] DB-011 Message model
 - [ ] DB-012 Media model
 - [ ] DB-013 SocialLink model
