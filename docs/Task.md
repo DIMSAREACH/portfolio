@@ -2619,7 +2619,7 @@ backend/src/routes/admin/certification.routes.ts
 
 ## API-010 Create BlogPost Admin CRUD
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 4
 - Dependencies:
@@ -2657,14 +2657,14 @@ backend/src/routes/admin/blog.routes.ts
 
 ### Acceptance Criteria
 
-- [ ] Standard CRUD works
-- [ ] Publish/unpublish endpoints work
-- [ ] `publishedAt` set on first publish
-- [ ] Cover image upload works
+- [x] Standard CRUD works
+- [x] Publish/unpublish endpoints work
+- [x] `publishedAt` set on first publish
+- [x] Cover image upload works
 
 ### Definition of Done
 
-- [ ] Blog admin CRUD complete with publish/unpublish
+- [x] Blog admin CRUD complete with publish/unpublish
 
 ---
 
@@ -5172,7 +5172,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-007 Experience CRUD
 - [x] API-008 Education CRUD
 - [x] API-009 Certification CRUD
-- [ ] API-010 Blog CRUD
+- [x] API-010 Blog CRUD
 - [ ] API-011 Message management
 - [ ] API-012 Profile management
 - [ ] API-013 Social link CRUD
