@@ -2791,7 +2791,7 @@ backend/src/routes/admin/socialLink.routes.ts
 
 ## API-014 Create Settings Management Endpoints
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 4
 - Dependencies:
@@ -2813,11 +2813,11 @@ backend/src/routes/admin/settings.routes.ts
 
 ### Acceptance Criteria
 
-- [ ] GET and PUT work (singleton upsert)
+- [x] GET and PUT work (singleton upsert)
 
 ### Definition of Done
 
-- [ ] Settings endpoints complete
+- [x] Settings endpoints complete
 
 ---
 
@@ -5178,7 +5178,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-011 Message management
 - [x] API-012 Profile management
 - [x] API-013 Social link CRUD
-- [ ] API-014 Settings management
+- [x] API-014 Settings management
 - [ ] API-015 Dashboard stats
 - [ ] API-016 Media and CV management
 - [ ] API-017 Swagger documentation
