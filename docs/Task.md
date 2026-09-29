@@ -1509,7 +1509,7 @@ backend/src/models/Skill.ts
 
 ## DB-007 Create Experience Model
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 2
 - Dependencies:
@@ -1541,12 +1541,12 @@ backend/src/models/Experience.ts
 
 ### Acceptance Criteria
 
-- [ ] Model matches PRD Section 11.7
-- [ ] Type enum validated
+- [x] Model matches PRD Section 11.7
+- [x] Type enum validated
 
 ### Definition of Done
 
-- [ ] Model file created
+- [x] Model file created
 
 ---
 
@@ -5145,7 +5145,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] DB-004 Category model
 - [x] DB-005 Project model
 - [x] DB-006 Skill model
-- [ ] DB-007 Experience model
+- [x] DB-007 Experience model
 - [ ] DB-008 Education model
 - [ ] DB-009 Certification model
 - [ ] DB-010 BlogPost model
