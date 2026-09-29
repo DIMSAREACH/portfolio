@@ -1067,7 +1067,7 @@ backend/src/app.ts (modify — wire all middleware)
 
 ## BACKEND-009 Create Route Structure with API Versioning
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 1
 - Dependencies:
@@ -1118,14 +1118,14 @@ backend/src/app.ts (modify — mount routes)
 
 ### Acceptance Criteria
 
-- [ ] Route structure created with `/api/v1` prefix
-- [ ] Health check accessible at `/api/v1/health`
-- [ ] Route file organized for future expansion
+- [x] Route structure created with `/api/v1` prefix
+- [x] Health check accessible at `/api/v1/health`
+- [x] Route file organized for future expansion
 
 ### Definition of Done
 
-- [ ] Routes file created and mounted
-- [ ] API versioning working
+- [x] Routes file created and mounted
+- [x] API versioning working
 
 ---
 
@@ -5136,7 +5136,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] BACKEND-006 Validation and rate limiting
 - [x] BACKEND-007 TypeScript type definitions
 - [x] BACKEND-008 CORS and security headers
-- [ ] BACKEND-009 Route structure
+- [x] BACKEND-009 Route structure
 
 ## Phase 2 — Database & Models
 - [ ] DB-001 MongoDB connection

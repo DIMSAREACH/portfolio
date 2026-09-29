@@ -7,6 +7,8 @@ import errorHandler from './middleware/errorHandler.middleware';
 import { NotFoundError } from './utils/AppError';
 import { morganMiddleware } from './utils/logger';
 
+import apiRoutes from './routes';
+
 const app: Application = express();
 
 // 1. Security HTTP Headers
@@ -25,13 +27,8 @@ app.use(morganMiddleware);
 // 5. Global API Rate Limiter
 app.use(globalLimiter);
 
-// 6. API Routes
-app.get('/api/v1/health', (_req: Request, res: Response) => {
-  res.status(200).json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-  });
-});
+// 6. API Routes (/api/v1/*)
+app.use('/api/v1', apiRoutes);
 
 // 7. 404 Handler for undefined routes
 app.use((req: Request, _res: Response, next: NextFunction) => {
