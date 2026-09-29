@@ -91,6 +91,26 @@ describe('ProjectService', () => {
       expect(result.pagination.total).toBe(1);
       expect(result.pagination.page).toBe(1);
     });
+
+    it('should resolve category by slug when category param is not an ObjectId', async () => {
+      const mockQueryChain: any = {
+        populate: jest.fn().mockReturnThis(),
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: (jest.fn() as any).mockResolvedValue([mockProjectInstance]),
+      };
+
+      jest.spyOn(Category, 'findOne').mockResolvedValue(mockCategoryInstance as any);
+      jest.spyOn(Project, 'find').mockReturnValue(mockQueryChain as any);
+      jest.spyOn(Project, 'countDocuments').mockResolvedValue(1 as any);
+
+      await projectService.getAll({ category: 'web-development' });
+
+      expect(Category.findOne).toHaveBeenCalledWith({ slug: 'web-development' });
+      expect(Project.find).toHaveBeenCalledWith(
+        expect.objectContaining({ category: dummyCategoryId }),
+      );
+    });
   });
 
   describe('getById', () => {
@@ -113,6 +133,51 @@ describe('ProjectService', () => {
       jest.spyOn(Project, 'findById').mockReturnValue(mockPopulate as any);
 
       await expect(projectService.getById(dummyProjectId)).rejects.toThrow(NotFoundError);
+    });
+  });
+
+  describe('getBySlug', () => {
+    it('should return project by slug without incrementing views when incrementViews is false', async () => {
+      const mockPopulate: any = {
+        populate: (jest.fn() as any).mockResolvedValue(mockProjectInstance),
+      };
+      jest.spyOn(Project, 'findOne').mockReturnValue(mockPopulate as any);
+
+      const result = await projectService.getBySlug('portfolio-website');
+
+      expect(Project.findOne).toHaveBeenCalledWith({ slug: 'portfolio-website' });
+      expect(result).toEqual(mockProjectInstance);
+    });
+
+    it('should atomically increment viewCount when incrementViews is true', async () => {
+      const mockPopulate: any = {
+        populate: (jest.fn() as any).mockResolvedValue({
+          ...mockProjectInstance,
+          viewCount: 1,
+        }),
+      };
+      jest.spyOn(Project, 'findOneAndUpdate').mockReturnValue(mockPopulate as any);
+
+      const result = await projectService.getBySlug('portfolio-website', {
+        incrementViews: true,
+        publishedOnly: true,
+      });
+
+      expect(Project.findOneAndUpdate).toHaveBeenCalledWith(
+        { slug: 'portfolio-website', status: 'published' },
+        { $inc: { viewCount: 1 } },
+        { new: true },
+      );
+      expect(result.viewCount).toBe(1);
+    });
+
+    it('should throw NotFoundError if project is not found', async () => {
+      const mockPopulate: any = {
+        populate: (jest.fn() as any).mockResolvedValue(null),
+      };
+      jest.spyOn(Project, 'findOne').mockReturnValue(mockPopulate as any);
+
+      await expect(projectService.getBySlug('non-existent')).rejects.toThrow(NotFoundError);
     });
   });
 

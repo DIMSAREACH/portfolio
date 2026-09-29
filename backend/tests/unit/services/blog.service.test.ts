@@ -93,6 +93,26 @@ describe('BlogService', () => {
       expect(result.pagination.total).toBe(1);
       expect(result.pagination.page).toBe(1);
     });
+
+    it('should resolve category by slug when category param is not an ObjectId', async () => {
+      const mockQueryChain: any = {
+        populate: jest.fn().mockReturnThis(),
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: (jest.fn() as any).mockResolvedValue([mockPostInstance]),
+      };
+
+      jest.spyOn(Category, 'findOne').mockResolvedValue(mockCategoryInstance as any);
+      jest.spyOn(BlogPost, 'find').mockReturnValue(mockQueryChain as any);
+      jest.spyOn(BlogPost, 'countDocuments').mockResolvedValue(1 as any);
+
+      await blogService.getAll({ category: 'web-development' });
+
+      expect(Category.findOne).toHaveBeenCalledWith({ slug: 'web-development' });
+      expect(BlogPost.find).toHaveBeenCalledWith(
+        expect.objectContaining({ category: dummyCategoryId }),
+      );
+    });
   });
 
   describe('getById', () => {
@@ -115,6 +135,51 @@ describe('BlogService', () => {
       jest.spyOn(BlogPost, 'findById').mockReturnValue(mockPopulate as any);
 
       await expect(blogService.getById(dummyPostId)).rejects.toThrow(NotFoundError);
+    });
+  });
+
+  describe('getBySlug', () => {
+    it('should return blog post by slug without incrementing views when incrementViews is false', async () => {
+      const mockPopulate: any = {
+        populate: (jest.fn() as any).mockResolvedValue(mockPostInstance),
+      };
+      jest.spyOn(BlogPost, 'findOne').mockReturnValue(mockPopulate as any);
+
+      const result = await blogService.getBySlug('angular-deep-dive');
+
+      expect(BlogPost.findOne).toHaveBeenCalledWith({ slug: 'angular-deep-dive' });
+      expect(result).toEqual(mockPostInstance);
+    });
+
+    it('should atomically increment viewCount when incrementViews is true', async () => {
+      const mockPopulate: any = {
+        populate: (jest.fn() as any).mockResolvedValue({
+          ...mockPostInstance,
+          viewCount: 1,
+        }),
+      };
+      jest.spyOn(BlogPost, 'findOneAndUpdate').mockReturnValue(mockPopulate as any);
+
+      const result = await blogService.getBySlug('angular-deep-dive', {
+        incrementViews: true,
+        publishedOnly: true,
+      });
+
+      expect(BlogPost.findOneAndUpdate).toHaveBeenCalledWith(
+        { slug: 'angular-deep-dive', status: 'published' },
+        { $inc: { viewCount: 1 } },
+        { new: true },
+      );
+      expect(result.viewCount).toBe(1);
+    });
+
+    it('should throw NotFoundError if blog post is not found', async () => {
+      const mockPopulate: any = {
+        populate: (jest.fn() as any).mockResolvedValue(null),
+      };
+      jest.spyOn(BlogPost, 'findOne').mockReturnValue(mockPopulate as any);
+
+      await expect(blogService.getBySlug('non-existent')).rejects.toThrow(NotFoundError);
     });
   });
 

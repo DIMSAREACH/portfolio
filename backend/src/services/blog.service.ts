@@ -70,7 +70,16 @@ export class BlogService {
     }
 
     if (query.category) {
-      filter.category = query.category;
+      if (Types.ObjectId.isValid(query.category)) {
+        filter.category = query.category;
+      } else {
+        const categoryDoc = await Category.findOne({ slug: query.category });
+        if (categoryDoc) {
+          filter.category = categoryDoc._id;
+        } else {
+          filter.category = new Types.ObjectId();
+        }
+      }
     }
 
     if (query.tag) {
@@ -115,6 +124,38 @@ export class BlogService {
     if (!post) {
       throw new NotFoundError(`Blog post with ID ${id} not found`);
     }
+    return post;
+  }
+
+  /**
+   * Get single blog post by slug with populated category and author, optionally incrementing viewCount
+   */
+  async getBySlug(
+    slug: string,
+    options: { incrementViews?: boolean; publishedOnly?: boolean } = {},
+  ): Promise<IBlogPost> {
+    const filter: Record<string, unknown> = { slug };
+    if (options.publishedOnly) {
+      filter.status = 'published';
+    }
+
+    let post: IBlogPost | null;
+    if (options.incrementViews) {
+      post = await BlogPost.findOneAndUpdate(filter, { $inc: { viewCount: 1 } }, { new: true }).populate([
+        { path: 'category', select: 'name slug type' },
+        { path: 'author', select: 'name email avatar' },
+      ]);
+    } else {
+      post = await BlogPost.findOne(filter).populate([
+        { path: 'category', select: 'name slug type' },
+        { path: 'author', select: 'name email avatar' },
+      ]);
+    }
+
+    if (!post) {
+      throw new NotFoundError(`Blog post with slug '${slug}' not found`);
+    }
+
     return post;
   }
 

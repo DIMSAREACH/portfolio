@@ -2995,7 +2995,7 @@ backend/src/services/email.service.ts
 
 ## PUB-002 Create Public API Controller and Routes
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 5
 - Dependencies:
@@ -3058,15 +3058,15 @@ backend/src/routes/index.ts (modify — mount public routes)
 
 ### Acceptance Criteria
 
-- [ ] All 12 GET public endpoints functional
-- [ ] Only published/visible content returned
-- [ ] Pagination with correct totals
-- [ ] Search and filtering work
-- [ ] View counts increment
+- [x] All 12 GET public endpoints functional
+- [x] Only published/visible content returned
+- [x] Pagination with correct totals
+- [x] Search and filtering work
+- [x] View counts increment
 
 ### Definition of Done
 
-- [ ] All public GET endpoints working
+- [x] All public GET endpoints working
 
 ---
 
@@ -5186,7 +5186,7 @@ DEPLOY-001 → DOC-001 → QA-001
 
 ## Phase 5 — Public API
 - [x] PUB-001 Email service
-- [ ] PUB-002 Public API endpoints
+- [x] PUB-002 Public API endpoints
 - [ ] PUB-003 Contact form endpoint
 - [ ] PUB-004 CV download endpoint
 

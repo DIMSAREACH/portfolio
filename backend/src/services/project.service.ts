@@ -87,7 +87,16 @@ export class ProjectService {
     }
 
     if (query.category) {
-      filter.category = query.category;
+      if (Types.ObjectId.isValid(query.category)) {
+        filter.category = query.category;
+      } else {
+        const categoryDoc = await Category.findOne({ slug: query.category });
+        if (categoryDoc) {
+          filter.category = categoryDoc._id;
+        } else {
+          filter.category = new Types.ObjectId();
+        }
+      }
     }
 
     if (query.tech) {
@@ -125,6 +134,32 @@ export class ProjectService {
     const project = await Project.findById(id).populate('category', 'name slug type');
     if (!project) {
       throw new NotFoundError(`Project with ID ${id} not found`);
+    }
+    return project;
+  }
+
+  /**
+   * Get single project by slug with populated category, optionally incrementing viewCount
+   */
+  async getBySlug(
+    slug: string,
+    options: { incrementViews?: boolean; publishedOnly?: boolean } = {},
+  ): Promise<IProject> {
+    const filter: Record<string, unknown> = { slug };
+    if (options.publishedOnly) {
+      filter.status = 'published';
+    }
+
+    let project: IProject | null;
+    if (options.incrementViews) {
+      project = await Project.findOneAndUpdate(filter, { $inc: { viewCount: 1 } }, { new: true })
+        .populate('category', 'name slug type');
+    } else {
+      project = await Project.findOne(filter).populate('category', 'name slug type');
+    }
+
+    if (!project) {
+      throw new NotFoundError(`Project with slug '${slug}' not found`);
     }
     return project;
   }
