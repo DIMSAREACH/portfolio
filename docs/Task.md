@@ -1739,7 +1739,7 @@ backend/src/models/Media.ts
 
 ## DB-013 Create SocialLink Model
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 2
 - Dependencies:
@@ -1762,11 +1762,11 @@ backend/src/models/SocialLink.ts
 
 ### Acceptance Criteria
 
-- [ ] Model matches PRD Section 11.14
+- [x] Model matches PRD Section 11.14
 
 ### Definition of Done
 
-- [ ] Model file created
+- [x] Model file created
 
 ---
 
@@ -5151,7 +5151,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] DB-010 BlogPost model
 - [x] DB-011 Message model
 - [x] DB-012 Media model
-- [ ] DB-013 SocialLink model
+- [x] DB-013 SocialLink model
 - [ ] DB-014 Settings model
 
 ## Phase 3 — Authentication
