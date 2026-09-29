@@ -3072,7 +3072,7 @@ backend/src/routes/index.ts (modify — mount public routes)
 
 ## PUB-003 Create Contact Form Endpoint
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 5
 - Dependencies:
@@ -3113,15 +3113,15 @@ backend/src/routes/public.routes.ts (modify — add POST /contact)
 
 ### Acceptance Criteria
 
-- [ ] Valid submission stores message and returns 201
-- [ ] Honeypot rejects silently (returns 201 but doesn't store)
-- [ ] Validation returns 400 with field errors
-- [ ] Rate limit returns 429 after 5 submissions
-- [ ] Email notification sent (async)
+- [x] Valid submission stores message and returns 201
+- [x] Honeypot rejects silently (returns 201 but doesn't store)
+- [x] Validation returns 400 with field errors
+- [x] Rate limit returns 429 after 5 submissions
+- [x] Email notification sent (async)
 
 ### Definition of Done
 
-- [ ] Contact endpoint working with all protections
+- [x] Contact endpoint working with all protections
 
 ---
 
@@ -5187,7 +5187,7 @@ DEPLOY-001 → DOC-001 → QA-001
 ## Phase 5 — Public API
 - [x] PUB-001 Email service
 - [x] PUB-002 Public API endpoints
-- [ ] PUB-003 Contact form endpoint
+- [x] PUB-003 Contact form endpoint
 - [ ] PUB-004 CV download endpoint
 
 ## Phase 6 — Seed Data

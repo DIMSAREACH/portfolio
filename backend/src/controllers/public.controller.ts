@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '../utils/catchAsync';
-import { sendSuccess, sendPaginated } from '../utils/apiResponse';
+import { sendSuccess, sendCreated, sendPaginated } from '../utils/apiResponse';
 import { NotFoundError } from '../utils/AppError';
 import profileService from '../services/profile.service';
 import projectService from '../services/project.service';
@@ -12,6 +12,9 @@ import blogService from '../services/blog.service';
 import categoryService from '../services/category.service';
 import socialLinkService from '../services/socialLink.service';
 import settingsService from '../services/settings.service';
+import messageService from '../services/message.service';
+import emailService from '../services/email.service';
+import logger from '../utils/logger';
 import { CategoryType } from '../models/Category';
 import { ExperienceType } from '../models/Experience';
 import { CertificationType } from '../models/Certification';
@@ -212,3 +215,49 @@ export const getPublicSettings = catchAsync(async (_req: Request, res: Response)
 
   return sendSuccess(res, publicSettings, 'Public settings retrieved successfully');
 });
+
+/**
+ * 13. POST /api/v1/contact
+ * Submit contact form with validation, honeypot protection, persistence, and async email
+ */
+export const submitContactForm = catchAsync(async (req: Request, res: Response) => {
+  const { name, email, subject, message, honeypot } = req.body;
+
+  // 1. Honeypot check: If honeypot is filled, silently reject by returning fake success
+  if (honeypot && typeof honeypot === 'string' && honeypot.trim().length > 0) {
+    logger.info('Honeypot triggered on contact form submission, silent rejection', {
+      ip: req.ip,
+      email,
+    });
+    return sendCreated(
+      res,
+      null,
+      'Message sent successfully. Thank you for reaching out!',
+    );
+  }
+
+  // 2. Persist message in database
+  const clientIp = req.ip || req.socket.remoteAddress;
+  const savedMessage = await messageService.create({
+    name,
+    email,
+    subject,
+    message,
+    ipAddress: clientIp,
+  });
+
+  // 3. Send email notification asynchronously without blocking response
+  emailService.sendContactNotification(savedMessage).catch((err) => {
+    logger.error('Background contact notification email error', {
+      error: (err as Error).message,
+    });
+  });
+
+  // 4. Return success response (201) per PRD Section 12.2
+  return sendCreated(
+    res,
+    null,
+    'Message sent successfully. Thank you for reaching out!',
+  );
+});
+

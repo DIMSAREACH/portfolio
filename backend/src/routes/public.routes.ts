@@ -12,7 +12,11 @@ import {
   getCategories,
   getSocialLinks,
   getPublicSettings,
+  submitContactForm,
 } from '../controllers/public.controller';
+import { contactLimiter } from '../middleware/rateLimiter.middleware';
+import { validate } from '../middleware/validate.middleware';
+import { contactFormValidator } from '../validators/contact.validator';
 
 const router = Router();
 
@@ -47,5 +51,13 @@ router.get('/social-links', getSocialLinks);
 
 // Public Settings
 router.get('/settings/public', getPublicSettings);
+
+// Contact Form Submission (PUB-003)
+router.post(
+  '/contact',
+  contactLimiter,
+  validate(contactFormValidator),
+  submitContactForm,
+);
 
 export default router;
