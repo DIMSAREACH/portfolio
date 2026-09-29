@@ -3172,7 +3172,7 @@ backend/src/routes/public.routes.ts (modify — add GET /cv/download)
 
 ## SEED-001 Create Complete Seed Script
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 6
 - Dependencies:
@@ -3229,15 +3229,15 @@ backend/seeds/seed.ts (modify — extend with all collections)
 
 ### Acceptance Criteria
 
-- [ ] All collections populated with realistic data
-- [ ] Bilingual content present
-- [ ] Admin login works
-- [ ] Public API returns seeded content
-- [ ] Script is idempotent
+- [x] All collections populated with realistic data
+- [x] Bilingual content present
+- [x] Admin login works
+- [x] Public API returns seeded content
+- [x] Script is idempotent
 
 ### Definition of Done
 
-- [ ] Complete seed script running successfully
+- [x] Complete seed script running successfully
 
 ---
 
@@ -5191,7 +5191,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] PUB-004 CV download endpoint
 
 ## Phase 6 — Seed Data
-- [ ] SEED-001 Complete seed script
+- [x] SEED-001 Complete seed script
 
 ## Phase 7 — Angular Foundation
 - [ ] FRONTEND-001 Global styles and design system
