@@ -2427,7 +2427,7 @@ backend/src/routes/admin/index.ts (modify — mount category routes)
 
 ## API-005 Create Project CRUD (Service, Controller, Validator, Routes)
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 4
 - Dependencies:
@@ -2476,15 +2476,15 @@ backend/src/routes/admin/project.routes.ts
 
 ### Acceptance Criteria
 
-- [ ] All CRUD operations work
-- [ ] Image upload to Cloudinary works
-- [ ] Slug auto-generated
-- [ ] Category populated in responses
-- [ ] Validation enforced
+- [x] All CRUD operations work
+- [x] Image upload to Cloudinary works
+- [x] Slug auto-generated
+- [x] Category populated in responses
+- [x] Validation enforced
 
 ### Definition of Done
 
-- [ ] All files created and endpoints working
+- [x] All files created and endpoints working
 
 ---
 
@@ -5167,7 +5167,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] API-002 Upload middleware
 - [x] API-003 Admin route infrastructure
 - [x] API-004 Category CRUD
-- [ ] API-005 Project CRUD
+- [x] API-005 Project CRUD
 - [ ] API-006 Skill CRUD
 - [ ] API-007 Experience CRUD
 - [ ] API-008 Education CRUD

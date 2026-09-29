@@ -129,14 +129,25 @@ const wrapMulter = (
   };
 };
 
+const multerProjectImages = multer({
+  storage,
+  limits: { fileSize: MAX_IMAGE_SIZE },
+  fileFilter: imageFileFilter,
+}).fields([
+  { name: 'mainImage', maxCount: 1 },
+  { name: 'screenshots', maxCount: 10 },
+]);
+
 export const uploadSingleImage = wrapMulter(multerSingleImage);
 export const uploadMultipleImages = wrapMulter(multerMultipleImages);
 export const uploadPdf = wrapMulter(multerPdf);
+export const uploadProjectImages = wrapMulter(multerProjectImages);
 
 export default {
   uploadSingleImage,
   uploadMultipleImages,
   uploadPdf,
+  uploadProjectImages,
   MAX_IMAGE_SIZE,
   MAX_PDF_SIZE,
 };
