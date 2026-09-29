@@ -2135,7 +2135,7 @@ backend/src/middleware/auth.middleware.ts
 
 ## AUTH-006 Create Admin Seed Script
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 3
 - Dependencies:
@@ -2184,15 +2184,15 @@ backend/package.json (verify seed script)
 
 ### Acceptance Criteria
 
-- [ ] `npm run seed` creates admin user
-- [ ] Password is hashed in database
-- [ ] Running twice doesn't create duplicates
-- [ ] Admin can log in with seeded credentials
+- [x] `npm run seed` creates admin user
+- [x] Password is hashed in database
+- [x] Running twice doesn't create duplicates
+- [x] Admin can log in with seeded credentials
 
 ### Definition of Done
 
-- [ ] Seed script created and working
-- [ ] Admin login verified
+- [x] Seed script created and working
+- [x] Admin login verified
 
 ---
 
@@ -5160,7 +5160,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] AUTH-003 Auth validators
 - [x] AUTH-004 Auth controller and routes
 - [x] AUTH-005 Auth middleware
-- [ ] AUTH-006 Admin seed script
+- [x] AUTH-006 Admin seed script
 
 ## Phase 4 — Admin API
 - [ ] API-001 Cloudinary config and service
