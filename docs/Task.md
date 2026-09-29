@@ -3573,7 +3573,7 @@ frontend/src/app/shared/components/
 
 ## FRONTEND-007 Create Shared Pipes
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 7
 - Dependencies:
@@ -3593,21 +3593,22 @@ Create custom pipes for template data transformation.
 ```
 frontend/src/app/shared/pipes/localize.pipe.ts
 frontend/src/app/shared/pipes/truncate.pipe.ts
+frontend/src/app/shared/pipes/index.ts (barrel export)
 ```
 
 ### Implementation Steps
 
-1. **LocalizePipe**: Inject `LanguageService`. Transform: `field[languageService.currentLang()] || field['en']`.
-2. **TruncatePipe**: Transform: if `value.length > limit`, return `value.slice(0, limit) + '...'`.
+1. **LocalizePipe**: Inject `LanguageService`. Impure pipe transforms `field[languageService.currentLang()] || field['en']` supporting string and string array bilingual fields.
+2. **TruncatePipe**: Transform: if `value.length > limit`, return `value.slice(0, limit) + '...'` with optional word boundary snapping.
 
 ### Acceptance Criteria
 
-- [ ] LocalizePipe returns correct language text
-- [ ] TruncatePipe truncates with ellipsis
+- [x] LocalizePipe returns correct language text
+- [x] TruncatePipe truncates with ellipsis
 
 ### Definition of Done
 
-- [ ] Pipes created
+- [x] Pipes created and unit tested
 
 ---
 
@@ -5210,7 +5211,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] FRONTEND-004 HTTP interceptors
 - [x] FRONTEND-005 Route guards
 - [x] FRONTEND-006 Shared UI components
-- [ ] FRONTEND-007 Shared pipes
+- [x] FRONTEND-007 Shared pipes
 - [ ] FRONTEND-008 Public layout and routing
 
 ## Phase 8 — Public Pages
