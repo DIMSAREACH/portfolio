@@ -994,7 +994,7 @@ backend/src/types/express.d.ts
 
 ## BACKEND-008 Configure CORS and Security Headers in App
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 1
 - Dependencies:
@@ -1050,18 +1050,18 @@ backend/src/app.ts (modify — wire all middleware)
 
 ### Acceptance Criteria
 
-- [ ] CORS allows only configured origin
-- [ ] Helmet headers present
-- [ ] Request body parsing works
-- [ ] Unknown routes → 404 JSON response
-- [ ] Error handler catches and formats errors
-- [ ] Middleware applied in correct order
+- [x] CORS allows only configured origin
+- [x] Helmet headers present
+- [x] Request body parsing works
+- [x] Unknown routes → 404 JSON response
+- [x] Error handler catches and formats errors
+- [x] Middleware applied in correct order
 
 ### Definition of Done
 
-- [ ] `app.ts` fully configured with all middleware
-- [ ] Server starts without errors
-- [ ] CORS and security verified
+- [x] `app.ts` fully configured with all middleware
+- [x] Server starts without errors
+- [x] CORS and security verified
 
 ---
 
@@ -5135,7 +5135,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] BACKEND-005 Utility functions
 - [x] BACKEND-006 Validation and rate limiting
 - [x] BACKEND-007 TypeScript type definitions
-- [ ] BACKEND-008 CORS and security headers
+- [x] BACKEND-008 CORS and security headers
 - [ ] BACKEND-009 Route structure
 
 ## Phase 2 — Database & Models

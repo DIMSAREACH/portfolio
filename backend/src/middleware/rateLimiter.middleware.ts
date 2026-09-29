@@ -51,6 +51,7 @@ export const globalLimiter = createRateLimiter({
   windowMs: config.RATE_LIMIT_WINDOW_MS,
   max: config.RATE_LIMIT_MAX_REQUESTS,
   message: 'Too many requests, please try again later.',
+  skip: () => config.NODE_ENV === 'test',
 });
 
 /**
