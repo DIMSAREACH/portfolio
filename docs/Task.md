@@ -3713,7 +3713,7 @@ frontend/src/app/features/public/home/home.component.css
 
 ## PUBLIC-002 Create About Page
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 8
 - Dependencies:
@@ -3728,16 +3728,17 @@ Create the About page per PRD Section 8.2.
 
 ```
 frontend/src/app/features/public/about/about.component.ts
+frontend/src/app/features/public/about/about.component.spec.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] Profile data displayed
-- [ ] Good typography and layout
+- [x] Profile data displayed
+- [x] Good typography and layout
 
 ### Definition of Done
 
-- [ ] About page complete
+- [x] About page complete and unit tested
 
 ---
 
