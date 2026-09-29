@@ -4,6 +4,7 @@ import categoryRoutes from './category.routes';
 import projectRoutes from './project.routes';
 import skillRoutes from './skill.routes';
 import experienceRoutes from './experience.routes';
+import educationRoutes from './education.routes';
 
 const router = Router();
 
@@ -26,7 +27,7 @@ router.use('/categories', categoryRoutes);       // API-004
 router.use('/projects', projectRoutes);           // API-005
 router.use('/skills', skillRoutes);               // API-006
 router.use('/experiences', experienceRoutes);     // API-007
-// router.use('/education', educationRoutes);         // API-008
+router.use('/education', educationRoutes);         // API-008
 // router.use('/certifications', certRoutes);        // API-009
 // router.use('/blog', blogRoutes);                   // API-010
 // router.use('/messages', messageRoutes);           // API-011
