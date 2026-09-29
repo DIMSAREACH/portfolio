@@ -1403,7 +1403,7 @@ backend/src/models/Category.ts
 
 ## DB-005 Create Project Model
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 2
 - Dependencies:
@@ -1455,14 +1455,14 @@ backend/src/models/Project.ts
 
 ### Acceptance Criteria
 
-- [ ] All PRD Section 11.5 fields present
-- [ ] 4 indexes defined
-- [ ] Slug auto-generated and unique
-- [ ] Category reference works
+- [x] All PRD Section 11.5 fields present
+- [x] 4 indexes defined
+- [x] Slug auto-generated and unique
+- [x] Category reference works
 
 ### Definition of Done
 
-- [ ] Model created with complete schema
+- [x] Model created with complete schema
 
 ---
 
@@ -5143,7 +5143,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] DB-002 User model
 - [x] DB-003 Profile model
 - [x] DB-004 Category model
-- [ ] DB-005 Project model
+- [x] DB-005 Project model
 - [ ] DB-006 Skill model
 - [ ] DB-007 Experience model
 - [ ] DB-008 Education model
