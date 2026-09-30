@@ -240,4 +240,45 @@ export class PortfolioService {
   public deleteAdminSkill(id: string): Observable<ApiResponse<null>> {
     return this.apiService.delete<ApiResponse<null>>(`/admin/skills/${id}`);
   }
+
+  /**
+   * Admin: List all experiences with pagination and filters (PRD 9.6, API-007)
+   */
+  public getAdminExperiences(params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    type?: string;
+    isCurrent?: boolean | string;
+  }): Observable<PaginatedResponse<Experience>> {
+    return this.apiService.get<PaginatedResponse<Experience>>('/admin/experiences', params);
+  }
+
+  /**
+   * Admin: Get experience by ID (PRD 9.6, API-007)
+   */
+  public getAdminExperienceById(id: string): Observable<ApiResponse<Experience>> {
+    return this.apiService.get<ApiResponse<Experience>>(`/admin/experiences/${id}`);
+  }
+
+  /**
+   * Admin: Create experience (PRD 9.6, API-007)
+   */
+  public createAdminExperience(experience: Partial<Experience>): Observable<ApiResponse<Experience>> {
+    return this.apiService.post<ApiResponse<Experience>>('/admin/experiences', experience);
+  }
+
+  /**
+   * Admin: Update experience by ID (PRD 9.6, API-007)
+   */
+  public updateAdminExperience(id: string, experience: Partial<Experience>): Observable<ApiResponse<Experience>> {
+    return this.apiService.patch<ApiResponse<Experience>>(`/admin/experiences/${id}`, experience);
+  }
+
+  /**
+   * Admin: Delete experience by ID (PRD 9.6, API-007)
+   */
+  public deleteAdminExperience(id: string): Observable<ApiResponse<null>> {
+    return this.apiService.delete<ApiResponse<null>>(`/admin/experiences/${id}`);
+  }
 }

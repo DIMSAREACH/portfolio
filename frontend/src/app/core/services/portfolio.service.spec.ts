@@ -273,4 +273,40 @@ describe('PortfolioService', () => {
     service.deleteAdminSkill('skill-1').subscribe();
     expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/skills/skill-1');
   });
+
+  it('should fetch admin experiences with query params', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: { items: [], pagination: {} } }));
+    service.getAdminExperiences({ page: 1, limit: 10, type: 'work' }).subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/experiences', { page: 1, limit: 10, type: 'work' });
+  });
+
+  it('should fetch admin experience by ID', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: { _id: 'exp-1' } }));
+    service.getAdminExperienceById('exp-1').subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/experiences/exp-1');
+  });
+
+  it('should create admin experience', () => {
+    const newExp = {
+      title: { en: 'Senior Engineer', kh: 'វិស្វករជាន់ខ្ពស់' },
+      organization: { en: 'Tech Corp', kh: 'តិច ខប' },
+      type: 'work' as const,
+    };
+    apiServiceMock.post.mockReturnValue(of({ success: true, data: newExp }));
+    service.createAdminExperience(newExp).subscribe();
+    expect(apiServiceMock.post).toHaveBeenCalledWith('/admin/experiences', newExp);
+  });
+
+  it('should update admin experience', () => {
+    const updateExp = { title: { en: 'Lead Engineer', kh: 'ប្រធានវិស្វករ' } };
+    apiServiceMock.patch.mockReturnValue(of({ success: true, data: updateExp }));
+    service.updateAdminExperience('exp-1', updateExp).subscribe();
+    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/experiences/exp-1', updateExp);
+  });
+
+  it('should delete admin experience', () => {
+    apiServiceMock.delete.mockReturnValue(of({ success: true, data: null }));
+    service.deleteAdminExperience('exp-1').subscribe();
+    expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/experiences/exp-1');
+  });
 });

@@ -67,6 +67,30 @@ export const ADMIN_ROUTES: Routes = [
           ),
         title: 'Edit Skill | Admin CMS',
       },
+      {
+        path: 'experience',
+        loadComponent: () =>
+          import('./experience/experience-list/experience-list.component').then(
+            (m) => m.ExperienceListComponent,
+          ),
+        title: 'Experience | Admin CMS',
+      },
+      {
+        path: 'experience/create',
+        loadComponent: () =>
+          import('./experience/experience-form/experience-form.component').then(
+            (m) => m.ExperienceFormComponent,
+          ),
+        title: 'Create Experience | Admin CMS',
+      },
+      {
+        path: 'experience/:id/edit',
+        loadComponent: () =>
+          import('./experience/experience-form/experience-form.component').then(
+            (m) => m.ExperienceFormComponent,
+          ),
+        title: 'Edit Experience | Admin CMS',
+      },
     ],
   },
 ];
