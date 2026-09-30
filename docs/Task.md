@@ -4146,7 +4146,7 @@ frontend/src/app/features/admin/dashboard/dashboard.component.spec.ts
 
 ## ADMIN-004 Create Reusable Admin Components
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 10
 - Dependencies:
@@ -4167,22 +4167,23 @@ Create reusable components for admin CRUD operations per Plan.md Phase 10: data 
 
 ```
 frontend/src/app/features/admin/shared/
-├── admin-data-table/
-├── bilingual-field/
-├── image-upload/
-└── markdown-editor/
+├── admin-data-table/admin-data-table.component.ts (.spec.ts)
+├── bilingual-field/bilingual-field.component.ts (.spec.ts)
+├── image-upload/image-upload.component.ts (.spec.ts)
+├── markdown-editor/markdown-editor.component.ts (.spec.ts)
+└── index.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] Data table supports search, pagination, and actions
-- [ ] Bilingual field shows EN/KH tabs
-- [ ] Image upload shows preview
-- [ ] Markdown editor shows live preview
+- [x] Data table supports search, pagination, and actions
+- [x] Bilingual field shows EN/KH tabs
+- [x] Image upload shows preview
+- [x] Markdown editor shows live preview
 
 ### Definition of Done
 
-- [ ] All 4 reusable components created
+- [x] All 4 reusable components created and unit tested
 
 ---
 
@@ -5133,7 +5134,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | CV Download | 8.12 | 5, 12 | PUB-004, MEDIA-001 | TODO |
 | Admin Layout | 9.1 | 9 | ADMIN-002 | DONE |
 | Dashboard | 9.2 | 9 | ADMIN-003 | DONE |
-| CRUD Standards | 9.3 | 10 | ADMIN-004 | TODO |
+| CRUD Standards | 9.3 | 10 | ADMIN-004 | DONE |
 | Admin Projects | 9.4 | 10 | ADMIN-005 | TODO |
 | Admin Skills | 9.5 | 10 | ADMIN-006 | TODO |
 | Admin Experience | 9.6 | 10 | ADMIN-007 | TODO |
@@ -5273,7 +5274,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] ADMIN-003 Dashboard overview
 
 ## Phase 10 — Admin CRUD
-- [ ] ADMIN-004 Reusable admin components
+- [x] ADMIN-004 Reusable admin components
 - [ ] ADMIN-005 Project CRUD pages
 - [ ] ADMIN-006 Skill CRUD pages
 - [ ] ADMIN-007 Experience CRUD pages
