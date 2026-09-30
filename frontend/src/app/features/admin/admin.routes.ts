@@ -43,6 +43,30 @@ export const ADMIN_ROUTES: Routes = [
           ),
         title: 'Edit Project | Admin CMS',
       },
+      {
+        path: 'skills',
+        loadComponent: () =>
+          import('./skills/skill-list/skill-list.component').then(
+            (m) => m.SkillListComponent,
+          ),
+        title: 'Skills | Admin CMS',
+      },
+      {
+        path: 'skills/create',
+        loadComponent: () =>
+          import('./skills/skill-form/skill-form.component').then(
+            (m) => m.SkillFormComponent,
+          ),
+        title: 'Create Skill | Admin CMS',
+      },
+      {
+        path: 'skills/:id/edit',
+        loadComponent: () =>
+          import('./skills/skill-form/skill-form.component').then(
+            (m) => m.SkillFormComponent,
+          ),
+        title: 'Edit Skill | Admin CMS',
+      },
     ],
   },
 ];

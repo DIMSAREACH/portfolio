@@ -4236,7 +4236,7 @@ frontend/src/app/features/admin/projects/project-form/project-form.component.spe
 
 ## ADMIN-006 Create Admin Skill CRUD Pages
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 10
 - Dependencies:
@@ -4247,13 +4247,22 @@ frontend/src/app/features/admin/projects/project-form/project-form.component.spe
 
 Create skill list and form pages per PRD Section 9.5.
 
+### Files / Modules
+
+```
+frontend/src/app/features/admin/skills/skill-list/skill-list.component.ts
+frontend/src/app/features/admin/skills/skill-list/skill-list.component.spec.ts
+frontend/src/app/features/admin/skills/skill-form/skill-form.component.ts
+frontend/src/app/features/admin/skills/skill-form/skill-form.component.spec.ts
+```
+
 ### Acceptance Criteria
 
-- [ ] Skill CRUD works end-to-end
+- [x] Skill CRUD works end-to-end
 
 ### Definition of Done
 
-- [ ] Skill CRUD UI complete
+- [x] Skill CRUD UI complete
 
 ---
 
@@ -5138,7 +5147,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | Dashboard | 9.2 | 9 | ADMIN-003 | DONE |
 | CRUD Standards | 9.3 | 10 | ADMIN-004 | DONE |
 | Admin Projects | 9.4 | 10 | ADMIN-005 | DONE |
-| Admin Skills | 9.5 | 10 | ADMIN-006 | TODO |
+| Admin Skills | 9.5 | 10 | ADMIN-006 | DONE |
 | Admin Experience | 9.6 | 10 | ADMIN-007 | TODO |
 | Admin Education | 9.7 | 10 | ADMIN-008 | TODO |
 | Admin Certifications | 9.8 | 10 | ADMIN-009 | TODO |
@@ -5278,7 +5287,7 @@ DEPLOY-001 → DOC-001 → QA-001
 ## Phase 10 — Admin CRUD
 - [x] ADMIN-004 Reusable admin components
 - [x] ADMIN-005 Project CRUD pages
-- [ ] ADMIN-006 Skill CRUD pages
+- [x] ADMIN-006 Skill CRUD pages
 - [ ] ADMIN-007 Experience CRUD pages
 - [ ] ADMIN-008 Education CRUD pages
 - [ ] ADMIN-009 Certification CRUD pages

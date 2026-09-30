@@ -199,4 +199,45 @@ export class PortfolioService {
   public deleteAdminProject(id: string): Observable<ApiResponse<null>> {
     return this.apiService.delete<ApiResponse<null>>(`/admin/projects/${id}`);
   }
+
+  /**
+   * Admin: List all skills with pagination, category filter, search (PRD 9.5, API-006)
+   */
+  public getAdminSkills(params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    category?: string;
+    isVisible?: boolean | string;
+  }): Observable<PaginatedResponse<Skill>> {
+    return this.apiService.get<PaginatedResponse<Skill>>('/admin/skills', params);
+  }
+
+  /**
+   * Admin: Get skill by ID (PRD 9.5, API-006)
+   */
+  public getAdminSkillById(id: string): Observable<ApiResponse<Skill>> {
+    return this.apiService.get<ApiResponse<Skill>>(`/admin/skills/${id}`);
+  }
+
+  /**
+   * Admin: Create skill (PRD 9.5, API-006)
+   */
+  public createAdminSkill(skill: Partial<Skill>): Observable<ApiResponse<Skill>> {
+    return this.apiService.post<ApiResponse<Skill>>('/admin/skills', skill);
+  }
+
+  /**
+   * Admin: Update skill by ID (PRD 9.5, API-006)
+   */
+  public updateAdminSkill(id: string, skill: Partial<Skill>): Observable<ApiResponse<Skill>> {
+    return this.apiService.patch<ApiResponse<Skill>>(`/admin/skills/${id}`, skill);
+  }
+
+  /**
+   * Admin: Delete skill by ID (PRD 9.5, API-006)
+   */
+  public deleteAdminSkill(id: string): Observable<ApiResponse<null>> {
+    return this.apiService.delete<ApiResponse<null>>(`/admin/skills/${id}`);
+  }
 }

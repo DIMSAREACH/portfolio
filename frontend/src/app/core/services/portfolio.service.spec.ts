@@ -241,4 +241,36 @@ describe('PortfolioService', () => {
     service.deleteAdminProject('proj-1').subscribe();
     expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/projects/proj-1');
   });
+
+  it('should fetch admin skills with query params', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: { items: [], pagination: {} } }));
+    service.getAdminSkills({ page: 1, limit: 10, search: 'Angular' }).subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/skills', { page: 1, limit: 10, search: 'Angular' });
+  });
+
+  it('should fetch admin skill by ID', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: { _id: 'skill-1' } }));
+    service.getAdminSkillById('skill-1').subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/skills/skill-1');
+  });
+
+  it('should create admin skill', () => {
+    const newSkill = { name: 'Angular', category: { en: 'Frontend', kh: 'ផ្នែកខាងមុខ' } };
+    apiServiceMock.post.mockReturnValue(of({ success: true, data: newSkill }));
+    service.createAdminSkill(newSkill).subscribe();
+    expect(apiServiceMock.post).toHaveBeenCalledWith('/admin/skills', newSkill);
+  });
+
+  it('should update admin skill', () => {
+    const updateSkill = { name: 'Angular 19' };
+    apiServiceMock.patch.mockReturnValue(of({ success: true, data: updateSkill }));
+    service.updateAdminSkill('skill-1', updateSkill).subscribe();
+    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/skills/skill-1', updateSkill);
+  });
+
+  it('should delete admin skill', () => {
+    apiServiceMock.delete.mockReturnValue(of({ success: true, data: null }));
+    service.deleteAdminSkill('skill-1').subscribe();
+    expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/skills/skill-1');
+  });
 });
