@@ -1,5 +1,6 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, HostListener, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { of, catchError } from 'rxjs';
 import { Marked } from 'marked';
@@ -13,6 +14,8 @@ import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-python';
 import 'prismjs/components/prism-sql';
 import 'prismjs/components/prism-markdown';
+import 'prismjs/components/prism-yaml';
+import 'prismjs/components/prism-docker';
 
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
@@ -101,7 +104,7 @@ import {
                 <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>{{ post()?.readingTime || 5 }} {{ isKhmer() ? 'នាទីអាន' : 'min read' }}</span>
+                <span>{{ readingTime() }} {{ isKhmer() ? 'នាទីអាន' : 'min read' }}</span>
               </span>
 
               <!-- View Count -->
@@ -392,6 +395,7 @@ export class BlogDetailComponent implements OnInit {
   private readonly portfolioService = inject(PortfolioService);
   private readonly languageService = inject(LanguageService);
   private readonly route = inject(ActivatedRoute);
+  private readonly sanitizer = inject(DomSanitizer);
 
   public readonly post = signal<BlogPost | null>(null);
   public readonly relatedPosts = signal<BlogPost[]>([]);
@@ -411,6 +415,10 @@ export class BlogDetailComponent implements OnInit {
     return String(p.category);
   });
 
+  public readonly readingTime = computed<number>(() => {
+    return Math.max(1, this.post()?.readingTime || 1);
+  });
+
   private readonly markedInstance = new Marked({
     gfm: true,
     breaks: true,
@@ -425,7 +433,13 @@ export class BlogDetailComponent implements OnInit {
           <div class="code-wrapper relative my-6 rounded-2xl overflow-hidden bg-[#13171f] border border-slate-700/60 shadow-xl group">
             <div class="flex items-center justify-between px-4 py-2 bg-slate-900/90 border-b border-slate-800 text-xs font-mono text-slate-400">
               <span class="font-semibold tracking-wider text-indigo-400">${displayLang}</span>
-              <span class="text-[11px] text-slate-500">syntax highlighted</span>
+              <button
+                type="button"
+                class="copy-code-btn inline-flex items-center gap-1 text-[11px] font-medium text-slate-400 hover:text-white px-2.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 transition-colors cursor-pointer select-none"
+                title="Copy code"
+              >
+                Copy
+              </button>
             </div>
             <pre class="p-4 overflow-x-auto text-sm font-mono leading-relaxed text-slate-200"><code class="language-${validLang || 'plaintext'}">${highlighted}</code></pre>
           </div>
@@ -434,16 +448,37 @@ export class BlogDetailComponent implements OnInit {
     },
   });
 
-  public readonly renderedContent = computed<string>(() => {
+  @HostListener('click', ['$event'])
+  public onContentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    const copyBtn = target.closest('.copy-code-btn') as HTMLElement;
+    if (copyBtn) {
+      const codeWrapper = copyBtn.closest('.code-wrapper');
+      const codeEl = codeWrapper?.querySelector('code');
+      if (codeEl && typeof navigator !== 'undefined' && navigator.clipboard) {
+        navigator.clipboard.writeText(codeEl.textContent || '');
+        const originalText = copyBtn.textContent || 'Copy';
+        copyBtn.textContent = 'Copied!';
+        copyBtn.classList.add('text-emerald-400');
+        setTimeout(() => {
+          copyBtn.textContent = originalText;
+          copyBtn.classList.remove('text-emerald-400');
+        }, 2000);
+      }
+    }
+  }
+
+  public readonly renderedContent = computed<SafeHtml>(() => {
     const p = this.post();
     if (!p || !p.content) return '';
     const raw = this.isKhmer() && p.content.kh ? p.content.kh : p.content.en;
     if (!raw) return '';
     const text = Array.isArray(raw) ? raw.join('\n\n') : raw;
     try {
-      return this.markedInstance.parse(text) as string;
+      const parsed = this.markedInstance.parse(text) as string;
+      return this.sanitizer.bypassSecurityTrustHtml(parsed);
     } catch {
-      return text;
+      return this.sanitizer.bypassSecurityTrustHtml(text);
     }
   });
 
@@ -494,12 +529,29 @@ export class BlogDetailComponent implements OnInit {
       catchError(() => of(null)),
     ).subscribe({
       next: (res) => {
+        let related: BlogPost[] = [];
         if (res && res.data && res.data.items) {
-          // Filter out the current post and limit to 3
-          const related = res.data.items
-            .filter((p) => p._id !== current._id && p.slug !== current.slug)
-            .slice(0, 3);
-          this.relatedPosts.set(related);
+          related = res.data.items.filter((p) => p._id !== current._id && p.slug !== current.slug);
+        }
+
+        // If category has < 2 related posts, fetch recent posts as fallback per PRD 8.9
+        if (related.length < 2 && catSlug) {
+          this.portfolioService.getBlogPosts({ limit: 4 }).pipe(
+            catchError(() => of(null)),
+          ).subscribe({
+            next: (recentRes) => {
+              if (recentRes && recentRes.data && recentRes.data.items) {
+                const recent = recentRes.data.items.filter(
+                  (p) => p._id !== current._id && p.slug !== current.slug && !related.some((r) => r._id === p._id),
+                );
+                this.relatedPosts.set([...related, ...recent].slice(0, 3));
+              } else {
+                this.relatedPosts.set(related.slice(0, 3));
+              }
+            },
+          });
+        } else {
+          this.relatedPosts.set(related.slice(0, 3));
         }
       },
     });

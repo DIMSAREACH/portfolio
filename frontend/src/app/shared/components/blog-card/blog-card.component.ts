@@ -63,7 +63,7 @@ import { LocalizePipe } from '../../pipes';
               <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span>{{ post.readingTime || 5 }} {{ isKhmer() ? 'នាទីអាន' : 'min read' }}</span>
+              <span>{{ readingTime() }} {{ isKhmer() ? 'នាទីអាន' : 'min read' }}</span>
             </span>
           </div>
 
@@ -129,6 +129,10 @@ export class BlogCardComponent {
   @Input() public showFeaturedBadge = true;
 
   public readonly isKhmer = computed(() => this.languageService.currentLang() === 'kh');
+
+  public readonly readingTime = computed<number>(() => {
+    return Math.max(1, this.post?.readingTime || 1);
+  });
 
   public readonly categoryName = computed<string>(() => {
     if (!this.post || !this.post.category) return 'Article';

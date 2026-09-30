@@ -4464,7 +4464,7 @@ frontend/src/app/features/admin/settings/settings-form.component.spec.ts
 
 ## BLOG-001 Polish Blog Markdown Rendering and Reading Time
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 11
 - Dependencies:
@@ -4481,15 +4481,25 @@ Polish the blog system: ensure code syntax highlighting, reading time display, a
 - Reading time shown on cards and detail
 - Related posts (2-3 from same category) shown on detail page
 
+### Files / Modules
+
+```
+backend/src/models/BlogPost.ts
+frontend/src/app/features/public/blog/blog-detail.component.ts
+frontend/src/app/features/public/blog/blog-detail.component.spec.ts
+frontend/src/app/shared/components/blog-card/blog-card.component.ts
+frontend/src/app/shared/components/blog-card/blog-card.component.spec.ts
+```
+
 ### Acceptance Criteria
 
-- [ ] Code blocks syntax highlighted
-- [ ] Reading time displayed
-- [ ] Related posts shown
+- [x] Code blocks syntax highlighted
+- [x] Reading time displayed
+- [x] Related posts shown
 
 ### Definition of Done
 
-- [ ] Blog system polished
+- [x] Blog system polished with syntax highlighting, copy-code button, reading time signals, related posts fallback, unit tests, and linting passed
 
 ---
 
@@ -5367,7 +5377,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] ADMIN-011 Remaining admin pages
 
 ## Phase 11 — Blog System
-- [ ] BLOG-001 Blog polish
+- [x] BLOG-001 Blog polish
 
 ## Phase 12 — Media & CV
 - [ ] MEDIA-001 Media and CV polish

@@ -107,6 +107,8 @@ const autoGenerateSlug = (doc: IBlogPost) => {
 const updateReadingTime = (doc: IBlogPost) => {
   if (doc.content?.en) {
     doc.readingTime = calculateReadingTime(doc.content.en);
+  } else if (doc.content?.kh) {
+    doc.readingTime = calculateReadingTime(doc.content.kh);
   }
 };
 

@@ -139,10 +139,11 @@ describe('BlogDetailComponent', () => {
   it('should render markdown content with syntax highlighted code blocks', () => {
     fixture.detectChanges();
 
-    const rendered = component.renderedContent();
-    expect(rendered).toContain('Introduction');
-    expect(rendered).toContain('code-wrapper');
-    expect(rendered).toContain('language-typescript');
+    const compiled = fixture.nativeElement as HTMLElement;
+    const content = compiled.querySelector('.blog-content');
+    expect(content?.textContent).toContain('Introduction');
+    expect(content?.innerHTML).toContain('code-wrapper');
+    expect(content?.innerHTML).toContain('language-typescript');
   });
 
   it('should load and filter related posts', () => {
@@ -197,6 +198,48 @@ describe('BlogDetailComponent', () => {
     languageServiceMock.currentLang.set('kh');
     fixture.detectChanges();
     expect(component.categoryName()).toBe('ស្ថាបត្យកម្ម');
-    expect(component.renderedContent()).toContain('សេចក្តីផ្តើម');
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.blog-content')?.textContent).toContain('សេចក្តីផ្តើម');
+  });
+
+  it('should compute reading time correctly', () => {
+    fixture.detectChanges();
+    expect(component.readingTime()).toBe(7);
+  });
+
+  it('should handle code block copy button click', () => {
+    fixture.detectChanges();
+    const clipboardMock = {
+      writeText: vi.fn().mockResolvedValue(undefined),
+    };
+    Object.assign(navigator, { clipboard: clipboardMock });
+
+    const btn = (fixture.nativeElement as HTMLElement).querySelector('.copy-code-btn') as HTMLButtonElement;
+    expect(btn).toBeTruthy();
+    btn.click();
+    expect(clipboardMock.writeText).toHaveBeenCalledWith(expect.stringContaining('const x: number = 42;'));
+  });
+
+  it('should fallback to recent posts when category has fewer than 2 related posts', () => {
+    const mockPost3: BlogPost = {
+      ...mockPost,
+      _id: 'post3',
+      slug: 'recent-post-3',
+      title: { en: 'Recent Post 3', kh: 'អត្ថបទថ្មី ៣' },
+    };
+
+    portfolioServiceMock.getBlogPosts
+      .mockReturnValueOnce(of({
+        success: true,
+        data: { items: [mockPost], pagination: { total: 1 } },
+      }))
+      .mockReturnValueOnce(of({
+        success: true,
+        data: { items: [mockPost3], pagination: { total: 1 } },
+      }));
+
+    component.loadRelatedPosts(mockPost);
+    expect(component.relatedPosts().length).toBe(1);
+    expect(component.relatedPosts()[0]._id).toBe('post3');
   });
 });
