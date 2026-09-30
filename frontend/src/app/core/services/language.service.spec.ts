@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { DOCUMENT } from '@angular/common';
+import { provideTranslateService } from '@ngx-translate/core';
 import { LanguageService } from './language.service';
 import { BilingualField, BilingualArrayField } from '../models';
 
@@ -11,7 +12,13 @@ describe('LanguageService', () => {
     localStorage.clear();
 
     TestBed.configureTestingModule({
-      providers: [LanguageService],
+      providers: [
+        LanguageService,
+        provideTranslateService({
+          fallbackLang: 'en',
+          lang: 'en',
+        }),
+      ],
     });
 
     service = TestBed.inject(LanguageService);
@@ -81,5 +88,20 @@ describe('LanguageService', () => {
 
     service.setLanguage('kh');
     expect(service.getLocalizedArray(field)).toEqual(['ជំនាញ ១', 'ជំនាញ ២']);
+  });
+
+  it('should translate static UI keys using translate() method', () => {
+    service.setLanguage('en');
+    expect(service.translate('nav.home')).toBe('Home');
+    expect(service.translate('contact.send_button')).toBe('Send Message');
+
+    service.setLanguage('kh');
+    expect(service.translate('nav.home')).toBe('ទំព័រដើម');
+    expect(service.translate('contact.send_button')).toBe('ផ្ញើសារឥឡូវនេះ');
+  });
+
+  it('should return the key if translation is not found', () => {
+    service.setLanguage('en');
+    expect(service.translate('unknown.deep.key')).toBe('unknown.deep.key');
   });
 });

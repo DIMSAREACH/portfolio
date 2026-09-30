@@ -1,6 +1,9 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
 import { BilingualField, BilingualArrayField } from '../models';
+import enTranslations from '../../../assets/i18n/en.json';
+import khTranslations from '../../../assets/i18n/kh.json';
 
 export type SupportedLanguage = 'en' | 'kh';
 
@@ -9,6 +12,7 @@ export type SupportedLanguage = 'en' | 'kh';
 })
 export class LanguageService {
   private readonly document = inject(DOCUMENT);
+  private readonly translateService = inject(TranslateService, { optional: true });
   private readonly storageKey = 'portfolio_lang';
 
   /**
@@ -22,7 +26,19 @@ export class LanguageService {
   public readonly isKhmer = computed<boolean>(() => this.currentLang() === 'kh');
 
   constructor() {
+    this.setupTranslations();
     this.initializeLanguage();
+  }
+
+  /**
+   * Setup initial translations in ngx-translate
+   */
+  private setupTranslations(): void {
+    if (this.translateService) {
+      this.translateService.setTranslation('en', enTranslations, true);
+      this.translateService.setTranslation('kh', khTranslations, true);
+      this.translateService.setFallbackLang('en');
+    }
   }
 
   /**
@@ -31,6 +47,9 @@ export class LanguageService {
   public setLanguage(lang: SupportedLanguage): void {
     this.currentLang.set(lang);
     this.applyLanguage(lang);
+    if (this.translateService) {
+      this.translateService.use(lang);
+    }
 
     try {
       localStorage.setItem(this.storageKey, lang);
@@ -86,6 +105,20 @@ export class LanguageService {
 
     this.currentLang.set(initialLang);
     this.applyLanguage(initialLang);
+    if (this.translateService) {
+      this.translateService.use(initialLang);
+    }
+  }
+
+  /**
+   * Helper to translate static string using ngx-translate
+   */
+  public translate(key: string, params?: Record<string, unknown>): string {
+    if (!this.translateService) {
+      return key;
+    }
+    const val = this.translateService.instant(key, params);
+    return val !== undefined ? val : key;
   }
 
   /**

@@ -4595,7 +4595,7 @@ Verify the complete contact flow: form submission, honeypot, email notification,
 
 ## I18N-001 Configure ngx-translate and Create Translation Files
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 14
 - Dependencies:
@@ -4634,14 +4634,14 @@ frontend/src/app/app.config.ts (modify — add TranslateModule)
 
 ### Acceptance Criteria
 
-- [ ] Language switch changes all UI text
-- [ ] Dynamic content shows correct language
-- [ ] Preference persists in localStorage
-- [ ] Fallback to English if Khmer text empty
+- [x] Language switch changes all UI text
+- [x] Dynamic content shows correct language
+- [x] Preference persists in localStorage
+- [x] Fallback to English if Khmer text empty
 
 ### Definition of Done
 
-- [ ] i18n fully implemented
+- [x] i18n fully implemented with ngx-translate v18, en.json, kh.json, TranslatePipe, LocalizePipe, unit tests, and persistent language switcher
 
 ---
 
@@ -5202,7 +5202,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [ ] ADMIN-004 (reusable components refinement), ADMIN-009, ADMIN-011 (remaining sections)
 - [ ] BLOG-001
 - [ ] MEDIA-001
-- [ ] I18N-001
+- [x] I18N-001
 - [ ] TEST-001 through TEST-004
 - [ ] SECURITY-001
 - [ ] DOCKER-001, CICD-001
@@ -5260,7 +5260,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | REST API | 12 | 4-5 | API-001 through API-017, PUB-001 through PUB-004 | TODO |
 | API Response Format | 13 | 1 | BACKEND-005 | TODO |
 | Error Handling | 14 | 1 | BACKEND-002, BACKEND-003 | TODO |
-| Multilingual (i18n) | 15 | 14 | I18N-001 | TODO |
+| Multilingual (i18n) | 15 | 14 | I18N-001 | DONE |
 | Dark/Light Mode | 16 | 7, 15 | FRONTEND-001, FRONTEND-003, THEME-001 | TODO |
 | File & Media Management | 17 | 4, 12 | API-001, API-002, API-016, MEDIA-001 | DONE |
 | Security | 18 | 1, 3, 18 | BACKEND-006, BACKEND-008, AUTH-005, SECURITY-001 | TODO |
@@ -5400,7 +5400,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] CONTACT-001 Contact system verification
 
 ## Phase 14 — i18n
-- [ ] I18N-001 ngx-translate setup and translations
+- [x] I18N-001 ngx-translate setup and translations
 
 ## Phase 15 — Theme & Accessibility
 - [ ] THEME-001 Theme and accessibility polish
