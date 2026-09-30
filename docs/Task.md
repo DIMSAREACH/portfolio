@@ -4054,7 +4054,7 @@ frontend/src/app/features/admin/login/login.component.spec.ts
 
 ## ADMIN-002 Create Admin Layout (Sidebar, Header, Content)
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 9
 - Dependencies:
@@ -4077,22 +4077,25 @@ Create the admin dashboard shell with sidebar navigation, header bar, and conten
 
 ```
 frontend/src/app/features/admin/layout/admin-layout/admin-layout.component.ts
+frontend/src/app/features/admin/layout/admin-layout/admin-layout.component.spec.ts
 frontend/src/app/features/admin/layout/admin-sidebar/admin-sidebar.component.ts
+frontend/src/app/features/admin/layout/admin-sidebar/admin-sidebar.component.spec.ts
 frontend/src/app/features/admin/layout/admin-header/admin-header.component.ts
+frontend/src/app/features/admin/layout/admin-header/admin-header.component.spec.ts
 frontend/src/app/features/admin/admin.routes.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] Sidebar shows all nav items with icons
-- [ ] Header shows admin info and logout
-- [ ] Content area renders child routes
-- [ ] Sidebar responsive (drawer on mobile)
-- [ ] Auth guard protects all admin routes
+- [x] Sidebar shows all nav items with icons
+- [x] Header shows admin info and logout
+- [x] Content area renders child routes
+- [x] Sidebar responsive (drawer on mobile)
+- [x] Auth guard protects all admin routes
 
 ### Definition of Done
 
-- [ ] Admin layout shell complete
+- [x] Admin layout shell complete and unit tested
 
 ---
 
@@ -5262,7 +5265,7 @@ DEPLOY-001 → DOC-001 → QA-001
 
 ## Phase 9 — Admin Layout & Auth
 - [x] ADMIN-001 Admin login page
-- [ ] ADMIN-002 Admin layout
+- [x] ADMIN-002 Admin layout
 - [ ] ADMIN-003 Dashboard overview
 
 ## Phase 10 — Admin CRUD
