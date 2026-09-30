@@ -309,4 +309,41 @@ describe('PortfolioService', () => {
     service.deleteAdminExperience('exp-1').subscribe();
     expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/experiences/exp-1');
   });
+
+  it('should fetch admin education with query params', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: { items: [], pagination: {} } }));
+    service.getAdminEducation({ page: 1, limit: 10, search: 'University' }).subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/education', { page: 1, limit: 10, search: 'University' });
+  });
+
+  it('should fetch admin education by ID', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: { _id: 'edu-1' } }));
+    service.getAdminEducationById('edu-1').subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/education/edu-1');
+  });
+
+  it('should create admin education', () => {
+    const newEdu = {
+      institution: { en: 'RUPP', kh: 'សាកលវិទ្យាល័យភូមិន្ទភ្នំពេញ' },
+      degree: { en: 'Bachelor of Science', kh: 'បរិញ្ញាបត្រវិទ្យាសាស្ត្រ' },
+      field: { en: 'Computer Science', kh: 'វិទ្យាសាស្ត្រកុំព្យូទ័រ' },
+      startYear: 2020,
+    };
+    apiServiceMock.post.mockReturnValue(of({ success: true, data: newEdu }));
+    service.createAdminEducation(newEdu).subscribe();
+    expect(apiServiceMock.post).toHaveBeenCalledWith('/admin/education', newEdu);
+  });
+
+  it('should update admin education', () => {
+    const updateEdu = { endYear: 2024 };
+    apiServiceMock.patch.mockReturnValue(of({ success: true, data: updateEdu }));
+    service.updateAdminEducation('edu-1', updateEdu).subscribe();
+    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/education/edu-1', updateEdu);
+  });
+
+  it('should delete admin education', () => {
+    apiServiceMock.delete.mockReturnValue(of({ success: true, data: null }));
+    service.deleteAdminEducation('edu-1').subscribe();
+    expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/education/edu-1');
+  });
 });

@@ -91,6 +91,30 @@ export const ADMIN_ROUTES: Routes = [
           ),
         title: 'Edit Experience | Admin CMS',
       },
+      {
+        path: 'education',
+        loadComponent: () =>
+          import('./education/education-list/education-list.component').then(
+            (m) => m.EducationListComponent,
+          ),
+        title: 'Education | Admin CMS',
+      },
+      {
+        path: 'education/create',
+        loadComponent: () =>
+          import('./education/education-form/education-form.component').then(
+            (m) => m.EducationFormComponent,
+          ),
+        title: 'Create Education | Admin CMS',
+      },
+      {
+        path: 'education/:id/edit',
+        loadComponent: () =>
+          import('./education/education-form/education-form.component').then(
+            (m) => m.EducationFormComponent,
+          ),
+        title: 'Edit Education | Admin CMS',
+      },
     ],
   },
 ];

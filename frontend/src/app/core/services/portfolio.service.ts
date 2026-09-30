@@ -281,4 +281,43 @@ export class PortfolioService {
   public deleteAdminExperience(id: string): Observable<ApiResponse<null>> {
     return this.apiService.delete<ApiResponse<null>>(`/admin/experiences/${id}`);
   }
+
+  /**
+   * Admin: List all education records with pagination (PRD 9.7, API-008)
+   */
+  public getAdminEducation(params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+  }): Observable<PaginatedResponse<Education>> {
+    return this.apiService.get<PaginatedResponse<Education>>('/admin/education', params);
+  }
+
+  /**
+   * Admin: Get education by ID (PRD 9.7, API-008)
+   */
+  public getAdminEducationById(id: string): Observable<ApiResponse<Education>> {
+    return this.apiService.get<ApiResponse<Education>>(`/admin/education/${id}`);
+  }
+
+  /**
+   * Admin: Create education (PRD 9.7, API-008)
+   */
+  public createAdminEducation(education: Partial<Education>): Observable<ApiResponse<Education>> {
+    return this.apiService.post<ApiResponse<Education>>('/admin/education', education);
+  }
+
+  /**
+   * Admin: Update education by ID (PRD 9.7, API-008)
+   */
+  public updateAdminEducation(id: string, education: Partial<Education>): Observable<ApiResponse<Education>> {
+    return this.apiService.patch<ApiResponse<Education>>(`/admin/education/${id}`, education);
+  }
+
+  /**
+   * Admin: Delete education by ID (PRD 9.7, API-008)
+   */
+  public deleteAdminEducation(id: string): Observable<ApiResponse<null>> {
+    return this.apiService.delete<ApiResponse<null>>(`/admin/education/${id}`);
+  }
 }
