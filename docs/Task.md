@@ -4013,7 +4013,7 @@ Ensure all public pages are responsive from 360px to 1440px+ per PRD Section 21.
 
 ## ADMIN-001 Create Admin Login Page
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 9
 - Dependencies:
@@ -4036,18 +4036,19 @@ Create the admin login page with email/password form per PRD Section 9.
 
 ```
 frontend/src/app/features/admin/login/login.component.ts
+frontend/src/app/features/admin/login/login.component.spec.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] Login form renders
-- [ ] Valid login redirects to dashboard
-- [ ] Invalid login shows error
-- [ ] Form validates required fields
+- [x] Login form renders
+- [x] Valid login redirects to dashboard
+- [x] Invalid login shows error
+- [x] Form validates required fields
 
 ### Definition of Done
 
-- [ ] Login page complete
+- [x] Login page complete and unit tested
 
 ---
 
@@ -5260,7 +5261,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] PUBLIC-009 Responsive design verification
 
 ## Phase 9 — Admin Layout & Auth
-- [ ] ADMIN-001 Admin login page
+- [x] ADMIN-001 Admin login page
 - [ ] ADMIN-002 Admin layout
 - [ ] ADMIN-003 Dashboard overview
 
