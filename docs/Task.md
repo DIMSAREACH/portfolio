@@ -4404,7 +4404,7 @@ frontend/src/app/features/admin/blog/blog-form/blog-form.component.spec.ts
 
 ## ADMIN-011 Create Admin Category, Message, Profile, Social Links, Media, CV, and Settings Pages
 
-- Status: TODO
+- Status: DONE
 - Priority: P0 (Categories, Messages, Profile) / P1 (others)
 - Phase: Phase 10
 - Dependencies:
@@ -4429,25 +4429,32 @@ Create all remaining admin pages per PRD Section 9.
 ### Files / Modules
 
 ```
-frontend/src/app/features/admin/categories/
-frontend/src/app/features/admin/messages/
-frontend/src/app/features/admin/profile/
-frontend/src/app/features/admin/social-links/
-frontend/src/app/features/admin/media/
-frontend/src/app/features/admin/cv/
-frontend/src/app/features/admin/settings/
+frontend/src/app/features/admin/categories/category-list.component.ts
+frontend/src/app/features/admin/categories/category-list.component.spec.ts
+frontend/src/app/features/admin/messages/message-list.component.ts
+frontend/src/app/features/admin/messages/message-list.component.spec.ts
+frontend/src/app/features/admin/profile/profile-form.component.ts
+frontend/src/app/features/admin/profile/profile-form.component.spec.ts
+frontend/src/app/features/admin/social-links/social-link-list.component.ts
+frontend/src/app/features/admin/social-links/social-link-list.component.spec.ts
+frontend/src/app/features/admin/media/media-list.component.ts
+frontend/src/app/features/admin/media/media-list.component.spec.ts
+frontend/src/app/features/admin/cv/cv-manager.component.ts
+frontend/src/app/features/admin/cv/cv-manager.component.spec.ts
+frontend/src/app/features/admin/settings/settings-form.component.ts
+frontend/src/app/features/admin/settings/settings-form.component.spec.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] All remaining admin pages functional
-- [ ] Message read/unread toggle works
-- [ ] Profile upsert works
-- [ ] Media grid displays images
+- [x] All remaining admin pages functional
+- [x] Message read/unread toggle works
+- [x] Profile upsert works
+- [x] Media grid displays images
 
 ### Definition of Done
 
-- [ ] All admin sections complete
+- [x] All admin sections complete with unit tests, linting, and build passed
 
 ---
 
@@ -5217,13 +5224,13 @@ DEPLOY-001 → DOC-001 → QA-001
 | Admin Education | 9.7 | 10 | ADMIN-008 | DONE |
 | Admin Certifications | 9.8 | 10 | ADMIN-009 | DONE |
 | Admin Blog | 9.9 | 10 | ADMIN-010 | DONE |
-| Admin Categories | 9.10 | 10 | ADMIN-011 | TODO |
-| Admin Media | 9.11 | 10, 12 | ADMIN-011, MEDIA-001 | TODO |
-| Admin Messages | 9.12 | 10, 13 | ADMIN-011, CONTACT-001 | TODO |
-| Admin CV | 9.13 | 10, 12 | ADMIN-011, MEDIA-001 | TODO |
-| Admin Social Links | 9.14 | 10 | ADMIN-011 | TODO |
-| Admin Profile | 9.15 | 10 | ADMIN-011 | TODO |
-| Admin Settings | 9.16 | 10 | ADMIN-011 | TODO |
+| Admin Categories | 9.10 | 10 | ADMIN-011 | DONE |
+| Admin Media | 9.11 | 10, 12 | ADMIN-011, MEDIA-001 | DONE (Admin UI) |
+| Admin Messages | 9.12 | 10, 13 | ADMIN-011, CONTACT-001 | DONE (Admin UI) |
+| Admin CV | 9.13 | 10, 12 | ADMIN-011, MEDIA-001 | DONE (Admin UI) |
+| Admin Social Links | 9.14 | 10 | ADMIN-011 | DONE |
+| Admin Profile | 9.15 | 10 | ADMIN-011 | DONE |
+| Admin Settings | 9.16 | 10 | ADMIN-011 | DONE |
 | Authentication | 10 | 3, 9 | AUTH-001 through AUTH-006, ADMIN-001, FRONTEND-004, FRONTEND-005 | TODO |
 | Database Design | 11 | 2 | DB-001 through DB-014 | TODO |
 | REST API | 12 | 4-5 | API-001 through API-017, PUB-001 through PUB-004 | TODO |
@@ -5357,7 +5364,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] ADMIN-008 Education CRUD pages
 - [x] ADMIN-009 Certification CRUD pages
 - [x] ADMIN-010 Blog CRUD pages
-- [ ] ADMIN-011 Remaining admin pages
+- [x] ADMIN-011 Remaining admin pages
 
 ## Phase 11 — Blog System
 - [ ] BLOG-001 Blog polish

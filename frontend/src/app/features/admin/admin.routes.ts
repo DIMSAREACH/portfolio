@@ -163,6 +163,67 @@ export const ADMIN_ROUTES: Routes = [
           ),
         title: 'Edit Blog Post | Admin CMS',
       },
+      {
+        path: 'categories',
+        loadComponent: () =>
+          import('./categories/category-list.component').then(
+            (m) => m.CategoryListComponent,
+          ),
+        title: 'Categories | Admin CMS',
+      },
+      {
+        path: 'messages',
+        loadComponent: () =>
+          import('./messages/message-list.component').then(
+            (m) => m.MessageListComponent,
+          ),
+        title: 'Messages | Admin CMS',
+      },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./profile/profile-form.component').then(
+            (m) => m.ProfileFormComponent,
+          ),
+        title: 'Profile | Admin CMS',
+      },
+      {
+        path: 'social-links',
+        loadComponent: () =>
+          import('./social-links/social-link-list.component').then(
+            (m) => m.SocialLinkListComponent,
+          ),
+        title: 'Social Links | Admin CMS',
+      },
+      {
+        path: 'media',
+        loadComponent: () =>
+          import('./media/media-list.component').then(
+            (m) => m.MediaListComponent,
+          ),
+        title: 'Media Library | Admin CMS',
+      },
+      {
+        path: 'cv',
+        loadComponent: () =>
+          import('./cv/cv-manager.component').then(
+            (m) => m.CvManagerComponent,
+          ),
+        title: 'CV Management | Admin CMS',
+      },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./settings/settings-form.component').then(
+            (m) => m.SettingsFormComponent,
+          ),
+        title: 'System Settings | Admin CMS',
+      },
+      {
+        path: 'achievements',
+        redirectTo: 'certifications',
+        pathMatch: 'full',
+      },
     ],
   },
 ];

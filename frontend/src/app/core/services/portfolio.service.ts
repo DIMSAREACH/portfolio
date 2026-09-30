@@ -17,6 +17,7 @@ import {
   Message,
   ContactFormPayload,
   DashboardStats,
+  Media,
 } from '../models';
 
 @Injectable({
@@ -418,4 +419,143 @@ export class PortfolioService {
   public unpublishAdminBlogPost(id: string): Observable<ApiResponse<BlogPost>> {
     return this.apiService.patch<ApiResponse<BlogPost>>(`/admin/blog/${id}/unpublish`, {});
   }
+
+  // ==========================================
+  // Categories (PRD 9.10, API-004)
+  // ==========================================
+
+  public getAdminCategories(): Observable<ApiResponse<Category[]>> {
+    return this.apiService.get<ApiResponse<Category[]>>('/admin/categories');
+  }
+
+  public createAdminCategory(data: Partial<Category>): Observable<ApiResponse<Category>> {
+    return this.apiService.post<ApiResponse<Category>>('/admin/categories', data);
+  }
+
+  public updateAdminCategory(id: string, data: Partial<Category>): Observable<ApiResponse<Category>> {
+    return this.apiService.patch<ApiResponse<Category>>(`/admin/categories/${id}`, data);
+  }
+
+  public deleteAdminCategory(id: string): Observable<ApiResponse<null>> {
+    return this.apiService.delete<ApiResponse<null>>(`/admin/categories/${id}`);
+  }
+
+  // ==========================================
+  // Messages (PRD 9.12, CONTACT-001, API-014)
+  // ==========================================
+
+  public getAdminMessages(params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    isRead?: boolean | string;
+    isArchived?: boolean | string;
+  }): Observable<PaginatedResponse<Message>> {
+    return this.apiService.get<PaginatedResponse<Message>>('/admin/messages', params);
+  }
+
+  public getAdminMessageById(id: string): Observable<ApiResponse<Message>> {
+    return this.apiService.get<ApiResponse<Message>>(`/admin/messages/${id}`);
+  }
+
+  public markAdminMessageAsRead(id: string): Observable<ApiResponse<Message>> {
+    return this.apiService.patch<ApiResponse<Message>>(`/admin/messages/${id}/read`, {});
+  }
+
+  public markAdminMessageAsUnread(id: string): Observable<ApiResponse<Message>> {
+    return this.apiService.patch<ApiResponse<Message>>(`/admin/messages/${id}/unread`, {});
+  }
+
+  public archiveAdminMessage(id: string): Observable<ApiResponse<Message>> {
+    return this.apiService.patch<ApiResponse<Message>>(`/admin/messages/${id}/archive`, {});
+  }
+
+  public deleteAdminMessage(id: string): Observable<ApiResponse<null>> {
+    return this.apiService.delete<ApiResponse<null>>(`/admin/messages/${id}`);
+  }
+
+  // ==========================================
+  // Profile (PRD 9.15, API-011)
+  // ==========================================
+
+  public getAdminProfile(): Observable<ApiResponse<Profile>> {
+    return this.apiService.get<ApiResponse<Profile>>('/admin/profile');
+  }
+
+  public upsertAdminProfile(data: Partial<Profile> | FormData): Observable<ApiResponse<Profile>> {
+    return this.apiService.put<ApiResponse<Profile>>('/admin/profile', data);
+  }
+
+  // ==========================================
+  // Social Links (PRD 9.14, API-013)
+  // ==========================================
+
+  public getAdminSocialLinks(): Observable<ApiResponse<SocialLink[]>> {
+    return this.apiService.get<ApiResponse<SocialLink[]>>('/admin/social-links');
+  }
+
+  public createAdminSocialLink(data: Partial<SocialLink>): Observable<ApiResponse<SocialLink>> {
+    return this.apiService.post<ApiResponse<SocialLink>>('/admin/social-links', data);
+  }
+
+  public updateAdminSocialLink(id: string, data: Partial<SocialLink>): Observable<ApiResponse<SocialLink>> {
+    return this.apiService.patch<ApiResponse<SocialLink>>(`/admin/social-links/${id}`, data);
+  }
+
+  public deleteAdminSocialLink(id: string): Observable<ApiResponse<null>> {
+    return this.apiService.delete<ApiResponse<null>>(`/admin/social-links/${id}`);
+  }
+
+  public reorderAdminSocialLinks(linkIds: string[]): Observable<ApiResponse<SocialLink[]>> {
+    return this.apiService.patch<ApiResponse<SocialLink[]>>('/admin/social-links/reorder', { linkIds });
+  }
+
+  // ==========================================
+  // Media (PRD 9.11, API-015, MEDIA-001)
+  // ==========================================
+
+  public getAdminMedia(params?: {
+    page?: number;
+    limit?: number;
+    folder?: string;
+  }): Observable<PaginatedResponse<Media>> {
+    return this.apiService.get<PaginatedResponse<Media>>('/admin/media', params);
+  }
+
+  public uploadAdminMedia(formData: FormData): Observable<ApiResponse<Media>> {
+    return this.apiService.post<ApiResponse<Media>>('/admin/media/upload', formData);
+  }
+
+  public deleteAdminMedia(id: string): Observable<ApiResponse<null>> {
+    return this.apiService.delete<ApiResponse<null>>(`/admin/media/${id}`);
+  }
+
+  // ==========================================
+  // CV Management (PRD 9.13, API-016, MEDIA-001)
+  // ==========================================
+
+  public getAdminCv(): Observable<ApiResponse<{ cvUrl?: string; cvPublicId?: string; updatedAt?: string }>> {
+    return this.apiService.get<ApiResponse<{ cvUrl?: string; cvPublicId?: string; updatedAt?: string }>>('/admin/cv');
+  }
+
+  public uploadAdminCv(formData: FormData): Observable<ApiResponse<{ cvUrl: string }>> {
+    return this.apiService.post<ApiResponse<{ cvUrl: string }>>('/admin/cv/upload', formData);
+  }
+
+  public deleteAdminCv(): Observable<ApiResponse<null>> {
+    return this.apiService.delete<ApiResponse<null>>('/admin/cv');
+  }
+
+  // ==========================================
+  // Settings (PRD 9.16, API-012)
+  // ==========================================
+
+  public getAdminSettings(): Observable<ApiResponse<Settings>> {
+    return this.apiService.get<ApiResponse<Settings>>('/admin/settings');
+  }
+
+  public updateAdminSettings(settings: Partial<Settings>): Observable<ApiResponse<Settings>> {
+    return this.apiService.put<ApiResponse<Settings>>('/admin/settings', settings);
+  }
 }
+

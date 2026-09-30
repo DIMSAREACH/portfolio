@@ -20,6 +20,7 @@ describe('PortfolioService', () => {
   let apiServiceMock: {
     get: ReturnType<typeof vi.fn>;
     post: ReturnType<typeof vi.fn>;
+    put: ReturnType<typeof vi.fn>;
     patch: ReturnType<typeof vi.fn>;
     delete: ReturnType<typeof vi.fn>;
     getUrl: ReturnType<typeof vi.fn>;
@@ -29,6 +30,7 @@ describe('PortfolioService', () => {
     apiServiceMock = {
       get: vi.fn(),
       post: vi.fn(),
+      put: vi.fn(),
       patch: vi.fn(),
       delete: vi.fn(),
       getUrl: vi.fn().mockImplementation((path: string) => `http://localhost:5000/api/v1/${path.replace(/^\/+/, '')}`),
@@ -433,5 +435,117 @@ describe('PortfolioService', () => {
     service.unpublishAdminBlogPost('post-1').subscribe();
     expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/blog/post-1/unpublish', {});
   });
+
+  // Admin Categories
+  it('should get, create, update, delete admin categories', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: [] }));
+    service.getAdminCategories().subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/categories');
+
+    apiServiceMock.post.mockReturnValue(of({ success: true, data: {} }));
+    service.createAdminCategory({ slug: 'new-cat' }).subscribe();
+    expect(apiServiceMock.post).toHaveBeenCalledWith('/admin/categories', { slug: 'new-cat' });
+
+    apiServiceMock.patch.mockReturnValue(of({ success: true, data: {} }));
+    service.updateAdminCategory('cat-1', { slug: 'up-cat' }).subscribe();
+    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/categories/cat-1', { slug: 'up-cat' });
+
+    apiServiceMock.delete.mockReturnValue(of({ success: true, data: null }));
+    service.deleteAdminCategory('cat-1').subscribe();
+    expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/categories/cat-1');
+  });
+
+  // Admin Messages
+  it('should get, read, unread, archive, and delete admin messages', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: [] }));
+    service.getAdminMessages({ page: 1, limit: 10, isRead: false }).subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/messages', { page: 1, limit: 10, isRead: false });
+
+    service.getAdminMessageById('msg-1').subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/messages/msg-1');
+
+    apiServiceMock.patch.mockReturnValue(of({ success: true, data: {} }));
+    service.markAdminMessageAsRead('msg-1').subscribe();
+    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/messages/msg-1/read', {});
+
+    service.markAdminMessageAsUnread('msg-1').subscribe();
+    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/messages/msg-1/unread', {});
+
+    service.archiveAdminMessage('msg-1').subscribe();
+    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/messages/msg-1/archive', {});
+
+    apiServiceMock.delete.mockReturnValue(of({ success: true, data: null }));
+    service.deleteAdminMessage('msg-1').subscribe();
+    expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/messages/msg-1');
+  });
+
+  // Admin Profile & Settings
+  it('should get and upsert admin profile', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: {} }));
+    service.getAdminProfile().subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/profile');
+
+    apiServiceMock.put.mockReturnValue(of({ success: true, data: {} }));
+    service.upsertAdminProfile({ email: 'test@example.com' }).subscribe();
+    expect(apiServiceMock.put).toHaveBeenCalledWith('/admin/profile', { email: 'test@example.com' });
+  });
+
+  it('should get and update admin settings', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: {} }));
+    service.getAdminSettings().subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/settings');
+
+    apiServiceMock.put.mockReturnValue(of({ success: true, data: {} }));
+    service.updateAdminSettings({ enableCvDownload: true }).subscribe();
+    expect(apiServiceMock.put).toHaveBeenCalledWith('/admin/settings', { enableCvDownload: true });
+  });
+
+  // Admin Social Links
+  it('should manage admin social links and reordering', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: [] }));
+    service.getAdminSocialLinks().subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/social-links');
+
+    apiServiceMock.post.mockReturnValue(of({ success: true, data: {} }));
+    service.createAdminSocialLink({ platform: 'github' }).subscribe();
+    expect(apiServiceMock.post).toHaveBeenCalledWith('/admin/social-links', { platform: 'github' });
+
+    apiServiceMock.patch.mockReturnValue(of({ success: true, data: {} }));
+    service.updateAdminSocialLink('soc-1', { label: 'GitHub' }).subscribe();
+    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/social-links/soc-1', { label: 'GitHub' });
+
+    apiServiceMock.delete.mockReturnValue(of({ success: true, data: null }));
+    service.deleteAdminSocialLink('soc-1').subscribe();
+    expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/social-links/soc-1');
+
+    service.reorderAdminSocialLinks(['soc-2', 'soc-1']).subscribe();
+    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/social-links/reorder', { linkIds: ['soc-2', 'soc-1'] });
+  });
+
+  // Admin Media & CV
+  it('should manage admin media and cv', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: [] }));
+    service.getAdminMedia({ page: 1, limit: 12 }).subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/media', { page: 1, limit: 12 });
+
+    const fd = new FormData();
+    apiServiceMock.post.mockReturnValue(of({ success: true, data: {} }));
+    service.uploadAdminMedia(fd).subscribe();
+    expect(apiServiceMock.post).toHaveBeenCalledWith('/admin/media/upload', fd);
+
+    apiServiceMock.delete.mockReturnValue(of({ success: true, data: null }));
+    service.deleteAdminMedia('media-1').subscribe();
+    expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/media/media-1');
+
+    service.getAdminCv().subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/cv');
+
+    service.uploadAdminCv(fd).subscribe();
+    expect(apiServiceMock.post).toHaveBeenCalledWith('/admin/cv/upload', fd);
+
+    service.deleteAdminCv().subscribe();
+    expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/cv');
+  });
 });
+
 
