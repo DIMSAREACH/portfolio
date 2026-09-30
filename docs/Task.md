@@ -3893,7 +3893,7 @@ frontend/src/app/shared/components/project-card/project-card.component.spec.ts
 
 ## PUBLIC-007 Create Blog List and Detail Pages
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 8
 - Dependencies:
@@ -3912,20 +3912,23 @@ Create Blog list and detail pages per PRD Sections 8.8 and 8.9, with Markdown re
 ### Files / Modules
 
 ```
-frontend/src/app/features/public/blog/blog-list/blog-list.component.ts
-frontend/src/app/features/public/blog/blog-detail/blog-detail.component.ts
+frontend/src/app/features/public/blog/blog-list.component.ts
+frontend/src/app/features/public/blog/blog-list.component.spec.ts
+frontend/src/app/features/public/blog/blog-detail.component.ts
+frontend/src/app/features/public/blog/blog-detail.component.spec.ts
 frontend/src/app/shared/components/blog-card/blog-card.component.ts
+frontend/src/app/shared/components/blog-card/blog-card.component.spec.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] Blog cards with reading time
-- [ ] Code blocks syntax highlighted
-- [ ] Markdown rendering works
+- [x] Blog cards with reading time
+- [x] Code blocks syntax highlighted
+- [x] Markdown rendering works
 
 ### Definition of Done
 
-- [ ] Blog pages complete
+- [x] Blog pages complete and unit tested
 
 ---
 
@@ -5113,7 +5116,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | Experience Page | 8.4 | 8 | PUBLIC-004 | DONE |
 | Education Page | 8.5 | 8 | PUBLIC-005 | DONE |
 | Projects Page + Detail | 8.6-8.7 | 8 | PUBLIC-006 | DONE |
-| Blog Page + Detail | 8.8-8.9 | 8, 11 | PUBLIC-007, BLOG-001 | TODO |
+| Blog Page + Detail | 8.8-8.9 | 8, 11 | PUBLIC-007, BLOG-001 | DONE (Public) |
 | Achievements Page | 8.10 | 8 | PUBLIC-008 | TODO |
 | Contact Page | 8.11 | 8, 13 | PUBLIC-008, CONTACT-001 | TODO |
 | CV Download | 8.12 | 5, 12 | PUB-004, MEDIA-001 | TODO |
@@ -5249,7 +5252,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] PUBLIC-004 Experience page
 - [x] PUBLIC-005 Education page
 - [x] PUBLIC-006 Project list and detail pages
-- [ ] PUBLIC-007 Blog list and detail pages
+- [x] PUBLIC-007 Blog list and detail pages
 - [ ] PUBLIC-008 Achievements, Contact, and 404 pages
 - [ ] PUBLIC-009 Responsive design verification
 

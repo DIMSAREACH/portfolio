@@ -8,3 +8,4 @@ export * from './confirm-dialog/confirm-dialog.component';
 export * from './header/header.component';
 export * from './footer/footer.component';
 export * from './project-card/project-card.component';
+export * from './blog-card/blog-card.component';

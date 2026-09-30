@@ -107,8 +107,10 @@ export class PortfolioService {
   public getBlogPosts(params?: {
     page?: number;
     limit?: number;
+    category?: string;
     tag?: string;
     search?: string;
+    featured?: boolean | string;
   }): Observable<PaginatedResponse<BlogPost>> {
     return this.apiService.get<PaginatedResponse<BlogPost>>('/blog', params);
   }
