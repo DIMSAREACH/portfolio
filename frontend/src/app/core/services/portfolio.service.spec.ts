@@ -164,6 +164,14 @@ describe('PortfolioService', () => {
     expect(apiServiceMock.get).toHaveBeenCalledWith('/settings/public');
   });
 
+  it('should fetch categories with optional filter', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, message: 'Categories retrieved', data: [] }));
+
+    service.getCategories('project').subscribe();
+
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/categories', { type: 'project' });
+  });
+
   it('should return correct CV download URL', () => {
     const url = service.getCvDownloadUrl();
     expect(url).toBe('http://localhost:5000/api/v1/cv/download');

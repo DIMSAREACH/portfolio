@@ -3842,7 +3842,7 @@ frontend/src/app/features/public/education/education.component.spec.ts
 
 ## PUBLIC-006 Create Project List and Detail Pages
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 8
 - Dependencies:
@@ -3857,34 +3857,37 @@ Create Projects list page (card grid with filter/search/pagination) and Project 
 
 - List: Card grid, category filter, tech filter, search, pagination
 - Detail: Full case study layout — title, hero image, meta, overview, problem, solution, features, tech stack, screenshots, challenges, lessons, links, related projects
-- Markdown rendering via `ngx-markdown`
+- Markdown rendering via `marked`
 
 ### Files / Modules
 
 ```
-frontend/src/app/features/public/projects/project-list/project-list.component.ts
-frontend/src/app/features/public/projects/project-detail/project-detail.component.ts
+frontend/src/app/features/public/projects/project-list.component.ts
+frontend/src/app/features/public/projects/project-list.component.spec.ts
+frontend/src/app/features/public/projects/project-detail.component.ts
+frontend/src/app/features/public/projects/project-detail.component.spec.ts
 frontend/src/app/shared/components/project-card/project-card.component.ts
+frontend/src/app/shared/components/project-card/project-card.component.spec.ts
 ```
 
 ### Implementation Steps
 
-1. Install `ngx-markdown`: `npm install ngx-markdown marked`
+1. Install `ngx-markdown` & `marked`: `npm install ngx-markdown marked`
 2. Create reusable `ProjectCardComponent`.
 3. Create `ProjectListComponent` with filter, search, and pagination.
 4. Create `ProjectDetailComponent` with case study layout and Markdown rendering.
 
 ### Acceptance Criteria
 
-- [ ] Project grid with cards
-- [ ] Filtering and search work
-- [ ] Pagination works
-- [ ] Detail page renders Markdown
-- [ ] Related projects shown
+- [x] Project grid with cards
+- [x] Filtering and search work
+- [x] Pagination works
+- [x] Detail page renders Markdown
+- [x] Related projects shown
 
 ### Definition of Done
 
-- [ ] Both pages complete
+- [x] Both pages complete and unit tested
 
 ---
 
@@ -5109,7 +5112,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | Skills Page | 8.3 | 8 | PUBLIC-003 | DONE |
 | Experience Page | 8.4 | 8 | PUBLIC-004 | DONE |
 | Education Page | 8.5 | 8 | PUBLIC-005 | DONE |
-| Projects Page + Detail | 8.6-8.7 | 8 | PUBLIC-006 | TODO |
+| Projects Page + Detail | 8.6-8.7 | 8 | PUBLIC-006 | DONE |
 | Blog Page + Detail | 8.8-8.9 | 8, 11 | PUBLIC-007, BLOG-001 | TODO |
 | Achievements Page | 8.10 | 8 | PUBLIC-008 | TODO |
 | Contact Page | 8.11 | 8, 13 | PUBLIC-008, CONTACT-001 | TODO |
@@ -5245,7 +5248,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] PUBLIC-003 Skills page
 - [x] PUBLIC-004 Experience page
 - [x] PUBLIC-005 Education page
-- [ ] PUBLIC-006 Project list and detail pages
+- [x] PUBLIC-006 Project list and detail pages
 - [ ] PUBLIC-007 Blog list and detail pages
 - [ ] PUBLIC-008 Achievements, Contact, and 404 pages
 - [ ] PUBLIC-009 Responsive design verification

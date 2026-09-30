@@ -4,6 +4,7 @@ import { ApiService } from './api.service';
 import {
   Profile,
   Project,
+  Category,
   Skill,
   Experience,
   Education,
@@ -28,6 +29,16 @@ export class PortfolioService {
    */
   public getProfile(): Observable<ApiResponse<Profile>> {
     return this.apiService.get<ApiResponse<Profile>>('/profile');
+  }
+
+  /**
+   * Fetch categories with optional type filter ('project' | 'blog' | 'both')
+   */
+  public getCategories(type?: string): Observable<ApiResponse<Category[]>> {
+    return this.apiService.get<ApiResponse<Category[]>>(
+      '/categories',
+      type ? { type } : undefined,
+    );
   }
 
   /**
