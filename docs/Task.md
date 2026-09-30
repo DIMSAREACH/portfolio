@@ -3979,7 +3979,7 @@ frontend/src/app/features/public/not-found/not-found.component.spec.ts
 
 ## PUBLIC-009 Make All Public Pages Responsive
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 8
 - Dependencies:
@@ -3997,13 +3997,13 @@ Ensure all public pages are responsive from 360px to 1440px+ per PRD Section 21.
 
 ### Acceptance Criteria
 
-- [ ] All pages usable at 360px
-- [ ] Grid columns adjust per breakpoint
-- [ ] Navigation responsive (hamburger on mobile)
+- [x] All pages usable at 360px
+- [x] Grid columns adjust per breakpoint
+- [x] Navigation responsive (hamburger on mobile)
 
 ### Definition of Done
 
-- [ ] Responsive design verified at all breakpoints
+- [x] Responsive design verified at all breakpoints
 
 ---
 
@@ -5148,8 +5148,8 @@ DEPLOY-001 → DOC-001 → QA-001
 | Dark/Light Mode | 16 | 7, 15 | FRONTEND-001, FRONTEND-003, THEME-001 | TODO |
 | File & Media Management | 17 | 4, 12 | API-001, API-002, API-016, MEDIA-001 | TODO |
 | Security | 18 | 1, 3, 18 | BACKEND-006, BACKEND-008, AUTH-005, SECURITY-001 | TODO |
-| UX/UI Design | 19-20 | 7, 8 | FRONTEND-001, FRONTEND-006, PUBLIC-009 | TODO |
-| Responsive Design | 21 | 8 | PUBLIC-009 | TODO |
+| UX/UI Design | 19-20 | 7, 8 | FRONTEND-001, FRONTEND-006, PUBLIC-009 | DONE (Public) |
+| Responsive Design | 21 | 8 | PUBLIC-009 | DONE |
 | Accessibility | 22 | 15 | THEME-001 | TODO |
 | SEO | 23 | 16 | SEO-001 | TODO |
 | Performance | 24 | 16 | SEO-001 | TODO |
@@ -5257,7 +5257,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] PUBLIC-006 Project list and detail pages
 - [x] PUBLIC-007 Blog list and detail pages
 - [x] PUBLIC-008 Achievements, Contact, and 404 pages
-- [ ] PUBLIC-009 Responsive design verification
+- [x] PUBLIC-009 Responsive design verification
 
 ## Phase 9 — Admin Layout & Auth
 - [ ] ADMIN-001 Admin login page

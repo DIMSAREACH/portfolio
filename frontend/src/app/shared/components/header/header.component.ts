@@ -151,6 +151,7 @@ export class HeaderComponent {
     { path: '/education', labelEn: 'Education', labelKh: 'ការអប់រំ' },
     { path: '/projects', labelEn: 'Projects', labelKh: 'គម្រោង' },
     { path: '/blog', labelEn: 'Blog', labelKh: 'ប្លុក' },
+    { path: '/achievements', labelEn: 'Achievements', labelKh: 'សមិទ្ធផល' },
     { path: '/contact', labelEn: 'Contact', labelKh: 'ទំនាក់ទំនង' },
   ];
 
