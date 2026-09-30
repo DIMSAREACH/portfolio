@@ -4,6 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 import { LanguageService } from '../../../core/services/language.service';
+import { PortfolioService } from '../../../core/services/portfolio.service';
 
 interface NavItem {
   path: string;
@@ -65,8 +66,22 @@ interface NavItem {
           }
         </nav>
 
-        <!-- Right Side Controls (Theme, Language, Mobile Toggle) -->
+        <!-- Right Side Controls (CV, Theme, Language, Mobile Toggle) -->
         <div class="flex items-center gap-2 sm:gap-3">
+          <a
+            [href]="cvDownloadUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-800/60 transition-colors shadow-2xs"
+            id="header-cv-btn"
+            title="Download CV"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            <span>{{ isKhmer() ? 'CV' : 'Resume' }}</span>
+          </a>
+
           <app-language-switcher></app-language-switcher>
           <app-theme-toggle></app-theme-toggle>
 
@@ -132,6 +147,22 @@ interface NavItem {
               {{ isKhmer() ? item.labelKh : item.labelEn }}
             </a>
           }
+
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800">
+            <a
+              [href]="cvDownloadUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              (click)="closeMobileMenu()"
+              class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm"
+              id="mobile-cv-btn"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+              <span>{{ isKhmer() ? 'ទាញយកប្រវត្តិរូប (CV)' : 'Download CV' }}</span>
+            </a>
+          </div>
         </div>
       }
     </header>
@@ -139,9 +170,14 @@ interface NavItem {
 })
 export class HeaderComponent {
   private readonly languageService = inject(LanguageService);
+  private readonly portfolioService = inject(PortfolioService, { optional: true });
 
   public readonly isKhmer = this.languageService.isKhmer;
   public isMobileMenuOpen = false;
+
+  public get cvDownloadUrl(): string {
+    return this.portfolioService?.getCvDownloadUrl() ?? '/api/v1/cv/download';
+  }
 
   public readonly navItems: NavItem[] = [
     { path: '/', labelEn: 'Home', labelKh: 'ទំព័រដើម', exact: true },

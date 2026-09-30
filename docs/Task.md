@@ -4509,7 +4509,7 @@ frontend/src/app/shared/components/blog-card/blog-card.component.spec.ts
 
 ## MEDIA-001 Polish Media Library and CV Download
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 12
 - Dependencies:
@@ -4526,14 +4526,28 @@ Ensure media library and CV download work end-to-end.
 - CV download button on public pages
 - File type filtering in media library
 
+### Files / Modules
+
+```
+frontend/src/app/core/services/portfolio.service.ts
+frontend/src/app/features/admin/media/media-list.component.ts
+frontend/src/app/features/admin/media/media-list.component.spec.ts
+frontend/src/app/features/admin/cv/cv-manager.component.ts
+frontend/src/app/features/admin/cv/cv-manager.component.spec.ts
+frontend/src/app/shared/components/header/header.component.ts
+frontend/src/app/shared/components/header/header.component.spec.ts
+frontend/src/app/features/public/home/home.component.ts
+frontend/src/app/features/public/about/about.component.ts
+```
+
 ### Acceptance Criteria
 
-- [ ] Media upload/delete/copy URL works
-- [ ] CV download from public pages works
+- [x] Media upload/delete/copy URL works
+- [x] CV download from public pages works
 
 ### Definition of Done
 
-- [ ] Media and CV features polished
+- [x] Media and CV features polished with file type filtering, document preview, public header/hero CV download, unit tests, and linting passed
 
 ---
 
@@ -5224,7 +5238,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | Blog Page + Detail | 8.8-8.9 | 8, 11 | PUBLIC-007, BLOG-001 | DONE (Public) |
 | Achievements Page | 8.10 | 8 | PUBLIC-008 | DONE |
 | Contact Page | 8.11 | 8, 13 | PUBLIC-008, CONTACT-001 | DONE (Public) |
-| CV Download | 8.12 | 5, 12 | PUB-004, MEDIA-001 | TODO |
+| CV Download | 8.12 | 5, 12 | PUB-004, MEDIA-001 | DONE |
 | Admin Layout | 9.1 | 9 | ADMIN-002 | DONE |
 | Dashboard | 9.2 | 9 | ADMIN-003 | DONE |
 | CRUD Standards | 9.3 | 10 | ADMIN-004 | DONE |
@@ -5235,9 +5249,9 @@ DEPLOY-001 → DOC-001 → QA-001
 | Admin Certifications | 9.8 | 10 | ADMIN-009 | DONE |
 | Admin Blog | 9.9 | 10 | ADMIN-010 | DONE |
 | Admin Categories | 9.10 | 10 | ADMIN-011 | DONE |
-| Admin Media | 9.11 | 10, 12 | ADMIN-011, MEDIA-001 | DONE (Admin UI) |
+| Admin Media | 9.11 | 10, 12 | ADMIN-011, MEDIA-001 | DONE |
 | Admin Messages | 9.12 | 10, 13 | ADMIN-011, CONTACT-001 | DONE (Admin UI) |
-| Admin CV | 9.13 | 10, 12 | ADMIN-011, MEDIA-001 | DONE (Admin UI) |
+| Admin CV | 9.13 | 10, 12 | ADMIN-011, MEDIA-001 | DONE |
 | Admin Social Links | 9.14 | 10 | ADMIN-011 | DONE |
 | Admin Profile | 9.15 | 10 | ADMIN-011 | DONE |
 | Admin Settings | 9.16 | 10 | ADMIN-011 | DONE |
@@ -5248,7 +5262,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | Error Handling | 14 | 1 | BACKEND-002, BACKEND-003 | TODO |
 | Multilingual (i18n) | 15 | 14 | I18N-001 | TODO |
 | Dark/Light Mode | 16 | 7, 15 | FRONTEND-001, FRONTEND-003, THEME-001 | TODO |
-| File & Media Management | 17 | 4, 12 | API-001, API-002, API-016, MEDIA-001 | TODO |
+| File & Media Management | 17 | 4, 12 | API-001, API-002, API-016, MEDIA-001 | DONE |
 | Security | 18 | 1, 3, 18 | BACKEND-006, BACKEND-008, AUTH-005, SECURITY-001 | TODO |
 | UX/UI Design | 19-20 | 7, 8 | FRONTEND-001, FRONTEND-006, PUBLIC-009 | DONE (Public) |
 | Responsive Design | 21 | 8 | PUBLIC-009 | DONE |
@@ -5380,7 +5394,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] BLOG-001 Blog polish
 
 ## Phase 12 — Media & CV
-- [ ] MEDIA-001 Media and CV polish
+- [x] MEDIA-001 Media and CV polish
 
 ## Phase 13 — Contact System
 - [ ] CONTACT-001 Contact system verification

@@ -59,6 +59,55 @@ import { ConfirmDialogComponent } from '../../../shared';
         </div>
       </div>
 
+      <!-- Filter Tabs Toolbar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 shadow-sm">
+        <div class="flex items-center gap-1.5">
+          <button
+            type="button"
+            (click)="setFilter('')"
+            [class.bg-indigo-600]="activeMimeType() === ''"
+            [class.text-white]="activeMimeType() === ''"
+            [class.bg-slate-100]="activeMimeType() !== ''"
+            [class.dark:bg-slate-800]="activeMimeType() !== ''"
+            [class.text-slate-600]="activeMimeType() !== ''"
+            [class.dark:text-slate-300]="activeMimeType() !== ''"
+            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+          >
+            All Files
+          </button>
+          <button
+            type="button"
+            (click)="setFilter('image')"
+            [class.bg-indigo-600]="activeMimeType() === 'image'"
+            [class.text-white]="activeMimeType() === 'image'"
+            [class.bg-slate-100]="activeMimeType() !== 'image'"
+            [class.dark:bg-slate-800]="activeMimeType() !== 'image'"
+            [class.text-slate-600]="activeMimeType() !== 'image'"
+            [class.dark:text-slate-300]="activeMimeType() !== 'image'"
+            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+          >
+            Images
+          </button>
+          <button
+            type="button"
+            (click)="setFilter('pdf')"
+            [class.bg-indigo-600]="activeMimeType() === 'pdf'"
+            [class.text-white]="activeMimeType() === 'pdf'"
+            [class.bg-slate-100]="activeMimeType() !== 'pdf'"
+            [class.dark:bg-slate-800]="activeMimeType() !== 'pdf'"
+            [class.text-slate-600]="activeMimeType() !== 'pdf'"
+            [class.dark:text-slate-300]="activeMimeType() !== 'pdf'"
+            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+          >
+            Documents / PDF
+          </button>
+        </div>
+
+        <span class="text-xs text-slate-400 font-medium px-2">
+          {{ mediaItems().length }} item{{ mediaItems().length === 1 ? '' : 's' }}
+        </span>
+      </div>
+
       <!-- Media Grid -->
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 space-y-6">
         @if (isLoading()) {
@@ -79,18 +128,28 @@ import { ConfirmDialogComponent } from '../../../shared';
             @for (item of mediaItems(); track item._id) {
               <div class="group relative rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-50 dark:bg-slate-950 flex flex-col">
                 <!-- Thumbnail -->
-                <div class="aspect-video w-full overflow-hidden bg-slate-900/5 dark:bg-slate-900 relative">
-                  <img
-                    [src]="item.url"
-                    [alt]="item.fileName"
-                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+                <div class="aspect-video w-full overflow-hidden bg-slate-900/5 dark:bg-slate-900 relative flex items-center justify-center">
+                  @if (item.mimeType && item.mimeType.includes('pdf')) {
+                    <div class="flex flex-col items-center justify-center text-rose-500 p-4">
+                      <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                      </svg>
+                      <span class="text-[10px] font-bold uppercase tracking-wider mt-1 text-slate-500">PDF</span>
+                    </div>
+                  } @else {
+                    <img
+                      [src]="item.url"
+                      [alt]="item.fileName"
+                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  }
                   <!-- Hover overlay buttons -->
                   <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2">
                     <button
                       type="button"
                       (click)="copyUrl(item.url)"
-                      class="px-2.5 py-1.5 rounded-lg bg-white/90 hover:bg-white text-slate-900 font-semibold text-[11px] shadow transition-transform active:scale-95 flex items-center gap-1"
+                      class="px-2.5 py-1.5 rounded-lg bg-white/90 hover:bg-white text-slate-900 font-semibold text-[11px] shadow transition-transform active:scale-95 flex items-center gap-1 cursor-pointer"
                       title="Copy URL to clipboard"
                     >
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,7 +160,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                     <button
                       type="button"
                       (click)="onDelete(item)"
-                      class="p-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow transition-transform active:scale-95"
+                      class="p-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow transition-transform active:scale-95 cursor-pointer"
                       title="Delete Image"
                       aria-label="Delete image"
                     >
@@ -138,14 +197,24 @@ export class MediaListComponent implements OnInit {
   public readonly mediaItems = signal<Media[]>([]);
   public readonly isLoading = signal<boolean>(true);
   public readonly isUploading = signal<boolean>(false);
+  public readonly activeMimeType = signal<string>('');
 
   public ngOnInit(): void {
     this.loadMedia();
   }
 
+  public setFilter(mimeType: string): void {
+    this.activeMimeType.set(mimeType);
+    this.loadMedia();
+  }
+
   public loadMedia(): void {
     this.isLoading.set(true);
-    this.portfolioService.getAdminMedia().subscribe({
+    const params: { mimeType?: string } = {};
+    if (this.activeMimeType()) {
+      params.mimeType = this.activeMimeType();
+    }
+    this.portfolioService.getAdminMedia(params).subscribe({
       next: (res) => {
         this.mediaItems.set(res.data.items || []);
         this.isLoading.set(false);

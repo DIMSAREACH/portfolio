@@ -130,4 +130,14 @@ describe('MediaListComponent', () => {
     component.loadMedia();
     expect(notificationServiceMock.showError).toHaveBeenCalledWith('Failed to load media assets.');
   });
+
+  it('should filter media items by file type', () => {
+    component.setFilter('image');
+    expect(component.activeMimeType()).toBe('image');
+    expect(portfolioServiceMock.getAdminMedia).toHaveBeenCalledWith({ mimeType: 'image' });
+
+    component.setFilter('');
+    expect(component.activeMimeType()).toBe('');
+    expect(portfolioServiceMock.getAdminMedia).toHaveBeenCalledWith({});
+  });
 });

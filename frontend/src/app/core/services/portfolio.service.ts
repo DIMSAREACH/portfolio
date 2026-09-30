@@ -518,6 +518,7 @@ export class PortfolioService {
     page?: number;
     limit?: number;
     folder?: string;
+    mimeType?: string;
   }): Observable<PaginatedResponse<Media>> {
     return this.apiService.get<PaginatedResponse<Media>>('/admin/media', params);
   }
