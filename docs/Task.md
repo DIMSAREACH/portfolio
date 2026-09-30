@@ -4332,18 +4332,36 @@ frontend/src/app/features/admin/education/education-form/education-form.componen
 
 ## ADMIN-009 Create Admin Certification CRUD Pages
 
-- Status: TODO
+- Status: DONE
 - Priority: P1
 - Phase: Phase 10
 - Dependencies:
   - ADMIN-004
   - API-009
 
+### Objective
+
+Create certification and achievements list and form pages per PRD Section 9.8.
+
+### Files / Modules
+
+```
+frontend/src/app/features/admin/certifications/certification-list/certification-list.component.ts
+frontend/src/app/features/admin/certifications/certification-list/certification-list.component.spec.ts
+frontend/src/app/features/admin/certifications/certification-form/certification-form.component.ts
+frontend/src/app/features/admin/certifications/certification-form/certification-form.component.spec.ts
+```
+
 ### Acceptance Criteria
 
-- [ ] Certification CRUD works
+- [x] Certification CRUD works end-to-end
+- [x] Supports credential types (certification, award, achievement)
+- [x] Bilingual name, issuer, and description
+- [x] Credential ID, verification URL, issue date, expiry date, badge upload, visibility toggle, order
 
----
+### Definition of Done
+
+- [x] Certification CRUD UI complete with tests, linting, and build passed
 
 ## ADMIN-010 Create Admin Blog CRUD Pages
 
@@ -5184,7 +5202,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | Admin Skills | 9.5 | 10 | ADMIN-006 | DONE |
 | Admin Experience | 9.6 | 10 | ADMIN-007 | DONE |
 | Admin Education | 9.7 | 10 | ADMIN-008 | DONE |
-| Admin Certifications | 9.8 | 10 | ADMIN-009 | TODO |
+| Admin Certifications | 9.8 | 10 | ADMIN-009 | DONE |
 | Admin Blog | 9.9 | 10 | ADMIN-010 | TODO |
 | Admin Categories | 9.10 | 10 | ADMIN-011 | TODO |
 | Admin Media | 9.11 | 10, 12 | ADMIN-011, MEDIA-001 | TODO |
@@ -5324,7 +5342,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] ADMIN-006 Skill CRUD pages
 - [x] ADMIN-007 Experience CRUD pages
 - [x] ADMIN-008 Education CRUD pages
-- [ ] ADMIN-009 Certification CRUD pages
+- [x] ADMIN-009 Certification CRUD pages
 - [ ] ADMIN-010 Blog CRUD pages
 - [ ] ADMIN-011 Remaining admin pages
 

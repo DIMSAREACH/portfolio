@@ -115,6 +115,30 @@ export const ADMIN_ROUTES: Routes = [
           ),
         title: 'Edit Education | Admin CMS',
       },
+      {
+        path: 'certifications',
+        loadComponent: () =>
+          import('./certifications/certification-list/certification-list.component').then(
+            (m) => m.CertificationListComponent,
+          ),
+        title: 'Certifications | Admin CMS',
+      },
+      {
+        path: 'certifications/create',
+        loadComponent: () =>
+          import('./certifications/certification-form/certification-form.component').then(
+            (m) => m.CertificationFormComponent,
+          ),
+        title: 'Create Certification | Admin CMS',
+      },
+      {
+        path: 'certifications/:id/edit',
+        loadComponent: () =>
+          import('./certifications/certification-form/certification-form.component').then(
+            (m) => m.CertificationFormComponent,
+          ),
+        title: 'Edit Certification | Admin CMS',
+      },
     ],
   },
 ];

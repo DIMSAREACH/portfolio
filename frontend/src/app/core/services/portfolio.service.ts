@@ -320,4 +320,45 @@ export class PortfolioService {
   public deleteAdminEducation(id: string): Observable<ApiResponse<null>> {
     return this.apiService.delete<ApiResponse<null>>(`/admin/education/${id}`);
   }
+
+  /**
+   * Admin: List all certifications/awards with pagination (PRD 9.8, API-009)
+   */
+  public getAdminCertifications(params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    type?: string;
+    isVisible?: boolean | string;
+  }): Observable<PaginatedResponse<Certification>> {
+    return this.apiService.get<PaginatedResponse<Certification>>('/admin/certifications', params);
+  }
+
+  /**
+   * Admin: Get certification by ID (PRD 9.8, API-009)
+   */
+  public getAdminCertificationById(id: string): Observable<ApiResponse<Certification>> {
+    return this.apiService.get<ApiResponse<Certification>>(`/admin/certifications/${id}`);
+  }
+
+  /**
+   * Admin: Create certification (PRD 9.8, API-009)
+   */
+  public createAdminCertification(cert: Partial<Certification> | FormData): Observable<ApiResponse<Certification>> {
+    return this.apiService.post<ApiResponse<Certification>>('/admin/certifications', cert);
+  }
+
+  /**
+   * Admin: Update certification by ID (PRD 9.8, API-009)
+   */
+  public updateAdminCertification(id: string, cert: Partial<Certification> | FormData): Observable<ApiResponse<Certification>> {
+    return this.apiService.patch<ApiResponse<Certification>>(`/admin/certifications/${id}`, cert);
+  }
+
+  /**
+   * Admin: Delete certification by ID (PRD 9.8, API-009)
+   */
+  public deleteAdminCertification(id: string): Observable<ApiResponse<null>> {
+    return this.apiService.delete<ApiResponse<null>>(`/admin/certifications/${id}`);
+  }
 }

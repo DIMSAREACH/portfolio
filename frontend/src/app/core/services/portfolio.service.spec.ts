@@ -346,4 +346,41 @@ describe('PortfolioService', () => {
     service.deleteAdminEducation('edu-1').subscribe();
     expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/education/edu-1');
   });
+
+  it('should fetch admin certifications with query params', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: { items: [], pagination: {} } }));
+    service.getAdminCertifications({ page: 1, limit: 10, type: 'certification' }).subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/certifications', { page: 1, limit: 10, type: 'certification' });
+  });
+
+  it('should fetch admin certification by ID', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: { _id: 'cert-1' } }));
+    service.getAdminCertificationById('cert-1').subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/certifications/cert-1');
+  });
+
+  it('should create admin certification', () => {
+    const newCert = {
+      name: { en: 'AWS Solutions Architect', kh: 'ស្ថាបត្យករដំណោះស្រាយ AWS' },
+      type: 'certification' as const,
+      organization: { en: 'Amazon Web Services', kh: 'AWS' },
+      issueDate: '2024-01-01',
+    };
+    apiServiceMock.post.mockReturnValue(of({ success: true, data: newCert }));
+    service.createAdminCertification(newCert).subscribe();
+    expect(apiServiceMock.post).toHaveBeenCalledWith('/admin/certifications', newCert);
+  });
+
+  it('should update admin certification', () => {
+    const updateCert = { credentialId: 'AWS-12345' };
+    apiServiceMock.patch.mockReturnValue(of({ success: true, data: updateCert }));
+    service.updateAdminCertification('cert-1', updateCert).subscribe();
+    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/certifications/cert-1', updateCert);
+  });
+
+  it('should delete admin certification', () => {
+    apiServiceMock.delete.mockReturnValue(of({ success: true, data: null }));
+    service.deleteAdminCertification('cert-1').subscribe();
+    expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/certifications/cert-1');
+  });
 });
