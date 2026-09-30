@@ -4101,7 +4101,7 @@ frontend/src/app/features/admin/admin.routes.ts
 
 ## ADMIN-003 Create Admin Dashboard Overview Page
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 9
 - Dependencies:
@@ -4121,18 +4121,22 @@ Create the dashboard overview page with statistics cards per PRD Section 9.2.
 ### Files / Modules
 
 ```
+frontend/src/app/core/models/dashboard-stats.model.ts
+frontend/src/app/core/models/index.ts
+frontend/src/app/core/services/portfolio.service.ts
 frontend/src/app/features/admin/dashboard/dashboard.component.ts
+frontend/src/app/features/admin/dashboard/dashboard.component.spec.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] Stats cards display real data from API
-- [ ] Quick action buttons navigate correctly
-- [ ] Recent messages list shows unread
+- [x] Stats cards display real data from API
+- [x] Quick action buttons navigate correctly
+- [x] Recent messages list shows unread
 
 ### Definition of Done
 
-- [ ] Dashboard page complete
+- [x] Dashboard page complete and unit tested
 
 ---
 
@@ -5127,8 +5131,8 @@ DEPLOY-001 → DOC-001 → QA-001
 | Achievements Page | 8.10 | 8 | PUBLIC-008 | DONE |
 | Contact Page | 8.11 | 8, 13 | PUBLIC-008, CONTACT-001 | DONE (Public) |
 | CV Download | 8.12 | 5, 12 | PUB-004, MEDIA-001 | TODO |
-| Admin Layout | 9.1 | 9 | ADMIN-002 | TODO |
-| Dashboard | 9.2 | 9 | ADMIN-003 | TODO |
+| Admin Layout | 9.1 | 9 | ADMIN-002 | DONE |
+| Dashboard | 9.2 | 9 | ADMIN-003 | DONE |
 | CRUD Standards | 9.3 | 10 | ADMIN-004 | TODO |
 | Admin Projects | 9.4 | 10 | ADMIN-005 | TODO |
 | Admin Skills | 9.5 | 10 | ADMIN-006 | TODO |
@@ -5266,7 +5270,7 @@ DEPLOY-001 → DOC-001 → QA-001
 ## Phase 9 — Admin Layout & Auth
 - [x] ADMIN-001 Admin login page
 - [x] ADMIN-002 Admin layout
-- [ ] ADMIN-003 Dashboard overview
+- [x] ADMIN-003 Dashboard overview
 
 ## Phase 10 — Admin CRUD
 - [ ] ADMIN-004 Reusable admin components

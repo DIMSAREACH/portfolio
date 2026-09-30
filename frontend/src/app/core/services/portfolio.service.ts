@@ -16,6 +16,7 @@ import {
   PaginatedResponse,
   Message,
   ContactFormPayload,
+  DashboardStats,
 } from '../models';
 
 @Injectable({
@@ -148,5 +149,12 @@ export class PortfolioService {
    */
   public getCvDownloadUrl(): string {
     return this.apiService.getUrl('/cv/download');
+  }
+
+  /**
+   * Fetch admin dashboard statistics (PRD Section 9.2, API-015)
+   */
+  public getDashboardStats(): Observable<ApiResponse<DashboardStats>> {
+    return this.apiService.get<ApiResponse<DashboardStats>>('/admin/dashboard/stats');
   }
 }

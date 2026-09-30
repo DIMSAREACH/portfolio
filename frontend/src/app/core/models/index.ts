@@ -16,3 +16,4 @@ export * from './social-link.model';
 export * from './settings.model';
 export * from './message.model';
 export * from './media.model';
+export * from './dashboard-stats.model';

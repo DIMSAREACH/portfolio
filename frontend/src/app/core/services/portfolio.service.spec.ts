@@ -176,4 +176,33 @@ describe('PortfolioService', () => {
     const url = service.getCvDownloadUrl();
     expect(url).toBe('http://localhost:5000/api/v1/cv/download');
   });
+
+  it('should fetch admin dashboard statistics', () => {
+    const mockStats = {
+      success: true,
+      message: 'Dashboard statistics retrieved successfully',
+      data: {
+        totalProjects: 10,
+        publishedProjects: 8,
+        draftProjects: 2,
+        totalBlogPosts: 5,
+        publishedBlogPosts: 4,
+        draftBlogPosts: 1,
+        unreadMessages: 3,
+        totalMessages: 12,
+        totalSkills: 20,
+        totalExperiences: 4,
+        cvDownloads: 42,
+        recentMessages: [],
+      },
+    };
+    apiServiceMock.get.mockReturnValue(of(mockStats));
+
+    service.getDashboardStats().subscribe((res) => {
+      expect(res.data.totalProjects).toBe(10);
+      expect(res.data.unreadMessages).toBe(3);
+    });
+
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/dashboard/stats');
+  });
 });

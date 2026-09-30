@@ -15,6 +15,7 @@ import {
   ApiResponse,
   PaginatedResponse,
   BilingualField,
+  DashboardStats,
 } from './index';
 
 describe('Core Models and Type Definitions', () => {
@@ -228,5 +229,24 @@ describe('Core Models and Type Definitions', () => {
       message: 'Items retrieved',
     };
     expect(paginated.data.items).toEqual([1, 2, 3]);
+  });
+
+  it('should instantiate and validate DashboardStats model', () => {
+    const stats: DashboardStats = {
+      totalProjects: 10,
+      publishedProjects: 8,
+      draftProjects: 2,
+      totalBlogPosts: 5,
+      publishedBlogPosts: 4,
+      draftBlogPosts: 1,
+      unreadMessages: 2,
+      totalMessages: 10,
+      totalSkills: 15,
+      totalExperiences: 3,
+      cvDownloads: 25,
+      recentMessages: [],
+    };
+    expect(stats.totalProjects).toBe(10);
+    expect(stats.cvDownloads).toBe(25);
   });
 });
