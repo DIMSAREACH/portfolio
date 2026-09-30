@@ -73,4 +73,13 @@ describe('AdminSidebarComponent', () => {
     fixture.detectChanges();
     expect(aside.classList.contains('-translate-x-full')).toBe(true);
   });
+
+  it('should display unread badge when unreadMessageCount > 0', () => {
+    component.unreadMessageCount.set(3);
+    fixture.detectChanges();
+
+    const badge = fixture.nativeElement.querySelector('#sidebar-unread-badge');
+    expect(badge).toBeTruthy();
+    expect(badge.textContent.trim()).toBe('3');
+  });
 });

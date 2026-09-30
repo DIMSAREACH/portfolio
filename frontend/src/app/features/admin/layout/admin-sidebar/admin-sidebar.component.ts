@@ -1,7 +1,9 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { catchError, of } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth.service';
+import { PortfolioService } from '../../../../core/services/portfolio.service';
 
 export interface AdminNavItem {
   label: string;
@@ -117,7 +119,12 @@ export interface AdminNavGroup {
                     }
                   }
                 </span>
-                <span>{{ item.label }}</span>
+                <span class="flex-1">{{ item.label }}</span>
+                @if (item.path === '/admin/messages' && unreadMessageCount() > 0) {
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-600 text-white shadow-2xs" id="sidebar-unread-badge">
+                    {{ unreadMessageCount() }}
+                  </span>
+                }
               </a>
             }
           </div>
@@ -145,11 +152,26 @@ export interface AdminNavGroup {
     </aside>
   `,
 })
-export class AdminSidebarComponent {
+export class AdminSidebarComponent implements OnInit {
   public readonly authService = inject(AuthService);
+  private readonly portfolioService = inject(PortfolioService, { optional: true });
 
   @Input() public isOpen = false;
   @Output() public closeSidebar = new EventEmitter<void>();
+
+  public readonly unreadMessageCount = signal<number>(0);
+
+  public ngOnInit(): void {
+    if (this.portfolioService) {
+      this.portfolioService.getDashboardStats().pipe(catchError(() => of(null))).subscribe({
+        next: (res) => {
+          if (res?.data?.unreadMessages !== undefined) {
+            this.unreadMessageCount.set(res.data.unreadMessages);
+          }
+        },
+      });
+    }
+  }
 
   // 15 Admin Sections per PRD Section 9.1
   public readonly navGroups: AdminNavGroup[] = [
