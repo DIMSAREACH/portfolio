@@ -214,6 +214,31 @@ export interface SortEvent {
                   @if (showActions) {
                     <td class="px-6 py-4 text-right align-middle whitespace-nowrap">
                       <div class="inline-flex items-center gap-1">
+                        @if (showPublishToggle) {
+                          <button
+                            type="button"
+                            (click)="togglePublishClick.emit(item)"
+                            class="p-1.5 rounded-lg transition-colors"
+                            [class.text-emerald-600]="getItemValue(item, 'status') === 'published'"
+                            [class.hover:bg-emerald-50]="getItemValue(item, 'status') === 'published'"
+                            [class.dark:hover:bg-emerald-950/50]="getItemValue(item, 'status') === 'published'"
+                            [class.text-amber-500]="getItemValue(item, 'status') !== 'published'"
+                            [class.hover:bg-amber-50]="getItemValue(item, 'status') !== 'published'"
+                            [class.dark:hover:bg-amber-950/50]="getItemValue(item, 'status') !== 'published'"
+                            [title]="getItemValue(item, 'status') === 'published' ? 'Unpublish post' : 'Publish post'"
+                            [attr.aria-label]="getItemValue(item, 'status') === 'published' ? 'Unpublish' : 'Publish'"
+                          >
+                            @if (getItemValue(item, 'status') === 'published') {
+                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                            } @else {
+                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                              </svg>
+                            }
+                          </button>
+                        }
                         <button
                           type="button"
                           (click)="viewClick.emit(item)"
@@ -353,6 +378,7 @@ export class AdminDataTableComponent {
   @Input() emptyMessage = 'No records found.';
   @Input() showActions = true;
   @Input() showCreateButton = true;
+  @Input() showPublishToggle = false;
 
   @Output() searchChange = new EventEmitter<string>();
   @Output() filterChange = new EventEmitter<string>();
@@ -363,6 +389,7 @@ export class AdminDataTableComponent {
   @Output() editClick = new EventEmitter<Record<string, unknown>>();
   @Output() deleteClick = new EventEmitter<Record<string, unknown>>();
   @Output() viewClick = new EventEmitter<Record<string, unknown>>();
+  @Output() togglePublishClick = new EventEmitter<Record<string, unknown>>();
 
   public searchTerm = '';
   public sortKey = '';

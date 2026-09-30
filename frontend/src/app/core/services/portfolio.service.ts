@@ -361,4 +361,61 @@ export class PortfolioService {
   public deleteAdminCertification(id: string): Observable<ApiResponse<null>> {
     return this.apiService.delete<ApiResponse<null>>(`/admin/certifications/${id}`);
   }
+
+  /**
+   * Admin: List all blog posts with pagination and filters (PRD 9.9, API-010)
+   */
+  public getAdminBlogPosts(params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    status?: string;
+    category?: string;
+    tag?: string;
+    featured?: boolean | string;
+  }): Observable<PaginatedResponse<BlogPost>> {
+    return this.apiService.get<PaginatedResponse<BlogPost>>('/admin/blog', params);
+  }
+
+  /**
+   * Admin: Get blog post by ID (PRD 9.9, API-010)
+   */
+  public getAdminBlogPostById(id: string): Observable<ApiResponse<BlogPost>> {
+    return this.apiService.get<ApiResponse<BlogPost>>(`/admin/blog/${id}`);
+  }
+
+  /**
+   * Admin: Create blog post (PRD 9.9, API-010)
+   */
+  public createAdminBlogPost(post: Partial<BlogPost> | FormData): Observable<ApiResponse<BlogPost>> {
+    return this.apiService.post<ApiResponse<BlogPost>>('/admin/blog', post);
+  }
+
+  /**
+   * Admin: Update blog post by ID (PRD 9.9, API-010)
+   */
+  public updateAdminBlogPost(id: string, post: Partial<BlogPost> | FormData): Observable<ApiResponse<BlogPost>> {
+    return this.apiService.patch<ApiResponse<BlogPost>>(`/admin/blog/${id}`, post);
+  }
+
+  /**
+   * Admin: Delete blog post by ID (PRD 9.9, API-010)
+   */
+  public deleteAdminBlogPost(id: string): Observable<ApiResponse<null>> {
+    return this.apiService.delete<ApiResponse<null>>(`/admin/blog/${id}`);
+  }
+
+  /**
+   * Admin: Publish blog post by ID (PRD 9.9, API-010)
+   */
+  public publishAdminBlogPost(id: string): Observable<ApiResponse<BlogPost>> {
+    return this.apiService.patch<ApiResponse<BlogPost>>(`/admin/blog/${id}/publish`, {});
+  }
+
+  /**
+   * Admin: Unpublish blog post by ID (PRD 9.9, API-010)
+   */
+  public unpublishAdminBlogPost(id: string): Observable<ApiResponse<BlogPost>> {
+    return this.apiService.patch<ApiResponse<BlogPost>>(`/admin/blog/${id}/unpublish`, {});
+  }
 }

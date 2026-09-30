@@ -139,6 +139,31 @@ export const ADMIN_ROUTES: Routes = [
           ),
         title: 'Edit Certification | Admin CMS',
       },
+      {
+        path: 'blog',
+        loadComponent: () =>
+          import('./blog/blog-list/blog-list.component').then(
+            (m) => m.BlogListComponent,
+          ),
+        title: 'Blog Posts | Admin CMS',
+      },
+      {
+        path: 'blog/create',
+        loadComponent: () =>
+          import('./blog/blog-form/blog-form.component').then(
+            (m) => m.BlogFormComponent,
+          ),
+        title: 'Create Blog Post | Admin CMS',
+      },
+      {
+        path: 'blog/:id/edit',
+        loadComponent: () =>
+          import('./blog/blog-form/blog-form.component').then(
+            (m) => m.BlogFormComponent,
+          ),
+        title: 'Edit Blog Post | Admin CMS',
+      },
     ],
   },
 ];
+

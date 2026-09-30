@@ -4365,7 +4365,7 @@ frontend/src/app/features/admin/certifications/certification-form/certification-
 
 ## ADMIN-010 Create Admin Blog CRUD Pages
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 10
 - Dependencies:
@@ -4382,10 +4382,23 @@ Create blog list and form pages with Markdown editor per PRD Section 9.9.
 - Publish/unpublish quick action
 - Cover image upload
 
+### Files / Modules
+
+```
+frontend/src/app/features/admin/blog/blog-list/blog-list.component.ts
+frontend/src/app/features/admin/blog/blog-list/blog-list.component.spec.ts
+frontend/src/app/features/admin/blog/blog-form/blog-form.component.ts
+frontend/src/app/features/admin/blog/blog-form/blog-form.component.spec.ts
+```
+
 ### Acceptance Criteria
 
-- [ ] Blog CRUD works with Markdown editing
-- [ ] Publish/unpublish works
+- [x] Blog CRUD works with Markdown editing
+- [x] Publish/unpublish works
+
+### Definition of Done
+
+- [x] Blog CRUD UI complete with tests, linting, and build passed
 
 ---
 
@@ -5203,7 +5216,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | Admin Experience | 9.6 | 10 | ADMIN-007 | DONE |
 | Admin Education | 9.7 | 10 | ADMIN-008 | DONE |
 | Admin Certifications | 9.8 | 10 | ADMIN-009 | DONE |
-| Admin Blog | 9.9 | 10 | ADMIN-010 | TODO |
+| Admin Blog | 9.9 | 10 | ADMIN-010 | DONE |
 | Admin Categories | 9.10 | 10 | ADMIN-011 | TODO |
 | Admin Media | 9.11 | 10, 12 | ADMIN-011, MEDIA-001 | TODO |
 | Admin Messages | 9.12 | 10, 13 | ADMIN-011, CONTACT-001 | TODO |
@@ -5343,7 +5356,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] ADMIN-007 Experience CRUD pages
 - [x] ADMIN-008 Education CRUD pages
 - [x] ADMIN-009 Certification CRUD pages
-- [ ] ADMIN-010 Blog CRUD pages
+- [x] ADMIN-010 Blog CRUD pages
 - [ ] ADMIN-011 Remaining admin pages
 
 ## Phase 11 — Blog System

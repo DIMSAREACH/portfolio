@@ -111,6 +111,7 @@ describe('AdminDataTableComponent', () => {
     const editSpy = vi.spyOn(component.editClick, 'emit');
     const deleteSpy = vi.spyOn(component.deleteClick, 'emit');
     const viewSpy = vi.spyOn(component.viewClick, 'emit');
+    const publishSpy = vi.spyOn(component.togglePublishClick, 'emit');
 
     component.editClick.emit(mockData[0]);
     expect(editSpy).toHaveBeenCalledWith(mockData[0]);
@@ -120,6 +121,9 @@ describe('AdminDataTableComponent', () => {
 
     component.viewClick.emit(mockData[0]);
     expect(viewSpy).toHaveBeenCalledWith(mockData[0]);
+
+    component.togglePublishClick.emit(mockData[0]);
+    expect(publishSpy).toHaveBeenCalledWith(mockData[0]);
   });
 
   it('should display empty state when data is empty and not loading', () => {
