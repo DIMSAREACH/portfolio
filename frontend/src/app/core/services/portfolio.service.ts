@@ -157,4 +157,46 @@ export class PortfolioService {
   public getDashboardStats(): Observable<ApiResponse<DashboardStats>> {
     return this.apiService.get<ApiResponse<DashboardStats>>('/admin/dashboard/stats');
   }
+
+  /**
+   * Admin: List all projects with pagination, status filter, search (PRD 9.4, API-005)
+   */
+  public getAdminProjects(params?: {
+    page?: number;
+    limit?: number;
+    status?: string;
+    search?: string;
+    category?: string;
+    sort?: string;
+  }): Observable<PaginatedResponse<Project>> {
+    return this.apiService.get<PaginatedResponse<Project>>('/admin/projects', params);
+  }
+
+  /**
+   * Admin: Get project by ID (PRD 9.4, API-005)
+   */
+  public getAdminProjectById(id: string): Observable<ApiResponse<Project>> {
+    return this.apiService.get<ApiResponse<Project>>(`/admin/projects/${id}`);
+  }
+
+  /**
+   * Admin: Create project (PRD 9.4, API-005)
+   */
+  public createAdminProject(project: Partial<Project> | FormData): Observable<ApiResponse<Project>> {
+    return this.apiService.post<ApiResponse<Project>>('/admin/projects', project);
+  }
+
+  /**
+   * Admin: Update project by ID (PRD 9.4, API-005)
+   */
+  public updateAdminProject(id: string, project: Partial<Project> | FormData): Observable<ApiResponse<Project>> {
+    return this.apiService.patch<ApiResponse<Project>>(`/admin/projects/${id}`, project);
+  }
+
+  /**
+   * Admin: Delete project by ID (PRD 9.4, API-005)
+   */
+  public deleteAdminProject(id: string): Observable<ApiResponse<null>> {
+    return this.apiService.delete<ApiResponse<null>>(`/admin/projects/${id}`);
+  }
 }

@@ -19,6 +19,8 @@ describe('PortfolioService', () => {
   let apiServiceMock: {
     get: ReturnType<typeof vi.fn>;
     post: ReturnType<typeof vi.fn>;
+    patch: ReturnType<typeof vi.fn>;
+    delete: ReturnType<typeof vi.fn>;
     getUrl: ReturnType<typeof vi.fn>;
   };
 
@@ -26,6 +28,8 @@ describe('PortfolioService', () => {
     apiServiceMock = {
       get: vi.fn(),
       post: vi.fn(),
+      patch: vi.fn(),
+      delete: vi.fn(),
       getUrl: vi.fn().mockImplementation((path: string) => `http://localhost:5000/api/v1/${path.replace(/^\/+/, '')}`),
     };
 
@@ -204,5 +208,37 @@ describe('PortfolioService', () => {
     });
 
     expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/dashboard/stats');
+  });
+
+  it('should fetch admin projects with query params', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: { items: [], pagination: {} } }));
+    service.getAdminProjects({ page: 2, limit: 10, status: 'published' }).subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/projects', { page: 2, limit: 10, status: 'published' });
+  });
+
+  it('should fetch admin project by ID', () => {
+    apiServiceMock.get.mockReturnValue(of({ success: true, data: { _id: 'proj-1' } }));
+    service.getAdminProjectById('proj-1').subscribe();
+    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/projects/proj-1');
+  });
+
+  it('should create admin project', () => {
+    const newProj = { title: { en: 'New', kh: 'ថ្មី' } };
+    apiServiceMock.post.mockReturnValue(of({ success: true, data: newProj }));
+    service.createAdminProject(newProj).subscribe();
+    expect(apiServiceMock.post).toHaveBeenCalledWith('/admin/projects', newProj);
+  });
+
+  it('should update admin project', () => {
+    const updateProj = { title: { en: 'Updated', kh: 'ធ្វើបច្ចុប្បន្នភាព' } };
+    apiServiceMock.patch.mockReturnValue(of({ success: true, data: updateProj }));
+    service.updateAdminProject('proj-1', updateProj).subscribe();
+    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/projects/proj-1', updateProj);
+  });
+
+  it('should delete admin project', () => {
+    apiServiceMock.delete.mockReturnValue(of({ success: true, data: null }));
+    service.deleteAdminProject('proj-1').subscribe();
+    expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/projects/proj-1');
   });
 });

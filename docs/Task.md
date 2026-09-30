@@ -4189,7 +4189,7 @@ frontend/src/app/features/admin/shared/
 
 ## ADMIN-005 Create Admin Project CRUD Pages
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 10
 - Dependencies:
@@ -4214,21 +4214,23 @@ Create project list and form (create/edit) pages per PRD Section 9.4.
 
 ```
 frontend/src/app/features/admin/projects/project-list/project-list.component.ts
+frontend/src/app/features/admin/projects/project-list/project-list.component.spec.ts
 frontend/src/app/features/admin/projects/project-form/project-form.component.ts
+frontend/src/app/features/admin/projects/project-form/project-form.component.spec.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] Project list displays data table
-- [ ] Create project works end-to-end
-- [ ] Edit project loads existing data
-- [ ] Delete with confirmation
-- [ ] Image upload works
-- [ ] Validation errors shown
+- [x] Project list displays data table
+- [x] Create project works end-to-end
+- [x] Edit project loads existing data
+- [x] Delete with confirmation
+- [x] Image upload works
+- [x] Validation errors shown
 
 ### Definition of Done
 
-- [ ] Project CRUD UI complete
+- [x] Project CRUD UI complete
 
 ---
 
@@ -5135,7 +5137,7 @@ DEPLOY-001 → DOC-001 → QA-001
 | Admin Layout | 9.1 | 9 | ADMIN-002 | DONE |
 | Dashboard | 9.2 | 9 | ADMIN-003 | DONE |
 | CRUD Standards | 9.3 | 10 | ADMIN-004 | DONE |
-| Admin Projects | 9.4 | 10 | ADMIN-005 | TODO |
+| Admin Projects | 9.4 | 10 | ADMIN-005 | DONE |
 | Admin Skills | 9.5 | 10 | ADMIN-006 | TODO |
 | Admin Experience | 9.6 | 10 | ADMIN-007 | TODO |
 | Admin Education | 9.7 | 10 | ADMIN-008 | TODO |
@@ -5275,7 +5277,7 @@ DEPLOY-001 → DOC-001 → QA-001
 
 ## Phase 10 — Admin CRUD
 - [x] ADMIN-004 Reusable admin components
-- [ ] ADMIN-005 Project CRUD pages
+- [x] ADMIN-005 Project CRUD pages
 - [ ] ADMIN-006 Skill CRUD pages
 - [ ] ADMIN-007 Experience CRUD pages
 - [ ] ADMIN-008 Education CRUD pages

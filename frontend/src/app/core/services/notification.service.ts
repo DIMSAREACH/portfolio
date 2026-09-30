@@ -25,6 +25,13 @@ export class NotificationService {
   }
 
   /**
+   * Convenience alias for success notification
+   */
+  public showSuccess(message: string, action = 'Close', duration = 4000): void {
+    this.success(message, action, duration);
+  }
+
+  /**
    * Display error notification
    */
   public error(message: string, action = 'Close', duration = 6000): void {
@@ -33,6 +40,13 @@ export class NotificationService {
       duration,
       panelClass: ['snackbar-error'],
     });
+  }
+
+  /**
+   * Convenience alias for error notification
+   */
+  public showError(message: string, action = 'Close', duration = 6000): void {
+    this.error(message, action, duration);
   }
 
   /**
