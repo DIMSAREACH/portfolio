@@ -4651,7 +4651,7 @@ frontend/src/app/app.config.ts (modify — add TranslateModule)
 
 ## THEME-001 Polish Theme System and Accessibility
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 15
 - Dependencies:
@@ -4678,14 +4678,14 @@ Polish dark/light theme and implement WCAG 2.2 AA accessibility per PRD Sections
 
 ### Acceptance Criteria
 
-- [ ] Theme toggle smooth and persistent
-- [ ] WCAG AA contrast met
-- [ ] Keyboard navigable
-- [ ] Screen reader friendly
+- [x] Theme toggle smooth and persistent
+- [x] WCAG AA contrast met
+- [x] Keyboard navigable
+- [x] Screen reader friendly
 
 ### Definition of Done
 
-- [ ] Theme and accessibility polished
+- [x] Theme and accessibility polished with system preference detection, smooth transitions, skip-to-content links, aria-labels, focus indicators, prefers-reduced-motion, and verified unit tests
 
 ---
 
@@ -5190,7 +5190,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [ ] PUBLIC-001 through PUBLIC-009
 - [ ] ADMIN-001 through ADMIN-008, ADMIN-010, ADMIN-011 (partial — categories, messages, profile)
 - [x] CONTACT-001
-- [ ] THEME-001 (basic dark/light)
+- [x] THEME-001 (basic dark/light)
 - [ ] SEO-001 (basic titles/meta)
 
 ## Post-MVP — V1 Polish
@@ -5261,12 +5261,12 @@ DEPLOY-001 → DOC-001 → QA-001
 | API Response Format | 13 | 1 | BACKEND-005 | TODO |
 | Error Handling | 14 | 1 | BACKEND-002, BACKEND-003 | TODO |
 | Multilingual (i18n) | 15 | 14 | I18N-001 | DONE |
-| Dark/Light Mode | 16 | 7, 15 | FRONTEND-001, FRONTEND-003, THEME-001 | TODO |
+| Dark/Light Mode | 16 | 7, 15 | FRONTEND-001, FRONTEND-003, THEME-001 | DONE |
 | File & Media Management | 17 | 4, 12 | API-001, API-002, API-016, MEDIA-001 | DONE |
 | Security | 18 | 1, 3, 18 | BACKEND-006, BACKEND-008, AUTH-005, SECURITY-001 | TODO |
 | UX/UI Design | 19-20 | 7, 8 | FRONTEND-001, FRONTEND-006, PUBLIC-009 | DONE (Public) |
 | Responsive Design | 21 | 8 | PUBLIC-009 | DONE |
-| Accessibility | 22 | 15 | THEME-001 | TODO |
+| Accessibility | 22 | 15 | THEME-001 | DONE |
 | SEO | 23 | 16 | SEO-001 | TODO |
 | Performance | 24 | 16 | SEO-001 | TODO |
 | Analytics (counters) | 25 | 5 | PUB-002 (viewCount) | TODO |
@@ -5403,7 +5403,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] I18N-001 ngx-translate setup and translations
 
 ## Phase 15 — Theme & Accessibility
-- [ ] THEME-001 Theme and accessibility polish
+- [x] THEME-001 Theme and accessibility polish
 
 ## Phase 16 — SEO & Performance
 - [ ] SEO-001 SEO and performance optimization

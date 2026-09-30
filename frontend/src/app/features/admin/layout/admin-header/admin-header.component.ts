@@ -61,6 +61,7 @@ import { ThemeToggleComponent } from '../../../../shared/components/theme-toggle
           [disabled]="authService.isLoading()"
           class="p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 transition-colors flex items-center gap-1.5 focus:outline-none"
           id="admin-logout-btn"
+          aria-label="Sign out of admin session"
           title="Sign out of admin session"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

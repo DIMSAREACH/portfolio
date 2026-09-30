@@ -27,4 +27,11 @@ describe('PublicLayoutComponent', () => {
     expect(compiled.querySelector('main#main-content')).toBeTruthy();
     expect(compiled.querySelector('app-footer')).toBeTruthy();
   });
+
+  it('should render accessible skip-to-content link targeting main content', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const skipLink = compiled.querySelector('#skip-to-content') as HTMLAnchorElement;
+    expect(skipLink).toBeTruthy();
+    expect(skipLink.getAttribute('href')).toBe('#main-content');
+  });
 });

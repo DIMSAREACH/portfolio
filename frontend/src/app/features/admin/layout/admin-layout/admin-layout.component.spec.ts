@@ -72,4 +72,11 @@ describe('AdminLayoutComponent', () => {
     expect(compiled.querySelector('app-admin-header')).toBeTruthy();
     expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
+
+  it('should render accessible skip-to-content link targeting admin main content', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const skipLink = compiled.querySelector('#admin-skip-to-content') as HTMLAnchorElement;
+    expect(skipLink).toBeTruthy();
+    expect(skipLink.getAttribute('href')).toBe('#admin-main-content');
+  });
 });
