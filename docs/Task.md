@@ -3934,7 +3934,7 @@ frontend/src/app/shared/components/blog-card/blog-card.component.spec.ts
 
 ## PUBLIC-008 Create Achievements, Contact, and 404 Pages
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 8
 - Dependencies:
@@ -3956,21 +3956,24 @@ Create remaining public pages: Achievements (PRD 8.10), Contact (PRD 8.11), and 
 
 ```
 frontend/src/app/features/public/achievements/achievements.component.ts
+frontend/src/app/features/public/achievements/achievements.component.spec.ts
 frontend/src/app/features/public/contact/contact.component.ts
+frontend/src/app/features/public/contact/contact.component.spec.ts
 frontend/src/app/features/public/not-found/not-found.component.ts
+frontend/src/app/features/public/not-found/not-found.component.spec.ts
 ```
 
 ### Acceptance Criteria
 
-- [ ] Contact form validates client-side
-- [ ] Contact form submits to API
-- [ ] Success/error messages displayed
-- [ ] Honeypot field hidden
-- [ ] 404 page renders for unknown routes
+- [x] Contact form validates client-side
+- [x] Contact form submits to API
+- [x] Success/error messages displayed
+- [x] Honeypot field hidden
+- [x] 404 page renders for unknown routes
 
 ### Definition of Done
 
-- [ ] All 3 pages complete
+- [x] All 3 pages complete and unit tested
 
 ---
 
@@ -5117,8 +5120,8 @@ DEPLOY-001 → DOC-001 → QA-001
 | Education Page | 8.5 | 8 | PUBLIC-005 | DONE |
 | Projects Page + Detail | 8.6-8.7 | 8 | PUBLIC-006 | DONE |
 | Blog Page + Detail | 8.8-8.9 | 8, 11 | PUBLIC-007, BLOG-001 | DONE (Public) |
-| Achievements Page | 8.10 | 8 | PUBLIC-008 | TODO |
-| Contact Page | 8.11 | 8, 13 | PUBLIC-008, CONTACT-001 | TODO |
+| Achievements Page | 8.10 | 8 | PUBLIC-008 | DONE |
+| Contact Page | 8.11 | 8, 13 | PUBLIC-008, CONTACT-001 | DONE (Public) |
 | CV Download | 8.12 | 5, 12 | PUB-004, MEDIA-001 | TODO |
 | Admin Layout | 9.1 | 9 | ADMIN-002 | TODO |
 | Dashboard | 9.2 | 9 | ADMIN-003 | TODO |
@@ -5253,7 +5256,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] PUBLIC-005 Education page
 - [x] PUBLIC-006 Project list and detail pages
 - [x] PUBLIC-007 Blog list and detail pages
-- [ ] PUBLIC-008 Achievements, Contact, and 404 pages
+- [x] PUBLIC-008 Achievements, Contact, and 404 pages
 - [ ] PUBLIC-009 Responsive design verification
 
 ## Phase 9 — Admin Layout & Auth
