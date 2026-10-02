@@ -108,17 +108,17 @@ portfolio/
 
 ### Acceptance Criteria
 
-- [ ] Git repository initialized
-- [ ] `.gitignore` covers all required patterns
-- [ ] `.editorconfig` created with correct settings
-- [ ] Folder structure `frontend/`, `backend/`, `docs/`, `.github/workflows/` exists
-- [ ] Initial commit made
+- [x] Git repository initialized
+- [x] `.gitignore` covers all required patterns
+- [x] `.editorconfig` created with correct settings
+- [x] Folder structure `frontend/`, `backend/`, `docs/`, `.github/workflows/` exists
+- [x] Initial commit made
 
 ### Definition of Done
 
-- [ ] Implementation completed
-- [ ] Repository structure verified
-- [ ] Initial commit exists in Git history
+- [x] Implementation completed
+- [x] Repository structure verified
+- [x] Initial commit exists in Git history
 
 ---
 
@@ -5184,29 +5184,29 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] DB-001, DB-002, DB-003, DB-004, DB-005, DB-006, DB-007, DB-008, DB-010, DB-011
 - [x] AUTH-001 through AUTH-006
 - [x] API-001 through API-003, API-004, API-005, API-006, API-007, API-008, API-010, API-011, API-012, API-015
-- [ ] PUB-002, PUB-003
-- [ ] SEED-001
-- [ ] FRONTEND-001 through FRONTEND-008
-- [ ] PUBLIC-001 through PUBLIC-009
-- [ ] ADMIN-001 through ADMIN-008, ADMIN-010, ADMIN-011 (partial — categories, messages, profile)
+- [x] PUB-002, PUB-003
+- [x] SEED-001
+- [x] FRONTEND-001 through FRONTEND-008
+- [x] PUBLIC-001 through PUBLIC-009
+- [x] ADMIN-001 through ADMIN-008, ADMIN-010, ADMIN-011 (partial — categories, messages, profile)
 - [x] CONTACT-001
 - [x] THEME-001 (basic dark/light)
-- [ ] SEO-001 (basic titles/meta)
+- [x] SEO-001 (basic titles/meta)
 
 ## Post-MVP — V1 Polish
 
 - [x] SETUP-005, SETUP-006
 - [x] DB-009, DB-012, DB-013, DB-014
-- [ ] API-009, API-013, API-014, API-016, API-017
-- [ ] PUB-001, PUB-004
-- [ ] ADMIN-004 (reusable components refinement), ADMIN-009, ADMIN-011 (remaining sections)
-- [ ] BLOG-001
-- [ ] MEDIA-001
+- [x] API-009, API-013, API-014, API-016, API-017
+- [x] PUB-001, PUB-004
+- [x] ADMIN-004 (reusable components refinement), ADMIN-009, ADMIN-011 (remaining sections)
+- [x] BLOG-001
+- [x] MEDIA-001
 - [x] I18N-001
-- [ ] TEST-001 through TEST-004
-- [ ] SECURITY-001
-- [ ] DOCKER-001, CICD-001
-- [ ] DEPLOY-001, DOC-001, QA-001
+- [x] TEST-001 through TEST-004
+- [x] SECURITY-001
+- [x] DOCKER-001, CICD-001
+- [x] DEPLOY-001, DOC-001, QA-001
 
 ## Future (Post-V1)
 
@@ -5227,15 +5227,15 @@ DEPLOY-001 → DOC-001 → QA-001
 
 | PRD Requirement | PRD Section | Plan Phase | Task IDs | Status |
 |----------------|-------------|------------|----------|--------|
-| Technology Stack | 6 | 0 | SETUP-001 through SETUP-006 | TODO |
-| System Architecture | 7 | 0-1 | SETUP-002, BACKEND-008, BACKEND-009 | TODO |
+| Technology Stack | 6 | 0 | SETUP-001 through SETUP-006 | DONE |
+| System Architecture | 7 | 0-1 | SETUP-002, BACKEND-008, BACKEND-009 | DONE |
 | Home Page | 8.1 | 8 | PUBLIC-001 | DONE |
 | About Page | 8.2 | 8 | PUBLIC-002 | DONE |
 | Skills Page | 8.3 | 8 | PUBLIC-003 | DONE |
 | Experience Page | 8.4 | 8 | PUBLIC-004 | DONE |
 | Education Page | 8.5 | 8 | PUBLIC-005 | DONE |
 | Projects Page + Detail | 8.6-8.7 | 8 | PUBLIC-006 | DONE |
-| Blog Page + Detail | 8.8-8.9 | 8, 11 | PUBLIC-007, BLOG-001 | DONE (Public) |
+| Blog Page + Detail | 8.8-8.9 | 8, 11 | PUBLIC-007, BLOG-001 | DONE |
 | Achievements Page | 8.10 | 8 | PUBLIC-008 | DONE |
 | Contact Page | 8.11 | 8, 13 | PUBLIC-008, CONTACT-001 | DONE |
 | CV Download | 8.12 | 5, 12 | PUB-004, MEDIA-001 | DONE |
@@ -5255,29 +5255,29 @@ DEPLOY-001 → DOC-001 → QA-001
 | Admin Social Links | 9.14 | 10 | ADMIN-011 | DONE |
 | Admin Profile | 9.15 | 10 | ADMIN-011 | DONE |
 | Admin Settings | 9.16 | 10 | ADMIN-011 | DONE |
-| Authentication | 10 | 3, 9 | AUTH-001 through AUTH-006, ADMIN-001, FRONTEND-004, FRONTEND-005 | TODO |
-| Database Design | 11 | 2 | DB-001 through DB-014 | TODO |
-| REST API | 12 | 4-5 | API-001 through API-017, PUB-001 through PUB-004 | TODO |
-| API Response Format | 13 | 1 | BACKEND-005 | TODO |
-| Error Handling | 14 | 1 | BACKEND-002, BACKEND-003 | TODO |
+| Authentication | 10 | 3, 9 | AUTH-001 through AUTH-006, ADMIN-001, FRONTEND-004, FRONTEND-005 | DONE |
+| Database Design | 11 | 2 | DB-001 through DB-014 | DONE |
+| REST API | 12 | 4-5 | API-001 through API-017, PUB-001 through PUB-004 | DONE |
+| API Response Format | 13 | 1 | BACKEND-005 | DONE |
+| Error Handling | 14 | 1 | BACKEND-002, BACKEND-003 | DONE |
 | Multilingual (i18n) | 15 | 14 | I18N-001 | DONE |
 | Dark/Light Mode | 16 | 7, 15 | FRONTEND-001, FRONTEND-003, THEME-001 | DONE |
 | File & Media Management | 17 | 4, 12 | API-001, API-002, API-016, MEDIA-001 | DONE |
-| Security | 18 | 1, 3, 18 | BACKEND-006, BACKEND-008, AUTH-005, SECURITY-001 | TODO |
-| UX/UI Design | 19-20 | 7, 8 | FRONTEND-001, FRONTEND-006, PUBLIC-009 | DONE (Public) |
+| Security | 18 | 1, 3, 18 | BACKEND-006, BACKEND-008, AUTH-005, SECURITY-001 | DONE |
+| UX/UI Design | 19-20 | 7, 8 | FRONTEND-001, FRONTEND-006, PUBLIC-009 | DONE |
 | Responsive Design | 21 | 8 | PUBLIC-009 | DONE |
 | Accessibility | 22 | 15 | THEME-001 | DONE |
-| SEO | 23 | 16 | SEO-001 | TODO |
-| Performance | 24 | 16 | SEO-001 | TODO |
-| Analytics (counters) | 25 | 5 | PUB-002 (viewCount) | TODO |
-| Logging | 26 | 1 | BACKEND-004 | TODO |
-| Testing | 28 | 17 | TEST-001 through TEST-004 | TODO |
-| Docker | 29 | 0, 19 | SETUP-005, DOCKER-001 | TODO |
-| CI/CD | 30 | 19 | CICD-001 | TODO |
-| Environment Config | 31 | 0-1 | SETUP-002, BACKEND-001 | TODO |
-| Folder Structure | 32 | 0 | SETUP-001 | TODO |
-| Seed Data | 38 | 6 | SEED-001 | TODO |
-| Documentation | 42 | 0, 20 | SETUP-006, DOC-001 | TODO |
+| SEO | 23 | 16 | SEO-001 | DONE |
+| Performance | 24 | 16 | SEO-001 | DONE |
+| Analytics (counters) | 25 | 5 | PUB-002 (viewCount) | DONE |
+| Logging | 26 | 1 | BACKEND-004 | DONE |
+| Testing | 28 | 17 | TEST-001 through TEST-004 | DONE |
+| Docker | 29 | 0, 19 | SETUP-005, DOCKER-001 | DONE |
+| CI/CD | 30 | 19 | CICD-001 | DONE |
+| Environment Config | 31 | 0-1 | SETUP-002, BACKEND-001 | DONE |
+| Folder Structure | 32 | 0 | SETUP-001 | DONE |
+| Seed Data | 38 | 6 | SEED-001 | DONE |
+| Documentation | 42 | 0, 20 | SETUP-006, DOC-001 | DONE |
 
 ---
 
