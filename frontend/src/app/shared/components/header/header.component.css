@@ -93,17 +93,3 @@
   background: linear-gradient(90deg, #4f46e5 0%, #9333ea 50%, #db2777 100%);
   box-shadow: 0 0 12px rgba(99, 102, 241, 0.8), 0 0 4px rgba(219, 39, 119, 0.5);
 }
-
-/* Mobile Nav Active */
-.mobile-nav-link.active-nav-link {
-  color: #4f46e5;
-  font-weight: 600;
-  background-color: rgba(238, 242, 255, 0.85);
-  border-left: 3px solid #6366f1;
-}
-
-:host-context(.dark) .mobile-nav-link.active-nav-link {
-  color: #818cf8;
-  background-color: rgba(49, 46, 129, 0.4);
-  border-left: 3px solid #818cf8;
-}

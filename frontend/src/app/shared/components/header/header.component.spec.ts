@@ -70,37 +70,14 @@ describe('HeaderComponent', () => {
     expect(navLinks[0].textContent).toContain('ទំព័រដើម');
   });
 
-  it('should toggle mobile menu when hamburger button is clicked', () => {
-    expect(component.isMobileMenuOpen).toBe(false);
-
+  it('should not render mobile hamburger button', () => {
     const hamburgerBtn = fixture.nativeElement.querySelector('#mobile-menu-btn');
-    hamburgerBtn.click();
-    fixture.detectChanges();
-
-    expect(component.isMobileMenuOpen).toBe(true);
-
-    const mobileNav = fixture.nativeElement.querySelector('#mobile-navigation');
-    expect(mobileNav).toBeTruthy();
-
-    hamburgerBtn.click();
-    fixture.detectChanges();
-
-    expect(component.isMobileMenuOpen).toBe(false);
+    expect(hamburgerBtn).toBeNull();
   });
 
-  it('should close mobile menu when a mobile nav link is clicked', () => {
-    const hamburgerBtn = fixture.nativeElement.querySelector('#mobile-menu-btn');
-    hamburgerBtn.click();
-    fixture.detectChanges();
-
-    const mobileNav = fixture.nativeElement.querySelector('#mobile-navigation');
-    expect(mobileNav).toBeTruthy();
-
-    const firstLink = mobileNav.querySelector('a') as HTMLAnchorElement;
-    firstLink.click();
-    fixture.detectChanges();
-
-    expect(component.isMobileMenuOpen).toBe(false);
+  it('should render all nav items directly in navigation bar', () => {
+    const navLinks = fixture.nativeElement.querySelectorAll('nav a');
+    expect(navLinks.length).toBe(component.navItems.length);
   });
 
   it('should toggle isScrolled based on scroll position', () => {

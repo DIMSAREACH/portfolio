@@ -51,17 +51,17 @@ interface NavItem {
           </span>
         </a>
 
-        <!-- Desktop Navigation Links with Cool Underline -->
+        <!-- Navigation Links with Cool Underline -->
         <nav
-          class="hidden md:flex items-center gap-1 lg:gap-1.5"
-          aria-label="Desktop Navigation"
+          class="flex items-center gap-1 lg:gap-1.5 overflow-x-auto no-scrollbar py-1"
+          aria-label="Navigation"
         >
           @for (item of navItems; track item.path) {
             <a
               [routerLink]="item.path"
               routerLinkActive="active-nav-link"
               [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
-              class="nav-link"
+              class="nav-link whitespace-nowrap"
               [class.font-khmer]="isKhmer()"
             >
               <span>{{ isKhmer() ? item.labelKh : item.labelEn }}</span>
@@ -69,8 +69,8 @@ interface NavItem {
           }
         </nav>
 
-        <!-- Right Side Controls (Resume, Language, Theme, Mobile Toggle) -->
-        <div class="flex items-center gap-2 sm:gap-2.5">
+        <!-- Right Side Controls (Resume, Language, Theme) -->
+        <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
           <a
             pButton
             rounded
@@ -87,60 +87,8 @@ interface NavItem {
 
           <app-language-switcher></app-language-switcher>
           <app-theme-toggle></app-theme-toggle>
-
-          <!-- Mobile Hamburger Toggle Button -->
-          <button
-            pButton
-            rounded
-            severity="secondary"
-            type="button"
-            (click)="toggleMobileMenu()"
-            [attr.aria-expanded]="isMobileMenuOpen"
-            aria-label="Toggle mobile menu"
-            class="md:hidden !w-9 !h-9 !p-0 flex items-center justify-center !rounded-full border border-slate-200/80 dark:border-slate-700/80"
-            id="mobile-menu-btn"
-          >
-            <i [class]="isMobileMenuOpen ? 'pi pi-times text-base' : 'pi pi-bars text-base'"></i>
-          </button>
         </div>
       </div>
-
-      <!-- Mobile Dropdown / Drawer Menu -->
-      @if (isMobileMenuOpen) {
-        <div
-          class="md:hidden border-t border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-1 shadow-2xl transition-all"
-          id="mobile-navigation"
-        >
-          @for (item of navItems; track item.path) {
-            <a
-              [routerLink]="item.path"
-              (click)="closeMobileMenu()"
-              routerLinkActive="active-nav-link"
-              [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
-              class="mobile-nav-link block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              [class.font-khmer]="isKhmer()"
-            >
-              {{ isKhmer() ? item.labelKh : item.labelEn }}
-            </a>
-          }
-
-          <div class="pt-3 mt-2 border-t border-slate-100 dark:border-slate-800">
-            <a
-              pButton
-              rounded
-              [href]="cvDownloadUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-              (click)="closeMobileMenu()"
-              class="w-full flex items-center justify-center gap-2 py-2.5 !rounded-full shadow-md transition-all"
-              id="mobile-cv-btn"
-            >
-              <i class="pi pi-download text-xs"></i>
-              <span>{{ isKhmer() ? 'ទាញយកប្រវត្តិរូប (CV)' : 'Download Resume' }}</span>
-            </a>
-          </div>
-        </div>
-      }
     </header>
   `,
   styleUrl: './header.component.css',
@@ -151,7 +99,6 @@ export class HeaderComponent {
 
   public readonly isKhmer = this.languageService.isKhmer;
   public readonly isScrolled = signal(false);
-  public isMobileMenuOpen = false;
 
   @HostListener('window:scroll')
   public onWindowScroll(): void {
@@ -178,12 +125,4 @@ export class HeaderComponent {
     { path: '/achievements', labelEn: 'Achievements', labelKh: 'សមិទ្ធផល' },
     { path: '/contact', labelEn: 'Contact', labelKh: 'ទំនាក់ទំនង' },
   ];
-
-  public toggleMobileMenu(): void {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
-  }
-
-  public closeMobileMenu(): void {
-    this.isMobileMenuOpen = false;
-  }
 }
