@@ -13,3 +13,29 @@ body {
   min-height: 100%;
   overflow-x: clip;
 }
+
+/* Custom Portfolio ScrollTop Floating Button */
+.portfolio-scrolltop {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #9333ea 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 10px 25px -4px rgba(99, 102, 241, 0.45), 0 6px 12px -2px rgba(124, 58, 237, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.portfolio-scrolltop:hover {
+  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 50%, #7e22ce 100%) !important;
+  transform: translateY(-4px) scale(1.08) !important;
+  box-shadow: 0 16px 32px -4px rgba(99, 102, 241, 0.6), 0 8px 16px -2px rgba(124, 58, 237, 0.4) !important;
+}
+
+.portfolio-scrolltop:active {
+  transform: translateY(0) scale(0.95) !important;
+}
+
+.portfolio-scrolltop svg,
+.portfolio-scrolltop i {
+  color: #ffffff !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+}
+

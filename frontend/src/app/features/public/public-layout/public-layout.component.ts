@@ -38,7 +38,8 @@ import { SeoService } from '../../../core/services/seo.service';
       <!-- PrimeNG Scroll Top Floating Button -->
       <p-scrolltop
         [threshold]="150"
-        [buttonProps]="{ severity: 'contrast', raised: true, rounded: true, iconOnly: true }"
+        styleClass="portfolio-scrolltop"
+        [buttonProps]="{ raised: true, rounded: true, iconOnly: true }"
       >
         <ng-template #icon>
           <svg data-p-icon="arrow-up"></svg>
