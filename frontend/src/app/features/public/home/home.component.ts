@@ -30,6 +30,7 @@ import { DividerModule } from 'primeng/divider';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
+import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 
 export interface SkillCategoryGroup {
   categoryName: string;
@@ -66,6 +67,7 @@ export interface TimelineItem {
     ProgressBarModule,
     AvatarModule,
     BadgeModule,
+    AnimateOnScrollModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',

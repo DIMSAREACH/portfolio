@@ -160,11 +160,26 @@
         </div>
       </div>
     </div>
+
+    <!-- Interactive Scroll Down Indicator (PrimeNG Style) -->
+    <div class="flex flex-col items-center gap-2 pt-10 pb-2 text-center">
+      <span class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+        {{ isKhmer() ? 'រមូរចុះក្រោមដើម្បីស្វែងយល់បន្ថែម' : 'Scroll Down' }}
+      </span>
+      <div class="animate-bounce w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-500/30">
+        <i class="pi pi-arrow-down text-xs"></i>
+      </div>
+    </div>
   </section>
 
   <!-- METRICS & IMPACT BAR -->
   <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20" aria-label="Key Achievements">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-3xl glass-card border border-slate-200/80 dark:border-slate-800/80">
+    <div
+      pAnimateOnScroll
+      enterClass="animate-enter fade-in-10 slide-in-from-b-12 animate-duration-1000"
+      leaveClass="animate-leave fade-out-0 animate-duration-100"
+      class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-3xl glass-card border border-slate-200/80 dark:border-slate-800/80"
+    >
       <div class="p-4 text-center border-r border-slate-200/60 dark:border-slate-800/60 last:border-none">
         <div class="text-3xl sm:text-4xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           3+
@@ -205,7 +220,12 @@
 
   <!-- FEATURED PROJECTS SHOWCASE -->
   <section class="relative py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" aria-labelledby="featured-projects-title">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+    <div
+      pAnimateOnScroll
+      enterClass="animate-enter fade-in-10 slide-in-from-t-12 animate-duration-1000"
+      leaveClass="animate-leave fade-out-0 animate-duration-100"
+      class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12"
+    >
       <div>
         <div class="inline-flex items-center gap-2 mb-2">
           <p-tag
@@ -244,8 +264,13 @@
           </div>
         }
       } @else {
-        @for (project of featuredProjects(); track project._id) {
-          <div class="glass-card rounded-3xl overflow-hidden flex flex-col group">
+        @for (project of featuredProjects(); track project._id; let idx = $index) {
+          <div
+            pAnimateOnScroll
+            [enterClass]="idx % 3 === 0 ? 'animate-enter fade-in-10 slide-in-from-l-8 animate-duration-1000' : idx % 3 === 1 ? 'animate-enter fade-in-10 zoom-in-50 animate-duration-1000' : 'animate-enter fade-in-10 slide-in-from-r-8 animate-duration-1000'"
+            leaveClass="animate-leave fade-out-0 animate-duration-100"
+            class="glass-card rounded-3xl overflow-hidden flex flex-col group"
+          >
             <!-- Project Image Banner -->
             <div class="project-img-wrapper h-52 bg-slate-100 dark:bg-slate-800">
               @if (project.mainImage) {
@@ -357,7 +382,12 @@
 
   <!-- SKILLS & SUPERPOWERS BENTO GRID -->
   <section class="relative py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" aria-labelledby="skills-section-title">
-    <div class="text-center max-w-2xl mx-auto mb-14">
+    <div
+      pAnimateOnScroll
+      enterClass="animate-enter fade-in-10 slide-in-from-t-16 animate-duration-1000"
+      leaveClass="animate-leave fade-out-0 animate-duration-100"
+      class="text-center max-w-2xl mx-auto mb-14"
+    >
       <p-tag
         [value]="isKhmer() ? 'ជំនាញ និងបច្ចេកវិទ្យា' : 'CORE COMPETENCIES'"
         [rounded]="true"
@@ -374,8 +404,13 @@
 
     <!-- Bento Grid Categories -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      @for (group of skillsGrouped(); track group.categoryName) {
-        <div class="glass-card rounded-3xl p-6 flex flex-col justify-between space-y-4">
+      @for (group of skillsGrouped(); track group.categoryName; let sIdx = $index) {
+        <div
+          pAnimateOnScroll
+          [enterClass]="sIdx % 2 === 0 ? 'animate-enter fade-in-10 slide-in-from-b-20 animate-duration-1000' : 'animate-enter fade-in-10 zoom-in-75 animate-duration-1000'"
+          leaveClass="animate-leave fade-out-0 animate-duration-100"
+          class="glass-card rounded-3xl p-6 flex flex-col justify-between space-y-4"
+        >
           <div>
             <!-- Group Header -->
             <div class="flex items-center gap-3 mb-4">
@@ -415,7 +450,12 @@
   <!-- CAREER JOURNEY TIMELINE SECTION (PrimeNG Timeline) -->
   @if (experiences().length > 0) {
     <section class="relative py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto" aria-labelledby="experience-timeline-title">
-      <div class="text-center max-w-2xl mx-auto mb-14">
+      <div
+        pAnimateOnScroll
+        enterClass="animate-enter fade-in-10 slide-in-from-t-16 animate-duration-1000"
+        leaveClass="animate-leave fade-out-0 animate-duration-100"
+        class="text-center max-w-2xl mx-auto mb-14"
+      >
         <p-tag
           [value]="isKhmer() ? 'ដំណើរការការងារ' : 'EXPERIENCE & JOURNEY'"
           [rounded]="true"
@@ -452,7 +492,12 @@
 
           <!-- Content Template -->
           <ng-template #content let-event>
-            <div class="glass-card rounded-2xl p-5 space-y-2.5">
+            <div
+              pAnimateOnScroll
+              enterClass="animate-enter fade-in-10 zoom-in-50 animate-duration-1000"
+              leaveClass="animate-leave fade-out-0 animate-duration-100"
+              class="glass-card rounded-2xl p-5 space-y-2.5"
+            >
               <div class="flex items-center justify-between gap-2">
                 <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                   {{ event.title | localize }}
@@ -494,7 +539,12 @@
 
   <!-- INTERACTIVE CALL TO ACTION (CTA) -->
   <section class="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" aria-label="Call to Action">
-    <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-900 via-slate-900 to-purple-950 text-white p-8 sm:p-12 md:p-16 shadow-2xl border border-indigo-500/20 text-center">
+    <div
+      pAnimateOnScroll
+      enterClass="animate-enter fade-in-10 zoom-in-50 slide-in-from-b-12 animate-duration-1000"
+      leaveClass="animate-leave fade-out-0 animate-duration-100"
+      class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-900 via-slate-900 to-purple-950 text-white p-8 sm:p-12 md:p-16 shadow-2xl border border-indigo-500/20 text-center"
+    >
       <!-- Glow Elements inside Banner -->
       <div class="absolute -top-24 -left-24 w-72 h-72 bg-indigo-500/30 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl pointer-events-none"></div>

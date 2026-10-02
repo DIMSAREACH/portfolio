@@ -176,6 +176,22 @@ describe('HomeComponent', () => {
     },
   };
 
+  beforeAll(() => {
+    if (typeof window !== 'undefined' && !window.IntersectionObserver) {
+      class MockIntersectionObserver {
+        root = null;
+        rootMargin = '';
+        thresholds = [];
+        observe = vi.fn();
+        unobserve = vi.fn();
+        disconnect = vi.fn();
+        takeRecords = vi.fn().mockReturnValue([]);
+      }
+      window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+      globalThis.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+    }
+  });
+
   beforeEach(async () => {
     portfolioServiceMock = {
       getProfile: vi.fn().mockReturnValue(of(mockProfile)),
