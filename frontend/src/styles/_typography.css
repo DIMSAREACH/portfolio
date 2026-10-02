@@ -453,3 +453,37 @@ hr {
     padding-right: var(--space-8);
   }
 }
+
+/* ==========================================================================
+   Khmer Typography Optimizations (System Smoothness & High Legibility)
+   ========================================================================== */
+
+html[lang="kh"] body {
+  font-family: var(--font-khmer), var(--font-sans);
+  line-height: var(--leading-relaxed);
+}
+
+html[lang="kh"] h1,
+html[lang="kh"] h2,
+html[lang="kh"] h3,
+html[lang="kh"] h4,
+html[lang="kh"] h5,
+html[lang="kh"] h6 {
+  font-family: var(--font-khmer), var(--font-sans);
+  letter-spacing: normal;
+  line-height: var(--leading-snug);
+}
+
+html[lang="kh"] p,
+html[lang="kh"] a,
+html[lang="kh"] span,
+html[lang="kh"] button,
+html[lang="kh"] input,
+html[lang="kh"] label {
+  letter-spacing: normal;
+}
+
+.font-khmer {
+  font-family: var(--font-khmer), sans-serif !important;
+  letter-spacing: normal !important;
+}

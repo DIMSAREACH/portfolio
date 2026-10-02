@@ -117,11 +117,19 @@
   --radius-full: 9999px;
   --radius-avatar: 50%;
 
-  /* Transitions */
-  --transition-fast: 150ms ease-in-out;
-  --transition-normal: 250ms ease-in-out;
-  --transition-slow: 350ms ease-in-out;
-  --transition-theme: background-color 250ms ease-in-out, border-color 250ms ease-in-out, color 250ms ease-in-out;
+  /* Transitions & Easing (System Smoothness & Modern Web Guidance) */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 380ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-spring: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-theme: background-color 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                      border-color 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                      color 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                      box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Layout / Container Dimensions */
   --max-width-container: 1280px;

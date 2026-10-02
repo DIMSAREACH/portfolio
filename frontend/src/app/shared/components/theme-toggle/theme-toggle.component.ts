@@ -19,12 +19,30 @@ import { ThemeService } from '../../../core/services/theme.service';
       id="theme-toggle-btn"
     >
       @if (isDark()) {
-        <i class="pi pi-sun text-amber-400 text-base transition-transform duration-300 hover:rotate-45"></i>
+        <i class="pi pi-sun text-amber-400 text-base theme-icon-in"></i>
       } @else {
-        <i class="pi pi-moon text-slate-700 dark:text-slate-200 text-base transition-transform duration-300 hover:-rotate-12"></i>
+        <i class="pi pi-moon text-slate-700 dark:text-slate-200 text-base theme-icon-in"></i>
       }
     </button>
   `,
+  styles: [
+    `
+      @keyframes themeIconIn {
+        from {
+          transform: rotate(-70deg) scale(0.65);
+          opacity: 0;
+        }
+        to {
+          transform: rotate(0deg) scale(1);
+          opacity: 1;
+        }
+      }
+
+      .theme-icon-in {
+        animation: themeIconIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+    `,
+  ],
 })
 export class ThemeToggleComponent {
   private readonly themeService = inject(ThemeService);

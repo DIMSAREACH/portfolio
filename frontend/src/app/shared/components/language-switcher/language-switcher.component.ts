@@ -15,6 +15,13 @@ import {
       role="group"
       aria-label="Language selector"
     >
+      <!-- Hardware-accelerated sliding glider pill -->
+      <span
+        class="lang-glider"
+        [class.slide-kh]="currentLang() === 'kh'"
+        aria-hidden="true"
+      ></span>
+
       <button
         type="button"
         (click)="selectLanguage('en')"
@@ -41,7 +48,9 @@ import {
   styles: [
     `
       .lang-switch-track {
-        display: inline-flex;
+        position: relative;
+        display: inline-grid;
+        grid-template-columns: repeat(2, minmax(38px, 1fr));
         align-items: center;
         padding: 3px;
         border-radius: 9999px;
@@ -50,6 +59,9 @@ import {
         gap: 3px;
         user-select: none;
         box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+        transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                    border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       :host-context(.dark) .lang-switch-track {
@@ -58,12 +70,41 @@ import {
         box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
       }
 
+      /* Sliding Pill Glider: Emerald pill with concentric double ring */
+      .lang-glider {
+        position: absolute;
+        top: 3px;
+        bottom: 3px;
+        left: 3px;
+        width: calc((100% - 9px) / 2);
+        border-radius: 9999px;
+        background-color: #059669;
+        box-shadow: 0 0 0 2px #ffffff, 0 0 0 3.5px #059669;
+        pointer-events: none;
+        z-index: 1;
+        transition: transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform;
+      }
+
+      :host-context(.dark) .lang-glider {
+        background-color: #059669;
+        box-shadow: 0 0 0 2px #0f172a, 0 0 0 3.5px #059669;
+      }
+
+      /* Smooth glide to Khmer (2nd button position) */
+      .lang-glider.slide-kh {
+        transform: translateX(calc(100% + 3px));
+      }
+
       .lang-btn {
         position: relative;
+        z-index: 2;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 4px 11px;
+        min-width: 38px;
+        padding: 4px 10px;
         font-size: 0.75rem;
         font-weight: 700;
         line-height: 1;
@@ -72,11 +113,17 @@ import {
         background: transparent;
         border: none;
         cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: color, transform;
       }
 
       .lang-btn:hover {
         color: #0f172a;
+      }
+
+      .lang-btn:active {
+        transform: scale(0.94);
       }
 
       :host-context(.dark) .lang-btn {
@@ -87,18 +134,21 @@ import {
         color: #ffffff;
       }
 
-      /* Active State: Emerald pill with concentric gap and outer ring matching the user's screenshot */
+      /* Active State: text turns bold white smoothly above the glider */
       .lang-btn.active {
-        background-color: #059669;
         color: #ffffff !important;
         font-weight: 800;
-        box-shadow: 0 0 0 2px #ffffff, 0 0 0 3.5px #059669;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       }
 
       :host-context(.dark) .lang-btn.active {
-        background-color: #059669;
         color: #ffffff !important;
-        box-shadow: 0 0 0 2px #0f172a, 0 0 0 3.5px #059669;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .lang-glider {
+          transition: none !important;
+        }
       }
     `,
   ],
