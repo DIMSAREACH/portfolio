@@ -52,13 +52,16 @@ portfolio/
 
 ## Project Documentation
 
-The repository is governed by the following master specifications:
+The repository is governed and documented by the following specifications:
 
 - **[PRD.md](docs/PRD.md)** — Product Requirements Document (features, schemas, API specifications)
 - **[Plan.md](docs/Plan.md)** — Architectural roadmap and dependency-aware implementation phases
 - **[Task.md](docs/Task.md)** — Task tracker with acceptance criteria and definition of done
 - **[Design.md](docs/Design.md)** — Design system, color palettes, typography, and UX guidelines
 - **[Agent.md](Agent.md)** — Operating manual and coding standards for AI pair programming
+- **[SETUP.md](docs/SETUP.md)** — Local development setup and testing guide
+- **[DEPLOYMENT.md](docs/DEPLOYMENT.md)** — Production hosting, MongoDB Atlas, and container guide
+- **[API.md](docs/API.md)** — RESTful API endpoint catalog, authentication flow, and Swagger documentation
 
 ---
 
