@@ -1,0 +1,56 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Test and Build Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Verify Backend
+        run: |
+          cd backend
+          npm ci
+          npm run lint
+          npm test
+          npm run build
+
+      - name: Verify Frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run lint
+          npm test -- --watch=false
+          npm run build
+
+  deploy-backend:
+    name: Deploy Backend
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Trigger Backend Deployment
+        run: echo "Production backend build verified and ready for deployment."
+
+  deploy-frontend:
+    name: Deploy Frontend
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Trigger Frontend Deployment
+        run: echo "Production frontend build verified and ready for deployment."
