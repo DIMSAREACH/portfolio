@@ -64,10 +64,10 @@ interface SocialLink {
               </li>
               <li>
                 <a
-                  routerLink="/blog"
+                  routerLink="/experience"
                   class="text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                 >
-                  {{ isKhmer() ? 'ប្លុក' : 'Blog' }}
+                  {{ isKhmer() ? 'បទពិសោធន៍' : 'Experience' }}
                 </a>
               </li>
               <li>

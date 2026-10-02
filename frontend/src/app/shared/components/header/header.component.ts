@@ -25,7 +25,7 @@ interface NavItem {
   ],
   template: `
     <header
-      class="sticky top-0 z-40 w-full backdrop-blur-md bg-white/85 dark:bg-slate-900/85 border-b border-slate-200/80 dark:border-slate-800 transition-colors duration-300"
+      class="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/70 dark:border-slate-800/70 transition-all duration-300 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.25)]"
     >
       <div
         class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4"
@@ -33,53 +33,51 @@ interface NavItem {
         <!-- Logo / Brand -->
         <a
           routerLink="/"
-          class="flex items-center gap-2 group text-decoration-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-lg p-1"
+          class="flex items-center gap-2.5 group text-decoration-none focus:outline-none focus:ring-2 focus:ring-indigo-500/40 rounded-xl p-1"
           aria-label="Portfolio Home"
         >
           <div
-            class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform"
+            class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-500 flex items-center justify-center text-white font-extrabold text-base shadow-md shadow-indigo-500/25 group-hover:scale-105 group-hover:shadow-indigo-500/40 ring-1 ring-white/20 transition-all"
           >
             S
           </div>
           <span
-            class="text-lg font-bold bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-700 dark:from-white dark:via-indigo-200 dark:to-slate-300 bg-clip-text text-transparent"
+            class="text-lg font-black tracking-tight text-slate-900 dark:text-white"
           >
-            Sareach<span class="text-indigo-600 dark:text-indigo-400">.dev</span>
+            Sareach<span class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent font-extrabold">.dev</span>
           </span>
         </a>
 
-        <!-- Desktop Navigation Links -->
+        <!-- Desktop Navigation Links with Cool Underline -->
         <nav
-          class="hidden md:flex items-center gap-1 lg:gap-2"
+          class="hidden md:flex items-center gap-1 lg:gap-1.5"
           aria-label="Desktop Navigation"
         >
           @for (item of navItems; track item.path) {
             <a
               [routerLink]="item.path"
-              routerLinkActive="text-indigo-600 dark:text-indigo-400 font-semibold bg-indigo-50/80 dark:bg-indigo-950/40"
+              routerLinkActive="active-nav-link"
               [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
-              class="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 transition-all"
+              class="nav-link"
               [class.font-khmer]="isKhmer()"
             >
-              {{ isKhmer() ? item.labelKh : item.labelEn }}
+              <span>{{ isKhmer() ? item.labelKh : item.labelEn }}</span>
             </a>
           }
         </nav>
 
-        <!-- Right Side Controls (CV, Theme, Language, Mobile Toggle) -->
-        <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Right Side Controls (Resume, Language, Theme, Mobile Toggle) -->
+        <div class="flex items-center gap-2 sm:gap-2.5">
           <a
             [href]="cvDownloadUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-800/60 transition-colors shadow-2xs"
+            class="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/60 hover:bg-gradient-to-r hover:from-indigo-600 hover:to-purple-600 hover:text-white dark:hover:text-white border border-indigo-200/80 dark:border-indigo-800/80 hover:border-transparent transition-all shadow-xs hover:shadow-indigo-500/25 hover:scale-105 active:scale-95"
             id="header-cv-btn"
             title="Download CV"
           >
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-            </svg>
-            <span>{{ isKhmer() ? 'CV' : 'Resume' }}</span>
+            <i class="pi pi-download text-xs"></i>
+            <span>{{ isKhmer() ? 'ប្រវត្តិរូប' : 'Resume' }}</span>
           </a>
 
           <app-language-switcher></app-language-switcher>
@@ -132,41 +130,40 @@ interface NavItem {
       <!-- Mobile Dropdown / Drawer Menu -->
       @if (isMobileMenuOpen) {
         <div
-          class="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg px-4 pt-3 pb-6 space-y-1.5 shadow-xl transition-all"
+          class="md:hidden border-t border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-1 shadow-2xl transition-all"
           id="mobile-navigation"
         >
           @for (item of navItems; track item.path) {
             <a
               [routerLink]="item.path"
               (click)="closeMobileMenu()"
-              routerLinkActive="text-indigo-600 dark:text-indigo-400 font-semibold bg-indigo-50 dark:bg-indigo-950/50"
+              routerLinkActive="active-nav-link"
               [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
-              class="block px-4 py-2.5 rounded-xl text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              class="mobile-nav-link block px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               [class.font-khmer]="isKhmer()"
             >
               {{ isKhmer() ? item.labelKh : item.labelEn }}
             </a>
           }
 
-          <div class="pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div class="pt-3 mt-2 border-t border-slate-100 dark:border-slate-800">
             <a
               [href]="cvDownloadUrl"
               target="_blank"
               rel="noopener noreferrer"
               (click)="closeMobileMenu()"
-              class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm"
+              class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md shadow-indigo-500/25"
               id="mobile-cv-btn"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-              </svg>
-              <span>{{ isKhmer() ? 'ទាញយកប្រវត្តិរូប (CV)' : 'Download CV' }}</span>
+              <i class="pi pi-download text-xs"></i>
+              <span>{{ isKhmer() ? 'ទាញយកប្រវត្តិរូប (CV)' : 'Download Resume' }}</span>
             </a>
           </div>
         </div>
       }
     </header>
   `,
+  styleUrl: './header.component.css',
 })
 export class HeaderComponent {
   private readonly languageService = inject(LanguageService);
@@ -179,6 +176,9 @@ export class HeaderComponent {
     return this.portfolioService?.getCvDownloadUrl() ?? '/api/v1/cv/download';
   }
 
+  /**
+   * Navigation links without Blog (hidden per request)
+   */
   public readonly navItems: NavItem[] = [
     { path: '/', labelEn: 'Home', labelKh: 'ទំព័រដើម', exact: true },
     { path: '/about', labelEn: 'About', labelKh: 'អំពីខ្ញុំ' },
@@ -186,7 +186,6 @@ export class HeaderComponent {
     { path: '/experience', labelEn: 'Experience', labelKh: 'បទពិសោធន៍' },
     { path: '/education', labelEn: 'Education', labelKh: 'ការអប់រំ' },
     { path: '/projects', labelEn: 'Projects', labelKh: 'គម្រោង' },
-    { path: '/blog', labelEn: 'Blog', labelKh: 'ប្លុក' },
     { path: '/achievements', labelEn: 'Achievements', labelKh: 'សមិទ្ធផល' },
     { path: '/contact', labelEn: 'Contact', labelKh: 'ទំនាក់ទំនង' },
   ];
