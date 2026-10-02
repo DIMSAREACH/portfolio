@@ -51,4 +51,16 @@ describe('LanguageSwitcherComponent', () => {
 
     expect(languageServiceMock.setLanguage).not.toHaveBeenCalled();
   });
+
+  it('should toggle active class between EN and Khmer buttons based on currentLang', () => {
+    const buttons = fixture.nativeElement.querySelectorAll('button');
+    expect(buttons[0].classList.contains('active')).toBe(true);
+    expect(buttons[1].classList.contains('active')).toBe(false);
+
+    languageServiceMock.currentLang.set('kh');
+    fixture.detectChanges();
+
+    expect(buttons[0].classList.contains('active')).toBe(false);
+    expect(buttons[1].classList.contains('active')).toBe(true);
+  });
 });
