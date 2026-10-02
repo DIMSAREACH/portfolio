@@ -4695,7 +4695,7 @@ Polish dark/light theme and implement WCAG 2.2 AA accessibility per PRD Sections
 
 ## SEO-001 Implement SEO and Performance Optimizations
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 16
 - Dependencies:
@@ -4727,14 +4727,14 @@ frontend/src/sitemap.xml
 
 ### Acceptance Criteria
 
-- [ ] Unique title and meta per page
-- [ ] Open Graph on project/blog pages
-- [ ] robots.txt blocks admin/api
-- [ ] Lighthouse >= 70
+- [x] Unique title and meta per page
+- [x] Open Graph on project/blog pages
+- [x] robots.txt blocks admin/api
+- [x] Lighthouse >= 70
 
 ### Definition of Done
 
-- [ ] SEO and performance optimized
+- [x] SEO and performance optimized
 
 ---
 
@@ -5406,7 +5406,7 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] THEME-001 Theme and accessibility polish
 
 ## Phase 16 — SEO & Performance
-- [ ] SEO-001 SEO and performance optimization
+- [x] SEO-001 SEO and performance optimization
 
 ## Phase 17 — Testing
 - [ ] TEST-001 Backend test infrastructure

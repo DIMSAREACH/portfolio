@@ -17,6 +17,11 @@ export const routes: Routes = [
             (m) => m.HomeComponent,
           ),
         title: 'Home | Dim Sareach',
+        data: {
+          description:
+            'Explore the developer portfolio, projects, skills, and technical articles by Dim Sareach, Full Stack Developer.',
+          keywords: 'Dim Sareach, full stack developer, software engineer, portfolio, angular, node.js',
+        },
       },
       {
         path: 'about',
@@ -25,6 +30,11 @@ export const routes: Routes = [
             (m) => m.AboutComponent,
           ),
         title: 'About Me | Dim Sareach',
+        data: {
+          description:
+            'Learn more about Dim Sareach, professional background, expertise, technical philosophy, and experience.',
+          keywords: 'about dim sareach, full stack engineer, software developer bio',
+        },
       },
       {
         path: 'skills',
@@ -33,6 +43,11 @@ export const routes: Routes = [
             (m) => m.SkillsComponent,
           ),
         title: 'Skills & Expertise | Dim Sareach',
+        data: {
+          description:
+            'Comprehensive directory of technical skills, frameworks, cloud tools, and programming languages mastered by Dim Sareach.',
+          keywords: 'technical skills, frontend, backend, devops, database, typescript, angular',
+        },
       },
       {
         path: 'experience',
@@ -41,6 +56,11 @@ export const routes: Routes = [
             (m) => m.ExperienceComponent,
           ),
         title: 'Work Experience | Dim Sareach',
+        data: {
+          description:
+            'Career history, software engineering roles, team leadership, and impactful technical accomplishments by Dim Sareach.',
+          keywords: 'work experience, career, software engineer roles, accomplishments',
+        },
       },
       {
         path: 'education',
@@ -49,6 +69,11 @@ export const routes: Routes = [
             (m) => m.EducationComponent,
           ),
         title: 'Education & Certifications | Dim Sareach',
+        data: {
+          description:
+            'Academic qualifications, university degrees, and professional certifications earned by Dim Sareach.',
+          keywords: 'education, certifications, degrees, credentials',
+        },
       },
       {
         path: 'projects',
@@ -57,6 +82,11 @@ export const routes: Routes = [
             (m) => m.ProjectListComponent,
           ),
         title: 'Projects | Dim Sareach',
+        data: {
+          description:
+            'Curated portfolio of software engineering projects, modern web applications, and architectural case studies.',
+          keywords: 'software projects, web applications, case studies, open source',
+        },
       },
       {
         path: 'projects/:slug',
@@ -65,6 +95,10 @@ export const routes: Routes = [
             (m) => m.ProjectDetailComponent,
           ),
         title: 'Project Details | Dim Sareach',
+        data: {
+          description:
+            'Detailed project case study, tech stack breakdown, architecture overview, and live demo links.',
+        },
       },
       {
         path: 'blog',
@@ -73,6 +107,11 @@ export const routes: Routes = [
             (m) => m.BlogListComponent,
           ),
         title: 'Blog & Articles | Dim Sareach',
+        data: {
+          description:
+            'Technical engineering blog, guides, best practices, and architecture articles by Dim Sareach.',
+          keywords: 'engineering blog, programming tutorials, tech articles, software insights',
+        },
       },
       {
         path: 'blog/:slug',
@@ -81,6 +120,10 @@ export const routes: Routes = [
             (m) => m.BlogDetailComponent,
           ),
         title: 'Blog Article | Dim Sareach',
+        data: {
+          description:
+            'Read this in-depth technical article and software engineering guide by Dim Sareach.',
+        },
       },
       {
         path: 'achievements',
@@ -89,6 +132,11 @@ export const routes: Routes = [
             './features/public/achievements/achievements.component'
           ).then((m) => m.AchievementsComponent),
         title: 'Achievements | Dim Sareach',
+        data: {
+          description:
+            'Key milestones, awards, honors, and notable community contributions by Dim Sareach.',
+          keywords: 'achievements, awards, honors, software milestones',
+        },
       },
       {
         path: 'contact',
@@ -97,6 +145,11 @@ export const routes: Routes = [
             (m) => m.ContactComponent,
           ),
         title: 'Contact | Dim Sareach',
+        data: {
+          description:
+            'Get in touch with Dim Sareach for project inquiries, freelance opportunities, consultations, or collaborations.',
+          keywords: 'contact dim sareach, hire full stack developer, software engineer contact',
+        },
       },
     ],
   },
@@ -110,6 +163,9 @@ export const routes: Routes = [
         (m) => m.LoginComponent,
       ),
     title: 'Admin Login | Portfolio CMS',
+    data: {
+      robots: 'noindex, nofollow',
+    },
   },
 
   // Admin protected management routes
@@ -118,6 +174,9 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadChildren: () =>
       import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
+    data: {
+      robots: 'noindex, nofollow',
+    },
   },
 
   // 404 Wildcard Page
@@ -128,5 +187,9 @@ export const routes: Routes = [
         (m) => m.NotFoundComponent,
       ),
     title: '404 - Page Not Found | Dim Sareach',
+    data: {
+      robots: 'noindex, nofollow',
+      description: 'The requested page could not be found.',
+    },
   },
 ];

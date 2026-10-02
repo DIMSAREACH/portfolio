@@ -8,3 +8,4 @@ export * from './theme.service';
 export * from './language.service';
 export * from './notification.service';
 export * from './portfolio.service';
+export * from './seo.service';

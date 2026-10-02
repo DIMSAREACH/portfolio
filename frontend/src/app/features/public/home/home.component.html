@@ -177,6 +177,8 @@
                   [src]="project.mainImage"
                   [alt]="project.title | localize"
                   class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  decoding="async"
                 />
               } @else {
                 <div class="w-full h-full flex items-center justify-center bg-slate-200 dark:bg-slate-800 text-slate-400 font-bold text-lg">

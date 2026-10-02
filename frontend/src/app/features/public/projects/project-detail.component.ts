@@ -5,6 +5,7 @@ import { of, catchError } from 'rxjs';
 import { marked } from 'marked';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
+import { SeoService } from '../../../core/services/seo.service';
 import { Project, Category } from '../../../core/models';
 import {
   ProjectCardComponent,
@@ -375,6 +376,7 @@ import {
 export class ProjectDetailComponent implements OnInit {
   private readonly portfolioService = inject(PortfolioService);
   private readonly languageService = inject(LanguageService);
+  private readonly seoService = inject(SeoService);
   private readonly route = inject(ActivatedRoute);
 
   public readonly project = signal<Project | null>(null);
@@ -425,6 +427,14 @@ export class ProjectDetailComponent implements OnInit {
           const current = res.data;
           this.project.set(current);
           this.loadRelatedProjects(current);
+
+          this.seoService.updateMetaTags({
+            title: current.title?.en || current.title?.kh,
+            description: current.shortDescription?.en || current.shortDescription?.kh,
+            image: current.mainImage,
+            type: 'website',
+            keywords: current.technologies?.join(', '),
+          });
         } else {
           this.error.set('Project details could not be found.');
         }

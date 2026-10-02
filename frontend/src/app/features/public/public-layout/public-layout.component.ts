@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { Subscription, filter } from 'rxjs';
 import { HeaderComponent, FooterComponent } from '../../../shared';
+import { SeoService } from '../../../core/services/seo.service';
 
 @Component({
   selector: 'app-public-layout',
@@ -26,4 +28,45 @@ import { HeaderComponent, FooterComponent } from '../../../shared';
     </div>
   `,
 })
-export class PublicLayoutComponent {}
+export class PublicLayoutComponent implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly seoService = inject(SeoService);
+  private navSub?: Subscription;
+
+  ngOnInit(): void {
+    this.syncSeo();
+    this.navSub = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.syncSeo();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.navSub?.unsubscribe();
+  }
+
+  private syncSeo(): void {
+    let currentRoute: ActivatedRoute | null = this.activatedRoute;
+    while (currentRoute.firstChild) {
+      currentRoute = currentRoute.firstChild;
+    }
+
+    if (currentRoute) {
+      const data = currentRoute.snapshot.data || {};
+      const title = data['title'] || currentRoute.snapshot.routeConfig?.title;
+      const description = data['description'];
+      const keywords = data['keywords'];
+      const robots = data['robots'];
+
+      this.seoService.updateMetaTags({
+        title: typeof title === 'string' ? title.replace(' | Dim Sareach', '') : undefined,
+        description: typeof description === 'string' ? description : undefined,
+        keywords: typeof keywords === 'string' ? keywords : undefined,
+        robots: typeof robots === 'string' ? robots : undefined,
+      });
+    }
+  }
+}
+

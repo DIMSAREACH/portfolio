@@ -19,6 +19,7 @@ import 'prismjs/components/prism-docker';
 
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
+import { SeoService } from '../../../core/services/seo.service';
 import { BlogPost, Category } from '../../../core/models';
 import {
   BlogCardComponent,
@@ -394,6 +395,7 @@ import {
 export class BlogDetailComponent implements OnInit {
   private readonly portfolioService = inject(PortfolioService);
   private readonly languageService = inject(LanguageService);
+  private readonly seoService = inject(SeoService);
   private readonly route = inject(ActivatedRoute);
   private readonly sanitizer = inject(DomSanitizer);
 
@@ -504,6 +506,17 @@ export class BlogDetailComponent implements OnInit {
           const current = res.data;
           this.post.set(current);
           this.loadRelatedPosts(current);
+
+          this.seoService.updateMetaTags({
+            title: current.title?.en || current.title?.kh,
+            description: current.excerpt?.en || current.excerpt?.kh,
+            image: current.coverImage,
+            type: 'article',
+            keywords: current.tags?.join(', '),
+            publishedTime: current.publishedAt
+              ? new Date(current.publishedAt).toISOString()
+              : (current.createdAt ? new Date(current.createdAt).toISOString() : undefined),
+          });
         } else {
           this.error.set('Article details could not be found.');
         }

@@ -57,6 +57,8 @@ import {
                     [src]="profile()?.aboutImage || profile()?.profileImage"
                     [alt]="(profile()?.fullName | localize) || 'Dim Sareach'"
                     class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                    decoding="async"
                   />
                 } @else {
                   <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700 text-white p-6 text-center">

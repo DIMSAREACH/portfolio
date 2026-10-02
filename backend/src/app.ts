@@ -2,6 +2,7 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
 import corsOptions from './config/cors';
 import { globalLimiter } from './middleware/rateLimiter.middleware';
 import errorHandler from './middleware/errorHandler.middleware';
@@ -21,7 +22,10 @@ app.use(
   }),
 );
 
-// 2. CORS with configured origin whitelist and credentials
+// 2. HTTP Response Compression (SEO-001 / PRD Section 24.2)
+app.use(compression());
+
+// 3. CORS with configured origin whitelist and credentials
 app.use(cors(corsOptions));
 
 // 3. Request body & cookie parsers with 10MB limit (SEC-013)

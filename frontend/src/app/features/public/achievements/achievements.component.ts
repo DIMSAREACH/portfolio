@@ -175,7 +175,13 @@ import {
                   <!-- Thumbnail / Fallback Icon -->
                   @if (item.image) {
                     <div class="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 flex-shrink-0">
-                      <img [src]="item.image" [alt]="(item.name | localize) || 'Badge'" class="w-full h-full object-cover object-center" />
+                      <img
+                        [src]="item.image"
+                        [alt]="(item.name | localize) || 'Badge'"
+                        class="w-full h-full object-cover object-center"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
                   } @else {
                     <div

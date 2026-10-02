@@ -63,4 +63,13 @@ describe('Security Headers & CORS Middleware Integration', () => {
     // confirming the body parser passed it along without 413 error
     expect(res.status).toBe(404);
   });
+
+  it('should compress HTTP responses with gzip or deflate (SEO-001 / PRD Section 24.2)', async () => {
+    const res = await request(app)
+      .get('/api/docs.json')
+      .set('Accept-Encoding', 'gzip, deflate');
+
+    expect(res.status).toBe(200);
+    expect(res.headers['content-encoding']).toMatch(/gzip|deflate/);
+  });
 });

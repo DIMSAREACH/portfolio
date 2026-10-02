@@ -73,6 +73,8 @@ import {
                   [src]="featuredPost()!.coverImage"
                   [alt]="(featuredPost()!.title | localize) || 'Featured article'"
                   class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  decoding="async"
                 />
               } @else {
                 <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-500/10 to-purple-500/10 text-indigo-500">
