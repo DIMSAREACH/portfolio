@@ -20,7 +20,7 @@ import { SeoService } from '../../../core/services/seo.service';
       >
         Skip to main content
       </a>
-      <app-header></app-header>
+      <app-header class="sticky top-0 z-50 block w-full"></app-header>
       <main class="flex-1" id="main-content" tabindex="-1">
         <router-outlet></router-outlet>
       </main>

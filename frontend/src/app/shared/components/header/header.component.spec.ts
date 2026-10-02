@@ -102,4 +102,18 @@ describe('HeaderComponent', () => {
 
     expect(component.isMobileMenuOpen).toBe(false);
   });
+
+  it('should toggle isScrolled based on scroll position', () => {
+    expect(component.isScrolled()).toBe(false);
+
+    // Simulate scrolling past 10px
+    Object.defineProperty(window, 'scrollY', { value: 50, writable: true });
+    component.onWindowScroll();
+    expect(component.isScrolled()).toBe(true);
+
+    // Simulate scrolling back to top
+    window.scrollY = 0;
+    component.onWindowScroll();
+    expect(component.isScrolled()).toBe(false);
+  });
 });

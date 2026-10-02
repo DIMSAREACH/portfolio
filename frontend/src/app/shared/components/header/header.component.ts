@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
@@ -25,7 +25,8 @@ interface NavItem {
   ],
   template: `
     <header
-      class="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/70 dark:border-slate-800/70 transition-all duration-300 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.25)]"
+      [class.header-scrolled]="isScrolled()"
+      class="w-full backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/70 dark:border-slate-800/70 transition-all duration-300 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.25)]"
     >
       <div
         class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4"
@@ -170,7 +171,16 @@ export class HeaderComponent {
   private readonly portfolioService = inject(PortfolioService, { optional: true });
 
   public readonly isKhmer = this.languageService.isKhmer;
+  public readonly isScrolled = signal(false);
   public isMobileMenuOpen = false;
+
+  @HostListener('window:scroll')
+  public onWindowScroll(): void {
+    if (typeof window !== 'undefined') {
+      const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      this.isScrolled.set(scrollY > 10);
+    }
+  }
 
   public get cvDownloadUrl(): string {
     return this.portfolioService?.getCvDownloadUrl() ?? '/api/v1/cv/download';
