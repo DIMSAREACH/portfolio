@@ -1,6 +1,7 @@
 import { Component, HostListener, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 import { LanguageService } from '../../../core/services/language.service';
@@ -20,6 +21,7 @@ interface NavItem {
     CommonModule,
     RouterLink,
     RouterLinkActive,
+    ButtonModule,
     ThemeToggleComponent,
     LanguageSwitcherComponent,
   ],
@@ -70,10 +72,12 @@ interface NavItem {
         <!-- Right Side Controls (Resume, Language, Theme, Mobile Toggle) -->
         <div class="flex items-center gap-2 sm:gap-2.5">
           <a
+            pButton
+            rounded
             [href]="cvDownloadUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/60 hover:bg-gradient-to-r hover:from-indigo-600 hover:to-purple-600 hover:text-white dark:hover:text-white border border-indigo-200/80 dark:border-indigo-800/80 hover:border-transparent transition-all shadow-xs hover:shadow-indigo-500/25 hover:scale-105 active:scale-95"
+            class="hidden lg:inline-flex items-center gap-1.5 !text-xs !py-1.5 !px-4 shadow-sm hover:shadow-md transition-all hover:scale-105 active:scale-95"
             id="header-cv-btn"
             title="Download CV"
           >
@@ -86,44 +90,17 @@ interface NavItem {
 
           <!-- Mobile Hamburger Toggle Button -->
           <button
+            pButton
+            rounded
+            severity="secondary"
             type="button"
             (click)="toggleMobileMenu()"
             [attr.aria-expanded]="isMobileMenuOpen"
             aria-label="Toggle mobile menu"
-            class="md:hidden p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+            class="md:hidden !w-9 !h-9 !p-0 flex items-center justify-center !rounded-full border border-slate-200/80 dark:border-slate-700/80"
             id="mobile-menu-btn"
           >
-            @if (!isMobileMenuOpen) {
-              <!-- Hamburger icon -->
-              <svg
-                class="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            } @else {
-              <!-- Close icon -->
-              <svg
-                class="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            }
+            <i [class]="isMobileMenuOpen ? 'pi pi-times text-base' : 'pi pi-bars text-base'"></i>
           </button>
         </div>
       </div>
@@ -149,11 +126,13 @@ interface NavItem {
 
           <div class="pt-3 mt-2 border-t border-slate-100 dark:border-slate-800">
             <a
+              pButton
+              rounded
               [href]="cvDownloadUrl"
               target="_blank"
               rel="noopener noreferrer"
               (click)="closeMobileMenu()"
-              class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md shadow-indigo-500/25"
+              class="w-full flex items-center justify-center gap-2 py-2.5 !rounded-full shadow-md transition-all"
               id="mobile-cv-btn"
             >
               <i class="pi pi-download text-xs"></i>
