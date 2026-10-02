@@ -2,16 +2,25 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
+import { ScrollTopModule } from 'primeng/scrolltop';
+import { ArrowUp } from '@primeicons/angular/arrow-up';
 import { HeaderComponent, FooterComponent } from '../../../shared';
 import { SeoService } from '../../../core/services/seo.service';
 
 @Component({
   selector: 'app-public-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    ScrollTopModule,
+    ArrowUp,
+  ],
   template: `
     <div
-      class="min-h-screen flex flex-col bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300"
+      class="min-h-screen flex flex-col bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 relative"
     >
       <a
         href="#main-content"
@@ -25,6 +34,16 @@ import { SeoService } from '../../../core/services/seo.service';
         <router-outlet></router-outlet>
       </main>
       <app-footer></app-footer>
+
+      <!-- PrimeNG Scroll Top Floating Button -->
+      <p-scrolltop
+        [threshold]="150"
+        [buttonProps]="{ severity: 'contrast', raised: true, rounded: true, iconOnly: true }"
+      >
+        <ng-template #icon>
+          <svg data-p-icon="arrow-up"></svg>
+        </ng-template>
+      </p-scrolltop>
     </div>
   `,
 })

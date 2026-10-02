@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { PublicLayoutComponent } from './public-layout.component';
 
 describe('PublicLayoutComponent', () => {
@@ -9,7 +10,7 @@ describe('PublicLayoutComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PublicLayoutComponent],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), provideAnimationsAsync()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PublicLayoutComponent);
@@ -34,4 +35,10 @@ describe('PublicLayoutComponent', () => {
     expect(skipLink).toBeTruthy();
     expect(skipLink.getAttribute('href')).toBe('#main-content');
   });
+
+  it('should render PrimeNG p-scrolltop element', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('p-scrolltop')).toBeTruthy();
+  });
 });
+
