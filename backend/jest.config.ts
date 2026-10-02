@@ -9,6 +9,7 @@ const config: Config = {
     '^.+\\.tsx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
   verbose: true,
   forceExit: true,
   clearMocks: true,

@@ -4744,7 +4744,7 @@ frontend/src/sitemap.xml
 
 ## TEST-001 Configure Backend Testing Infrastructure
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 17
 - Dependencies:
@@ -4772,18 +4772,18 @@ backend/tests/helpers/testAuth.ts
 
 ### Acceptance Criteria
 
-- [ ] `npm test` runs successfully
-- [ ] In-memory MongoDB works for tests
+- [x] `npm test` runs successfully
+- [x] In-memory MongoDB works for tests
 
 ### Definition of Done
 
-- [ ] Test infrastructure ready
+- [x] Test infrastructure ready
 
 ---
 
 ## TEST-002 Write Backend Unit Tests
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 17
 - Dependencies:
@@ -4810,18 +4810,18 @@ backend/tests/unit/services/auth.service.test.ts
 
 ### Acceptance Criteria
 
-- [ ] All utility tests pass
-- [ ] Auth service tests pass
+- [x] All utility tests pass
+- [x] Auth service tests pass
 
 ### Definition of Done
 
-- [ ] Unit tests written and passing
+- [x] Unit tests written and passing
 
 ---
 
 ## TEST-003 Write Backend Integration Tests
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 17
 - Dependencies:
@@ -4849,20 +4849,20 @@ backend/tests/integration/public.test.ts
 
 ### Acceptance Criteria
 
-- [ ] Auth flow fully tested
-- [ ] CRUD operations tested
-- [ ] Validation tested
-- [ ] Backend coverage >= 60%
+- [x] Auth flow fully tested
+- [x] CRUD operations tested
+- [x] Validation tested
+- [x] Backend coverage >= 60%
 
 ### Definition of Done
 
-- [ ] Integration tests passing
+- [x] Integration tests passing
 
 ---
 
 ## TEST-004 Write Frontend Tests
 
-- Status: TODO
+- Status: DONE
 - Priority: P0
 - Phase: Phase 17
 - Dependencies:
@@ -4891,14 +4891,14 @@ frontend/src/app/features/public/contact/contact.component.spec.ts
 
 ### Acceptance Criteria
 
-- [ ] Service tests pass
-- [ ] Guard tests pass
-- [ ] Component tests pass
-- [ ] Frontend coverage >= 50%
+- [x] Service tests pass
+- [x] Guard tests pass
+- [x] Component tests pass
+- [x] Frontend coverage >= 50%
 
 ### Definition of Done
 
-- [ ] Frontend tests passing
+- [x] Frontend tests passing
 
 ---
 
@@ -5409,10 +5409,10 @@ DEPLOY-001 → DOC-001 → QA-001
 - [x] SEO-001 SEO and performance optimization
 
 ## Phase 17 — Testing
-- [ ] TEST-001 Backend test infrastructure
-- [ ] TEST-002 Backend unit tests
-- [ ] TEST-003 Backend integration tests
-- [ ] TEST-004 Frontend tests
+- [x] TEST-001 Backend test infrastructure
+- [x] TEST-002 Backend unit tests
+- [x] TEST-003 Backend integration tests
+- [x] TEST-004 Frontend tests
 
 ## Phase 18 — Security
 - [ ] SECURITY-001 Security verification
