@@ -9,6 +9,8 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideTranslateService, provideTranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader, provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
 import { authInterceptor, errorInterceptor } from './core/interceptors';
 
@@ -34,6 +36,15 @@ export const appConfig: ApplicationConfig = {
     provideTranslateHttpLoader({
       prefix: './assets/i18n/',
       suffix: '.json',
+    }),
+    providePrimeNG({
+      theme: {
+        preset: Aura,
+        options: {
+          darkModeSelector: '.dark',
+        },
+      },
+      ripple: true,
     }),
   ],
 };

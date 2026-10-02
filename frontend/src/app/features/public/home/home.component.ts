@@ -19,9 +19,32 @@ import {
   TruncatePipe,
 } from '../../../shared';
 
+// PrimeNG UI Modules
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { TagModule } from 'primeng/tag';
+import { ChipModule } from 'primeng/chip';
+import { TimelineModule } from 'primeng/timeline';
+import { TooltipModule } from 'primeng/tooltip';
+import { DividerModule } from 'primeng/divider';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { AvatarModule } from 'primeng/avatar';
+import { BadgeModule } from 'primeng/badge';
+
 export interface SkillCategoryGroup {
   categoryName: string;
   skills: Skill[];
+}
+
+export interface TimelineItem {
+  title: { en: string; kh: string } | string;
+  organization: { en: string; kh: string } | string;
+  period: string;
+  description?: { en: string; kh: string } | string;
+  technologies: string[];
+  icon: string;
+  color: string;
+  isCurrent?: boolean;
 }
 
 @Component({
@@ -33,6 +56,16 @@ export interface SkillCategoryGroup {
     SkeletonLoaderComponent,
     LocalizePipe,
     TruncatePipe,
+    ButtonModule,
+    CardModule,
+    TagModule,
+    ChipModule,
+    TimelineModule,
+    TooltipModule,
+    DividerModule,
+    ProgressBarModule,
+    AvatarModule,
+    BadgeModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -78,6 +111,29 @@ export class HomeComponent implements OnInit {
     return Array.from(groupsMap.entries()).map(([categoryName, skills]) => ({
       categoryName,
       skills,
+    }));
+  });
+
+  /**
+   * Interactive timeline items for Career Journey section
+   */
+  public readonly timelineEvents = computed<TimelineItem[]>(() => {
+    const exps = this.experiences();
+    return exps.map((exp, idx) => ({
+      title: exp.title,
+      organization: exp.organization,
+      period: `${this.formatDate(exp.startDate)} - ${
+        exp.isCurrent
+          ? this.isKhmer()
+            ? 'បច្ចុប្បន្ន'
+            : 'Present'
+          : this.formatDate(exp.endDate)
+      }`,
+      description: exp.description,
+      technologies: exp.technologies || [],
+      icon: exp.isCurrent ? 'pi pi-bolt' : 'pi pi-briefcase',
+      color: idx % 2 === 0 ? '#6366f1' : '#8b5cf6',
+      isCurrent: exp.isCurrent,
     }));
   });
 
@@ -135,11 +191,42 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  public getSocialIcon(platform: string): string {
+    const p = platform.toLowerCase();
+    if (p.includes('git')) return 'pi pi-github';
+    if (p.includes('link')) return 'pi pi-linkedin';
+    if (p.includes('twit') || p === 'x') return 'pi pi-twitter';
+    if (p.includes('tele')) return 'pi pi-send';
+    if (p.includes('face')) return 'pi pi-facebook';
+    if (p.includes('mail')) return 'pi pi-envelope';
+    if (p.includes('insta')) return 'pi pi-instagram';
+    return 'pi pi-globe';
+  }
+
   public formatYear(date: string | Date | undefined): string {
     if (!date) {
       return '';
     }
     const d = new Date(date);
     return isNaN(d.getFullYear()) ? String(date) : d.getFullYear().toString();
+  }
+
+  public formatDate(date: string | Date | undefined): string {
+    if (!date) return '';
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return String(date);
+    return d.toLocaleDateString(this.isKhmer() ? 'km-KH' : 'en-US', {
+      month: 'short',
+      year: 'numeric',
+    });
+  }
+
+  public getCategoryLabel(category: any): string {
+    if (!category) return '';
+    if (typeof category === 'string') return category;
+    if (category.name) {
+      return this.isKhmer() && category.name.kh ? category.name.kh : category.name.en || '';
+    }
+    return this.isKhmer() && category.kh ? category.kh : category.en || '';
   }
 }

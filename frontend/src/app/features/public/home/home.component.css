@@ -1,20 +1,153 @@
-/* Subtle background glow effect for hero section */
+/* Ambient Glows & Background Elements */
 .hero-glow {
   background: radial-gradient(
-    circle at 50% 30%,
-    rgba(99, 102, 241, 0.15) 0%,
-    rgba(168, 85, 247, 0.08) 35%,
-    transparent 70%
+    circle at 50% 25%,
+    rgba(99, 102, 241, 0.18) 0%,
+    rgba(168, 85, 247, 0.12) 35%,
+    rgba(236, 72, 153, 0.05) 55%,
+    transparent 75%
   );
 }
 
-/* Card hover elevation and glow */
-.project-card {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.3s ease;
+.bg-grid-pattern {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(99, 102, 241, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
 }
 
-.project-card:hover {
+:host-context(.dark) .bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Glassmorphism Card System */
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.04), 0 2px 8px -1px rgba(0, 0, 0, 0.02);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:host-context(.dark) .glass-card {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(51, 65, 85, 0.65);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.25), 0 2px 8px -1px rgba(0, 0, 0, 0.2);
+}
+
+.glass-card:hover {
   transform: translateY(-4px);
+  box-shadow: 0 20px 32px -8px rgba(99, 102, 241, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+  border-color: rgba(165, 180, 252, 0.6);
+}
+
+:host-context(.dark) .glass-card:hover {
+  box-shadow: 0 20px 32px -8px rgba(99, 102, 241, 0.25), 0 8px 16px -4px rgba(0, 0, 0, 0.4);
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+/* Floating Animations for Tech Badges */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+@keyframes floatReverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(8px) rotate(-1deg);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 5s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: floatReverse 6s ease-in-out infinite;
+}
+
+/* Gradient Borders & Accent Line */
+.gradient-border-mask {
+  position: relative;
+}
+.gradient-border-mask::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.6), rgba(236, 72, 153, 0.4), rgba(59, 130, 246, 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Project Image Zoom Effect */
+.project-img-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.project-img-wrapper img {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover .project-img-wrapper img {
+  transform: scale(1.05);
+}
+
+/* PrimeNG Timeline Refinements */
+:host ::ng-deep .p-timeline .p-timeline-event-opposite {
+  flex: 0 0 100px;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  :host ::ng-deep .p-timeline .p-timeline-event-opposite {
+    flex: 1;
+    padding: 0 1.5rem;
+  }
+}
+
+:host ::ng-deep .p-timeline .p-timeline-event-content {
+  padding: 0 1rem 2rem 1rem;
+}
+
+@media (min-width: 768px) {
+  :host ::ng-deep .p-timeline .p-timeline-event-content {
+    padding: 0 1.5rem 2.5rem 1.5rem;
+  }
+}
+
+/* Code Snippet Window */
+.code-window {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  background: #0d1117;
+  border: 1px solid #30363d;
+}
+
+/* PrimeNG Button Gradient Overrides */
+:host ::ng-deep .btn-gradient {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%) !important;
+  border: none !important;
+  color: white !important;
+  box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39) !important;
+  transition: all 0.3s ease !important;
+}
+
+:host ::ng-deep .btn-gradient:hover {
+  opacity: 0.95 !important;
+  transform: translateY(-1px) scale(1.02) !important;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45) !important;
 }
