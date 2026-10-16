@@ -55,7 +55,7 @@ import { AdminHeaderComponent } from '../admin-header/admin-header.component';
         ></app-admin-header>
 
         <!-- Dynamic Admin Content Router Outlet -->
-        <main class="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto" id="admin-main-content" tabindex="-1">
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 w-full min-w-0" id="admin-main-content" tabindex="-1">
           <router-outlet></router-outlet>
         </main>
       </div>
