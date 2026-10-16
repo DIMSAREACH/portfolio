@@ -27,7 +27,7 @@ import { Message } from '../../../../core/models';
     MenuModule,
   ],
   template: `
-    <header class="h-16 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 sticky top-0 z-30 transition-colors duration-300">
+    <header class="h-16 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 sticky top-0 z-40 transition-colors duration-300">
       <!-- Left: Mobile Menu Toggle, Desktop Collapse Toggle & Breadcrumbs -->
       <div class="flex items-center gap-3">
         <!-- Mobile Menu Toggle Button (Strictly Hidden on Desktop) -->
@@ -220,24 +220,87 @@ import { Message } from '../../../../core/models';
 
         <div class="h-5 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
 
-        <!-- User Avatar with PrimeNG Popup Account Menu -->
+        <!-- User Avatar with Profile Dropdown Menu -->
         <div class="relative flex items-center">
-          <p-menu #accountMenu [model]="accountMenuItems" [popup]="true" styleClass="w-52 text-xs" />
           <button
             type="button"
-            (click)="accountMenu.toggle($event)"
-            class="relative flex items-center rounded-full p-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 cursor-pointer transition-all hover:scale-105 active:scale-95 group"
+            (click)="toggleProfileMenu($event)"
+            class="relative flex items-center justify-center rounded-full p-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 cursor-pointer transition-all hover:scale-105 active:scale-95 group shadow-2xs"
             id="admin-account-avatar-btn"
             aria-label="Toggle user account menu"
             [title]="userName() + ' (' + userEmail() + ')'"
+            [attr.aria-expanded]="isProfileMenuOpen()"
           >
-            <p-avatar
-              [image]="userAvatar()"
-              shape="circle"
-              class="size-9 shrink-0 shadow-xs ring-2 ring-slate-200/80 dark:ring-slate-700/80 group-hover:ring-indigo-500 dark:group-hover:ring-indigo-400 transition-all"
-            />
+            <!-- Circular Avatar Only (matching design) -->
+            <div class="relative size-10 rounded-full p-0.5 ring-2 ring-slate-200/90 dark:ring-slate-700/80 group-hover:ring-indigo-500 dark:group-hover:ring-indigo-400 transition-all bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+              <img
+                [src]="userAvatar()"
+                [alt]="userName()"
+                class="w-full h-full rounded-full object-cover"
+              />
+            </div>
             <span class="sr-only">{{ userName() }} {{ userEmail() }}</span>
           </button>
+
+          <!-- Profile Dropdown Menu (Solid 100% Opaque, System-Specific Actions) -->
+          @if (isProfileMenuOpen()) {
+            <div
+              class="absolute right-0 top-full mt-2 w-64 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.18)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.7)] z-[100] p-1.5 animate-fadeIn"
+              id="admin-profile-dropdown"
+              role="menu"
+            >
+              <!-- User Info Card Header -->
+              <div class="px-3.5 py-3 mb-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700/80 flex items-center gap-3">
+                <div class="relative size-10 rounded-full p-0.5 ring-2 ring-indigo-500/30 dark:ring-indigo-400/30 shrink-0 overflow-hidden bg-white dark:bg-slate-900">
+                  <img
+                    [src]="userAvatar()"
+                    [alt]="userName()"
+                    class="w-full h-full rounded-full object-cover"
+                  />
+                </div>
+                <div class="flex flex-col min-w-0 text-left">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ userName() }}</span>
+                    <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-800/50">Admin</span>
+                  </div>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 truncate font-mono mt-0.5">{{ userEmail() }}</span>
+                </div>
+              </div>
+
+              <!-- Menu Groups (My Account, Portfolio CMS, Appearance, Session) -->
+              @for (group of accountMenuItems; track $index) {
+                @if (group.separator) {
+                  <div class="my-1 border-t border-slate-100 dark:border-slate-800"></div>
+                } @else if (group.items && group.items.length > 0) {
+                  <div class="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500" [class.font-khmer]="isKhmer()">
+                    {{ group.label }}
+                  </div>
+                  @for (item of group.items; track item.label) {
+                    <button
+                      type="button"
+                      (click)="onMenuItemClick(item)"
+                      class="w-full flex items-center justify-between gap-2.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-left focus:outline-none group/item"
+                      [class.hover:!text-rose-600]="item.icon === 'pi pi-sign-out'"
+                      [class.dark:hover:!text-rose-400]="item.icon === 'pi pi-sign-out'"
+                      [class.hover:!bg-rose-50]="item.icon === 'pi pi-sign-out'"
+                      [class.dark:hover:!bg-rose-950/40]="item.icon === 'pi pi-sign-out'"
+                      [class.font-khmer]="isKhmer()"
+                    >
+                      <div class="flex items-center gap-2.5 min-w-0">
+                        <i [class]="item.icon" class="text-xs text-slate-400 dark:text-slate-500 group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-400 w-4 text-center shrink-0 transition-colors" [class.group-hover/item:!text-rose-600]="item.icon === 'pi pi-sign-out'"></i>
+                        <span class="truncate">{{ item.label }}</span>
+                      </div>
+                      @if (item.badge) {
+                        <span class="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white shadow-2xs">
+                          {{ item.badge }}
+                        </span>
+                      }
+                    </button>
+                  }
+                }
+              }
+            </div>
+          }
         </div>
 
         <!-- Logout Button -->
@@ -271,6 +334,7 @@ export class AdminHeaderComponent implements OnInit {
   @Output() public toggleCollapse = new EventEmitter<void>();
 
   public readonly isNotificationsOpen = signal<boolean>(false);
+  public readonly isProfileMenuOpen = signal<boolean>(false);
   public readonly unreadCount = signal<number>(0);
   public readonly recentMessages = signal<Message[]>([]);
   public accountMenuItems: MenuItem[] = [];
@@ -325,12 +389,49 @@ export class AdminHeaderComponent implements OnInit {
     ) {
       this.isNotificationsOpen.set(false);
     }
+    if (
+      this.isProfileMenuOpen() &&
+      target &&
+      !target.closest('#admin-account-avatar-btn') &&
+      !target.closest('#admin-profile-dropdown')
+    ) {
+      this.isProfileMenuOpen.set(false);
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  public onEscapeKey(): void {
+    this.isNotificationsOpen.set(false);
+    this.isProfileMenuOpen.set(false);
+  }
+
+  public toggleProfileMenu(event?: MouseEvent): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    const next = !this.isProfileMenuOpen();
+    this.isProfileMenuOpen.set(next);
+    if (next) {
+      this.isNotificationsOpen.set(false);
+    }
+  }
+
+  public closeProfileMenu(): void {
+    this.isProfileMenuOpen.set(false);
+  }
+
+  public onMenuItemClick(item: MenuItem): void {
+    this.closeProfileMenu();
+    if (item.command) {
+      item.command({ item });
+    }
   }
 
   public toggleNotifications(): void {
     const next = !this.isNotificationsOpen();
     this.isNotificationsOpen.set(next);
     if (next) {
+      this.isProfileMenuOpen.set(false);
       this.loadNotifications();
     }
   }
@@ -403,26 +504,27 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   public initAccountMenu(kh = false): void {
+    const unread = this.unreadCount();
     this.accountMenuItems = [
       {
-        label: kh ? 'គណនីរបស់ខ្ញុំ' : 'My Account',
+        label: kh ? 'គណនី & ប្រវត្តិរូប' : 'My Account',
         items: [
           {
-            label: kh ? 'ព័ត៌មានផ្ទាល់ខ្លួន' : 'Profile',
+            label: kh ? 'ព័ត៌មានផ្ទាល់ខ្លួន' : 'Profile & Bio',
             icon: 'pi pi-user',
             command: () => {
               this.router.navigate(['/admin/profile']);
             },
           },
           {
-            label: kh ? 'ការទូទាត់' : 'Billing',
-            icon: 'pi pi-credit-card',
+            label: kh ? 'គ្រប់គ្រង CV & ប្រវត្តិរូបសង្ខេប' : 'CV / Resume Manager',
+            icon: 'pi pi-file',
             command: () => {
-              this.router.navigate(['/admin/settings']);
+              this.router.navigate(['/admin/cv']);
             },
           },
           {
-            label: kh ? 'ការកំណត់' : 'Settings',
+            label: kh ? 'ការកំណត់ប្រព័ន្ធ' : 'System Settings',
             icon: 'pi pi-cog',
             command: () => {
               this.router.navigate(['/admin/settings']);
@@ -432,45 +534,60 @@ export class AdminHeaderComponent implements OnInit {
       },
       { separator: true },
       {
-        label: kh ? 'ការជូនដំណឹង' : 'Notifications',
+        label: kh ? 'គ្រប់គ្រងផលប័ត្រ' : 'Portfolio CMS',
         items: [
           {
-            label: kh ? 'បើកការជូនដំណឹង' : 'Enable notifications',
-            icon: 'pi pi-blank',
+            label: kh ? 'គ្រប់គ្រងគម្រោង' : 'Projects Showcase',
+            icon: 'pi pi-folder',
             command: () => {
-              this.toggleNotifications();
+              this.router.navigate(['/admin/projects']);
             },
           },
           {
-            label: kh ? 'ចាក់សំឡេង' : 'Play sound',
-            icon: 'pi pi-blank',
+            label: kh ? 'ជំនាញ & បច្ចេកវិទ្យា' : 'Skills & Tech Stack',
+            icon: 'pi pi-bolt',
             command: () => {
-              this.playNotificationSound();
+              this.router.navigate(['/admin/skills']);
+            },
+          },
+          {
+            label: kh ? 'សារសាកសួរពីភ្ញៀវ' : 'Client Inquiries',
+            icon: 'pi pi-envelope',
+            badge: unread > 0 ? String(unread) : undefined,
+            command: () => {
+              this.router.navigate(['/admin/messages']);
             },
           },
         ],
       },
       { separator: true },
       {
-        label: kh ? 'រូបរាង' : 'Appearance',
+        label: kh ? 'ប្រព័ន្ធ & រូបរាង' : 'Appearance',
         items: [
           {
-            label: kh ? 'ពន្លឺ' : 'Light',
-            icon: 'pi pi-blank',
+            label: kh ? 'មើលគេហទំព័រផ្ទាល់' : 'View Live Portfolio',
+            icon: 'pi pi-external-link',
+            command: () => {
+              window.open('/', '_blank');
+            },
+          },
+          {
+            label: kh ? 'ពន្លឺ' : 'Light Mode',
+            icon: 'pi pi-sun',
             command: () => {
               this.themeService?.setTheme('light');
             },
           },
           {
-            label: kh ? 'ងងឹត' : 'Dark',
-            icon: 'pi pi-blank',
+            label: kh ? 'ងងឹត' : 'Dark Mode',
+            icon: 'pi pi-moon',
             command: () => {
               this.themeService?.setTheme('dark');
             },
           },
           {
-            label: kh ? 'ប្រព័ន្ធ' : 'System',
-            icon: 'pi pi-blank',
+            label: kh ? 'ប្រព័ន្ធ' : 'System Theme',
+            icon: 'pi pi-desktop',
             command: () => {
               this.setSystemTheme();
             },
@@ -482,7 +599,7 @@ export class AdminHeaderComponent implements OnInit {
         label: kh ? 'សម័យការ' : 'Session',
         items: [
           {
-            label: kh ? 'ចាកចេញ' : 'Logout',
+            label: kh ? 'ចាកចេញពីប្រព័ន្ធ' : 'Sign Out / Logout',
             icon: 'pi pi-sign-out',
             command: () => {
               this.onLogout();

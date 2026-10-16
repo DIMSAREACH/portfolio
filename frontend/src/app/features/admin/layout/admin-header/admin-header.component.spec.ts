@@ -121,15 +121,46 @@ describe('AdminHeaderComponent', () => {
     expect(badge.textContent.trim()).toBe('5');
   });
 
-  it('should initialize account menu items with My Account, Notifications, and Appearance', () => {
+  it('should initialize account menu items with My Account, Portfolio CMS, Appearance, and Session', () => {
     expect(component.accountMenuItems.length).toBeGreaterThanOrEqual(4);
     const labels = component.accountMenuItems.map((item) => item.label).filter(Boolean);
     expect(labels).toContain('My Account');
-    expect(labels).toContain('Notifications');
+    expect(labels).toContain('Portfolio CMS');
     expect(labels).toContain('Appearance');
     expect(labels).toContain('Session');
 
     const avatarBtn = fixture.nativeElement.querySelector('#admin-account-avatar-btn');
     expect(avatarBtn).toBeTruthy();
+  });
+
+  it('should toggle profile menu when avatar button is clicked and close on escape', () => {
+    const avatarBtn: HTMLButtonElement = fixture.nativeElement.querySelector('#admin-account-avatar-btn');
+    expect(component.isProfileMenuOpen()).toBe(false);
+
+    avatarBtn.click();
+    fixture.detectChanges();
+    expect(component.isProfileMenuOpen()).toBe(true);
+
+    const dropdown = fixture.nativeElement.querySelector('#admin-profile-dropdown');
+    expect(dropdown).toBeTruthy();
+
+    // Trigger escape
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    fixture.detectChanges();
+    expect(component.isProfileMenuOpen()).toBe(false);
+  });
+
+  it('should close profile menu when a menu item is clicked', () => {
+    component.isProfileMenuOpen.set(true);
+    fixture.detectChanges();
+
+    const firstGroup = component.accountMenuItems[0];
+    const firstItem = firstGroup.items?.[0];
+    expect(firstItem).toBeDefined();
+
+    if (firstItem) {
+      component.onMenuItemClick(firstItem);
+      expect(component.isProfileMenuOpen()).toBe(false);
+    }
   });
 });
