@@ -141,7 +141,9 @@ export class SkillListComponent implements OnInit {
       label: 'Created',
       type: 'date',
       sortable: true,
-      width: '130px',
+      align: 'center',
+      width: '140px',
+      nowrap: true,
     },
   ];
 

@@ -115,7 +115,8 @@ export class EducationListComponent implements OnInit {
       label: 'Years',
       sortable: false,
       align: 'center',
-      width: '140px',
+      width: '150px',
+      nowrap: true,
       formatter: (_val, row: Record<string, unknown>) => {
         const start = row['startYear'] || '—';
         const end = row['endYear'] ? String(row['endYear']) : 'Present';
@@ -128,6 +129,7 @@ export class EducationListComponent implements OnInit {
       sortable: false,
       align: 'center',
       width: '120px',
+      nowrap: true,
       formatter: (val) => String(val || '—'),
     },
     {
@@ -136,6 +138,7 @@ export class EducationListComponent implements OnInit {
       sortable: true,
       align: 'center',
       width: '80px',
+      nowrap: true,
     },
   ];
 

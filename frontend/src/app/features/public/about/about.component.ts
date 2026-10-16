@@ -276,7 +276,7 @@ import { AnimateOnScrollModule } from 'primeng/animateonscroll';
                             <span>{{ edu.institution | localize }}</span>
                           </p>
                         </div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/50">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/50 whitespace-nowrap shrink-0">
                           {{ edu.startYear }} — {{ edu.endYear || (isKhmer() ? 'បច្ចុប្បន្ន' : 'Present') }}
                         </span>
                       </div>

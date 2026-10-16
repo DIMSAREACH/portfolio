@@ -141,7 +141,9 @@ export class CertificationListComponent implements OnInit {
       label: 'Issued',
       type: 'date',
       sortable: true,
-      width: '120px',
+      align: 'center',
+      width: '130px',
+      nowrap: true,
     },
     {
       key: 'isVisible',
@@ -150,6 +152,7 @@ export class CertificationListComponent implements OnInit {
       sortable: true,
       align: 'center',
       width: '110px',
+      nowrap: true,
       badgeClassMap: {
         true: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800',
         false: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700',

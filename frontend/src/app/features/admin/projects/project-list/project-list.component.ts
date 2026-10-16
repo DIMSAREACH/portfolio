@@ -132,6 +132,9 @@ export class ProjectListComponent implements OnInit {
       label: 'Created',
       type: 'date',
       sortable: true,
+      align: 'center',
+      width: '140px',
+      nowrap: true,
     },
   ];
 

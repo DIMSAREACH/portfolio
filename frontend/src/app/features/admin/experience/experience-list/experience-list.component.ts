@@ -120,6 +120,7 @@ export class ExperienceListComponent implements OnInit {
       sortable: true,
       align: 'center',
       width: '120px',
+      nowrap: true,
       badgeClassMap: {
         work: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800',
         volunteer: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800',
@@ -135,6 +136,9 @@ export class ExperienceListComponent implements OnInit {
       key: 'period',
       label: 'Timeline',
       sortable: false,
+      align: 'center',
+      width: '180px',
+      nowrap: true,
       formatter: (_val, row: Record<string, unknown>) => {
         const start = row['startDate'] ? new Date(String(row['startDate'])).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : '—';
         const isCurrent = row['isCurrent'] === true;
@@ -153,6 +157,7 @@ export class ExperienceListComponent implements OnInit {
       sortable: true,
       align: 'center',
       width: '110px',
+      nowrap: true,
       badgeClassMap: {
         true: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800',
         false: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700',
@@ -165,6 +170,7 @@ export class ExperienceListComponent implements OnInit {
       sortable: true,
       align: 'center',
       width: '80px',
+      nowrap: true,
     },
   ];
 

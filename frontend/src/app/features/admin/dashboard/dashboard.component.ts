@@ -299,11 +299,11 @@ import { DashboardStats } from '../../../core/models';
                         <h3 class="text-sm font-semibold text-slate-900 dark:text-white truncate">
                           {{ msg.name }}
                         </h3>
-                        <span class="text-[11px] text-slate-400 shrink-0 font-mono">
+                        <span class="text-[11px] text-slate-400 shrink-0 font-sans whitespace-nowrap">
                           {{ formatDate(msg.createdAt) }}
                         </span>
                       </div>
-                      <div class="text-xs text-slate-500 dark:text-slate-400 truncate font-mono">
+                      <div class="text-xs text-slate-500 dark:text-slate-400 truncate font-sans">
                         {{ msg.email }}
                       </div>
                       <div class="text-xs font-medium text-slate-800 dark:text-slate-200 mt-1 truncate">

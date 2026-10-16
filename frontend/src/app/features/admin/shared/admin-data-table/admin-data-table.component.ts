@@ -11,6 +11,7 @@ export interface TableColumn<T = Record<string, unknown>> {
   badgeClassMap?: Record<string, string>;
   align?: 'left' | 'center' | 'right';
   width?: string;
+  nowrap?: boolean;
   formatter?: (value: unknown, row: T) => string;
 }
 
@@ -97,7 +98,7 @@ export interface SortEvent {
               @for (col of columns; track col.key) {
                 <th
                   scope="col"
-                  class="px-6 py-3.5 select-none"
+                  class="px-6 py-3.5 select-none whitespace-nowrap"
                   [style.width]="col.width"
                   [class.cursor-pointer]="col.sortable"
                   [class.text-center]="col.align === 'center'"
@@ -127,7 +128,7 @@ export interface SortEvent {
                 </th>
               }
               @if (showActions) {
-                <th scope="col" class="px-6 py-3.5 text-right w-32" [class.font-khmer]="isKhmer()">
+                <th scope="col" class="px-6 py-3.5 text-right w-32 whitespace-nowrap" [class.font-khmer]="isKhmer()">
                   {{ isKhmer() ? 'សកម្មភាព' : 'Actions' }}
                 </th>
               }
@@ -139,7 +140,7 @@ export interface SortEvent {
               @for (row of [1, 2, 3, 4, 5]; track row) {
                 <tr class="animate-pulse">
                   @for (col of columns; track col.key) {
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4" [style.width]="col.width">
                       <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
                     </td>
                   }
@@ -157,13 +158,15 @@ export interface SortEvent {
                   @for (col of columns; track col.key) {
                     <td
                       class="px-6 py-4 text-slate-700 dark:text-slate-300 align-middle"
+                      [style.width]="col.width"
                       [class.text-center]="col.align === 'center'"
                       [class.text-right]="col.align === 'right'"
+                      [class.whitespace-nowrap]="col.nowrap || col.type === 'date' || col.type === 'badge' || col.type === 'boolean'"
                     >
                       <!-- Badge Type -->
                       @if (col.type === 'badge') {
                         <span
-                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold"
+                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap"
                           [ngClass]="getBadgeClass(col, getItemValue(item, col.key))"
                         >
                           {{ formatCellValue(col, item) }}
@@ -189,13 +192,13 @@ export interface SortEvent {
                       }
                       <!-- Date Type -->
                       @else if (col.type === 'date') {
-                        <span class="text-slate-500 dark:text-slate-400">
+                        <span class="text-slate-500 dark:text-slate-400 whitespace-nowrap">
                           {{ formatDate(getItemValue(item, col.key)) }}
                         </span>
                       }
                       <!-- Boolean Type -->
                       @else if (col.type === 'boolean') {
-                        <span class="inline-flex items-center gap-1.5 font-medium" [class.font-khmer]="isKhmer()">
+                        <span class="inline-flex items-center gap-1.5 font-medium whitespace-nowrap" [class.font-khmer]="isKhmer()">
                           <span
                             class="w-2 h-2 rounded-full"
                             [class.bg-emerald-500]="!!getItemValue(item, col.key)"
@@ -207,7 +210,7 @@ export interface SortEvent {
                       }
                       <!-- Default / Text Type -->
                       @else {
-                        <span class="font-medium text-slate-900 dark:text-white">
+                        <span class="font-medium text-slate-900 dark:text-white" [class.whitespace-nowrap]="col.nowrap">
                           {{ formatCellValue(col, item) }}
                         </span>
                       }

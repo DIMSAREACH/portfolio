@@ -319,14 +319,14 @@ import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 
                   <!-- Date Range & Duration Badges -->
                   <div class="flex sm:flex-col items-start sm:items-end gap-1.5 flex-shrink-0 self-start">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs sm:text-sm font-semibold border border-slate-200/70 dark:border-slate-700/70 shadow-2xs">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs sm:text-sm font-semibold border border-slate-200/70 dark:border-slate-700/70 shadow-2xs whitespace-nowrap shrink-0">
                       <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                       <span>{{ formatDateRange(exp.startDate, exp.endDate, exp.isCurrent) }}</span>
                     </span>
 
-                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-indigo-50/80 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 text-[11px] font-semibold border border-indigo-100 dark:border-indigo-900/40">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-indigo-50/80 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 text-[11px] font-semibold border border-indigo-100 dark:border-indigo-900/40 whitespace-nowrap shrink-0">
                       <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
