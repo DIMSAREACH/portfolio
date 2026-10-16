@@ -7,6 +7,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { LabelModule } from 'primeng/label';
 import { AuthService } from '../../../core/services/auth.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { AlertMessageComponent, MessageSeverity } from '../../../shared/components/alert-message/alert-message.component';
 import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/theme-toggle.component';
 
 @Component({
@@ -20,6 +22,7 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
     ButtonModule,
     InputTextModule,
     LabelModule,
+    AlertMessageComponent,
     ThemeToggleComponent,
   ],
   styles: [
@@ -133,14 +136,16 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
           header="Welcome back"
           subheader="Sign in with your email to continue."
         >
-          <!-- Error Alert Banner -->
+          <!-- Alert Banner using AlertMessageComponent with Dynamic Severity -->
           @if (errorMessage()) {
-            <div
-              id="login-error-alert"
-              class="mb-4 p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-200 text-xs flex items-start gap-2.5 animate-fadeIn"
-            >
-              <i class="pi pi-exclamation-triangle text-rose-500 text-sm shrink-0 mt-0.5"></i>
-              <span class="font-medium leading-relaxed">{{ errorMessage() }}</span>
+            <div id="login-error-alert" class="mb-4">
+              <app-alert-message
+                [severity]="alertSeverity()"
+                [summary]="alertSummary()"
+                [text]="errorMessage()!"
+                [closable]="true"
+                (closed)="clearAlert()"
+              />
             </div>
           }
 
@@ -180,10 +185,10 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
                   type="button"
                   pButton
                   variant="link"
-                  (click)="togglePasswordVisibility()"
+                  (click)="onForgotPassword()"
                   class="!p-0 !text-xs !font-semibold !text-indigo-600 dark:!text-indigo-400 hover:underline cursor-pointer"
                 >
-                  {{ showPassword() ? 'Hide password' : 'Forgot password?' }}
+                  Forgot password?
                 </button>
               </div>
               <div class="relative">
@@ -283,12 +288,15 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
   public readonly loginForm: FormGroup;
   public readonly isLoading = signal<boolean>(false);
   public readonly errorMessage = signal<string | null>(null);
+  public readonly alertSeverity = signal<MessageSeverity>('error');
+  public readonly alertSummary = signal<string>('Authentication Failed');
   public readonly showPassword = signal<boolean>(false);
 
   constructor() {
@@ -323,18 +331,44 @@ export class LoginComponent {
     this.showPassword.update((val) => !val);
   }
 
+  public setAlert(message: string, severity: MessageSeverity = 'error', summary = 'Authentication Notice'): void {
+    this.alertSeverity.set(severity);
+    this.alertSummary.set(summary);
+    this.errorMessage.set(message);
+  }
+
+  public clearAlert(): void {
+    this.errorMessage.set(null);
+  }
+
   public fillDemoCredentials(): void {
     this.loginForm.patchValue({
       email: 'admin@portfolio.dev',
       password: 'Admin@123456',
     });
+    this.clearAlert();
+    this.notificationService.showInfo('Demo admin credentials applied.', 'Autofill');
+  }
+
+  public onForgotPassword(): void {
+    this.setAlert(
+      'Use the default admin credentials provided below to access the CMS.',
+      'info',
+      'Account Assistance',
+    );
+    this.notificationService.showSecondary(
+      'Default admin credentials are displayed below. Autofill to sign in.',
+      'Password Assistance',
+    );
   }
 
   public onSubmit(): void {
-    this.errorMessage.set(null);
+    this.clearAlert();
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      this.setAlert('Please enter both your email address and password.', 'warn', 'Validation Required');
+      this.notificationService.showWarning('Please enter both your email address and password.', 'Validation Required');
       return;
     }
 
@@ -344,13 +378,15 @@ export class LoginComponent {
     this.authService.login({ email: email.trim(), password }).subscribe({
       next: () => {
         this.isLoading.set(false);
+        this.notificationService.showSuccess('Welcome back, Admin! Redirecting to CMS...', 'Authentication Successful');
         const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/admin/dashboard';
         this.router.navigateByUrl(returnUrl);
       },
       error: (err) => {
         this.isLoading.set(false);
         const msg = err?.error?.message || err?.message || 'Invalid email or password. Please try again.';
-        this.errorMessage.set(msg);
+        this.setAlert(msg, 'error', 'Authentication Failed');
+        this.notificationService.showError(msg, 'Authentication Failed');
       },
     });
   }

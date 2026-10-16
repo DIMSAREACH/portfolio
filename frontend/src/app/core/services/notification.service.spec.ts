@@ -77,6 +77,39 @@ describe('NotificationService', () => {
     });
   });
 
+  it('should emit secondary toast with severity secondary', () => {
+    service.secondary('Secondary notice');
+
+    expect(messageServiceMock.add).toHaveBeenCalledWith({
+      severity: 'secondary',
+      summary: 'Notice',
+      detail: 'Secondary notice',
+      life: 4000,
+    });
+  });
+
+  it('should emit contrast toast with severity contrast', () => {
+    service.contrast('High contrast notice');
+
+    expect(messageServiceMock.add).toHaveBeenCalledWith({
+      severity: 'contrast',
+      summary: 'Attention',
+      detail: 'High contrast notice',
+      life: 5000,
+    });
+  });
+
+  it('should dispatch correct toast via notify()', () => {
+    service.notify('warn', 'Dynamic warning', 'Alert');
+
+    expect(messageServiceMock.add).toHaveBeenCalledWith({
+      severity: 'warn',
+      summary: 'Alert',
+      detail: 'Dynamic warning',
+      life: 5000,
+    });
+  });
+
   it('should pass custom ToastMessageOptions to showToast', () => {
     service.showToast({
       severity: 'success',

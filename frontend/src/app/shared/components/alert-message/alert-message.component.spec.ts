@@ -39,4 +39,43 @@ describe('AlertMessageComponent', () => {
     expect(component.visible).toBe(false);
     expect(closeSpy).toHaveBeenCalled();
   });
+
+  it('should resolve effectiveSeverity from type or severity input', () => {
+    component.severity = 'error';
+    expect(component.effectiveSeverity).toBe('error');
+
+    component.type = 'warn';
+    expect(component.effectiveSeverity).toBe('warn');
+  });
+
+  it('should map proper icons for each severity', () => {
+    component.severity = 'success';
+    expect(component.effectiveIcon).toBe('pi pi-check-circle');
+
+    component.severity = 'info';
+    expect(component.effectiveIcon).toBe('pi pi-info-circle');
+
+    component.severity = 'warn';
+    expect(component.effectiveIcon).toBe('pi pi-exclamation-triangle');
+
+    component.severity = 'error';
+    expect(component.effectiveIcon).toBe('pi pi-times-circle');
+
+    component.severity = 'secondary';
+    expect(component.effectiveIcon).toBe('pi pi-bell');
+
+    component.severity = 'contrast';
+    expect(component.effectiveIcon).toBe('pi pi-shield');
+
+    component.icon = 'pi pi-custom';
+    expect(component.effectiveIcon).toBe('pi pi-custom');
+  });
+
+  it('should support show() and hide() programmatically', () => {
+    component.hide();
+    expect(component.visible).toBe(false);
+
+    component.show();
+    expect(component.visible).toBe(true);
+  });
 });

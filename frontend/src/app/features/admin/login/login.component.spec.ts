@@ -3,6 +3,7 @@ import { provideRouter, Router, ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { LoginComponent } from './login.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import { AuthResponse, ApiResponse } from '../../../core/models';
 
 describe('Admin LoginComponent', () => {
@@ -12,6 +13,14 @@ describe('Admin LoginComponent', () => {
 
   let authServiceMock: {
     login: ReturnType<typeof vi.fn>;
+  };
+
+  let notificationServiceMock: {
+    showSuccess: ReturnType<typeof vi.fn>;
+    showError: ReturnType<typeof vi.fn>;
+    showWarning: ReturnType<typeof vi.fn>;
+    showInfo: ReturnType<typeof vi.fn>;
+    showSecondary: ReturnType<typeof vi.fn>;
   };
 
   const mockAuthResponse: ApiResponse<AuthResponse> = {
@@ -36,11 +45,20 @@ describe('Admin LoginComponent', () => {
       login: vi.fn().mockReturnValue(of(mockAuthResponse)),
     };
 
+    notificationServiceMock = {
+      showSuccess: vi.fn(),
+      showError: vi.fn(),
+      showWarning: vi.fn(),
+      showInfo: vi.fn(),
+      showSecondary: vi.fn(),
+    };
+
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
       providers: [
         provideRouter([]),
         { provide: AuthService, useValue: authServiceMock },
+        { provide: NotificationService, useValue: notificationServiceMock },
         {
           provide: ActivatedRoute,
           useValue: {
@@ -145,10 +163,57 @@ describe('Admin LoginComponent', () => {
 
     expect(component.isLoading()).toBe(false);
     expect(component.errorMessage()).toBe('Invalid credentials');
+    expect(component.alertSeverity()).toBe('error');
+    expect(notificationServiceMock.showError).toHaveBeenCalledWith('Invalid credentials', 'Authentication Failed');
     expect(router.navigateByUrl).not.toHaveBeenCalled();
 
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('#login-error-alert')?.textContent).toContain('Invalid credentials');
+  });
+
+  it('should display warning message and emit warning toast on invalid submit', () => {
+    component.onSubmit();
+
+    expect(component.alertSeverity()).toBe('warn');
+    expect(component.errorMessage()).toBe('Please enter both your email address and password.');
+    expect(notificationServiceMock.showWarning).toHaveBeenCalledWith(
+      'Please enter both your email address and password.',
+      'Validation Required',
+    );
+  });
+
+  it('should emit success toast on successful authentication', () => {
+    component.loginForm.setValue({
+      email: 'admin@example.com',
+      password: 'password123',
+    });
+
+    component.onSubmit();
+
+    expect(notificationServiceMock.showSuccess).toHaveBeenCalledWith(
+      'Welcome back, Admin! Redirecting to CMS...',
+      'Authentication Successful',
+    );
+  });
+
+  it('should emit info toast on autofill demo credentials', () => {
+    component.fillDemoCredentials();
+
+    expect(notificationServiceMock.showInfo).toHaveBeenCalledWith(
+      'Demo admin credentials applied.',
+      'Autofill',
+    );
+  });
+
+  it('should set info alert and emit secondary toast on forgot password', () => {
+    component.onForgotPassword();
+
+    expect(component.alertSeverity()).toBe('info');
+    expect(component.errorMessage()).toContain('default admin credentials');
+    expect(notificationServiceMock.showSecondary).toHaveBeenCalledWith(
+      'Default admin credentials are displayed below. Autofill to sign in.',
+      'Password Assistance',
+    );
   });
 });
