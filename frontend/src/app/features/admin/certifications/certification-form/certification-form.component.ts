@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Certification, CertificationType } from '../../../../core/models';
+import { DatePickerModule } from 'primeng/datepicker';
 import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
 
 @Component({
@@ -14,6 +15,7 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
     CommonModule,
     ReactiveFormsModule,
     RouterLink,
+    DatePickerModule,
     BilingualFieldComponent,
     ImageUploadComponent,
   ],
@@ -127,11 +129,17 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
               <label for="cert-issue-date" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Issue Date <span class="text-rose-500 font-bold">*</span>
               </label>
-              <input
-                id="cert-issue-date"
-                type="date"
+              <p-datepicker
+                inputId="cert-issue-date"
                 formControlName="issueDate"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                dateFormat="yy-mm-dd"
+                [showIcon]="true"
+                iconDisplay="input"
+                [showButtonBar]="true"
+                appendTo="body"
+                placeholder="YYYY-MM-DD"
+                styleClass="w-full"
+                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
               @if (isFieldInvalid('issueDate')) {
                 <p class="text-[11px] text-rose-500 mt-1 font-medium">Issue date is required.</p>
@@ -143,11 +151,17 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
               <label for="cert-exp-date" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Expiration Date (Leave blank if lifetime/no expiry)
               </label>
-              <input
-                id="cert-exp-date"
-                type="date"
+              <p-datepicker
+                inputId="cert-exp-date"
                 formControlName="expirationDate"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                dateFormat="yy-mm-dd"
+                [showIcon]="true"
+                iconDisplay="input"
+                [showButtonBar]="true"
+                appendTo="body"
+                placeholder="YYYY-MM-DD"
+                styleClass="w-full"
+                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
 

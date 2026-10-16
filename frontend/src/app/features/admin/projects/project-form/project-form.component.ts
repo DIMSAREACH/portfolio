@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Category, Project } from '../../../../core/models';
+import { DatePickerModule } from 'primeng/datepicker';
 import {
   BilingualFieldComponent,
   ImageUploadComponent,
@@ -18,6 +19,7 @@ import {
     ReactiveFormsModule,
     FormsModule,
     RouterLink,
+    DatePickerModule,
     BilingualFieldComponent,
     ImageUploadComponent,
   ],
@@ -320,11 +322,17 @@ import {
               <label for="project-start-date-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Start Date
               </label>
-              <input
-                id="project-start-date-input"
-                type="date"
+              <p-datepicker
+                inputId="project-start-date-input"
                 formControlName="startDate"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                dateFormat="yy-mm-dd"
+                [showIcon]="true"
+                iconDisplay="input"
+                [showButtonBar]="true"
+                appendTo="body"
+                placeholder="YYYY-MM-DD"
+                styleClass="w-full"
+                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
 
@@ -332,11 +340,17 @@ import {
               <label for="project-completion-date-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Completion Date
               </label>
-              <input
-                id="project-completion-date-input"
-                type="date"
+              <p-datepicker
+                inputId="project-completion-date-input"
                 formControlName="completionDate"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                dateFormat="yy-mm-dd"
+                [showIcon]="true"
+                iconDisplay="input"
+                [showButtonBar]="true"
+                appendTo="body"
+                placeholder="YYYY-MM-DD"
+                styleClass="w-full"
+                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
           </div>

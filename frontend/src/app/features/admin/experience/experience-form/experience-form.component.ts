@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Experience, ExperienceType } from '../../../../core/models';
+import { DatePickerModule } from 'primeng/datepicker';
 import { BilingualFieldComponent } from '../../shared';
 
 @Component({
@@ -15,6 +16,7 @@ import { BilingualFieldComponent } from '../../shared';
     ReactiveFormsModule,
     FormsModule,
     RouterLink,
+    DatePickerModule,
     BilingualFieldComponent,
   ],
   template: `
@@ -151,11 +153,17 @@ import { BilingualFieldComponent } from '../../shared';
               <label for="experience-start-date" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Start Date <span class="text-rose-500 font-bold">*</span>
               </label>
-              <input
-                id="experience-start-date"
-                type="date"
+              <p-datepicker
+                inputId="experience-start-date"
                 formControlName="startDate"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                dateFormat="yy-mm-dd"
+                [showIcon]="true"
+                iconDisplay="input"
+                [showButtonBar]="true"
+                appendTo="body"
+                placeholder="YYYY-MM-DD"
+                styleClass="w-full"
+                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
               @if (isFieldInvalid('startDate')) {
                 <p class="text-[11px] text-rose-500 mt-1 font-medium">Start date is required.</p>
@@ -167,11 +175,17 @@ import { BilingualFieldComponent } from '../../shared';
               <label for="experience-end-date" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 End Date (Leave blank if currently working)
               </label>
-              <input
-                id="experience-end-date"
-                type="date"
+              <p-datepicker
+                inputId="experience-end-date"
                 formControlName="endDate"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono disabled:opacity-40 disabled:cursor-not-allowed"
+                dateFormat="yy-mm-dd"
+                [showIcon]="true"
+                iconDisplay="input"
+                [showButtonBar]="true"
+                appendTo="body"
+                placeholder="YYYY-MM-DD"
+                styleClass="w-full"
+                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono disabled:opacity-40 disabled:cursor-not-allowed"
               />
             </div>
 
