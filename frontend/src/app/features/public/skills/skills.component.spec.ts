@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { SkillsComponent } from './skills.component';
@@ -72,6 +73,22 @@ describe('SkillsComponent', () => {
     data: mockSkills,
   };
 
+  beforeAll(() => {
+    if (typeof window !== 'undefined' && !window.IntersectionObserver) {
+      class MockIntersectionObserver {
+        root = null;
+        rootMargin = '';
+        thresholds = [];
+        observe = vi.fn();
+        unobserve = vi.fn();
+        disconnect = vi.fn();
+        takeRecords = vi.fn().mockReturnValue([]);
+      }
+      window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+      globalThis.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+    }
+  });
+
   beforeEach(async () => {
     portfolioServiceMock = {
       getSkills: vi.fn().mockReturnValue(of(mockApiResponse)),
@@ -85,6 +102,7 @@ describe('SkillsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [SkillsComponent],
       providers: [
+        provideAnimationsAsync(),
         provideRouter([]),
         { provide: PortfolioService, useValue: portfolioServiceMock },
         { provide: LanguageService, useValue: languageServiceMock },
@@ -206,5 +224,55 @@ describe('SkillsComponent', () => {
     expect(component.isKhmer()).toBe(true);
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('ជំនាញ');
+  });
+
+  it('should toggle and close category dropdown and update currentCategory', () => {
+    fixture.detectChanges();
+
+    expect(component.isCategoryDropdownOpen()).toBe(false);
+    expect(component.currentCategory()?.id).toBe('all');
+
+    component.toggleCategoryDropdown();
+    expect(component.isCategoryDropdownOpen()).toBe(true);
+
+    component.onEscape();
+    expect(component.isCategoryDropdownOpen()).toBe(false);
+
+    component.toggleCategoryDropdown();
+    expect(component.isCategoryDropdownOpen()).toBe(true);
+
+    component.setCategory('frontend');
+    expect(component.isCategoryDropdownOpen()).toBe(false);
+    expect(component.selectedCategory()).toBe('frontend');
+    expect(component.currentCategory()?.id).toBe('frontend');
+
+    component.toggleCategoryDropdown();
+    component.resetFilters();
+    expect(component.isCategoryDropdownOpen()).toBe(false);
+    expect(component.selectedCategory()).toBe('all');
+  });
+
+  it('should handle CascadeSelect change, clear, and category filtering', () => {
+    fixture.detectChanges();
+
+    const cascadeOptions = component.cascadeCategories();
+    expect(cascadeOptions.length).toBe(5);
+    expect(cascadeOptions[0].id).toBe('all');
+    expect(cascadeOptions[1].id).toBe('frontend');
+
+    // Select category option from CascadeSelect
+    const frontendCategoryOption = cascadeOptions[1];
+    component.onCascadeChange({ value: frontendCategoryOption });
+    fixture.detectChanges();
+    expect(component.selectedCategory()).toBe('frontend');
+    expect(component.groupedSkills().length).toBe(1);
+    expect(component.totalFilteredCount()).toBe(2);
+
+    // Clear cascade select
+    component.onCascadeClear();
+    fixture.detectChanges();
+    expect(component.selectedCategory()).toBe('all');
+    expect(component.selectedCascadeItem()).toBeNull();
+    expect(component.totalFilteredCount()).toBe(5);
   });
 });

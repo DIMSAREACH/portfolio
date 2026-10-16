@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LanguageService } from '../../../../core/services/language.service';
 
 export interface TableColumn<T = Record<string, unknown>> {
   key: string;
@@ -36,8 +37,9 @@ export interface SortEvent {
             type="text"
             [ngModel]="searchTerm"
             (ngModelChange)="onSearchInput($event)"
-            [placeholder]="searchPlaceholder"
-            class="w-full pl-10 pr-9 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+            [placeholder]="isKhmer() ? 'ស្វែងរក...' : searchPlaceholder"
+            [class.font-khmer]="isKhmer()"
+            class="w-full pl-10 pr-9 py-2 text-xs sm:text-sm rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
             aria-label="Search records"
           />
           @if (searchTerm) {
@@ -91,7 +93,7 @@ export interface SortEvent {
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse" aria-label="Admin Data Table">
           <thead>
-            <tr class="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            <tr class="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               @for (col of columns; track col.key) {
                 <th
                   scope="col"
@@ -125,11 +127,13 @@ export interface SortEvent {
                 </th>
               }
               @if (showActions) {
-                <th scope="col" class="px-6 py-3.5 text-right w-32">Actions</th>
+                <th scope="col" class="px-6 py-3.5 text-right w-32" [class.font-khmer]="isKhmer()">
+                  {{ isKhmer() ? 'សកម្មភាព' : 'Actions' }}
+                </th>
               }
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80 text-xs">
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80 text-[13px] sm:text-sm">
             <!-- Loading Skeletons -->
             @if (isLoading) {
               @for (row of [1, 2, 3, 4, 5]; track row) {
@@ -191,14 +195,14 @@ export interface SortEvent {
                       }
                       <!-- Boolean Type -->
                       @else if (col.type === 'boolean') {
-                        <span class="inline-flex items-center gap-1.5 font-medium">
+                        <span class="inline-flex items-center gap-1.5 font-medium" [class.font-khmer]="isKhmer()">
                           <span
                             class="w-2 h-2 rounded-full"
                             [class.bg-emerald-500]="!!getItemValue(item, col.key)"
                             [class.bg-slate-300]="!getItemValue(item, col.key)"
                             [class.dark:bg-slate-600]="!getItemValue(item, col.key)"
                           ></span>
-                          <span>{{ getItemValue(item, col.key) ? 'Active' : 'Inactive' }}</span>
+                          <span>{{ isKhmer() ? (getItemValue(item, col.key) ? 'សកម្ម' : 'អសកម្ម') : (getItemValue(item, col.key) ? 'Active' : 'Inactive') }}</span>
                         </span>
                       }
                       <!-- Default / Text Type -->
@@ -218,14 +222,14 @@ export interface SortEvent {
                           <button
                             type="button"
                             (click)="togglePublishClick.emit(item)"
-                            class="p-1.5 rounded-lg transition-colors"
+                            class="p-1.5 rounded-lg transition-colors cursor-pointer"
                             [class.text-emerald-600]="getItemValue(item, 'status') === 'published'"
                             [class.hover:bg-emerald-50]="getItemValue(item, 'status') === 'published'"
                             [class.dark:hover:bg-emerald-950/50]="getItemValue(item, 'status') === 'published'"
                             [class.text-amber-500]="getItemValue(item, 'status') !== 'published'"
                             [class.hover:bg-amber-50]="getItemValue(item, 'status') !== 'published'"
                             [class.dark:hover:bg-amber-950/50]="getItemValue(item, 'status') !== 'published'"
-                            [title]="getItemValue(item, 'status') === 'published' ? 'Unpublish post' : 'Publish post'"
+                            [title]="getItemValue(item, 'status') === 'published' ? (isKhmer() ? 'ដកការផ្សាយ' : 'Unpublish post') : (isKhmer() ? 'ផ្សព្វផ្សាយ' : 'Publish post')"
                             [attr.aria-label]="getItemValue(item, 'status') === 'published' ? 'Unpublish' : 'Publish'"
                           >
                             @if (getItemValue(item, 'status') === 'published') {
@@ -242,8 +246,8 @@ export interface SortEvent {
                         <button
                           type="button"
                           (click)="viewClick.emit(item)"
-                          class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                          title="View"
+                          class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                          [title]="isKhmer() ? 'មើល' : 'View'"
                           aria-label="View item"
                         >
                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -254,8 +258,8 @@ export interface SortEvent {
                         <button
                           type="button"
                           (click)="editClick.emit(item)"
-                          class="p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded-lg transition-colors"
-                          title="Edit"
+                          class="p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded-lg transition-colors cursor-pointer"
+                          [title]="isKhmer() ? 'កែសម្រួល' : 'Edit'"
                           aria-label="Edit item"
                         >
                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -265,8 +269,8 @@ export interface SortEvent {
                         <button
                           type="button"
                           (click)="deleteClick.emit(item)"
-                          class="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg transition-colors"
-                          title="Delete"
+                          class="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg transition-colors cursor-pointer"
+                          [title]="isKhmer() ? 'លុប' : 'Delete'"
                           aria-label="Delete item"
                         >
                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -288,17 +292,20 @@ export interface SortEvent {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                       </svg>
                     </div>
-                    <p class="text-sm font-semibold text-slate-900 dark:text-white">{{ emptyMessage }}</p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
-                      Get started by creating a new entry or adjust your search filter.
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white" [class.font-khmer]="isKhmer()">
+                      {{ isKhmer() ? 'មិនមានទិន្នន័យត្រូវបានរកឃើញទេ។' : emptyMessage }}
+                    </p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm" [class.font-khmer]="isKhmer()">
+                      {{ isKhmer() ? 'ចាប់ផ្តើមដោយការបង្កើតទិន្នន័យថ្មី ឬកែសម្រួលតម្រងស្វែងរករបស់អ្នក។' : 'Get started by creating a new entry or adjust your search filter.' }}
                     </p>
                     @if (showCreateButton) {
                       <button
                         type="button"
                         (click)="createClick.emit()"
-                        class="mt-4 px-4 py-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-xl transition-all"
+                        class="mt-4 px-4 py-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-xl transition-all cursor-pointer"
+                        [class.font-khmer]="isKhmer()"
                       >
-                        {{ createButtonLabel }}
+                        {{ isKhmer() ? (createButtonLabel === 'Create New' ? 'បង្កើតថ្មី' : createButtonLabel) : createButtonLabel }}
                       </button>
                     }
                   </div>
@@ -311,24 +318,24 @@ export interface SortEvent {
 
       <!-- Pagination Footer -->
       <div class="p-4 border-t border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
-        <div>
-          Showing
+        <div [class.font-khmer]="isKhmer()">
+          {{ isKhmer() ? 'បង្ហាញពី' : 'Showing' }}
           <span class="font-semibold text-slate-700 dark:text-slate-300">{{ startItemIndex }}</span>
-          to
+          {{ isKhmer() ? 'ដល់' : 'to' }}
           <span class="font-semibold text-slate-700 dark:text-slate-300">{{ endItemIndex }}</span>
-          of
+          {{ isKhmer() ? 'នៃ' : 'of' }}
           <span class="font-semibold text-slate-700 dark:text-slate-300">{{ totalItems }}</span>
-          results
+          {{ isKhmer() ? 'លទ្ធផល' : 'results' }}
         </div>
 
         <div class="flex items-center gap-2">
           <!-- Page Size Selector -->
-          <div class="flex items-center gap-1.5 mr-2">
-            <span>Per page:</span>
+          <div class="flex items-center gap-1.5 mr-2" [class.font-khmer]="isKhmer()">
+            <span>{{ isKhmer() ? 'ក្នុងមួយទំព័រ:' : 'Per page:' }}</span>
             <select
               [ngModel]="pageSize"
               (ngModelChange)="onPageSizeChange($event)"
-              class="px-2 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs focus:outline-none"
+              class="px-2 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs focus:outline-none cursor-pointer"
             >
               @for (size of pageSizeOptions; track size) {
                 <option [value]="size">{{ size }}</option>
@@ -341,22 +348,24 @@ export interface SortEvent {
             type="button"
             (click)="onPageChange(currentPage - 1)"
             [disabled]="currentPage <= 1 || isLoading"
-            class="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-colors"
+            class="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
+            [class.font-khmer]="isKhmer()"
             aria-label="Previous Page"
           >
-            Previous
+            {{ isKhmer() ? 'មុន' : 'Previous' }}
           </button>
-          <span class="px-2 font-semibold text-slate-700 dark:text-slate-300">
-            Page {{ currentPage }} of {{ totalPages }}
+          <span class="px-2 font-semibold text-slate-700 dark:text-slate-300" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'ទំព័រទី ' + currentPage + ' នៃ ' + totalPages : 'Page ' + currentPage + ' of ' + totalPages }}
           </span>
           <button
             type="button"
             (click)="onPageChange(currentPage + 1)"
             [disabled]="currentPage >= totalPages || isLoading"
-            class="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-colors"
+            class="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
+            [class.font-khmer]="isKhmer()"
             aria-label="Next Page"
           >
-            Next
+            {{ isKhmer() ? 'បន្ទាប់' : 'Next' }}
           </button>
         </div>
       </div>
@@ -364,6 +373,9 @@ export interface SortEvent {
   `,
 })
 export class AdminDataTableComponent {
+  public readonly languageService = inject(LanguageService, { optional: true });
+  public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
+
   @Input() columns: TableColumn[] = [];
   @Input() data: Record<string, unknown>[] = [];
   @Input() totalItems = 0;

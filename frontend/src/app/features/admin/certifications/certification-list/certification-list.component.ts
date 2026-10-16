@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { LanguageService } from '../../../../core/services/language.service';
 import { Certification } from '../../../../core/models';
 import { AdminDataTableComponent, TableColumn, SortEvent } from '../../shared';
 import { ConfirmDialogComponent } from '../../../../shared';
@@ -18,26 +19,27 @@ import { ConfirmDialogComponent } from '../../../../shared';
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-              CMS Credentials
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400" [class.font-khmer]="isKhmer()">
+              {{ isKhmer() ? 'ការគ្រប់គ្រងវិញ្ញាបនបត្រ' : 'CMS Credentials' }}
             </span>
           </div>
-          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">
-            Certifications & Honors
+          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1 tracking-tight" [class.font-khmer]="isKhmer()">
+            {{ isAchievementsRoute ? (isKhmer() ? 'សមិទ្ធផល & រង្វាន់កិត្តិយស' : 'Milestones & Achievements') : (isKhmer() ? 'វិញ្ញាបនបត្រ & ពានរង្វាន់' : 'Certifications & Honors') }}
           </h1>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Manage industry certifications, hackathon awards, honors, and credential verification badges.
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
+            {{ isAchievementsRoute ? (isKhmer() ? 'គ្រប់គ្រងពានរង្វាន់ hackathon កិត្តិយសផ្លូវការ និងសមិទ្ធផលលេចធ្លោ។' : 'Manage competitive hackathon awards, verified honors, and milestone achievements.') : (isKhmer() ? 'គ្រប់គ្រងវិញ្ញាបនបត្រវិជ្ជាជីវៈ ពានរង្វាន់ hackathon និងផ្លាកសញ្ញាផ្ទៀងផ្ទាត់។' : 'Manage industry certifications, hackathon awards, honors, and credential verification badges.') }}
           </p>
         </div>
 
         <a
           routerLink="/admin/certifications/create"
-          class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto"
+          class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto cursor-pointer"
+          [class.font-khmer]="isKhmer()"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          <span>New Certification</span>
+          <span>{{ isKhmer() ? 'វិញ្ញាបនបត្រថ្មី' : 'New Certification' }}</span>
         </a>
       </div>
 
@@ -50,10 +52,10 @@ import { ConfirmDialogComponent } from '../../../../shared';
         [pageSize]="pageSize()"
         [isLoading]="isLoading()"
         [activeFilter]="activeFilter()"
-        [filterOptions]="filterOptions"
-        searchPlaceholder="Search by title, organization, credential ID..."
-        createButtonLabel="New Certification"
-        emptyMessage="No credentials found. Add your first certification or honor!"
+        [filterOptions]="filterOptions()"
+        [searchPlaceholder]="isKhmer() ? 'ស្វែងរកតាមចំណងជើង, ស្ថាប័ន, លេខសម្គាល់...' : 'Search by title, organization, credential ID...'"
+        [createButtonLabel]="isKhmer() ? 'វិញ្ញាបនបត្រថ្មី' : 'New Certification'"
+        [emptyMessage]="isKhmer() ? 'មិនមានវិញ្ញាបនបត្រត្រូវបានរកឃើញទេ។ សូមបន្ថែមវិញ្ញាបនបត្រដំបូងរបស់អ្នក!' : 'No credentials found. Add your first certification or honor!'"
         (searchChange)="onSearchChange($event)"
         (filterChange)="onFilterChange($event)"
         (sortChange)="onSortChange($event)"
@@ -71,6 +73,8 @@ export class CertificationListComponent implements OnInit {
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
+  public readonly languageService = inject(LanguageService, { optional: true });
+  public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
 
   public readonly certifications = signal<Certification[]>([]);
   public readonly totalItems = signal<number>(0);
@@ -82,12 +86,12 @@ export class CertificationListComponent implements OnInit {
   public readonly sortKey = signal<string>('issueDate');
   public readonly sortDirection = signal<'asc' | 'desc'>('desc');
 
-  public readonly filterOptions = [
-    { label: 'All Types', value: 'all' },
-    { label: 'Certifications', value: 'certification' },
-    { label: 'Awards', value: 'award' },
-    { label: 'Achievements', value: 'achievement' },
-  ];
+  public readonly filterOptions = computed(() => [
+    { label: this.isKhmer() ? 'ប្រភេទទាំងអស់' : 'All Types', value: 'all' },
+    { label: this.isKhmer() ? 'វិញ្ញាបនបត្រ' : 'Certifications', value: 'certification' },
+    { label: this.isKhmer() ? 'ពានរង្វាន់' : 'Awards', value: 'award' },
+    { label: this.isKhmer() ? 'សមិទ្ធផល' : 'Achievements', value: 'achievement' },
+  ]);
 
   public readonly columns: TableColumn[] = [
     {
@@ -161,7 +165,14 @@ export class CertificationListComponent implements OnInit {
     },
   ];
 
+  public get isAchievementsRoute(): boolean {
+    return this.router.url.includes('/admin/achievements');
+  }
+
   public ngOnInit(): void {
+    if (this.isAchievementsRoute) {
+      this.activeFilter.set('achievement');
+    }
     this.loadCertifications();
   }
 

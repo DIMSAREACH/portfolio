@@ -3,6 +3,7 @@ import { body, param, ValidationChain } from 'express-validator';
 const validPlatforms = [
   'github',
   'linkedin',
+  'telegram',
   'facebook',
   'email',
   'twitter',

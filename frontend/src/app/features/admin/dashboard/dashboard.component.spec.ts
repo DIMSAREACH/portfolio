@@ -118,10 +118,8 @@ describe('DashboardComponent', () => {
     expect(compiled.textContent).toContain('9 Published');
     expect(compiled.textContent).toContain('3 Drafts');
 
-    // Total Blog Posts
-    expect(compiled.textContent).toContain('8');
-    expect(compiled.textContent).toContain('6 Published');
-    expect(compiled.textContent).toContain('2 Drafts');
+    // Ensure Blog posts metric card is removed
+    expect(compiled.textContent).not.toContain('Total Blog Posts');
 
     // Unread Inquiries & Total Messages
     expect(compiled.textContent).toContain('4');
@@ -189,12 +187,14 @@ describe('DashboardComponent', () => {
     expect(component.getInitials('')).toBe('U');
   });
 
-  it('should render quick action buttons for New Project and New Blog Post', () => {
+  it('should render quick action buttons for New Project and Admin sections without blog', () => {
     const links = fixture.nativeElement.querySelectorAll('a[routerLink]');
     const hrefs = Array.from(links).map((l) => (l as HTMLAnchorElement).getAttribute('routerLink'));
 
     expect(hrefs).toContain('/admin/projects');
-    expect(hrefs).toContain('/admin/blog');
     expect(hrefs).toContain('/admin/messages');
+    expect(hrefs).toContain('/admin/cv');
+    expect(hrefs).toContain('/admin/skills');
+    expect(hrefs).not.toContain('/admin/blog');
   });
 });

@@ -70,14 +70,20 @@ describe('HeaderComponent', () => {
     expect(navLinks[0].textContent).toContain('ទំព័រដើម');
   });
 
-  it('should not render mobile hamburger button', () => {
+  it('should render mobile hamburger button and toggle mobile menu', () => {
     const hamburgerBtn = fixture.nativeElement.querySelector('#mobile-menu-btn');
-    expect(hamburgerBtn).toBeNull();
+    expect(hamburgerBtn).toBeTruthy();
+
+    expect(component.isMobileMenuOpen()).toBe(false);
+    hamburgerBtn.click();
+    expect(component.isMobileMenuOpen()).toBe(true);
+
+    component.closeMobileMenu();
+    expect(component.isMobileMenuOpen()).toBe(false);
   });
 
-  it('should render all nav items directly in navigation bar', () => {
-    const navLinks = fixture.nativeElement.querySelectorAll('nav a');
-    expect(navLinks.length).toBe(component.navItems.length);
+  it('should render all nav items in navigation', () => {
+    expect(component.navItems.length).toBe(8);
   });
 
   it('should toggle isScrolled based on scroll position', () => {

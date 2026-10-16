@@ -46,13 +46,13 @@ describe('HomeComponent', () => {
     success: true,
     message: 'Profile retrieved',
     data: {
-      fullName: { en: 'Dim Sareach', kh: 'ឌីម សារាជ' },
+      fullName: { en: 'Dim Sareach', kh: 'ឌឹម សារាជ' },
       title: { en: 'Senior Full Stack Engineer', kh: 'វិស្វករកម្មវិធីជាន់ខ្ពស់' },
       introduction: {
         en: 'Passionate about distributed systems and AI applications.',
         kh: 'មានចំណង់ចំណូលចិត្តលើប្រព័ន្ធកុំព្យូទ័រ និងកម្មវិធី AI។',
       },
-      about: { en: 'About Dim Sareach', kh: 'អំពី ឌីម សារាជ' },
+      about: { en: 'About Dim Sareach', kh: 'អំពី ឌឹម សារាជ' },
       profileImage: 'https://example.com/avatar.jpg',
     },
   };
@@ -190,6 +190,20 @@ describe('HomeComponent', () => {
       window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
       globalThis.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
     }
+
+    if (typeof window !== 'undefined' && !window.ResizeObserver) {
+      class MockResizeObserver {
+        observe = vi.fn();
+        unobserve = vi.fn();
+        disconnect = vi.fn();
+      }
+      window.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
+      globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
+    }
+
+    if (typeof Element !== 'undefined' && !Element.prototype.scrollTo) {
+      Element.prototype.scrollTo = vi.fn();
+    }
   });
 
   beforeEach(async () => {
@@ -231,7 +245,7 @@ describe('HomeComponent', () => {
 
   it('should load all home data on initialization', () => {
     expect(portfolioServiceMock.getProfile).toHaveBeenCalled();
-    expect(portfolioServiceMock.getFeaturedProjects).toHaveBeenCalledWith(3);
+    expect(portfolioServiceMock.getFeaturedProjects).toHaveBeenCalledWith(6);
     expect(portfolioServiceMock.getSkills).toHaveBeenCalled();
     expect(portfolioServiceMock.getExperiences).toHaveBeenCalled();
     expect(portfolioServiceMock.getEducation).toHaveBeenCalled();
@@ -247,10 +261,12 @@ describe('HomeComponent', () => {
     expect(component.isLoading()).toBe(false);
   });
 
-  it('should render profile name and title in hero section', () => {
+  it('should render profile name and typewriter role in hero section', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain('Dim Sareach');
-    expect(compiled.textContent).toContain('Senior Full Stack Engineer');
+    expect(compiled.textContent).toContain('Full-Stack Developer');
+    expect(component.typewriterText()).toBe('Full-Stack Developer');
+    expect(component.typewriterWords()).toEqual(['Full-Stack Developer', 'Computer Science Student']);
   });
 
   it('should group skills by category correctly', () => {
@@ -272,5 +288,26 @@ describe('HomeComponent', () => {
     component.loadHomeData();
 
     expect(component.isLoading()).toBe(false);
+  });
+
+  it('should invoke scrollIntoView when scrollToSection is called with existing element', () => {
+    const el = document.getElementById('metrics-section') || fixture.nativeElement.querySelector('#metrics-section');
+    if (el) {
+      el.scrollIntoView = vi.fn();
+      component.scrollToSection('metrics-section');
+      expect(el.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
+    } else {
+      const dummy = document.createElement('div');
+      dummy.id = 'test-section';
+      dummy.scrollIntoView = vi.fn();
+      document.body.appendChild(dummy);
+      component.scrollToSection('test-section');
+      expect(dummy.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
+      document.body.removeChild(dummy);
+    }
+  });
+
+  it('should safely handle scrollToSection when element does not exist', () => {
+    expect(() => component.scrollToSection('non-existent-id')).not.toThrow();
   });
 });

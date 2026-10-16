@@ -127,6 +127,12 @@ export class LanguageService {
   private applyLanguage(lang: SupportedLanguage): void {
     if (this.document?.documentElement) {
       this.document.documentElement.lang = lang;
+      this.document.documentElement.setAttribute('data-lang', lang);
+      if (lang === 'kh') {
+        this.document.documentElement.classList.add('lang-kh');
+      } else {
+        this.document.documentElement.classList.remove('lang-kh');
+      }
     }
   }
 }

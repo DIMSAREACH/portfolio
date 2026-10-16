@@ -15,7 +15,7 @@ import { ThemeService } from '../../../core/services/theme.service';
       type="button"
       (click)="toggleTheme()"
       [attr.aria-label]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
-      class="!w-9 !h-9 !p-0 flex items-center justify-center !rounded-full border border-slate-200/80 dark:border-slate-700/80 transition-all duration-300 shadow-2xs hover:scale-105 active:scale-95"
+      class="!w-9 !h-9 !p-0 flex items-center justify-center !rounded-full bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 border border-slate-200/80 dark:border-slate-700/80 transition-all duration-300 shadow-2xs hover:scale-105 active:scale-95 cursor-pointer"
       id="theme-toggle-btn"
     >
       @if (isDark()) {

@@ -2,170 +2,281 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { LabelModule } from 'primeng/label';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-admin-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    CardModule,
+    ButtonModule,
+    InputTextModule,
+    LabelModule,
+    ThemeToggleComponent,
+  ],
+  styles: [
+    `
+      .bg-grid-tech {
+        background-image: radial-gradient(rgba(99, 102, 241, 0.22) 1.2px, transparent 1.2px);
+        background-size: 24px 24px;
+      }
+      :host-context(.dark) .bg-grid-tech {
+        background-image: radial-gradient(rgba(129, 140, 248, 0.18) 1.2px, transparent 1.2px);
+      }
+
+      :host ::ng-deep .login-card.p-card {
+        border-radius: 1.75rem !important;
+        border: 1px solid rgba(226, 232, 240, 0.9) !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(99, 102, 241, 0.08) !important;
+        overflow: hidden;
+      }
+      :host-context(.dark) ::ng-deep .login-card.p-card {
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        background: rgba(15, 23, 42, 0.92) !important;
+        backdrop-filter: blur(24px) !important;
+        -webkit-backdrop-filter: blur(24px) !important;
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(99, 102, 241, 0.25) !important;
+      }
+      :host ::ng-deep .login-card .p-card-body {
+        padding: 2.25rem 2rem !important;
+      }
+      :host ::ng-deep .login-card .p-card-title {
+        font-size: 1.625rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.03em !important;
+        color: #0f172a !important;
+        line-height: 1.2 !important;
+      }
+      :host-context(.dark) ::ng-deep .login-card .p-card-title {
+        color: #ffffff !important;
+      }
+      :host ::ng-deep .login-card .p-card-subtitle {
+        font-size: 0.875rem !important;
+        color: #64748b !important;
+        margin-top: 0.35rem !important;
+        font-weight: 400 !important;
+      }
+      :host-context(.dark) ::ng-deep .login-card .p-card-subtitle {
+        color: #94a3b8 !important;
+      }
+      :host ::ng-deep .login-card .p-card-content {
+        padding-top: 1.25rem !important;
+        padding-bottom: 0 !important;
+      }
+      :host ::ng-deep .login-card .p-card-footer {
+        padding-top: 1.25rem !important;
+      }
+    `,
+  ],
   template: `
-    <div class="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950 py-12 transition-colors duration-300">
-      <div class="w-full max-w-md space-y-8">
-        <!-- Logo and Title Header -->
-        <div class="text-center space-y-3">
+    <div class="min-h-screen flex flex-col justify-between items-center px-4 sm:px-6 py-6 sm:py-8 bg-slate-50 dark:bg-slate-950 transition-colors duration-300 relative overflow-hidden">
+      <!-- High-tech Subtle Grid Pattern Backdrop -->
+      <div class="absolute inset-0 bg-grid-tech pointer-events-none opacity-70"></div>
+
+      <!-- Multi-stop Radiant Ambient Glowing Orbs -->
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[360px] bg-gradient-to-tr from-indigo-500/20 via-purple-500/20 to-pink-500/15 dark:from-indigo-600/25 dark:via-purple-600/20 dark:to-pink-600/15 rounded-full blur-[110px] pointer-events-none -z-10"></div>
+      <div class="absolute bottom-10 right-1/4 w-[420px] h-[280px] bg-sky-500/15 dark:bg-indigo-700/15 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+
+      <!-- Top Navigation & Controls Bar -->
+      <header class="w-full max-w-4xl flex items-center justify-between z-10">
+        <a
+          routerLink="/"
+          class="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-2xs hover:shadow-xs transition-all"
+        >
+          <i class="pi pi-arrow-left text-[11px] group-hover:-translate-x-1 transition-transform"></i>
+          <span>Back to Portfolio</span>
+        </a>
+
+        <div class="flex items-center gap-2">
+          <app-theme-toggle />
+        </div>
+      </header>
+
+      <!-- Center Card Section -->
+      <main class="w-full max-w-md my-auto py-6 z-10 flex flex-col items-center">
+        <!-- Brand Header with Status Badge -->
+        <div class="text-center space-y-2.5 mb-6">
           <a
             routerLink="/"
-            class="inline-flex items-center gap-2 group text-decoration-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 rounded-xl p-1"
+            class="inline-flex items-center text-decoration-none group hover:scale-105 transition-transform"
+            aria-label="Return to portfolio home"
           >
-            <div
-              class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-extrabold text-2xl shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform"
+            <span
+              class="font-brand text-3xl font-black tracking-tight text-slate-900 dark:text-white"
+              style="font-family: var(--font-brand), 'Outfit', 'Plus Jakarta Sans', sans-serif;"
             >
-              S
-            </div>
+              Sareach<span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent font-black ml-0.5">.dev</span>
+            </span>
           </a>
-
-          <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-            Admin Portal
-          </h1>
-
-          <p class="text-sm text-slate-500 dark:text-slate-400">
-            Sign in to manage your portfolio content, projects, and articles.
-          </p>
+          <div class="flex items-center justify-center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-indigo-50/90 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/80 shadow-2xs">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              CMS Control Center
+            </span>
+          </div>
         </div>
 
-        <!-- Login Card -->
-        <div class="bg-white dark:bg-slate-900 p-8 sm:p-10 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none space-y-6">
+        <!-- PrimeNG Card with Form -->
+        <p-card
+          class="w-full login-card"
+          header="Welcome back"
+          subheader="Sign in with your email to continue."
+        >
           <!-- Error Alert Banner -->
           @if (errorMessage()) {
             <div
               id="login-error-alert"
-              class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-800 dark:text-rose-200 text-sm flex items-start gap-3 animate-fadeIn"
+              class="mb-4 p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-200 text-xs flex items-start gap-2.5 animate-fadeIn"
             >
-              <svg class="w-5 h-5 text-rose-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <p class="font-medium text-xs sm:text-sm">{{ errorMessage() }}</p>
+              <i class="pi pi-exclamation-triangle text-rose-500 text-sm shrink-0 mt-0.5"></i>
+              <span class="font-medium leading-relaxed">{{ errorMessage() }}</span>
             </div>
           }
 
-          <!-- Form Element -->
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5" novalidate>
             <!-- Email Field -->
-            <div class="space-y-1.5">
-              <label for="admin-email" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                Email Address
+            <div class="flex flex-col gap-1.5">
+              <label pLabel for="email" class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <i class="pi pi-envelope text-indigo-600 dark:text-indigo-400 text-xs"></i>
+                <span>Email Address</span>
               </label>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                  </svg>
-                </div>
-                <input
-                  id="admin-email"
-                  type="email"
-                  formControlName="email"
-                  placeholder="admin@example.com"
-                  autocomplete="username"
-                  class="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-800/80 border text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  [ngClass]="{
-                    'border-rose-400 dark:border-rose-500/80 bg-rose-50/20': isFieldInvalid('email'),
-                    'border-slate-200 dark:border-slate-700': !isFieldInvalid('email')
-                  }"
-                />
-              </div>
+              <input
+                pInputText
+                id="email"
+                type="email"
+                formControlName="email"
+                autocomplete="username"
+                placeholder="admin@portfolio.dev"
+                class="w-full !rounded-xl !text-sm !py-3 !px-3.5 bg-slate-50/80 dark:bg-slate-900/70 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 focus:!border-indigo-500 transition-all"
+                [ngClass]="{ '!border-rose-500': isFieldInvalid('email') }"
+              />
               @if (isFieldInvalid('email')) {
-                <p class="text-xs text-rose-600 dark:text-rose-400 font-medium">
+                <span class="text-xs text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1 mt-0.5">
+                  <i class="pi pi-times-circle text-xs"></i>
                   {{ getEmailError() }}
-                </p>
+                </span>
               }
             </div>
 
-            <!-- Password Field with Show/Hide Toggle -->
-            <div class="space-y-1.5">
-              <label for="admin-password" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                Password
-              </label>
+            <!-- Password Field -->
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center justify-between">
+                <label pLabel for="password" class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5 flex-1">
+                  <i class="pi pi-lock text-indigo-600 dark:text-indigo-400 text-xs"></i>
+                  <span>Password</span>
+                </label>
+                <button
+                  type="button"
+                  pButton
+                  variant="link"
+                  (click)="togglePasswordVisibility()"
+                  class="!p-0 !text-xs !font-semibold !text-indigo-600 dark:!text-indigo-400 hover:underline cursor-pointer"
+                >
+                  {{ showPassword() ? 'Hide password' : 'Forgot password?' }}
+                </button>
+              </div>
               <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
                 <input
-                  id="admin-password"
+                  pInputText
+                  id="password"
                   [type]="showPassword() ? 'text' : 'password'"
                   formControlName="password"
-                  placeholder="••••••••••••"
                   autocomplete="current-password"
-                  class="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-800/80 border text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all font-mono"
-                  [ngClass]="{
-                    'border-rose-400 dark:border-rose-500/80 bg-rose-50/20': isFieldInvalid('password'),
-                    'border-slate-200 dark:border-slate-700': !isFieldInvalid('password')
-                  }"
+                  placeholder="••••••••••••"
+                  class="w-full !rounded-xl !text-sm !py-3 !pl-3.5 !pr-10 bg-slate-50/80 dark:bg-slate-900/70 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 font-mono focus:!border-indigo-500 transition-all"
+                  [ngClass]="{ '!border-rose-500': isFieldInvalid('password') }"
                 />
                 <button
                   type="button"
                   (click)="togglePasswordVisibility()"
-                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus:outline-none"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1"
                   [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
                 >
-                  @if (showPassword()) {
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
-                    </svg>
-                  } @else {
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  }
+                  <i class="pi text-xs" [ngClass]="showPassword() ? 'pi-eye-slash' : 'pi-eye'"></i>
                 </button>
               </div>
               @if (isFieldInvalid('password')) {
-                <p class="text-xs text-rose-600 dark:text-rose-400 font-medium">
+                <span class="text-xs text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1 mt-0.5">
+                  <i class="pi pi-times-circle text-xs"></i>
                   {{ getPasswordError() }}
-                </p>
+                </span>
               }
             </div>
+          </form>
 
-            <!-- Submit Button with Spinner -->
-            <div class="pt-2">
+          <ng-template #footer>
+            <div class="flex flex-col gap-3.5">
+              <!-- Submit Button with Explicit Text & State -->
               <button
-                type="submit"
+                type="button"
+                (click)="onSubmit()"
+                pButton
                 [disabled]="isLoading()"
-                class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm text-white bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none shadow-lg shadow-indigo-500/25 transition-all duration-200"
+                class="w-full !py-3 !px-4 !rounded-xl !font-bold !text-sm !bg-gradient-to-r !from-indigo-600 !via-indigo-600 !to-violet-600 hover:!from-indigo-500 hover:!to-violet-500 !text-white !border-0 shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/40 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 @if (isLoading()) {
-                  <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  <span>Signing In...</span>
+                  <i class="pi pi-spin pi-spinner text-sm"></i>
+                  <span>Signing in...</span>
                 } @else {
-                  <span>Sign In</span>
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
+                  <span>Login</span>
+                  <i class="pi pi-arrow-right text-xs"></i>
                 }
               </button>
-            </div>
-          </form>
-        </div>
 
-        <!-- Back to Website Link -->
-        <div class="text-center">
-          <a
-            routerLink="/"
-            class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-          >
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            <span>Return to Portfolio</span>
-          </a>
-        </div>
-      </div>
+              <!-- Autofill Demo Button with explicit label & icon -->
+              <button
+                type="button"
+                (click)="fillDemoCredentials()"
+                pButton
+                severity="secondary"
+                [outlined]="true"
+                class="w-full !py-2.5 !px-4 !rounded-xl !text-xs !font-bold !border-slate-300 dark:!border-slate-700 !bg-slate-100/70 dark:!bg-slate-800/40 hover:!bg-slate-200/80 dark:hover:!bg-slate-800 !text-slate-800 dark:!text-slate-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <i class="pi pi-key text-indigo-600 dark:text-indigo-400 text-xs"></i>
+                <span>Autofill Demo Credentials</span>
+              </button>
+
+              <!-- Demo Credential Information Hint -->
+              <div class="p-2.5 rounded-xl bg-slate-100/60 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700/60 text-[11px] text-slate-600 dark:text-slate-400 flex items-center justify-between">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                  <span class="font-medium">Admin:</span>
+                  <code class="font-mono text-indigo-700 dark:text-indigo-300 font-semibold">admin&#64;portfolio.dev</code>
+                </div>
+                <code class="font-mono text-slate-500 dark:text-slate-400">Admin&#64;123456</code>
+              </div>
+
+              <!-- Return to Portfolio Site Link -->
+              <div class="mt-1 text-center text-slate-500 dark:text-slate-400 text-xs">
+                Don't need to log in?
+                <a
+                  routerLink="/"
+                  class="font-bold text-indigo-600 dark:text-indigo-400 hover:underline ml-1 inline-flex items-center gap-0.5"
+                >
+                  Return to Portfolio
+                </a>
+              </div>
+            </div>
+          </ng-template>
+        </p-card>
+      </main>
+
+      <!-- Bottom Security Badge -->
+      <footer class="z-10 text-center py-2 text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
+        <i class="pi pi-shield text-indigo-500 text-xs"></i>
+        <span>Secure TLS 256-bit Encrypted Session</span>
+      </footer>
     </div>
   `,
 })
@@ -210,6 +321,13 @@ export class LoginComponent {
 
   public togglePasswordVisibility(): void {
     this.showPassword.update((val) => !val);
+  }
+
+  public fillDemoCredentials(): void {
+    this.loginForm.patchValue({
+      email: 'admin@portfolio.dev',
+      password: 'Admin@123456',
+    });
   }
 
   public onSubmit(): void {

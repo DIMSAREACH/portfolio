@@ -102,28 +102,17 @@ export const routes: Routes = [
       },
       {
         path: 'blog',
-        loadComponent: () =>
-          import('./features/public/blog/blog-list.component').then(
-            (m) => m.BlogListComponent,
-          ),
-        title: 'Blog & Articles | Dim Sareach',
-        data: {
-          description:
-            'Technical engineering blog, guides, best practices, and architecture articles by Dim Sareach.',
-          keywords: 'engineering blog, programming tutorials, tech articles, software insights',
-        },
+        redirectTo: 'projects',
+        pathMatch: 'full',
       },
       {
         path: 'blog/:slug',
-        loadComponent: () =>
-          import('./features/public/blog/blog-detail.component').then(
-            (m) => m.BlogDetailComponent,
-          ),
-        title: 'Blog Article | Dim Sareach',
-        data: {
-          description:
-            'Read this in-depth technical article and software engineering guide by Dim Sareach.',
-        },
+        redirectTo: 'projects',
+      },
+      {
+        path: 'certifications',
+        redirectTo: 'achievements',
+        pathMatch: 'full',
       },
       {
         path: 'achievements',

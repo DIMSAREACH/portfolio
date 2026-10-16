@@ -61,9 +61,10 @@
   --glass-border: rgba(255, 255, 255, 0.4);
   --glass-blur: blur(12px);
 
-  /* Typography Scale */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-khmer: 'Noto Sans Khmer', sans-serif;
+  /* Typography Scale & Modern Font Hierarchy */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-brand: 'Plus Jakarta Sans', 'Outfit', var(--font-sans);
+  --font-khmer: 'Kantumruy Pro', 'Noto Sans Khmer', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   --text-xs: 0.75rem;    /* 12px */

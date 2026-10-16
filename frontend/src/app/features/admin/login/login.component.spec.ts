@@ -101,6 +101,13 @@ describe('Admin LoginComponent', () => {
     expect(component.showPassword()).toBe(false);
   });
 
+  it('should populate demo credentials on fillDemoCredentials', () => {
+    component.fillDemoCredentials();
+    expect(component.loginForm.value.email).toBe('admin@portfolio.dev');
+    expect(component.loginForm.value.password).toBe('Admin@123456');
+    expect(component.loginForm.valid).toBe(true);
+  });
+
   it('should mark fields touched on invalid submit without calling authService', () => {
     component.onSubmit();
 

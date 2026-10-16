@@ -29,7 +29,6 @@ export const categorySchema = new Schema<ICategory>(
       unique: true,
       trim: true,
       lowercase: true,
-      index: true,
     },
     description: {
       type: createBilingualSchema(false),
@@ -70,10 +69,6 @@ categorySchema.pre('validate', async function () {
 categorySchema.pre('save', async function () {
   autoGenerateSlug(this);
 });
-
-// Ensure explicit indexes match PRD Section 11.11
-categorySchema.index({ slug: 1 }, { unique: true });
-categorySchema.index({ type: 1 });
 
 export const Category: CategoryModel =
   (mongoose.models.Category as CategoryModel) ||

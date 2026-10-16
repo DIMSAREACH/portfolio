@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { AboutComponent } from './about.component';
@@ -30,7 +31,7 @@ describe('AboutComponent', () => {
     success: true,
     message: 'Profile retrieved',
     data: {
-      fullName: { en: 'Dim Sareach', kh: 'ឌីម សារាជ' },
+      fullName: { en: 'Dim Sareach', kh: 'ឌឹម សារាជ' },
       title: { en: 'Senior Software Engineer', kh: 'វិស្វករកម្មវិធីជាន់ខ្ពស់' },
       introduction: { en: 'Introduction text', kh: 'ការណែនាំ' },
       about: { en: 'Detailed about narrative', kh: 'ព័ត៌មានលម្អិតអំពីខ្ញុំ' },
@@ -77,6 +78,22 @@ describe('AboutComponent', () => {
     },
   };
 
+  beforeAll(() => {
+    if (typeof window !== 'undefined' && !window.IntersectionObserver) {
+      class MockIntersectionObserver {
+        root = null;
+        rootMargin = '';
+        thresholds = [];
+        observe = vi.fn();
+        unobserve = vi.fn();
+        disconnect = vi.fn();
+        takeRecords = vi.fn().mockReturnValue([]);
+      }
+      window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+      globalThis.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+    }
+  });
+
   beforeEach(async () => {
     portfolioServiceMock = {
       getProfile: vi.fn().mockReturnValue(of(mockProfile)),
@@ -93,6 +110,7 @@ describe('AboutComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AboutComponent],
       providers: [
+        provideAnimationsAsync(),
         provideRouter([]),
         { provide: PortfolioService, useValue: portfolioServiceMock },
         { provide: LanguageService, useValue: languageServiceMock },
@@ -118,11 +136,11 @@ describe('AboutComponent', () => {
     expect(component.isLoading()).toBe(false);
   });
 
-  it('should render about narrative and professional summary', () => {
+  it('should render about narrative and education details', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('Detailed about narrative');
-    expect(compiled.textContent).toContain('Professional summary paragraph');
-    expect(compiled.textContent).toContain('Engineering background and philosophy');
+    expect(compiled.textContent).toContain('Bachelor of Engineering');
+    expect(compiled.textContent).toContain('Institute of Technology of Cambodia');
   });
 
   it('should compute strengths correctly for current language', () => {

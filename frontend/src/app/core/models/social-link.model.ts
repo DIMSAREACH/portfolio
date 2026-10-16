@@ -6,6 +6,7 @@
 export type SocialPlatform =
   | 'github'
   | 'linkedin'
+  | 'telegram'
   | 'facebook'
   | 'email'
   | 'twitter'

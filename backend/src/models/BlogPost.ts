@@ -143,7 +143,6 @@ blogPostSchema.pre('save', async function () {
 });
 
 // Explicit indexes matching PRD Section 11.10
-blogPostSchema.index({ slug: 1 }, { unique: true });
 blogPostSchema.index({ status: 1, publishedAt: -1 });
 blogPostSchema.index({ category: 1 });
 blogPostSchema.index({ tags: 1 });

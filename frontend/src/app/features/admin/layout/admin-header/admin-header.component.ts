@@ -1,57 +1,243 @@
-import { Component, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, HostListener, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AvatarModule } from 'primeng/avatar';
+import { ButtonModule } from 'primeng/button';
+import { MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
+import { catchError, of } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth.service';
+import { PortfolioService } from '../../../../core/services/portfolio.service';
+import { ThemeService } from '../../../../core/services/theme.service';
+import { LanguageService } from '../../../../core/services/language.service';
 import { ThemeToggleComponent } from '../../../../shared/components/theme-toggle/theme-toggle.component';
+import { LanguageSwitcherComponent } from '../../../../shared/components/language-switcher/language-switcher.component';
+import { Message } from '../../../../core/models';
 
 @Component({
   selector: 'app-admin-header',
   standalone: true,
-  imports: [CommonModule, ThemeToggleComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    ThemeToggleComponent,
+    LanguageSwitcherComponent,
+    AvatarModule,
+    ButtonModule,
+    MenuModule,
+  ],
   template: `
-    <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 sticky top-0 z-30 transition-colors duration-300">
-      <!-- Left: Mobile Menu Toggle & Title -->
+    <header class="h-16 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 sticky top-0 z-30 transition-colors duration-300">
+      <!-- Left: Mobile Menu Toggle, Desktop Collapse Toggle & Breadcrumbs -->
       <div class="flex items-center gap-3">
+        <!-- Mobile Menu Toggle Button (Strictly Hidden on Desktop) -->
+        <div class="lg:hidden flex items-center">
+          <button
+            type="button"
+            (click)="toggleSidebar.emit()"
+            class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none cursor-pointer flex items-center justify-center transition-colors"
+            id="admin-sidebar-toggle-btn"
+            aria-label="Toggle navigation sidebar"
+          >
+            <i class="pi pi-bars text-sm"></i>
+          </button>
+        </div>
+
+        <!-- Desktop Sidebar Collapse / Expand Toggle Button -->
         <button
           type="button"
-          (click)="toggleSidebar.emit()"
-          class="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none"
-          id="admin-sidebar-toggle-btn"
-          aria-label="Toggle navigation sidebar"
+          (click)="toggleCollapse.emit()"
+          class="hidden lg:flex items-center justify-center w-8 h-8 rounded-xl text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 bg-slate-100/80 hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/90 dark:border-slate-700/80 focus:outline-none cursor-pointer transition-all shadow-2xs mr-2"
+          [title]="isCollapsed ? (isKhmer() ? 'ពង្រីករបារចំហៀង' : 'Expand sidebar') : (isKhmer() ? 'បង្រួមរបារចំហៀង' : 'Collapse sidebar')"
+          aria-label="Toggle sidebar collapse"
+          id="admin-desktop-sidebar-collapse-btn"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+          <i class="pi text-xs" [ngClass]="isCollapsed ? 'pi-arrow-right' : 'pi-bars'"></i>
         </button>
 
-        <div class="flex items-center gap-2">
-          <span class="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-            Control Center
+        <!-- Breadcrumb & Control Center Identity -->
+        <div class="flex items-center gap-2 text-xs sm:text-sm">
+          <span class="text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider text-[11px]" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'អ្នកគ្រប់គ្រង' : 'Admin' }}
+          </span>
+          <i class="pi pi-angle-right text-[10px] text-slate-400 dark:text-slate-600"></i>
+          <span class="font-extrabold text-slate-900 dark:text-white tracking-tight" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'មជ្ឈមណ្ឌលបញ្ជា' : 'Control Center' }}
+          </span>
+          <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60 ml-2" [class.font-khmer]="isKhmer()">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            {{ isKhmer() ? 'បន្តផ្ទាល់' : 'Live' }}
           </span>
         </div>
       </div>
 
-      <!-- Right: Theme, User Info, Logout -->
-      <div class="flex items-center gap-3 sm:gap-4">
+      <!-- Right: Live Site, Language Switcher, Theme, Notifications, Avatar, Logout -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Live Portfolio Link Button -->
+        <a
+          routerLink="/"
+          target="_blank"
+          class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 transition-colors"
+          [class.font-khmer]="isKhmer()"
+          [title]="isKhmer() ? 'មើលគេហទំព័រផលប័ត្រផ្ទាល់' : 'Open live public portfolio website'"
+        >
+          <i class="pi pi-external-link text-[11px]"></i>
+          <span>{{ isKhmer() ? 'គេហទំព័រផ្ទាល់' : 'Live Site' }}</span>
+        </a>
+
+        <!-- EN & KH Language Switcher -->
+        <app-language-switcher class="inline-block"></app-language-switcher>
+
         <!-- Theme Toggle -->
         <app-theme-toggle></app-theme-toggle>
 
-        <div class="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
+        <!-- Notifications Bell & Dropdown -->
+        <div class="relative">
+          <button
+            type="button"
+            (click)="toggleNotifications()"
+            class="relative w-9 h-9 !rounded-full flex items-center justify-center bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700/80 transition-all duration-300 shadow-2xs hover:scale-105 active:scale-95 cursor-pointer focus:outline-none"
+            [class.bg-indigo-50]="isNotificationsOpen()"
+            [class.dark:bg-indigo-950/60]="isNotificationsOpen()"
+            [class.text-indigo-600]="isNotificationsOpen()"
+            [class.border-indigo-300]="isNotificationsOpen()"
+            id="admin-notifications-btn"
+            aria-label="Toggle notifications menu"
+            [title]="unreadCount() > 0 ? (isKhmer() ? 'សារមិនទាន់អាន ' + unreadCount() : unreadCount() + ' unread inquiries') : (isKhmer() ? 'ការជូនដំណឹង' : 'Notifications')"
+          >
+            <i class="pi pi-bell text-base"></i>
+            @if (unreadCount() > 0) {
+              <span
+                id="admin-notifications-badge"
+                class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-black bg-rose-500 text-white flex items-center justify-center shadow-xs ring-2 ring-white dark:ring-slate-900 animate-pulse"
+              >
+                {{ unreadCount() > 99 ? '99+' : unreadCount() }}
+              </span>
+            }
+          </button>
 
-        <!-- User Info & Avatar -->
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-bold text-xs shadow-sm">
-            {{ userInitials() }}
-          </div>
+          <!-- Notifications Dropdown Panel -->
+          @if (isNotificationsOpen()) {
+            <div
+              class="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl z-50 overflow-hidden animate-fadeIn"
+              id="admin-notifications-dropdown"
+            >
+              <!-- Panel Header -->
+              <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-slate-900 dark:text-white" [class.font-khmer]="isKhmer()">
+                    {{ isKhmer() ? 'សារសាកសួរ & ការជូនដំណឹង' : 'Inquiries & Alerts' }}
+                  </span>
+                  @if (unreadCount() > 0) {
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400" [class.font-khmer]="isKhmer()">
+                      {{ isKhmer() ? 'ថ្មី ' + unreadCount() : unreadCount() + ' new' }}
+                    </span>
+                  }
+                </div>
+                <div class="flex items-center gap-2">
+                  @if (unreadCount() > 0) {
+                    <button
+                      type="button"
+                      (click)="markAllAsRead()"
+                      class="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+                      [class.font-khmer]="isKhmer()"
+                      title="Mark all as read"
+                    >
+                      {{ isKhmer() ? 'សម្គាល់ថាបានអាន' : 'Mark all read' }}
+                    </button>
+                  }
+                  <button
+                    type="button"
+                    (click)="closeNotifications()"
+                    class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg cursor-pointer transition-colors"
+                    aria-label="Close notifications panel"
+                  >
+                    <i class="pi pi-times text-xs"></i>
+                  </button>
+                </div>
+              </div>
 
-          <div class="hidden sm:block text-left">
-            <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">
-              {{ userName() }}
-            </p>
-            <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">
-              {{ userEmail() }}
-            </p>
-          </div>
+              <!-- Notifications List -->
+              <div class="max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/60">
+                @if (recentMessages().length === 0) {
+                  <div class="p-6 text-center text-slate-400 dark:text-slate-500 space-y-1.5">
+                    <i class="pi pi-check-circle text-2xl text-emerald-500"></i>
+                    <p class="text-xs font-semibold text-slate-700 dark:text-slate-300" [class.font-khmer]="isKhmer()">
+                      {{ isKhmer() ? 'បានរួចរាល់ទាំងអស់!' : 'All caught up!' }}
+                    </p>
+                    <p class="text-[11px]" [class.font-khmer]="isKhmer()">
+                      {{ isKhmer() ? 'គ្មានសារសាកសួរ ឬការជូនដំណឹងដែលមិនទាន់អានទេ។' : 'No unread inquiries or system alerts.' }}
+                    </p>
+                  </div>
+                } @else {
+                  @for (msg of recentMessages(); track msg._id) {
+                    <a
+                      routerLink="/admin/messages"
+                      (click)="closeNotifications()"
+                      class="block p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors text-left text-decoration-none group cursor-pointer"
+                    >
+                      <div class="flex items-start gap-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
+                          <i class="pi pi-envelope text-xs"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <div class="flex items-center justify-between gap-2">
+                            <span class="text-xs font-bold text-slate-900 dark:text-white truncate">
+                              {{ msg.name }}
+                            </span>
+                            <span class="text-[10px] text-slate-400 whitespace-nowrap">
+                              {{ formatTimeAgo(msg.createdAt) }}
+                            </span>
+                          </div>
+                          <p class="text-[11px] font-medium text-slate-700 dark:text-slate-300 truncate mt-0.5">
+                            {{ msg.subject || (isKhmer() ? 'សារសាកសួរថ្មី' : 'New Contact Inquiry') }}
+                          </p>
+                          <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                            {{ msg.message }}
+                          </p>
+                        </div>
+                      </div>
+                    </a>
+                  }
+                }
+              </div>
+
+              <!-- Panel Footer -->
+              <div class="p-2.5 bg-slate-50/80 dark:bg-slate-900/80 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <a
+                  routerLink="/admin/messages"
+                  (click)="closeNotifications()"
+                  class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1.5 px-2 py-1 rounded-lg transition-colors cursor-pointer"
+                  [class.font-khmer]="isKhmer()"
+                >
+                  <span>{{ isKhmer() ? 'មើលសារទាំងអស់' : 'View all messages' }}</span>
+                  <i class="pi pi-arrow-right text-[10px]"></i>
+                </a>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="h-5 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
+
+        <!-- User Avatar with PrimeNG Popup Account Menu -->
+        <div class="relative flex items-center">
+          <p-menu #accountMenu [model]="accountMenuItems" [popup]="true" styleClass="w-52 text-xs" />
+          <button
+            type="button"
+            (click)="accountMenu.toggle($event)"
+            class="relative flex items-center rounded-full p-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 cursor-pointer transition-all hover:scale-105 active:scale-95 group"
+            id="admin-account-avatar-btn"
+            aria-label="Toggle user account menu"
+            [title]="userName() + ' (' + userEmail() + ')'"
+          >
+            <p-avatar
+              [image]="userAvatar()"
+              shape="circle"
+              class="size-9 shrink-0 shadow-xs ring-2 ring-slate-200/80 dark:ring-slate-700/80 group-hover:ring-indigo-500 dark:group-hover:ring-indigo-400 transition-all"
+            />
+            <span class="sr-only">{{ userName() }} {{ userEmail() }}</span>
+          </button>
         </div>
 
         <!-- Logout Button -->
@@ -59,25 +245,129 @@ import { ThemeToggleComponent } from '../../../../shared/components/theme-toggle
           type="button"
           (click)="onLogout()"
           [disabled]="authService.isLoading()"
-          class="p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 transition-colors flex items-center gap-1.5 focus:outline-none"
+          class="p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 transition-colors flex items-center gap-1.5 focus:outline-none cursor-pointer shadow-2xs"
+          [class.font-khmer]="isKhmer()"
           id="admin-logout-btn"
-          aria-label="Sign out of admin session"
-          title="Sign out of admin session"
+          [attr.aria-label]="isKhmer() ? 'ចាកចេញពីផ្ទាំងគ្រប់គ្រង' : 'Sign out of admin session'"
+          [title]="isKhmer() ? 'ចាកចេញពីផ្ទាំងគ្រប់គ្រង' : 'Sign out of admin session'"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-          <span class="hidden sm:inline">Logout</span>
+          <i class="pi pi-sign-out text-xs"></i>
+          <span class="hidden sm:inline">{{ isKhmer() ? 'ចាកចេញ' : 'Logout' }}</span>
         </button>
       </div>
     </header>
   `,
 })
-export class AdminHeaderComponent {
+export class AdminHeaderComponent implements OnInit {
   public readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly portfolioService = inject(PortfolioService, { optional: true });
+  public readonly themeService = inject(ThemeService, { optional: true });
+  public readonly languageService = inject(LanguageService);
+  public readonly isKhmer = this.languageService.isKhmer;
 
+  @Input() public isCollapsed = false;
   @Output() public toggleSidebar = new EventEmitter<void>();
+  @Output() public toggleCollapse = new EventEmitter<void>();
+
+  public readonly isNotificationsOpen = signal<boolean>(false);
+  public readonly unreadCount = signal<number>(0);
+  public readonly recentMessages = signal<Message[]>([]);
+  public accountMenuItems: MenuItem[] = [];
+
+  constructor() {
+    effect(() => {
+      this.initAccountMenu(this.isKhmer());
+    });
+  }
+
+  public ngOnInit(): void {
+    this.initAccountMenu(this.isKhmer());
+    this.loadNotifications();
+  }
+
+  public loadNotifications(): void {
+    if (!this.portfolioService) {
+      return;
+    }
+
+    this.portfolioService
+      .getDashboardStats()
+      .pipe(catchError(() => of(null)))
+      .subscribe({
+        next: (res) => {
+          if (res?.data?.unreadMessages !== undefined) {
+            this.unreadCount.set(res.data.unreadMessages);
+          }
+        },
+      });
+
+    this.portfolioService
+      .getAdminMessages({ page: 1, limit: 4, isRead: false })
+      .pipe(catchError(() => of(null)))
+      .subscribe({
+        next: (res) => {
+          if (res?.data?.items) {
+            this.recentMessages.set(res.data.items);
+          }
+        },
+      });
+  }
+
+  @HostListener('document:click', ['$event'])
+  public onDocumentClick(event: MouseEvent): void {
+    const target = event.target as Element | null;
+    if (
+      this.isNotificationsOpen() &&
+      target &&
+      !target.closest('#admin-notifications-btn') &&
+      !target.closest('#admin-notifications-dropdown')
+    ) {
+      this.isNotificationsOpen.set(false);
+    }
+  }
+
+  public toggleNotifications(): void {
+    const next = !this.isNotificationsOpen();
+    this.isNotificationsOpen.set(next);
+    if (next) {
+      this.loadNotifications();
+    }
+  }
+
+  public closeNotifications(): void {
+    this.isNotificationsOpen.set(false);
+  }
+
+  public markAllAsRead(): void {
+    const msgs = this.recentMessages();
+    if (this.portfolioService && msgs.length > 0) {
+      msgs.forEach((m) => {
+        if (m._id) {
+          this.portfolioService?.markAdminMessageAsRead(m._id)
+            .pipe(catchError(() => of(null)))
+            .subscribe();
+        }
+      });
+    }
+    this.unreadCount.set(0);
+    this.recentMessages.set([]);
+  }
+
+  public formatTimeAgo(dateInput: string | Date | undefined): string {
+    if (!dateInput) return '';
+    const date = new Date(dateInput);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const kh = this.isKhmer();
+    if (diffMins < 1) return kh ? 'អម្បាញ់មិញ' : 'Just now';
+    if (diffMins < 60) return kh ? `${diffMins} នាទីមុន` : `${diffMins}m ago`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return kh ? `${diffHours} ម៉ោងមុន` : `${diffHours}h ago`;
+    const diffDays = Math.floor(diffHours / 24);
+    return kh ? `${diffDays} ថ្ងៃមុន` : `${diffDays}d ago`;
+  }
 
   public userName(): string {
     return this.authService.currentUser()?.fullName || 'Administrator';
@@ -96,6 +386,11 @@ export class AdminHeaderComponent {
     return (name[0] || 'A').toUpperCase();
   }
 
+  public userAvatar(): string {
+    const user = this.authService.currentUser();
+    return user?.avatar || 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png';
+  }
+
   public onLogout(): void {
     this.authService.logout().subscribe({
       next: () => {
@@ -105,5 +400,132 @@ export class AdminHeaderComponent {
         this.router.navigateByUrl('/admin/login');
       },
     });
+  }
+
+  public initAccountMenu(kh = false): void {
+    this.accountMenuItems = [
+      {
+        label: kh ? 'គណនីរបស់ខ្ញុំ' : 'My Account',
+        items: [
+          {
+            label: kh ? 'ព័ត៌មានផ្ទាល់ខ្លួន' : 'Profile',
+            icon: 'pi pi-user',
+            command: () => {
+              this.router.navigate(['/admin/profile']);
+            },
+          },
+          {
+            label: kh ? 'ការទូទាត់' : 'Billing',
+            icon: 'pi pi-credit-card',
+            command: () => {
+              this.router.navigate(['/admin/settings']);
+            },
+          },
+          {
+            label: kh ? 'ការកំណត់' : 'Settings',
+            icon: 'pi pi-cog',
+            command: () => {
+              this.router.navigate(['/admin/settings']);
+            },
+          },
+        ],
+      },
+      { separator: true },
+      {
+        label: kh ? 'ការជូនដំណឹង' : 'Notifications',
+        items: [
+          {
+            label: kh ? 'បើកការជូនដំណឹង' : 'Enable notifications',
+            icon: 'pi pi-blank',
+            command: () => {
+              this.toggleNotifications();
+            },
+          },
+          {
+            label: kh ? 'ចាក់សំឡេង' : 'Play sound',
+            icon: 'pi pi-blank',
+            command: () => {
+              this.playNotificationSound();
+            },
+          },
+        ],
+      },
+      { separator: true },
+      {
+        label: kh ? 'រូបរាង' : 'Appearance',
+        items: [
+          {
+            label: kh ? 'ពន្លឺ' : 'Light',
+            icon: 'pi pi-blank',
+            command: () => {
+              this.themeService?.setTheme('light');
+            },
+          },
+          {
+            label: kh ? 'ងងឹត' : 'Dark',
+            icon: 'pi pi-blank',
+            command: () => {
+              this.themeService?.setTheme('dark');
+            },
+          },
+          {
+            label: kh ? 'ប្រព័ន្ធ' : 'System',
+            icon: 'pi pi-blank',
+            command: () => {
+              this.setSystemTheme();
+            },
+          },
+        ],
+      },
+      { separator: true },
+      {
+        label: kh ? 'សម័យការ' : 'Session',
+        items: [
+          {
+            label: kh ? 'ចាកចេញ' : 'Logout',
+            icon: 'pi pi-sign-out',
+            command: () => {
+              this.onLogout();
+            },
+          },
+        ],
+      },
+    ];
+  }
+
+  public setSystemTheme(): void {
+    try {
+      localStorage.removeItem('portfolio_theme');
+      const isSystemDark =
+        typeof window !== 'undefined' &&
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+      this.themeService?.setTheme(isSystemDark ? 'dark' : 'light');
+    } catch {
+      this.themeService?.setTheme('light');
+    }
+  }
+
+  public playNotificationSound(): void {
+    try {
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
+      const audioCtx = new AudioCtx();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.3);
+    } catch {
+      // Audio playback unavailable or blocked by autoplay
+    }
   }
 }

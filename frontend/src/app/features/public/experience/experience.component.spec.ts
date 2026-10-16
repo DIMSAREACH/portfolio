@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { ExperienceComponent } from './experience.component';
@@ -72,6 +73,22 @@ describe('ExperienceComponent', () => {
     data: mockExperiences,
   };
 
+  beforeAll(() => {
+    if (typeof window !== 'undefined' && !window.IntersectionObserver) {
+      class MockIntersectionObserver {
+        root = null;
+        rootMargin = '';
+        thresholds = [];
+        observe = vi.fn();
+        unobserve = vi.fn();
+        disconnect = vi.fn();
+        takeRecords = vi.fn().mockReturnValue([]);
+      }
+      window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+      globalThis.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+    }
+  });
+
   beforeEach(async () => {
     portfolioServiceMock = {
       getExperiences: vi.fn().mockReturnValue(of(mockApiResponse)),
@@ -86,6 +103,7 @@ describe('ExperienceComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ExperienceComponent],
       providers: [
+        provideAnimationsAsync(),
         provideRouter([]),
         { provide: PortfolioService, useValue: portfolioServiceMock },
         { provide: LanguageService, useValue: languageServiceMock },
@@ -217,5 +235,29 @@ describe('ExperienceComponent', () => {
   it('should provide CV download URL from portfolio service', () => {
     expect(component.cvDownloadUrl).toBe('/api/v1/cv/download');
     expect(portfolioServiceMock.getCvDownloadUrl).toHaveBeenCalled();
+  });
+
+  it('should handle CascadeSelect change, clear, and type filtering', () => {
+    fixture.detectChanges();
+
+    const cascadeOptions = component.cascadeCategories();
+    expect(cascadeOptions.length).toBe(5);
+    expect(cascadeOptions[0].id).toBe('all');
+    expect(cascadeOptions[1].id).toBe('work');
+
+    // Select work option
+    const workOption = cascadeOptions[1];
+    component.onCascadeChange({ value: workOption });
+    fixture.detectChanges();
+    expect(component.selectedType()).toBe('work');
+    expect(component.selectedCascadeItem()?.id).toBe('work');
+    expect(component.filteredExperiences().length).toBe(1);
+
+    // Clear cascade select
+    component.onCascadeClear();
+    fixture.detectChanges();
+    expect(component.selectedType()).toBe('all');
+    expect(component.selectedCascadeItem()?.id).toBe('all');
+    expect(component.filteredExperiences().length).toBe(2);
   });
 });

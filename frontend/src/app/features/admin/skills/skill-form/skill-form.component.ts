@@ -24,7 +24,7 @@ interface CategoryPreset {
     BilingualFieldComponent,
   ],
   template: `
-    <div class="max-w-3xl mx-auto space-y-8 animate-fadeIn">
+    <div class="w-full space-y-8 animate-fadeIn">
       <!-- Breadcrumb & Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

@@ -141,27 +141,18 @@ export const ADMIN_ROUTES: Routes = [
       },
       {
         path: 'blog',
-        loadComponent: () =>
-          import('./blog/blog-list/blog-list.component').then(
-            (m) => m.BlogListComponent,
-          ),
-        title: 'Blog Posts | Admin CMS',
+        redirectTo: 'projects',
+        pathMatch: 'full',
       },
       {
         path: 'blog/create',
-        loadComponent: () =>
-          import('./blog/blog-form/blog-form.component').then(
-            (m) => m.BlogFormComponent,
-          ),
-        title: 'Create Blog Post | Admin CMS',
+        redirectTo: 'projects',
+        pathMatch: 'full',
       },
       {
         path: 'blog/:id/edit',
-        loadComponent: () =>
-          import('./blog/blog-form/blog-form.component').then(
-            (m) => m.BlogFormComponent,
-          ),
-        title: 'Edit Blog Post | Admin CMS',
+        redirectTo: 'projects',
+        pathMatch: 'full',
       },
       {
         path: 'categories',

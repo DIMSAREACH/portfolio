@@ -95,12 +95,15 @@ button {
 
 /* Links */
 a {
-  color: var(--color-accent);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
-a:hover {
+a:not([class]) {
+  color: var(--color-accent);
+}
+
+a:not([class]):hover {
   color: var(--color-accent-hover);
 }
 

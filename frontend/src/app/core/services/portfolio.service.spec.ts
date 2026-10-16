@@ -55,7 +55,7 @@ describe('PortfolioService', () => {
       success: true,
       message: 'Profile retrieved',
       data: {
-        fullName: { en: 'Dim Sareach', kh: 'ឌីម សារាជ' },
+        fullName: { en: 'Dim Sareach', kh: 'ឌឹម សារាជ' },
         title: { en: 'Full Stack Engineer', kh: 'វិស្វករកម្មវិធី' },
         introduction: { en: 'Hello world', kh: 'សួស្តីពិភពលោក' },
         about: { en: 'About me', kh: 'អំពីខ្ញុំ' },

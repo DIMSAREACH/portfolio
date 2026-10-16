@@ -23,6 +23,7 @@ describe('App Routes', () => {
     expect(childPaths).toContain('blog');
     expect(childPaths).toContain('blog/:slug');
     expect(childPaths).toContain('achievements');
+    expect(childPaths).toContain('certifications');
     expect(childPaths).toContain('contact');
   });
 

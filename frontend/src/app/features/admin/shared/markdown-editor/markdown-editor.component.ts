@@ -209,7 +209,7 @@ import { Marked } from 'marked';
                 [value]="content()"
                 (input)="onTextareaInput($event)"
                 (blur)="onBlur()"
-                class="w-full p-4 font-mono text-xs text-slate-800 dark:text-slate-200 bg-transparent focus:outline-none resize-y leading-relaxed disabled:opacity-50"
+                class="w-full p-4 font-mono text-sm text-slate-800 dark:text-slate-200 bg-transparent focus:outline-none resize-y leading-relaxed disabled:opacity-50"
               ></textarea>
             </div>
           }

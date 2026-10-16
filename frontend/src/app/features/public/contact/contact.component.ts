@@ -7,14 +7,16 @@ import { LanguageService } from '../../../core/services/language.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { SocialLink } from '../../../core/models';
 
+import { AnimateOnScrollModule } from 'primeng/animateonscroll';
+
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AnimateOnScrollModule],
   template: `
     <div class="py-12 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
-      <!-- Page Header -->
-      <section class="space-y-4 max-w-3xl">
+      <!-- Page Header with Entrance Animation -->
+      <section class="space-y-4 max-w-3xl animate-fade-in-up">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-900/50 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -36,8 +38,15 @@ import { SocialLink } from '../../../core/models';
 
       <!-- Main Two-Column Layout (PRD 8.11 & Design.md Section 13: 60% Form / 40% Info) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-        <!-- Left: Contact Form (7 cols on lg) -->
-        <section class="lg:col-span-7 bg-white dark:bg-slate-900 p-6 sm:p-8 md:p-10 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-6">
+        <!-- Left: Contact Form (7 cols on lg) with Scroll Animation -->
+        <section
+          pAnimateOnScroll
+          [once]="true"
+          [threshold]="0.05"
+          enterClass="animate-enter fade-in-0 slide-in-from-l-8 animate-duration-700"
+          leaveClass="animate-leave fade-out-0"
+          class="card-interactive lg:col-span-7 bg-white dark:bg-slate-900 p-6 sm:p-8 md:p-10 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 space-y-6"
+        >
           <div class="space-y-1">
             <h2 class="text-2xl font-bold text-slate-900 dark:text-white">
               {{ isKhmer() ? 'ផ្ញើសារមកកាន់ខ្ញុំ' : 'Send a Direct Message' }}
@@ -257,10 +266,17 @@ import { SocialLink } from '../../../core/models';
           </form>
         </section>
 
-        <!-- Right: Contact Info & Social Links (5 cols on lg) -->
-        <aside class="lg:col-span-5 space-y-6">
+        <!-- Right: Contact Info & Social Links (5 cols on lg) with Scroll Animation -->
+        <aside
+          pAnimateOnScroll
+          [once]="true"
+          [threshold]="0.05"
+          enterClass="animate-enter fade-in-0 slide-in-from-r-8 animate-duration-700"
+          leaveClass="animate-leave fade-out-0"
+          class="lg:col-span-5 space-y-6"
+        >
           <!-- Availability & Status Card -->
-          <div class="p-6 sm:p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-5">
+          <div class="card-interactive p-6 sm:p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-xl transition-all duration-300 space-y-5">
             <div class="flex items-center gap-2.5">
               <span class="relative flex h-3 w-3">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -336,28 +352,83 @@ import { SocialLink } from '../../../core/models';
             </div>
           </div>
 
-          <!-- Social Links Card -->
+          <!-- Social Links Card with Scroll Animation -->
           @if (socialLinks().length > 0) {
-            <div class="p-6 sm:p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-4">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white">
-                {{ isKhmer() ? 'បណ្តាញសង្គម និងការងារ' : 'Connect on Social Media' }}
-              </h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400">
-                {{ isKhmer() ? 'តាមដានការសរសេរកូដ និងគម្រោងរបស់ខ្ញុំតាមរយៈបណ្តាញទាំងនេះ៖' : 'Follow my open-source work and professional updates:' }}
-              </p>
+            <div class="card-interactive p-6 sm:p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-xl transition-all duration-300 space-y-4">
+              <div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                  {{ isKhmer() ? 'បណ្តាញសង្គម និងការងារ' : 'Connect on Social Media' }}
+                </h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  {{ isKhmer() ? 'តាមដានការងារអភិវឌ្ឍន៍សូហ្វវែរ និងគម្រោងរបស់ខ្ញុំ៖' : 'Follow my open-source work and professional updates:' }}
+                </p>
+              </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
-                @for (link of socialLinks(); track link._id) {
+              <div class="flex flex-col gap-2.5 pt-1">
+                @for (link of socialLinks(); track link._id || link.platform) {
                   <a
                     [href]="link.url"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="group flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 border border-slate-200/60 dark:border-slate-700/60 hover:border-indigo-300 dark:hover:border-indigo-800/80 transition-all text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400"
+                    [attr.aria-label]="'Visit ' + (link.label || link.platform)"
+                    class="group relative flex items-center justify-between p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/40 hover:bg-white dark:hover:bg-slate-800 border border-slate-200/70 dark:border-slate-700/60 hover:border-indigo-400/60 dark:hover:border-indigo-500/60 hover:shadow-lg hover:shadow-indigo-500/5 hover:-translate-y-0.5 transition-all duration-200"
                   >
-                    <span class="capitalize">{{ link.platform }}</span>
-                    <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-slate-400 group-hover:text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
+                    <div class="flex items-center gap-3.5 min-w-0">
+                      <!-- Platform Icon Badge -->
+                      @switch (link.platform.toLowerCase()) {
+                        @case ('github') {
+                          <div class="w-10 h-10 rounded-xl bg-slate-950 dark:bg-slate-700 text-white flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                            </svg>
+                          </div>
+                        }
+                        @case ('linkedin') {
+                          <div class="w-10 h-10 rounded-xl bg-[#0A66C2]/10 dark:bg-[#0A66C2]/20 text-[#0A66C2] dark:text-[#388bfd] border border-[#0A66C2]/20 flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.64 1.64 0 1 0 0-3.28 1.64 1.64 0 0 0 0 3.28m1.39 9.74v-8.37H5.07v8.37h2.78z" />
+                            </svg>
+                          </div>
+                        }
+                        @case ('telegram') {
+                          <div class="w-10 h-10 rounded-xl bg-[#229ED9]/10 dark:bg-[#229ED9]/20 text-[#229ED9] dark:text-[#40b3e9] border border-[#229ED9]/20 flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z" />
+                            </svg>
+                          </div>
+                        }
+                        @default {
+                          <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                            </svg>
+                          </div>
+                        }
+                      }
+
+                      <!-- Platform Details -->
+                      <div class="text-left min-w-0">
+                        <div class="text-sm font-bold text-slate-800 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors capitalize truncate">
+                          {{ link.label || link.platform }}
+                        </div>
+                        <div class="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate">
+                          {{ getPlatformSubtitle(link.platform) }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Action Indicator -->
+                    <div class="flex items-center gap-2 flex-shrink-0 pl-3">
+                      <span class="hidden sm:inline-block text-[11px] font-semibold text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200">
+                        {{ isKhmer() ? 'ចូលមើល' : 'Connect' }}
+                      </span>
+                      <div class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center text-slate-400 dark:text-slate-300 transition-all duration-200 shadow-sm">
+                        <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </div>
+                    </div>
                   </a>
                 }
               </div>
@@ -422,10 +493,26 @@ export class ContactComponent implements OnInit {
     this.portfolioService.getSocialLinks().pipe(catchError(() => of(null))).subscribe({
       next: (res) => {
         if (res && res.data && Array.isArray(res.data)) {
-          this.socialLinks.set(res.data.filter((l) => l.isVisible !== false));
+          this.socialLinks.set(
+            res.data.filter((l) => l.isVisible !== false && l.platform?.toLowerCase() !== 'email')
+          );
         }
       },
     });
+  }
+
+  public getPlatformSubtitle(platform: string): string {
+    const p = (platform || '').toLowerCase();
+    if (p.includes('git')) {
+      return this.isKhmer() ? 'កូដ និងគម្រោងប្រភពបើកចំហ' : 'Code & Open-Source Repos';
+    }
+    if (p.includes('link')) {
+      return this.isKhmer() ? 'ប្រវត្តិ និងបណ្តាញវិជ្ជាជីវៈ' : 'Professional Network & Career';
+    }
+    if (p.includes('tele')) {
+      return this.isKhmer() ? 'ផ្ញើសាររហ័សទាន់ចិត្ត' : 'Direct Instant Messaging';
+    }
+    return this.isKhmer() ? 'បណ្តាញទំនាក់ទំនង' : 'Connect online';
   }
 
   public isFieldInvalid(fieldName: string): boolean {

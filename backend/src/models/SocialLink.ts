@@ -3,6 +3,7 @@ import mongoose, { Document, Schema, Model } from 'mongoose';
 export type SocialPlatform =
   | 'github'
   | 'linkedin'
+  | 'telegram'
   | 'facebook'
   | 'email'
   | 'twitter'
@@ -30,6 +31,7 @@ export const socialLinkSchema = new Schema<ISocialLink>(
         values: [
           'github',
           'linkedin',
+          'telegram',
           'facebook',
           'email',
           'twitter',

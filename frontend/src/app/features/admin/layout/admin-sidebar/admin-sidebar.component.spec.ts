@@ -34,15 +34,15 @@ describe('AdminSidebarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render exactly 15 navigation items per PRD 9.1', () => {
+  it('should render active navigation items with Blog Management and Achievements consolidated', () => {
     const totalItems = component.navGroups.reduce((acc, g) => acc + g.items.length, 0);
-    expect(totalItems).toBe(15);
+    expect(totalItems).toBe(12);
 
     const links = fixture.nativeElement.querySelectorAll('nav a');
-    expect(links.length).toBe(15);
+    expect(links.length).toBe(12);
   });
 
-  it('should include key sections like Dashboard, Projects, Blog, Messages, and Settings', () => {
+  it('should include key sections like Dashboard, Projects, Messages, and Settings, and show only Certifications', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('Dashboard');
     expect(compiled.textContent).toContain('Projects');
@@ -50,8 +50,9 @@ describe('AdminSidebarComponent', () => {
     expect(compiled.textContent).toContain('Experience');
     expect(compiled.textContent).toContain('Education');
     expect(compiled.textContent).toContain('Certifications');
-    expect(compiled.textContent).toContain('Achievements');
-    expect(compiled.textContent).toContain('Blog Posts');
+    expect(compiled.textContent).not.toContain('Achievements');
+    expect(compiled.textContent).not.toContain('Blog Management');
+    expect(compiled.textContent).not.toContain('Blog Posts');
     expect(compiled.textContent).toContain('Messages');
     expect(compiled.textContent).toContain('Settings');
   });
@@ -81,5 +82,17 @@ describe('AdminSidebarComponent', () => {
     const badge = fixture.nativeElement.querySelector('#sidebar-unread-badge');
     expect(badge).toBeTruthy();
     expect(badge.textContent.trim()).toBe('3');
+  });
+
+  it('should toggle collapse width class when isCollapsed changes', () => {
+    fixture.componentRef.setInput('isCollapsed', false);
+    fixture.detectChanges();
+
+    const aside = fixture.nativeElement.querySelector('aside');
+    expect(aside.classList.contains('lg:w-64')).toBe(true);
+
+    fixture.componentRef.setInput('isCollapsed', true);
+    fixture.detectChanges();
+    expect(aside.classList.contains('lg:w-20')).toBe(true);
   });
 });

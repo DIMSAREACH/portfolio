@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { LanguageService } from '../../../../core/services/language.service';
 import { Education } from '../../../../core/models';
 import { AdminDataTableComponent, TableColumn, SortEvent } from '../../shared';
 import { ConfirmDialogComponent } from '../../../../shared';
@@ -18,26 +19,27 @@ import { ConfirmDialogComponent } from '../../../../shared';
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-              CMS Academics
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400" [class.font-khmer]="isKhmer()">
+              {{ isKhmer() ? 'ការគ្រប់គ្រងការសិក្សា' : 'CMS Academics' }}
             </span>
           </div>
-          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">
-            Education & Degrees
+          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1 tracking-tight" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'ការអប់រំ និងសញ្ញាបត្រ' : 'Education & Degrees' }}
           </h1>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Manage academic degrees, institutions, study disciplines, timelines, and honors.
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'គ្រប់គ្រងកម្រិតសញ្ញាបត្រ គ្រឹះស្ថានឧត្តមសិក្សា ជំនាញសិក្សា និងកិត្តិយសសិក្សា។' : 'Manage academic degrees, institutions, study disciplines, timelines, and honors.' }}
           </p>
         </div>
 
         <a
           routerLink="/admin/education/create"
-          class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto"
+          class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto cursor-pointer"
+          [class.font-khmer]="isKhmer()"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          <span>New Education</span>
+          <span>{{ isKhmer() ? 'ការអប់រំថ្មី' : 'New Education' }}</span>
         </a>
       </div>
 
@@ -49,9 +51,9 @@ import { ConfirmDialogComponent } from '../../../../shared';
         [currentPage]="currentPage()"
         [pageSize]="pageSize()"
         [isLoading]="isLoading()"
-        searchPlaceholder="Search by school, degree, field of study..."
-        createButtonLabel="New Education"
-        emptyMessage="No education records found. Add your first academic degree!"
+        [searchPlaceholder]="isKhmer() ? 'ស្វែងរកតាមគ្រឹះស្ថាន, សញ្ញាបត្រ, មុខជំនាញ...' : 'Search by school, degree, field of study...'"
+        [createButtonLabel]="isKhmer() ? 'ការអប់រំថ្មី' : 'New Education'"
+        [emptyMessage]="isKhmer() ? 'មិនមានកំណត់ត្រាអប់រំត្រូវបានរកឃើញទេ។ សូមបន្ថែមសញ្ញាបត្រដំបូងរបស់អ្នក!' : 'No education records found. Add your first academic degree!'"
         (searchChange)="onSearchChange($event)"
         (sortChange)="onSortChange($event)"
         (pageChange)="onPageChange($event)"
@@ -68,6 +70,8 @@ export class EducationListComponent implements OnInit {
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
+  public readonly languageService = inject(LanguageService, { optional: true });
+  public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
 
   public readonly educationList = signal<Education[]>([]);
   public readonly totalItems = signal<number>(0);

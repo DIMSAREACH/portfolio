@@ -76,6 +76,70 @@
   animation: floatReverse 6s ease-in-out infinite;
 }
 
+/* Circular Hero Visual Enhancements & Orbital System */
+@keyframes spinOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseSubtle {
+  0%, 100% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.04);
+  }
+}
+
+.animate-spin-orbital {
+  animation: spinOrbit 30s linear infinite;
+}
+
+.animate-pulse-subtle {
+  animation: pulseSubtle 4s ease-in-out infinite;
+}
+
+/* Typewriter Cursor & Animation */
+.typewriter-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1.15em;
+  margin-left: 4px;
+  vertical-align: -0.1em;
+  background: linear-gradient(180deg, #6366f1 0%, #a855f7 100%);
+  border-radius: 9999px;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.65);
+  animation: typewriterCursorBlink 0.9s ease-in-out infinite;
+}
+
+@keyframes typewriterCursorBlink {
+  0%, 45% {
+    opacity: 1;
+  }
+  50%, 95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-orbital,
+  .animate-pulse-subtle,
+  .animate-float-slow,
+  .animate-float-reverse,
+  .typewriter-cursor {
+    animation: none !important;
+  }
+}
+
 /* Gradient Borders & Accent Line */
 .gradient-border-mask {
   position: relative;
@@ -88,6 +152,7 @@
   padding: 1px;
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.6), rgba(236, 72, 153, 0.4), rgba(59, 130, 246, 0.3));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -107,27 +172,69 @@
   transform: scale(1.05);
 }
 
-/* PrimeNG Timeline Refinements */
-:host ::ng-deep .p-timeline .p-timeline-event-opposite {
-  flex: 0 0 100px;
-  padding: 0 1rem;
-}
+/* ==========================================================================
+   PrimeNG Timeline Responsive Design (Phone & Tablet: Left Aligned; Desktop: Alternate)
+   ========================================================================== */
 
-@media (min-width: 768px) {
-  :host ::ng-deep .p-timeline .p-timeline-event-opposite {
-    flex: 1;
-    padding: 0 1.5rem;
+/* Mobile & Tablet (< 1024px) - Clean Left-Aligned Vertical Stream */
+@media (max-width: 1023px) {
+  :host ::ng-deep .custom-timeline .p-timeline-event-opposite {
+    display: none !important;
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  :host ::ng-deep .custom-timeline .p-timeline-event,
+  :host ::ng-deep .custom-timeline .p-timeline-event:nth-child(even),
+  :host ::ng-deep .custom-timeline .p-timeline-event:nth-child(odd) {
+    flex-direction: row !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  :host ::ng-deep .custom-timeline .p-timeline-event-separator {
+    flex: 0 0 2.5rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  :host ::ng-deep .custom-timeline .p-timeline-event-content {
+    flex: 1 1 auto !important;
+    width: calc(100% - 2.5rem) !important;
+    padding: 0 0 1.5rem 0.75rem !important;
+    text-align: left !important;
+  }
+
+  :host ::ng-deep .custom-timeline .glass-card {
+    width: 100% !important;
+    box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03) !important;
   }
 }
 
-:host ::ng-deep .p-timeline .p-timeline-event-content {
-  padding: 0 1rem 2rem 1rem;
+/* Desktop (>= 1024px) - Balanced Alternating Timeline */
+@media (min-width: 1024px) {
+  :host ::ng-deep .custom-timeline .p-timeline-event-opposite {
+    flex: 1 1 0 !important;
+    padding: 0 2rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+  }
+
+  :host ::ng-deep .custom-timeline .p-timeline-event-content {
+    flex: 1 1 0 !important;
+    padding: 0 2rem 3rem 2rem !important;
+  }
 }
 
-@media (min-width: 768px) {
-  :host ::ng-deep .p-timeline .p-timeline-event-content {
-    padding: 0 1.5rem 2.5rem 1.5rem;
-  }
+:host ::ng-deep .custom-timeline .p-timeline-event-content,
+:host ::ng-deep .custom-timeline .glass-card,
+:host ::ng-deep .custom-timeline .glass-card p {
+  text-align: left !important;
 }
 
 /* Code Snippet Window */
@@ -137,17 +244,322 @@
   border: 1px solid #30363d;
 }
 
-/* PrimeNG Button Gradient Overrides */
-:host ::ng-deep .btn-gradient {
+/* PrimeNG Button Gradient Overrides & High-Contrast Hover System */
+.btn-primary-action,
+:host ::ng-deep .btn-gradient,
+:host ::ng-deep .btn-primary-action {
   background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%) !important;
   border: none !important;
-  color: white !important;
-  box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39) !important;
-  transition: all 0.3s ease !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px -4px rgba(99, 102, 241, 0.4) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  text-decoration: none !important;
 }
 
-:host ::ng-deep .btn-gradient:hover {
-  opacity: 0.95 !important;
-  transform: translateY(-1px) scale(1.02) !important;
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45) !important;
+.btn-primary-action:hover,
+.btn-primary-action:focus,
+.btn-primary-action:active,
+:host ::ng-deep .btn-gradient:hover,
+:host ::ng-deep .btn-gradient:focus,
+:host ::ng-deep .btn-gradient:active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 50%, #be185d 100%) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 10px 25px -4px rgba(99, 102, 241, 0.55), 0 0 16px rgba(219, 39, 119, 0.3) !important;
+}
+
+.btn-primary-action *,
+.btn-primary-action:hover *,
+:host ::ng-deep .btn-gradient *,
+:host ::ng-deep .btn-gradient:hover * {
+  color: #ffffff !important;
+}
+
+/* Secondary Hero Button (Get In Touch) */
+.btn-secondary-action {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  color: #1e293b !important;
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none !important;
+}
+
+:host-context(.dark) .btn-secondary-action {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(51, 65, 85, 0.85);
+  color: #f1f5f9 !important;
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.25);
+}
+
+.btn-secondary-action i {
+  color: #6366f1 !important;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.btn-secondary-action:hover {
+  background: #ffffff !important;
+  border-color: #6366f1 !important;
+  color: #4338ca !important;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.25);
+}
+
+:host-context(.dark) .btn-secondary-action:hover {
+  background: rgba(30, 41, 59, 1) !important;
+  border-color: #818cf8 !important;
+  color: #a5b4fc !important;
+  box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.35);
+}
+
+.btn-secondary-action:hover i {
+  transform: translate(2px, -2px) scale(1.15);
+  color: #4f46e5 !important;
+}
+
+:host-context(.dark) .btn-secondary-action:hover i {
+  color: #a5b4fc !important;
+}
+
+/* Connect Social Buttons (GitHub, LinkedIn, Telegram) */
+.social-icon-btn {
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  color: #475569 !important;
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  text-decoration: none !important;
+}
+
+:host-context(.dark) .social-icon-btn {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(51, 65, 85, 0.85);
+  color: #94a3b8 !important;
+}
+
+.social-icon-btn i,
+.social-icon-btn svg {
+  color: #334155 !important;
+  fill: currentColor;
+  transition: transform 0.25s ease, color 0.25s ease, fill 0.25s ease;
+}
+
+:host-context(.dark) .social-icon-btn i,
+:host-context(.dark) .social-icon-btn svg {
+  color: #cbd5e1 !important;
+  fill: currentColor;
+}
+
+.social-icon-btn:hover {
+  transform: translateY(-3px) scale(1.12);
+}
+
+.social-icon-btn:hover i,
+.social-icon-btn:hover svg {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  transform: scale(1.08);
+}
+
+/* GitHub Signature Hover */
+.social-icon-btn.btn-social-github:hover {
+  background: #0f172a !important;
+  border-color: #0f172a !important;
+  box-shadow: 0 10px 22px -4px rgba(15, 23, 42, 0.45) !important;
+}
+
+/* LinkedIn Signature Hover */
+.social-icon-btn.btn-social-linkedin:hover {
+  background: #0077b5 !important;
+  border-color: #0077b5 !important;
+  box-shadow: 0 10px 22px -4px rgba(0, 119, 181, 0.45) !important;
+}
+
+/* Telegram Signature Hover */
+.social-icon-btn.btn-social-telegram:hover {
+  background: #229ed9 !important;
+  border-color: #229ed9 !important;
+  box-shadow: 0 10px 22px -4px rgba(34, 158, 217, 0.45) !important;
+}
+
+/* Universal Text White Protection on Hover */
+:host ::ng-deep a.text-white:hover,
+:host ::ng-deep a.text-white:hover * {
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   Hero Page-Load Entrance Animations (Staggered & Smooth)
+   ========================================================================== */
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.93) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.hero-anim-1 {
+  animation: heroFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+.hero-anim-2 {
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+.hero-anim-3 {
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+.hero-anim-4 {
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+
+.hero-anim-5 {
+  animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
+}
+
+.hero-anim-visual {
+  animation: heroScaleIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.hero-anim-scroll {
+  animation: heroFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+}
+
+/* AnimateOnScroll Component Scope Rules */
+:host ::ng-deep .animate-enter {
+  animation-name: enter;
+  animation-duration: 1000ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+  --p-enter-opacity: 0;
+  --p-enter-translate-y: 3.5rem;
+}
+
+:host ::ng-deep .animate-leave {
+  animation-name: leave;
+  animation-duration: 150ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+  --p-leave-opacity: 0;
+}
+
+:host ::ng-deep .fade-in-10 {
+  --p-enter-opacity: 0;
+}
+
+:host ::ng-deep .fade-out-0 {
+  --p-leave-opacity: 0;
+}
+
+:host ::ng-deep .slide-in-from-b-16 {
+  --p-enter-translate-y: 3.5rem;
+}
+
+:host ::ng-deep .animate-duration-1000 {
+  animation-duration: 1000ms !important;
+}
+
+:host ::ng-deep .animate-duration-100 {
+  animation-duration: 100ms !important;
+}
+
+/* Custom PrimeNG Featured Projects Carousel */
+:host ::ng-deep .custom-project-carousel {
+  position: relative;
+}
+
+:host ::ng-deep .custom-project-carousel .p-carousel-content-container {
+  overflow: visible;
+}
+
+:host ::ng-deep .custom-project-carousel .p-carousel-viewport {
+  padding: 0.5rem 0 1rem 0;
+  overflow: hidden;
+  border-radius: 1.5rem;
+}
+
+:host ::ng-deep .custom-project-carousel .p-carousel-prev-button,
+:host ::ng-deep .custom-project-carousel .p-carousel-next-button {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  color: #4f46e5;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+}
+
+:host-context(.dark) :host ::ng-deep .custom-project-carousel .p-carousel-prev-button,
+:host-context(.dark) :host ::ng-deep .custom-project-carousel .p-carousel-next-button {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(51, 65, 85, 0.85);
+  color: #818cf8;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+:host ::ng-deep .custom-project-carousel .p-carousel-prev-button:hover,
+:host ::ng-deep .custom-project-carousel .p-carousel-next-button:hover {
+  background: #6366f1;
+  color: #ffffff;
+  border-color: #6366f1;
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+}
+
+:host ::ng-deep p-carousel-indicators,
+:host ::ng-deep .p-carousel-indicator-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+:host ::ng-deep .p-carousel-indicator-button {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 9999px;
+  background: rgba(148, 163, 184, 0.45);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:host ::ng-deep .p-carousel-indicator-button:hover {
+  background: rgba(99, 102, 241, 0.75);
+}
+
+:host ::ng-deep .p-carousel-indicator-button.p-carousel-indicator-active,
+:host ::ng-deep .p-carousel-indicator-active .p-carousel-indicator-button {
+  width: 2rem;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
 }

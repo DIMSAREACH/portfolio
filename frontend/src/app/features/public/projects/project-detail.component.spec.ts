@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, ActivatedRoute, convertToParamMap } from '@angular/router';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { ProjectDetailComponent } from './project-detail.component';
@@ -110,6 +111,22 @@ describe('ProjectDetailComponent', () => {
     },
   };
 
+  beforeAll(() => {
+    if (typeof window !== 'undefined' && !window.IntersectionObserver) {
+      class MockIntersectionObserver {
+        root = null;
+        rootMargin = '';
+        thresholds = [];
+        observe = vi.fn();
+        unobserve = vi.fn();
+        disconnect = vi.fn();
+        takeRecords = vi.fn().mockReturnValue([]);
+      }
+      window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+      globalThis.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+    }
+  });
+
   beforeEach(async () => {
     portfolioServiceMock = {
       getProjectBySlug: vi.fn().mockReturnValue(of(mockProjectResponse)),
@@ -124,6 +141,7 @@ describe('ProjectDetailComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ProjectDetailComponent],
       providers: [
+        provideAnimationsAsync(),
         provideRouter([]),
         { provide: PortfolioService, useValue: portfolioServiceMock },
         { provide: LanguageService, useValue: languageServiceMock },

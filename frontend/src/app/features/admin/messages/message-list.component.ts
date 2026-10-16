@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { LanguageService } from '../../../core/services/language.service';
 import { Message } from '../../../core/models';
 import { ConfirmDialogComponent } from '../../../shared';
 
@@ -17,26 +18,26 @@ import { ConfirmDialogComponent } from '../../../shared';
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-              Communication Center
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400" [class.font-khmer]="isKhmer()">
+              {{ isKhmer() ? 'មជ្ឈមណ្ឌលសារសាកសួរ' : 'Communication Center' }}
             </span>
             @if (unreadCount() > 0) {
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-500 text-white">
-                {{ unreadCount() }} Unread
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-500 text-white animate-pulse" [class.font-khmer]="isKhmer()">
+                {{ unreadCount() }} {{ isKhmer() ? 'មិនទាន់អាន' : 'Unread' }}
               </span>
             }
           </div>
-          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">
-            Inquiries & Contact Messages
+          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1 tracking-tight" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'សារទំនាក់ទំនង & សំណើសាកសួរ' : 'Inquiries & Contact Messages' }}
           </h1>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Manage inquiries, project consultations, and hire requests submitted from your public portfolio.
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'គ្រប់គ្រងសារសាកសួរ ការពិគ្រោះយោបល់គម្រោង និងសំណើការងារពីគេហទំព័រផលប័ត្រ។' : 'Manage inquiries, project consultations, and hire requests submitted from your public portfolio.' }}
           </p>
         </div>
       </div>
 
       <!-- Main Messages Container -->
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs overflow-hidden">
         <!-- Filter Toolbar -->
         <div class="p-4 border-b border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div class="relative w-full sm:w-72">
@@ -44,7 +45,8 @@ import { ConfirmDialogComponent } from '../../../shared';
               type="text"
               [(ngModel)]="searchQuery"
               (ngModelChange)="onSearchChange()"
-              placeholder="Search sender, subject..."
+              [placeholder]="isKhmer() ? 'ស្វែងរកអ្នកផ្ញើ, ប្រធានបទ...' : 'Search sender, subject...'"
+              [class.font-khmer]="isKhmer()"
               class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             />
             <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,7 +59,8 @@ import { ConfirmDialogComponent } from '../../../shared';
             <button
               type="button"
               (click)="onFilterChange('all')"
-              class="px-3 py-1.5 text-xs font-semibold rounded-xl transition-all"
+              class="px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer"
+              [class.font-khmer]="isKhmer()"
               [class.bg-indigo-600]="activeFilter() === 'all'"
               [class.text-white]="activeFilter() === 'all'"
               [class.bg-slate-100]="activeFilter() !== 'all'"
@@ -65,12 +68,13 @@ import { ConfirmDialogComponent } from '../../../shared';
               [class.text-slate-600]="activeFilter() !== 'all'"
               [class.dark:text-slate-300]="activeFilter() !== 'all'"
             >
-              All Messages
+              {{ isKhmer() ? 'សារទាំងអស់' : 'All Messages' }}
             </button>
             <button
               type="button"
               (click)="onFilterChange('unread')"
-              class="px-3 py-1.5 text-xs font-semibold rounded-xl transition-all"
+              class="px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer"
+              [class.font-khmer]="isKhmer()"
               [class.bg-indigo-600]="activeFilter() === 'unread'"
               [class.text-white]="activeFilter() === 'unread'"
               [class.bg-slate-100]="activeFilter() !== 'unread'"
@@ -78,12 +82,13 @@ import { ConfirmDialogComponent } from '../../../shared';
               [class.text-slate-600]="activeFilter() !== 'unread'"
               [class.dark:text-slate-300]="activeFilter() !== 'unread'"
             >
-              Unread Only
+              {{ isKhmer() ? 'មិនទាន់អាន' : 'Unread Only' }}
             </button>
             <button
               type="button"
               (click)="onFilterChange('read')"
-              class="px-3 py-1.5 text-xs font-semibold rounded-xl transition-all"
+              class="px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer"
+              [class.font-khmer]="isKhmer()"
               [class.bg-indigo-600]="activeFilter() === 'read'"
               [class.text-white]="activeFilter() === 'read'"
               [class.bg-slate-100]="activeFilter() !== 'read'"
@@ -91,7 +96,7 @@ import { ConfirmDialogComponent } from '../../../shared';
               [class.text-slate-600]="activeFilter() !== 'read'"
               [class.dark:text-slate-300]="activeFilter() !== 'read'"
             >
-              Read
+              {{ isKhmer() ? 'បានអាន' : 'Read' }}
             </button>
           </div>
         </div>
@@ -100,12 +105,12 @@ import { ConfirmDialogComponent } from '../../../shared';
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse" aria-label="Contact Inquiries Table">
             <thead>
-              <tr class="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                <th scope="col" class="px-6 py-3.5">Status</th>
-                <th scope="col" class="px-6 py-3.5">Sender</th>
-                <th scope="col" class="px-6 py-3.5">Subject & Message Preview</th>
-                <th scope="col" class="px-6 py-3.5">Received Date</th>
-                <th scope="col" class="px-6 py-3.5 text-right">Actions</th>
+              <tr class="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400" [class.font-khmer]="isKhmer()">
+                <th scope="col" class="px-6 py-3.5">{{ isKhmer() ? 'ស្ថានភាព' : 'Status' }}</th>
+                <th scope="col" class="px-6 py-3.5">{{ isKhmer() ? 'អ្នកផ្ញើ' : 'Sender' }}</th>
+                <th scope="col" class="px-6 py-3.5">{{ isKhmer() ? 'ប្រធានបទ & សារ' : 'Subject & Message Preview' }}</th>
+                <th scope="col" class="px-6 py-3.5">{{ isKhmer() ? 'កាលបរិច្ឆេទ' : 'Received Date' }}</th>
+                <th scope="col" class="px-6 py-3.5 text-right">{{ isKhmer() ? 'សកម្មភាព' : 'Actions' }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs">
@@ -289,6 +294,8 @@ export class MessageListComponent implements OnInit {
   private readonly portfolioService = inject(PortfolioService);
   private readonly notificationService = inject(NotificationService);
   private readonly dialog = inject(MatDialog);
+  public readonly languageService = inject(LanguageService, { optional: true });
+  public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
 
   public readonly messages = signal<Message[]>([]);
   public readonly isLoading = signal<boolean>(true);

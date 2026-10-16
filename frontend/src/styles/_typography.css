@@ -106,8 +106,10 @@ small,
 [lang="kh"],
 .font-khmer,
 .khmer-text {
-  font-family: var(--font-khmer), var(--font-sans);
-  line-height: 1.8;
+  font-family: var(--font-khmer), sans-serif !important;
+  line-height: 1.75;
+  letter-spacing: normal !important;
+  word-break: break-word;
 }
 
 [lang="kh"] h1,
@@ -116,9 +118,10 @@ small,
 [lang="kh"] h4,
 [lang="kh"] h5,
 [lang="kh"] h6 {
-  font-family: var(--font-khmer), var(--font-sans);
-  line-height: 1.5;
-  letter-spacing: normal;
+  font-family: var(--font-khmer), sans-serif !important;
+  line-height: 1.45 !important;
+  letter-spacing: normal !important;
+  font-weight: 700;
 }
 
 /* ==========================================================================
@@ -458,9 +461,11 @@ hr {
    Khmer Typography Optimizations (System Smoothness & High Legibility)
    ========================================================================== */
 
-html[lang="kh"] body {
-  font-family: var(--font-khmer), var(--font-sans);
-  line-height: var(--leading-relaxed);
+html[lang="kh"] body,
+html[data-lang="kh"] body,
+html.lang-kh body {
+  font-family: var(--font-khmer), sans-serif !important;
+  line-height: 1.75;
 }
 
 html[lang="kh"] h1,
@@ -468,10 +473,23 @@ html[lang="kh"] h2,
 html[lang="kh"] h3,
 html[lang="kh"] h4,
 html[lang="kh"] h5,
-html[lang="kh"] h6 {
-  font-family: var(--font-khmer), var(--font-sans);
-  letter-spacing: normal;
-  line-height: var(--leading-snug);
+html[lang="kh"] h6,
+html[data-lang="kh"] h1,
+html[data-lang="kh"] h2,
+html[data-lang="kh"] h3,
+html[data-lang="kh"] h4,
+html[data-lang="kh"] h5,
+html[data-lang="kh"] h6,
+html.lang-kh h1,
+html.lang-kh h2,
+html.lang-kh h3,
+html.lang-kh h4,
+html.lang-kh h5,
+html.lang-kh h6 {
+  font-family: var(--font-khmer), sans-serif !important;
+  letter-spacing: normal !important;
+  line-height: 1.45 !important;
+  font-weight: 700;
 }
 
 html[lang="kh"] p,
@@ -479,8 +497,49 @@ html[lang="kh"] a,
 html[lang="kh"] span,
 html[lang="kh"] button,
 html[lang="kh"] input,
-html[lang="kh"] label {
+html[lang="kh"] textarea,
+html[lang="kh"] label,
+html[lang="kh"] td,
+html[lang="kh"] th,
+html[data-lang="kh"] p,
+html[data-lang="kh"] a,
+html[data-lang="kh"] span,
+html[data-lang="kh"] button,
+html[data-lang="kh"] input,
+html[data-lang="kh"] textarea,
+html[data-lang="kh"] label,
+html[data-lang="kh"] td,
+html[data-lang="kh"] th,
+html.lang-kh p,
+html.lang-kh a,
+html.lang-kh span,
+html.lang-kh button,
+html.lang-kh input,
+html.lang-kh textarea,
+html.lang-kh label,
+html.lang-kh td,
+html.lang-kh th {
+  font-family: var(--font-khmer), sans-serif;
   letter-spacing: normal;
+}
+
+/* Scaled font-sizes for Khmer legibility */
+html[lang="kh"] .text-xs,
+html[data-lang="kh"] .text-xs,
+html.lang-kh .text-xs,
+.font-khmer.text-xs,
+.font-khmer .text-xs {
+  font-size: 0.8125rem !important; /* 13px */
+  line-height: 1.65 !important;
+}
+
+html[lang="kh"] .text-sm,
+html[data-lang="kh"] .text-sm,
+html.lang-kh .text-sm,
+.font-khmer.text-sm,
+.font-khmer .text-sm {
+  font-size: 0.9375rem !important; /* 15px */
+  line-height: 1.7 !important;
 }
 
 .font-khmer {

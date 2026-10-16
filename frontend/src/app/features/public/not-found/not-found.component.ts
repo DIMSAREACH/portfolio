@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
     <div
       class="min-h-[70vh] flex flex-col items-center justify-center px-4 py-16 text-center"
     >
-      <div class="relative max-w-md w-full p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl shadow-2xl">
+      <div class="relative max-w-md w-full p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl shadow-2xl animate-enter fade-in-0 slide-in-from-b-8 animate-duration-700">
         <!-- 404 Gradient Number -->
         <span
           class="text-8xl font-black bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent select-none"

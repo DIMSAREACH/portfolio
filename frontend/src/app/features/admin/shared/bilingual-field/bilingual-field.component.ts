@@ -18,54 +18,12 @@ import { BilingualField } from '../../../../core/models';
     <div class="space-y-1.5">
       <!-- Field Header: Label, Optional/Required Tag, and Language Switcher Tabs -->
       <div class="flex items-center justify-between">
-        <label [attr.for]="fieldId" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+        <label [attr.for]="fieldId" class="block text-xs sm:text-[13px] font-semibold text-slate-700 dark:text-slate-300">
           {{ label }}
           @if (required) {
             <span class="text-rose-500 font-bold ml-0.5">*</span>
           }
         </label>
-
-        <!-- EN / KH Tab Buttons -->
-        <div class="inline-flex p-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" role="tablist">
-          <button
-            type="button"
-            role="tab"
-            [attr.aria-selected]="activeTab === 'en'"
-            (click)="selectTab('en')"
-            class="px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5 focus:outline-none"
-            [class.bg-white]="activeTab === 'en'"
-            [class.dark:bg-slate-700]="activeTab === 'en'"
-            [class.text-indigo-600]="activeTab === 'en'"
-            [class.dark:text-indigo-400]="activeTab === 'en'"
-            [class.shadow-xs]="activeTab === 'en'"
-            [class.text-slate-500]="activeTab !== 'en'"
-            [class.dark:text-slate-400]="activeTab !== 'en'"
-          >
-            <span>English</span>
-            @if (value.en) {
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-            }
-          </button>
-          <button
-            type="button"
-            role="tab"
-            [attr.aria-selected]="activeTab === 'kh'"
-            (click)="selectTab('kh')"
-            class="px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5 focus:outline-none"
-            [class.bg-white]="activeTab === 'kh'"
-            [class.dark:bg-slate-700]="activeTab === 'kh'"
-            [class.text-indigo-600]="activeTab === 'kh'"
-            [class.dark:text-indigo-400]="activeTab === 'kh'"
-            [class.shadow-xs]="activeTab === 'kh'"
-            [class.text-slate-500]="activeTab !== 'kh'"
-            [class.dark:text-slate-400]="activeTab !== 'kh'"
-          >
-            <span>ភាសាខ្មែរ (KH)</span>
-            @if (value.kh) {
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-            }
-          </button>
-        </div>
       </div>
 
       <!-- Input Area: Conditional for Input or Textarea -->
@@ -75,29 +33,29 @@ import { BilingualField } from '../../../../core/models';
             [id]="fieldId"
             [rows]="rows"
             [disabled]="isDisabled()"
-            [placeholder]="activeTab === 'en' ? placeholderEn : placeholderKh"
-            [value]="activeTab === 'en' ? value.en : value.kh"
+            [placeholder]="placeholderEn"
+            [value]="value.en || value.kh || ''"
             (input)="onInputElement($event)"
             (blur)="onBlur()"
-            class="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed leading-relaxed"
           ></textarea>
         } @else {
           <input
             [id]="fieldId"
             type="text"
             [disabled]="isDisabled()"
-            [placeholder]="activeTab === 'en' ? placeholderEn : placeholderKh"
-            [value]="activeTab === 'en' ? value.en : value.kh"
+            [placeholder]="placeholderEn"
+            [value]="value.en || value.kh || ''"
             (input)="onInputElement($event)"
             (blur)="onBlur()"
-            class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           />
         }
       </div>
 
       <!-- Helper / Guidance Text -->
       @if (helperText) {
-        <p class="text-[11px] text-slate-500 dark:text-slate-400">
+        <p class="text-xs text-slate-500 dark:text-slate-400">
           {{ helperText }}
         </p>
       }
@@ -148,11 +106,8 @@ export class BilingualFieldComponent implements ControlValueAccessor {
   }
 
   public onTextChange(newText: string): void {
-    if (this.activeTab === 'en') {
-      this.value = { ...this.value, en: newText || '' };
-    } else {
-      this.value = { ...this.value, kh: newText || '' };
-    }
+    const text = newText || '';
+    this.value = { en: text, kh: text };
     this.onChange(this.value);
   }
 

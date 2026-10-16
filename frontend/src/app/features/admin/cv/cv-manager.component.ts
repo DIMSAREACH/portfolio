@@ -1,8 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { LanguageService } from '../../../core/services/language.service';
 import { ConfirmDialogComponent } from '../../../shared';
 
 @Component({
@@ -10,28 +11,28 @@ import { ConfirmDialogComponent } from '../../../shared';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="max-w-4xl mx-auto space-y-6 animate-fadeIn pb-12">
+    <div class="w-full space-y-6 animate-fadeIn pb-12">
       <!-- Header -->
       <div>
         <div class="flex items-center gap-2">
-          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-            Career Documents
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'ឯកសារអាជីព' : 'Career Documents' }}
           </span>
         </div>
-        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">
-          CV / Resume Management
+        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1 tracking-tight" [class.font-khmer]="isKhmer()">
+          {{ isKhmer() ? 'ការគ្រប់គ្រងប្រវត្តិរូបសង្ខេប CV' : 'CV / Resume Management' }}
         </h1>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-          Upload, activate, or replace your official curriculum vitae PDF for public recruitment downloads.
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
+          {{ isKhmer() ? 'ផ្ទុកឡើង បើកដំណើរការ ឬផ្លាស់ប្តូរឯកសារ PDF នៃ CV ផ្លូវការរបស់អ្នកសម្រាប់ការទាញយកជ្រើសរើសបុគ្គលិក។' : 'Upload, activate, or replace your official curriculum vitae PDF for public recruitment downloads.' }}
         </p>
       </div>
 
       <!-- Main Card -->
-      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-8">
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs space-y-8">
         <!-- Current Active CV Status -->
         <div class="space-y-4">
-          <h2 class="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 border-b border-slate-100 dark:border-slate-800 pb-3">
-            Active Curriculum Vitae
+          <h2 class="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 border-b border-slate-100 dark:border-slate-800 pb-3" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'ប្រវត្តិរូបសង្ខេបដែលកំពុងដំណើរការ' : 'Active Curriculum Vitae' }}
           </h2>
 
           @if (isLoading()) {
@@ -49,15 +50,19 @@ import { ConfirmDialogComponent } from '../../../shared';
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="font-bold text-sm text-slate-900 dark:text-white">Official CV Document</span>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300">Active</span>
+                    <span class="font-bold text-sm text-slate-900 dark:text-white" [class.font-khmer]="isKhmer()">
+                      {{ isKhmer() ? 'ឯកសារ CV ផ្លូវការ' : 'Official CV Document' }}
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300" [class.font-khmer]="isKhmer()">
+                      {{ isKhmer() ? 'សកម្ម' : 'Active' }}
+                    </span>
                   </div>
                   <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-mono truncate max-w-sm">
                     {{ currentCv()?.cvUrl }}
                   </div>
                   @if (currentCv()?.updatedAt) {
-                    <div class="text-[11px] text-slate-400 mt-1">
-                      Last uploaded: {{ currentCv()?.updatedAt | date: 'medium' }}
+                    <div class="text-[11px] text-slate-400 mt-1" [class.font-khmer]="isKhmer()">
+                      {{ isKhmer() ? 'បានផ្ទុកឡើងចុងក្រោយ:' : 'Last uploaded:' }} {{ currentCv()?.updatedAt | date: 'medium' }}
                     </div>
                   }
                 </div>
@@ -69,20 +74,21 @@ import { ConfirmDialogComponent } from '../../../shared';
                   [href]="currentCv()?.cvUrl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-all shadow-xs"
+                  class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-all shadow-xs cursor-pointer"
+                  [class.font-khmer]="isKhmer()"
                 >
                   <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
-                  <span>Preview PDF</span>
+                  <span>{{ isKhmer() ? 'មើលសាកល្បង PDF' : 'Preview PDF' }}</span>
                 </a>
 
                 <button
                   type="button"
                   (click)="onDeleteCv()"
-                  class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-xl transition-colors"
-                  title="Remove CV"
+                  class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-xl transition-colors cursor-pointer"
+                  [title]="isKhmer() ? 'លុប CV' : 'Remove CV'"
                   aria-label="Remove CV"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,9 +102,11 @@ import { ConfirmDialogComponent } from '../../../shared';
               <svg class="w-10 h-10 mx-auto text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              <div class="text-xs font-semibold text-slate-700 dark:text-slate-300">No active CV found</div>
-              <p class="text-[11px] text-slate-400 max-w-sm mx-auto">
-                Upload your resume PDF below to enable public CV downloads on your header and contact pages.
+              <div class="text-xs font-semibold text-slate-700 dark:text-slate-300" [class.font-khmer]="isKhmer()">
+                {{ isKhmer() ? 'មិនមាន CV សកម្មត្រូវបានរកឃើញទេ' : 'No active CV found' }}
+              </div>
+              <p class="text-[11px] text-slate-400 max-w-sm mx-auto" [class.font-khmer]="isKhmer()">
+                {{ isKhmer() ? 'ផ្ទុកឡើងប្រវត្តិរូបសង្ខេប PDF របស់អ្នកខាងក្រោមដើម្បីបើកការទាញយក CV ជាសាធារណៈ។' : 'Upload your resume PDF below to enable public CV downloads on your header and contact pages.' }}
               </p>
             </div>
           }
@@ -106,8 +114,8 @@ import { ConfirmDialogComponent } from '../../../shared';
 
         <!-- Upload New CV Box -->
         <div class="space-y-4">
-          <h2 class="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 border-b border-slate-100 dark:border-slate-800 pb-3">
-            Upload / Replace CV
+          <h2 class="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 border-b border-slate-100 dark:border-slate-800 pb-3" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'ផ្ទុកឡើង / ផ្លាស់ប្តូរ CV' : 'Upload / Replace CV' }}
           </h2>
 
           <div class="p-8 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-600 transition-colors text-center space-y-4 bg-slate-50/50 dark:bg-slate-900/50">
@@ -115,11 +123,11 @@ import { ConfirmDialogComponent } from '../../../shared';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
             <div>
-              <p class="text-xs font-semibold text-slate-800 dark:text-slate-200">
-                Upload your new Curriculum Vitae PDF file
+              <p class="text-xs font-semibold text-slate-800 dark:text-slate-200" [class.font-khmer]="isKhmer()">
+                {{ isKhmer() ? 'ផ្ទុកឡើងឯកសារប្រវត្តិរូបសង្ខេប PDF ថ្មីរបស់អ្នក' : 'Upload your new Curriculum Vitae PDF file' }}
               </p>
-              <p class="text-[11px] text-slate-400 mt-0.5">
-                Maximum file size: 10MB (PDF format only).
+              <p class="text-[11px] text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
+                {{ isKhmer() ? 'ទំហំឯកសារអតិបរមា: 10MB (ទម្រង់ PDF តែប៉ុណ្ណោះ)' : 'Maximum file size: 10MB (PDF format only).' }}
               </p>
             </div>
 
@@ -135,19 +143,20 @@ import { ConfirmDialogComponent } from '../../../shared';
               type="button"
               (click)="cvFileInput.click()"
               [disabled]="isUploading()"
-              class="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+              class="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50 cursor-pointer"
+              [class.font-khmer]="isKhmer()"
             >
               @if (isUploading()) {
                 <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                 </svg>
-                <span>Uploading & Activating...</span>
+                <span>{{ isKhmer() ? 'កំពុងផ្ទុកឡើង...' : 'Uploading & Activating...' }}</span>
               } @else {
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                 </svg>
-                <span>Select & Upload PDF</span>
+                <span>{{ isKhmer() ? 'ជ្រើសរើស & ផ្ទុកឡើង PDF' : 'Select & Upload PDF' }}</span>
               }
             </button>
           </div>
@@ -160,6 +169,8 @@ export class CvManagerComponent implements OnInit {
   private readonly portfolioService = inject(PortfolioService);
   private readonly notificationService = inject(NotificationService);
   private readonly dialog = inject(MatDialog);
+  public readonly languageService = inject(LanguageService, { optional: true });
+  public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
 
   public readonly currentCv = signal<{ cvUrl?: string; cvPublicId?: string; updatedAt?: string } | null>(null);
   public readonly isLoading = signal<boolean>(true);

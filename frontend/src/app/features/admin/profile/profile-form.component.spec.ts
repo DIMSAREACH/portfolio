@@ -20,7 +20,7 @@ describe('ProfileFormComponent', () => {
 
   const mockProfile: Profile = {
     _id: 'prof-1',
-    fullName: { en: 'Sareach Dim', kh: 'ឌីម សារាជ' },
+    fullName: { en: 'Sareach Dim', kh: 'ឌឹម សារាជ' },
     title: { en: 'Senior Full-Stack Cloud Engineer', kh: 'វិស្វករ Cloud' },
     introduction: { en: 'Passionate software architect', kh: 'វិស្វករផ្នែកទន់' },
     about: { en: '# Story', kh: '# រឿងរ៉ាវ' },

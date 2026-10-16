@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { EducationComponent } from './education.component';
@@ -93,6 +94,22 @@ describe('EducationComponent', () => {
     data: mockCertifications,
   };
 
+  beforeAll(() => {
+    if (typeof window !== 'undefined' && !window.IntersectionObserver) {
+      class MockIntersectionObserver {
+        root = null;
+        rootMargin = '';
+        thresholds = [];
+        observe = vi.fn();
+        unobserve = vi.fn();
+        disconnect = vi.fn();
+        takeRecords = vi.fn().mockReturnValue([]);
+      }
+      window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+      globalThis.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+    }
+  });
+
   beforeEach(async () => {
     portfolioServiceMock = {
       getEducation: vi.fn().mockReturnValue(of(mockEduResponse)),
@@ -107,6 +124,7 @@ describe('EducationComponent', () => {
     await TestBed.configureTestingModule({
       imports: [EducationComponent],
       providers: [
+        provideAnimationsAsync(),
         provideRouter([]),
         { provide: PortfolioService, useValue: portfolioServiceMock },
         { provide: LanguageService, useValue: languageServiceMock },
@@ -121,13 +139,11 @@ describe('EducationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load education and certifications on init', () => {
+  it('should load education on init', () => {
     fixture.detectChanges();
 
     expect(portfolioServiceMock.getEducation).toHaveBeenCalled();
-    expect(portfolioServiceMock.getCertifications).toHaveBeenCalled();
     expect(component.education().length).toBe(2);
-    expect(component.certifications().length).toBe(1);
     expect(component.isLoading()).toBe(false);
   });
 
@@ -165,19 +181,17 @@ describe('EducationComponent', () => {
 
   it('should display empty state when education array is empty', () => {
     portfolioServiceMock.getEducation.mockReturnValue(of({ success: true, message: 'Empty', data: [] }));
-    portfolioServiceMock.getCertifications.mockReturnValue(of({ success: true, message: 'Empty', data: [] }));
 
     component.ngOnInit();
     fixture.detectChanges();
 
     expect(component.education().length).toBe(0);
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-empty-state')).toBeTruthy();
+    expect(compiled.textContent).toContain('No matching records found');
   });
 
   it('should handle service errors gracefully', () => {
     portfolioServiceMock.getEducation.mockReturnValue(throwError(() => new Error('Service down')));
-    portfolioServiceMock.getCertifications.mockReturnValue(throwError(() => new Error('Service down')));
 
     component.ngOnInit();
     fixture.detectChanges();
@@ -187,11 +201,33 @@ describe('EducationComponent', () => {
     expect(component.education().length).toBe(0);
   });
 
-  it('should render certifications section when credentials exist', () => {
+  it('should render academic timeline when education exists', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain('AWS Certified Cloud Practitioner');
-    expect(compiled.textContent).toContain('Amazon Web Services');
+    expect(compiled.textContent).toContain('Royal University of Phnom Penh');
+    expect(compiled.textContent).toContain('Bachelor of Science');
+  });
+
+  it('should handle CascadeSelect change, clear, and category filtering', () => {
+    fixture.detectChanges();
+
+    const cascadeOptions = component.cascadeCategories();
+    expect(cascadeOptions.length).toBe(3);
+    expect(cascadeOptions[0].id).toBe('all');
+    expect(cascadeOptions[1].id).toBe('higher');
+
+    // Select higher education option
+    const higherOption = cascadeOptions[1];
+    component.onCascadeChange({ value: higherOption });
+    fixture.detectChanges();
+    expect(component.selectedCategory()).toBe('higher');
+    expect(component.selectedCascadeItem()?.id).toBe('higher');
+
+    // Clear cascade select
+    component.onCascadeClear();
+    fixture.detectChanges();
+    expect(component.selectedCategory()).toBe('all');
+    expect(component.selectedCascadeItem()?.id).toBe('all');
   });
 });

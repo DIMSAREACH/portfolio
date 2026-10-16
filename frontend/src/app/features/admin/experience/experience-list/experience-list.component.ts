@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { LanguageService } from '../../../../core/services/language.service';
 import { Experience } from '../../../../core/models';
 import { AdminDataTableComponent, TableColumn, SortEvent } from '../../shared';
 import { ConfirmDialogComponent } from '../../../../shared';
@@ -18,26 +19,27 @@ import { ConfirmDialogComponent } from '../../../../shared';
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-              CMS Career & Roles
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400" [class.font-khmer]="isKhmer()">
+              {{ isKhmer() ? 'ការគ្រប់គ្រងបទពិសោធន៍' : 'CMS Career & Roles' }}
             </span>
           </div>
-          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">
-            Experience & Engagements
+          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1 tracking-tight" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'បទពិសោធន៍ការងារ និងការបម្រើការ' : 'Experience & Engagements' }}
           </h1>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Manage your employment history, voluntary roles, internships, and freelance milestones.
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'គ្រប់គ្រងប្រវត្តិការងារ ការងារស្ម័គ្រចិត្ត កម្មសិក្សា និងការងារឯករាជ្យ។' : 'Manage your employment history, voluntary roles, internships, and freelance milestones.' }}
           </p>
         </div>
 
         <a
           routerLink="/admin/experience/create"
-          class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto"
+          class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto cursor-pointer"
+          [class.font-khmer]="isKhmer()"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          <span>New Experience</span>
+          <span>{{ isKhmer() ? 'បទពិសោធន៍ថ្មី' : 'New Experience' }}</span>
         </a>
       </div>
 
@@ -50,10 +52,10 @@ import { ConfirmDialogComponent } from '../../../../shared';
         [pageSize]="pageSize()"
         [isLoading]="isLoading()"
         [activeFilter]="activeFilter()"
-        [filterOptions]="filterOptions"
-        searchPlaceholder="Search by role, company, tech stack..."
-        createButtonLabel="New Experience"
-        emptyMessage="No experiences found. Add your first career milestone!"
+        [filterOptions]="filterOptions()"
+        [searchPlaceholder]="isKhmer() ? 'ស្វែងរកតាមតួនាទី, ក្រុមហ៊ុន, បច្ចេកវិទ្យា...' : 'Search by role, company, tech stack...'"
+        [createButtonLabel]="isKhmer() ? 'បទពិសោធន៍ថ្មី' : 'New Experience'"
+        [emptyMessage]="isKhmer() ? 'មិនមានបទពិសោធន៍ត្រូវបានរកឃើញទេ។ សូមបន្ថែមបទពិសោធន៍ដំបូងរបស់អ្នក!' : 'No experiences found. Add your first career milestone!'"
         (searchChange)="onSearchChange($event)"
         (filterChange)="onFilterChange($event)"
         (sortChange)="onSortChange($event)"
@@ -71,6 +73,8 @@ export class ExperienceListComponent implements OnInit {
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
+  public readonly languageService = inject(LanguageService, { optional: true });
+  public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
 
   public readonly experiences = signal<Experience[]>([]);
   public readonly totalItems = signal<number>(0);
@@ -82,13 +86,13 @@ export class ExperienceListComponent implements OnInit {
   public readonly sortKey = signal<string>('startDate');
   public readonly sortDirection = signal<'asc' | 'desc'>('desc');
 
-  public readonly filterOptions = [
-    { label: 'All Types', value: 'all' },
-    { label: 'Work', value: 'work' },
-    { label: 'Volunteer', value: 'volunteer' },
-    { label: 'Internship', value: 'internship' },
-    { label: 'Freelance', value: 'freelance' },
-  ];
+  public readonly filterOptions = computed(() => [
+    { label: this.isKhmer() ? 'ប្រភេទទាំងអស់' : 'All Types', value: 'all' },
+    { label: this.isKhmer() ? 'ការងារ' : 'Work', value: 'work' },
+    { label: this.isKhmer() ? 'ស្ម័គ្រចិត្ត' : 'Volunteer', value: 'volunteer' },
+    { label: this.isKhmer() ? 'កម្មសិក្សា' : 'Internship', value: 'internship' },
+    { label: this.isKhmer() ? 'ការងារឯករាជ្យ' : 'Freelance', value: 'freelance' },
+  ]);
 
   public readonly columns: TableColumn[] = [
     {

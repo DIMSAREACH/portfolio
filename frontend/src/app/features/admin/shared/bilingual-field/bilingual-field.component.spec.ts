@@ -42,45 +42,22 @@ describe('BilingualFieldComponent', () => {
     expect(fixture.nativeElement.querySelector('input')).toBeFalsy();
   });
 
-  it('should switch between English and Khmer tabs', () => {
-    expect(component.activeTab).toBe('en');
-
-    const buttons = fixture.nativeElement.querySelectorAll('button[role="tab"]');
-    expect(buttons.length).toBe(2);
-
-    // Click Khmer tab
-    buttons[1].click();
-    fixture.detectChanges();
-
-    expect(component.activeTab).toBe('kh');
-
-    // Click English tab
-    buttons[0].click();
-    fixture.detectChanges();
-
-    expect(component.activeTab).toBe('en');
+  it('should render clean single input without language switcher tabs', () => {
+    const tabButtons = fixture.nativeElement.querySelectorAll('button[role="tab"]');
+    expect(tabButtons.length).toBe(0);
+    expect(fixture.nativeElement.textContent).not.toContain('English');
+    expect(fixture.nativeElement.textContent).not.toContain('ភាសាខ្មែរ (KH)');
   });
 
-  it('should update EN value and emit onChange when typing in EN tab', () => {
+  it('should update value and emit onChange when typing', () => {
     const changeSpy = vi.fn();
     component.registerOnChange(changeSpy);
 
-    component.activeTab = 'en';
     component.onTextChange('New English Title');
 
     expect(component.value.en).toBe('New English Title');
-    expect(changeSpy).toHaveBeenCalledWith({ en: 'New English Title', kh: '' });
-  });
-
-  it('should update KH value and emit onChange when typing in KH tab', () => {
-    const changeSpy = vi.fn();
-    component.registerOnChange(changeSpy);
-
-    component.selectTab('kh');
-    component.onTextChange('ចំណងជើងថ្មី');
-
-    expect(component.value.kh).toBe('ចំណងជើងថ្មី');
-    expect(changeSpy).toHaveBeenCalledWith({ en: '', kh: 'ចំណងជើងថ្មី' });
+    expect(component.value.kh).toBe('New English Title');
+    expect(changeSpy).toHaveBeenCalledWith({ en: 'New English Title', kh: 'New English Title' });
   });
 
   it('should call onTouched when input blurs', () => {

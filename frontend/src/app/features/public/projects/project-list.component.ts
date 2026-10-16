@@ -1,7 +1,9 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { of, catchError } from 'rxjs';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { Project, Category } from '../../../core/models';
@@ -9,71 +11,150 @@ import {
   ProjectCardComponent,
   PaginationComponent,
   SkeletonLoaderComponent,
-  EmptyStateComponent,
   LocalizePipe,
 } from '../../../shared';
+
+import { AnimateOnScrollModule } from 'primeng/animateonscroll';
+
+export type ProjectViewMode = 'grid' | 'list';
+
+export interface ProjectCascadeItem {
+  id: string;
+  name: string;
+  cname: string;
+  nameKh: string;
+  cnameKh: string;
+}
 
 @Component({
   selector: 'app-project-list',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
+    RouterLink,
+    CascadeSelectModule,
     ProjectCardComponent,
     PaginationComponent,
     SkeletonLoaderComponent,
-    EmptyStateComponent,
     LocalizePipe,
+    AnimateOnScrollModule,
   ],
   template: `
-    <div class="py-12 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
-      <!-- Page Header -->
-      <section class="space-y-4 max-w-3xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-900/50 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
-          <span>{{ isKhmer() ? 'ផលប័ត្រគម្រោង' : 'Featured Portfolio' }}</span>
+    <div class="relative py-12 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+      <!-- Ambient Lighting Background Decor -->
+      <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-[32rem] h-80 bg-gradient-to-tr from-indigo-500/15 via-purple-500/10 to-transparent dark:from-indigo-500/10 dark:via-purple-500/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+      <!-- Page Header with Entrance Animation -->
+      <header class="space-y-6 animate-fade-in-up">
+        <div class="max-w-3xl space-y-5">
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/60 dark:border-indigo-800/60 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 backdrop-blur-sm shadow-2xs">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+            <span>{{ isKhmer() ? 'ផលប័ត្រគម្រោង & ករណីសិក្សា' : 'Featured Portfolio & Case Studies' }}</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+            {{ isKhmer() ? 'គម្រោងវិស្វកម្ម និងដំណោះស្រាយឌីជីថល' : 'Projects & Digital Solutions' }}
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl" [class.font-khmer]="isKhmer()">
+            {{ isKhmer()
+              ? 'បណ្តុំនៃកម្មវិធីពេញលេញ (Full-Stack) ប្រព័ន្ធ AI ឆ្លាតវៃ និងស្ថាបត្យកម្មកុំព្យូទ័រពពក ដែលខ្ញុំបានអភិវឌ្ឍឡើងជាមួយនឹងស្តង់ដារវិស្វកម្មខ្ពស់។'
+              : 'Production web applications, computer vision systems, full-stack platforms, and architectural solutions built with modern technology.'
+            }}
+          </p>
         </div>
 
-        <h1 class="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-          {{ isKhmer() ? 'គម្រោងវិស្វកម្ម និងដំណោះស្រាយឌីជីថល' : 'Projects & Case Studies' }}
-        </h1>
-
-        <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed" [class.font-khmer]="isKhmer()">
-          {{ isKhmer()
-            ? 'បណ្តុំនៃកម្មវិធីពេញលេញ (Full-Stack) ប្រព័ន្ធ AI ឆ្លាតវៃ និងស្ថាបត្យកម្មកុំព្យូទ័រពពក ដែលខ្ញុំបានអភិវឌ្ឍឡើង។'
-            : 'Explore production web applications, computer vision systems, and architectural solutions built with modern technology.'
-          }}
-        </p>
-
-        <!-- Quick Metrics -->
-        <div class="flex flex-wrap items-center gap-3 pt-2">
-          <div class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/60 text-xs font-medium text-slate-700 dark:text-slate-300">
-            <span class="font-bold text-indigo-600 dark:text-indigo-400">{{ totalItems() }}</span>
-            <span class="ml-1.5">{{ isKhmer() ? 'គម្រោងសរុប' : 'Total Projects' }}</span>
+        <!-- Quick Summary Cards (Clean Portfolio Snapshot) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pt-1 w-full">
+          <!-- Stat 1: Total Projects -->
+          <div class="p-3.5 sm:p-4 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 shadow-2xs backdrop-blur-sm flex flex-col justify-between gap-2 transition-all hover:border-slate-300 dark:hover:border-slate-700">
+            <div>
+              <div class="flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                <span class="whitespace-nowrap">{{ isKhmer() ? 'គម្រោងសរុប' : 'Total Projects' }}</span>
+              </div>
+              <div class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white mt-1 leading-snug whitespace-nowrap">
+                {{ totalItems() }} {{ isKhmer() ? 'គម្រោង' : 'Applications' }}
+              </div>
+            </div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              {{ isKhmer() ? 'បានបញ្ចេញផ្លូវការ' : 'Verified & Deployed' }}
+            </div>
           </div>
-          <div class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/60 text-xs font-medium text-slate-700 dark:text-slate-300">
-            <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ featuredCount() }}</span>
-            <span class="ml-1.5">{{ isKhmer() ? 'គម្រោងឆ្នើម' : 'Featured Case Studies' }}</span>
+
+          <!-- Stat 2: Featured Highlights -->
+          <div class="p-3.5 sm:p-4 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 shadow-2xs backdrop-blur-sm flex flex-col justify-between gap-2 transition-all hover:border-slate-300 dark:hover:border-slate-700">
+            <div>
+              <div class="text-xs font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                </svg>
+                <span class="whitespace-nowrap">{{ isKhmer() ? 'គម្រោងឆ្នើម' : 'Featured' }}</span>
+              </div>
+              <div class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white mt-1 leading-snug whitespace-nowrap">
+                {{ featuredCount() }} {{ isKhmer() ? 'គម្រោងសំខាន់' : 'Case Studies' }}
+              </div>
+            </div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              {{ isKhmer() ? 'ស្ថាបត្យកម្មលម្អិត' : 'In-Depth Architecture' }}
+            </div>
+          </div>
+
+          <!-- Stat 3: Tech Ecosystem -->
+          <div class="p-3.5 sm:p-4 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 shadow-2xs backdrop-blur-sm flex flex-col justify-between gap-2 transition-all hover:border-slate-300 dark:hover:border-slate-700">
+            <div>
+              <div class="text-xs font-semibold text-purple-600 dark:text-purple-400 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+                <span class="whitespace-nowrap">{{ isKhmer() ? 'បច្ចេកវិទ្យា' : 'Tech Stack' }}</span>
+              </div>
+              <div class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white mt-1 leading-snug whitespace-nowrap">
+                {{ technologies().length || 10 }}+ {{ isKhmer() ? 'បច្ចេកវិទ្យា' : 'Libraries & Tools' }}
+              </div>
+            </div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              {{ isKhmer() ? 'Full-Stack & Cloud' : 'Full-Stack & AI Stack' }}
+            </div>
+          </div>
+
+          <!-- Stat 4: Production Live Status -->
+          <div class="p-3.5 sm:p-4 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 shadow-2xs backdrop-blur-sm flex flex-col justify-between gap-2 transition-all hover:border-slate-300 dark:hover:border-slate-700">
+            <div>
+              <div class="flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="whitespace-nowrap">{{ isKhmer() ? 'ការដាក់ដំណើរការ' : 'Deployment' }}</span>
+              </div>
+              <div class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white mt-1 leading-snug whitespace-nowrap">
+                100% Live & Tested
+              </div>
+            </div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              {{ isKhmer() ? 'បើកជាសាធារណៈ' : 'Open Source & Web' }}
+            </div>
           </div>
         </div>
-      </section>
+      </header>
 
-      <!-- Filter Controls: Search, Category, Tech -->
-      <section class="space-y-6">
-        <!-- Search and Primary Category Pills -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <!-- Category Pills -->
-          <div class="flex flex-wrap items-center gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Project Categories">
+      <!-- Unified Filter & Command Bar Section with Stagger Entrance -->
+      <section class="space-y-4 animate-fade-in-up delay-150">
+        <!-- Main Bar: Category Tabs & Search Input & View Switcher -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-2 rounded-2xl bg-slate-100/70 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-md">
+          <!-- Primary Category Pills (Desktop >= 1024px) -->
+          <div class="hidden lg:flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Project Categories">
             <button
               type="button"
               role="tab"
               [attr.aria-selected]="selectedCategory() === 'all'"
               (click)="onCategorySelect('all')"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+              class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 cursor-pointer"
               [ngClass]="{
-                'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 scale-[1.02]': selectedCategory() === 'all',
-                'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 border border-slate-200 dark:border-slate-700/60': selectedCategory() !== 'all'
+                'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm border border-slate-200/90 dark:border-slate-700 font-bold': selectedCategory() === 'all',
+                'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/60 border border-transparent': selectedCategory() !== 'all'
               }"
             >
               <span>{{ isKhmer() ? 'ទាំងអស់' : 'All Projects' }}</span>
@@ -85,10 +166,10 @@ import {
                 role="tab"
                 [attr.aria-selected]="selectedCategory() === cat.slug"
                 (click)="onCategorySelect(cat.slug)"
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 cursor-pointer"
                 [ngClass]="{
-                  'bg-indigo-600 text-white shadow-md shadow-indigo-500/20 scale-[1.02]': selectedCategory() === cat.slug,
-                  'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/60 border border-slate-200 dark:border-slate-700/60': selectedCategory() !== cat.slug
+                  'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm border border-slate-200/90 dark:border-slate-700 font-bold': selectedCategory() === cat.slug,
+                  'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/60 border border-transparent': selectedCategory() !== cat.slug
                 }"
               >
                 <span>{{ cat.name | localize }}</span>
@@ -96,80 +177,102 @@ import {
             }
           </div>
 
-          <!-- Search Input -->
-          <div class="relative w-full md:w-72 flex-shrink-0">
-            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-            <input
-              type="text"
-              [value]="searchQuery()"
-              (input)="onSearchInput($event)"
-              [placeholder]="isKhmer() ? 'ស្វែងរកគម្រោង (ឧ. Traffic, POS)...' : 'Search projects...'"
-              class="w-full pl-10 pr-9 py-2 rounded-xl text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+          <!-- Mobile & Tablet Responsive PrimeNG CascadeSelect (Visible < 1024px) -->
+          <div class="lg:hidden w-full flex-1">
+            <p-cascadeselect
+              [ngModel]="selectedCascadeItem()"
+              (ngModelChange)="onCascadeChange({ value: $event })"
+              [options]="cascadeCategories()"
+              [optionLabel]="isKhmer() ? 'cnameKh' : 'cname'"
+              [placeholder]="isKhmer() ? 'ជ្រើសរើសប្រភេទគម្រោង...' : 'All Projects'"
+              [showClear]="true"
+              appendTo="body"
+              (onChange)="onCascadeChange($event)"
+              (onClear)="onCascadeClear()"
+              styleClass="w-full portfolio-cascadeselect"
+              [style]="{ width: '100%', minWidth: '14rem' }"
+              inputId="project-cascadeselect"
+              ariaLabel="Select a Project Category"
             />
-            @if (searchQuery()) {
+          </div>
+
+          <!-- Controls: Search Input & View Mode Switcher -->
+          <div class="flex items-center gap-2.5 w-full lg:w-auto">
+            <!-- Search Input -->
+            <div class="relative flex-1 lg:w-72">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <input
+                type="text"
+                [value]="searchQuery()"
+                (input)="onSearchInput($event)"
+                [placeholder]="isKhmer() ? 'ស្វែងរកគម្រោង...' : 'Search projects...'"
+                class="w-full pl-10 pr-9 py-2 rounded-xl text-sm bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700/80 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all shadow-2xs"
+              />
+              @if (searchQuery()) {
+                <button
+                  type="button"
+                  (click)="clearSearch()"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  aria-label="Clear search"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              }
+            </div>
+
+            <!-- View Mode Switcher -->
+            <div class="flex items-center gap-1 p-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs flex-shrink-0">
               <button
                 type="button"
-                (click)="clearSearch()"
-                class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
-                aria-label="Clear search"
+                (click)="setViewMode('grid')"
+                [title]="isKhmer() ? 'ទម្រង់ក្រឡា (Grid)' : 'Grid View'"
+                class="p-1.5 rounded-lg transition-all"
+                [ngClass]="{
+                  'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 shadow-xs font-bold': viewMode() === 'grid',
+                  'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200': viewMode() !== 'grid'
+                }"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
               </button>
-            }
+
+              <button
+                type="button"
+                (click)="setViewMode('list')"
+                [title]="isKhmer() ? 'ទម្រង់បញ្ជី (List)' : 'List View'"
+                class="p-1.5 rounded-lg transition-all"
+                [ngClass]="{
+                  'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 shadow-xs font-bold': viewMode() === 'list',
+                  'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200': viewMode() !== 'list'
+                }"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Secondary Technology Filter (if technologies exist) -->
-        @if (technologies().length > 0) {
-          <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-            <span class="font-bold text-slate-400 dark:text-slate-500 flex-shrink-0 mr-1">
-              {{ isKhmer() ? 'បច្ចេកវិទ្យា៖' : 'Technology:' }}
-            </span>
-            <button
-              type="button"
-              (click)="onTechSelect('all')"
-              class="px-2.5 py-1 rounded-lg font-medium transition-colors"
-              [ngClass]="{
-                'bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-bold': selectedTech() === 'all',
-                'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700': selectedTech() !== 'all'
-              }"
-            >
-              All Tech
-            </button>
-            @for (tech of technologies(); track tech) {
-              <button
-                type="button"
-                (click)="onTechSelect(tech)"
-                class="px-2.5 py-1 rounded-lg font-medium transition-colors flex-shrink-0"
-                [ngClass]="{
-                  'bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-bold': selectedTech() === tech,
-                  'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700': selectedTech() !== tech
-                }"
-              >
-                {{ tech }}
-              </button>
-            }
-          </div>
-        }
-
-        <!-- Active Filters Feedback & Reset -->
+        <!-- Active Filters Feedback & Quick Reset -->
         @if (hasActiveFilters()) {
-          <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/40 px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/40">
+          <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 bg-indigo-50/50 dark:bg-indigo-950/20 px-4 py-2.5 rounded-xl border border-indigo-100 dark:border-indigo-900/40">
             <div class="flex items-center gap-1.5 flex-wrap">
               <span>{{ isKhmer() ? 'លទ្ធផល' : 'Results:' }}</span>
-              <strong class="text-slate-800 dark:text-slate-200">{{ totalItems() }}</strong>
+              <strong class="text-indigo-600 dark:text-indigo-400">{{ totalItems() }}</strong>
               <span>{{ isKhmer() ? 'គម្រោងត្រូវគ្នានឹងតម្រង' : 'matching project(s)' }}</span>
             </div>
             <button
               type="button"
               (click)="resetFilters()"
-              class="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold"
+              class="text-indigo-600 dark:text-indigo-400 hover:underline font-bold"
             >
               {{ isKhmer() ? 'កំណត់តម្រងឡើងវិញ' : 'Reset all filters' }}
             </button>
@@ -177,12 +280,12 @@ import {
         }
       </section>
 
-      <!-- Projects Grid Content -->
+      <!-- Projects Content Display -->
       @if (isLoading()) {
         <!-- Skeleton Loading State -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           @for (idx of [1, 2, 3, 4, 5, 6]; track idx) {
-            <div class="p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4">
+            <div class="p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4">
               <app-skeleton-loader type="card" [count]="1"></app-skeleton-loader>
               <app-skeleton-loader type="text" [count]="3"></app-skeleton-loader>
             </div>
@@ -206,22 +309,62 @@ import {
           </button>
         </div>
       } @else if (projects().length === 0) {
-        <!-- Empty State -->
-        <app-empty-state
-          [title]="isKhmer() ? 'រកមិនឃើញគម្រោងទេ' : 'No projects found'"
-          [description]="isKhmer() ? 'មិនមានគម្រោងត្រូវគ្នានឹងពាក្យគន្លឹះ ឬប្រភេទដែលបានជ្រើសរើសឡើយ។' : 'No projects matched your criteria. Try adjusting your filters or search term.'"
-          [actionText]="isKhmer() ? 'សម្អាតតម្រង' : 'Clear Filters'"
-          (actionClick)="resetFilters()"
-        ></app-empty-state>
-      } @else {
-        <!-- Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          @for (project of projects(); track project._id) {
-            <app-project-card [project]="project"></app-project-card>
-          }
+        <!-- Clean Empty State -->
+        <div class="p-12 text-center rounded-3xl border border-dashed border-slate-300 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40 space-y-4 max-w-lg mx-auto">
+          <div class="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">
+            {{ isKhmer() ? 'រកមិនឃើញគម្រោងត្រូវគ្នានឹងការស្វែងរកទេ' : 'No matching projects found' }}
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
+            {{ isKhmer() ? 'មិនមានគម្រោងត្រូវគ្នានឹងពាក្យគន្លឹះ ឬប្រភេទដែលបានជ្រើសរើសឡើយ។' : 'No projects matched your criteria. Try adjusting your filters or search term.' }}
+          </p>
+          <button
+            type="button"
+            (click)="resetFilters()"
+            class="px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-semibold hover:opacity-90 transition-opacity"
+          >
+            {{ isKhmer() ? 'ជម្រះតម្រងទាំងអស់' : 'Reset All Filters' }}
+          </button>
         </div>
+      } @else {
+        <!-- ================= PROJECTS DISPLAY (GRID vs LIST) ================= -->
+        @if (viewMode() === 'grid') {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @for (project of projects(); track project._id) {
+              <div
+                pAnimateOnScroll
+                [once]="true"
+                [threshold]="0.08"
+                enterClass="animate-enter fade-in-0 slide-in-from-b-8 animate-duration-700"
+                leaveClass="animate-leave fade-out-0"
+                class="h-full"
+              >
+                <app-project-card [project]="project" [viewMode]="'grid'"></app-project-card>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="flex flex-col space-y-6">
+            @for (project of projects(); track project._id) {
+              <div
+                pAnimateOnScroll
+                [once]="true"
+                [threshold]="0.08"
+                enterClass="animate-enter fade-in-0 slide-in-from-b-8 animate-duration-700"
+                leaveClass="animate-leave fade-out-0"
+                class="w-full"
+              >
+                <app-project-card [project]="project" [viewMode]="'list'"></app-project-card>
+              </div>
+            }
+          </div>
+        }
 
-        <!-- Pagination -->
+        <!-- Pagination Controls -->
         @if (totalPages() > 1) {
           <div class="pt-8 flex justify-center">
             <app-pagination
@@ -232,6 +375,48 @@ import {
           </div>
         }
       }
+
+      <!-- Bottom Next Steps Navigation Banner -->
+      <section
+        pAnimateOnScroll
+        [once]="true"
+        [threshold]="0.1"
+        enterClass="animate-enter fade-in-0 slide-in-from-b-8 animate-duration-700"
+        leaveClass="animate-leave fade-out-0"
+        class="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-slate-100 to-indigo-50/30 dark:from-slate-900 dark:to-indigo-950/20 border border-slate-200/80 dark:border-slate-800 text-slate-900 dark:text-white flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm"
+      >
+        <div class="space-y-2 max-w-xl">
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>{{ isKhmer() ? 'ជំហានបន្ទាប់' : 'Next In Portfolio' }}</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold tracking-tight">
+            {{ isKhmer() ? 'ចង់ស្វែងយល់បន្ថែមអំពីបទពិសោធន៍ ឬការសិក្សា?' : 'Explore career timeline or academic background' }}
+          </h2>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            {{ isKhmer()
+              ? 'ចូលទៅកាន់ទំព័របទពិសោធន៍ដើម្បីមើលតួនាទីជាក់ស្តែង ឬពិនិត្យមើលប្រវត្តិសិក្សានៅសាកលវិទ្យាល័យ។'
+              : 'Browse my professional timeline, engineering roles, or check academic coursework and leadership milestones.'
+            }}
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a
+            routerLink="/experience"
+            class="px-5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-2xs"
+          >
+            {{ isKhmer() ? 'បទពិសោធន៍ការងារ' : 'Work Experience' }}
+          </a>
+          <a
+            routerLink="/education"
+            class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-md shadow-indigo-600/20 transition-all"
+          >
+            {{ isKhmer() ? 'ប្រវត្តិការសិក្សា' : 'Academic Journey' }}
+          </a>
+        </div>
+      </section>
     </div>
   `,
 })
@@ -250,8 +435,8 @@ export class ProjectListComponent implements OnInit {
   public readonly pageSize = signal<number>(6);
 
   public readonly selectedCategory = signal<string>('all');
-  public readonly selectedTech = signal<string>('all');
   public readonly searchQuery = signal<string>('');
+  public readonly viewMode = signal<ProjectViewMode>('grid');
 
   public readonly isLoading = signal<boolean>(true);
   public readonly error = signal<string | null>(null);
@@ -265,9 +450,39 @@ export class ProjectListComponent implements OnInit {
   public readonly hasActiveFilters = computed<boolean>(() => {
     return (
       this.selectedCategory() !== 'all' ||
-      this.selectedTech() !== 'all' ||
       !!this.searchQuery().trim()
     );
+  });
+
+  public readonly cascadeCategories = computed<ProjectCascadeItem[]>(() => {
+    const cats = this.categories();
+    const items: ProjectCascadeItem[] = [
+      {
+        id: 'all',
+        name: 'All Projects',
+        cname: 'All Projects',
+        nameKh: 'គម្រោងទាំងអស់',
+        cnameKh: 'គម្រោងទាំងអស់',
+      },
+    ];
+    for (const cat of cats) {
+      const en = cat.name?.en || cat.slug;
+      const kh = cat.name?.kh || en;
+      items.push({
+        id: cat.slug,
+        name: en,
+        cname: en,
+        nameKh: kh,
+        cnameKh: kh,
+      });
+    }
+    return items;
+  });
+
+  public readonly selectedCascadeItem = computed<ProjectCascadeItem | null>(() => {
+    const current = this.selectedCategory();
+    const list = this.cascadeCategories();
+    return list.find((item) => item.id === current) || null;
   });
 
   public ngOnInit(): void {
@@ -276,11 +491,11 @@ export class ProjectListComponent implements OnInit {
       if (params['category']) {
         this.selectedCategory.set(params['category']);
       }
-      if (params['tech']) {
-        this.selectedTech.set(params['tech']);
-      }
       if (params['search']) {
         this.searchQuery.set(params['search']);
+      }
+      if (params['view'] === 'list' || params['view'] === 'grid') {
+        this.viewMode.set(params['view']);
       }
       if (params['page']) {
         const p = parseInt(params['page'], 10);
@@ -292,6 +507,11 @@ export class ProjectListComponent implements OnInit {
     });
 
     this.loadCategories();
+  }
+
+  public setViewMode(mode: ProjectViewMode): void {
+    this.viewMode.set(mode);
+    this.updateUrlParams();
   }
 
   public loadCategories(): void {
@@ -312,7 +532,6 @@ export class ProjectListComponent implements OnInit {
       page: number;
       limit: number;
       category?: string;
-      tech?: string;
       search?: string;
     } = {
       page: this.currentPage(),
@@ -321,9 +540,6 @@ export class ProjectListComponent implements OnInit {
 
     if (this.selectedCategory() !== 'all') {
       params.category = this.selectedCategory();
-    }
-    if (this.selectedTech() !== 'all') {
-      params.tech = this.selectedTech();
     }
     const query = this.searchQuery().trim();
     if (query) {
@@ -380,11 +596,17 @@ export class ProjectListComponent implements OnInit {
     this.loadProjects();
   }
 
-  public onTechSelect(tech: string): void {
-    this.selectedTech.set(tech);
-    this.currentPage.set(1);
-    this.updateUrlParams();
-    this.loadProjects();
+  public onCascadeChange(event: { value?: ProjectCascadeItem | null }): void {
+    const item = event?.value;
+    if (!item || item.id === 'all') {
+      this.onCategorySelect('all');
+    } else {
+      this.onCategorySelect(item.id);
+    }
+  }
+
+  public onCascadeClear(): void {
+    this.onCategorySelect('all');
   }
 
   public onSearchInput(event: Event): void {
@@ -404,7 +626,6 @@ export class ProjectListComponent implements OnInit {
 
   public resetFilters(): void {
     this.selectedCategory.set('all');
-    this.selectedTech.set('all');
     this.searchQuery.set('');
     this.currentPage.set(1);
     this.updateUrlParams();
@@ -429,17 +650,17 @@ export class ProjectListComponent implements OnInit {
       queryParams['category'] = null;
     }
 
-    if (this.selectedTech() !== 'all') {
-      queryParams['tech'] = this.selectedTech();
-    } else {
-      queryParams['tech'] = null;
-    }
-
     const q = this.searchQuery().trim();
     if (q) {
       queryParams['search'] = q;
     } else {
       queryParams['search'] = null;
+    }
+
+    if (this.viewMode() !== 'grid') {
+      queryParams['view'] = this.viewMode();
+    } else {
+      queryParams['view'] = null;
     }
 
     if (this.currentPage() > 1) {

@@ -26,7 +26,7 @@ import { ConfirmDialogComponent } from '../../../shared';
             Categories & Taxonomies
           </h1>
           <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Organize classification tags for portfolio case studies and blog articles.
+            Organize classification tags for portfolio projects and technical case studies.
           </p>
         </div>
 

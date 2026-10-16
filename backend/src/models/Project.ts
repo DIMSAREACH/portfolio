@@ -171,7 +171,6 @@ projectSchema.pre('save', async function () {
 });
 
 // Explicit compound & single field indexes matching PRD Section 11.5
-projectSchema.index({ slug: 1 }, { unique: true });
 projectSchema.index({ status: 1, featured: -1, order: 1 });
 projectSchema.index({ category: 1 });
 projectSchema.index({ technologies: 1 });

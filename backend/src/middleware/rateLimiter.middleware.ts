@@ -51,27 +51,29 @@ export const globalLimiter = createRateLimiter({
   windowMs: config.RATE_LIMIT_WINDOW_MS,
   max: config.RATE_LIMIT_MAX_REQUESTS,
   message: 'Too many requests, please try again later.',
-  skip: () => config.NODE_ENV === 'test',
+  skip: () => config.NODE_ENV === 'test' || config.NODE_ENV === 'development',
 });
 
 /**
  * Strict rate limiter for authentication endpoints (login, register).
- * Limit: 5 requests per 15 minutes per IP to prevent brute force attacks.
+ * Limit: 5 requests per 15 minutes per IP to prevent brute force attacks in production.
  */
 export const loginLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
   max: 5,
   message: 'Too many login attempts, please try again after 15 minutes.',
+  skip: () => config.NODE_ENV === 'development',
 });
 
 /**
  * Rate limiter for public contact form / messaging endpoints.
- * Limit: 5 requests per hour per IP to prevent spam.
+ * Limit: 5 requests per hour per IP to prevent spam in production.
  */
 export const contactLimiter = createRateLimiter({
   windowMs: 60 * 60 * 1000,
   max: 5,
   message: 'Too many contact requests from this IP, please try again after an hour.',
+  skip: () => config.NODE_ENV === 'development',
 });
 
 export default {

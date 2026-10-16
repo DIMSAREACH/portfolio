@@ -1,10 +1,12 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { LanguageService } from '../../../core/services/language.service';
 import { Profile } from '../../../core/models';
 import { BilingualFieldComponent, ImageUploadComponent, MarkdownEditorComponent } from '../shared';
+import { AvatarModule } from 'primeng/avatar';
 
 @Component({
   selector: 'app-admin-profile-form',
@@ -15,22 +17,23 @@ import { BilingualFieldComponent, ImageUploadComponent, MarkdownEditorComponent 
     BilingualFieldComponent,
     ImageUploadComponent,
     MarkdownEditorComponent,
+    AvatarModule,
   ],
   template: `
-    <div class="max-w-5xl mx-auto space-y-6 animate-fadeIn pb-12">
+    <div class="w-full space-y-6 animate-fadeIn pb-12">
       <!-- Page Header -->
       <div class="flex items-center justify-between">
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-              Personal Brand
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400" [class.font-khmer]="isKhmer()">
+              {{ isKhmer() ? 'ម៉ាកសញ្ញាផ្ទាល់ខ្លួន' : 'Personal Brand' }}
             </span>
           </div>
-          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">
-            Author Profile & Bio
+          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1 tracking-tight" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'ព័ត៌មានប្រវត្តិរូប & ជីវប្រវត្តិ' : 'Author Profile & Bio' }}
           </h1>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Manage your personal identity, contact details, headshot portraits, and bilingual biographical narratives.
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'គ្រប់គ្រងអត្តសញ្ញាណផ្ទាល់ខ្លួន ព័ត៌មានទំនាក់ទំនង រូបភាពបញ្ឈរ និងការពិពណ៌នាជីវប្រវត្តិពីរភាសា។' : 'Manage your personal identity, contact details, headshot portraits, and bilingual biographical narratives.' }}
           </p>
         </div>
       </div>
@@ -38,9 +41,9 @@ import { BilingualFieldComponent, ImageUploadComponent, MarkdownEditorComponent 
       <!-- Main Profile Form -->
       <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="space-y-8">
         <!-- Section 1: Identity & Key Titles -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
-          <h2 class="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 border-b border-slate-100 dark:border-slate-800 pb-3">
-            Identity & Professional Titles
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-6">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 border-b border-slate-100 dark:border-slate-800 pb-3" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'អត្តសញ្ញាណ & មុខតំណែងវិជ្ជាជីវៈ' : 'Identity & Professional Titles' }}
           </h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -49,7 +52,7 @@ import { BilingualFieldComponent, ImageUploadComponent, MarkdownEditorComponent 
               label="Full Name"
               [required]="true"
               placeholderEn="e.g. Sareach Dim"
-              placeholderKh="e.g. ឌីម សារាជ"
+              placeholderKh="e.g. ឌឹម សារាជ"
               formControlName="fullName"
             ></app-bilingual-field>
 
@@ -150,6 +153,27 @@ import { BilingualFieldComponent, ImageUploadComponent, MarkdownEditorComponent 
                   class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
+
+              <!-- Quick Demo Preset Avatars with PrimeNG p-avatar -->
+              <div class="pt-1">
+                <span class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                  Sample Preset Avatars
+                </span>
+                <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/80">
+                  @for (demoImg of demoAvatars; track demoImg) {
+                    <button
+                      type="button"
+                      (click)="selectPresetAvatar(demoImg)"
+                      class="transition-transform hover:scale-110 focus:outline-none rounded-full ring-2 transition-all p-0.5 cursor-pointer"
+                      [class.ring-indigo-600]="profileForm.get('profileImage')?.value === demoImg"
+                      [class.ring-transparent]="profileForm.get('profileImage')?.value !== demoImg"
+                      [title]="'Select avatar'"
+                    >
+                      <p-avatar [image]="demoImg" size="large" shape="circle" />
+                    </button>
+                  }
+                </div>
+              </div>
             </div>
 
             <div class="space-y-3">
@@ -190,52 +214,15 @@ import { BilingualFieldComponent, ImageUploadComponent, MarkdownEditorComponent 
               </p>
             </div>
 
-            <!-- Tab switch -->
-            <div class="inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl" role="tablist">
-              <button
-                type="button"
-                role="tab"
-                (click)="activeAboutLang.set('en')"
-                class="px-3 py-1 text-xs font-semibold rounded-lg transition-all"
-                [class.bg-white]="activeAboutLang() === 'en'"
-                [class.dark:bg-slate-700]="activeAboutLang() === 'en'"
-                [class.text-indigo-600]="activeAboutLang() === 'en'"
-                [class.dark:text-indigo-400]="activeAboutLang() === 'en'"
-              >
-                English Story
-              </button>
-              <button
-                type="button"
-                role="tab"
-                (click)="activeAboutLang.set('kh')"
-                class="px-3 py-1 text-xs font-semibold rounded-lg transition-all"
-                [class.bg-white]="activeAboutLang() === 'kh'"
-                [class.dark:bg-slate-700]="activeAboutLang() === 'kh'"
-                [class.text-indigo-600]="activeAboutLang() === 'kh'"
-                [class.dark:text-indigo-400]="activeAboutLang() === 'kh'"
-              >
-                Khmer Story
-              </button>
-            </div>
           </div>
 
           <div formGroupName="about">
-            <div [class.hidden]="activeAboutLang() !== 'en'">
-              <app-markdown-editor
-                label="English Biography"
-                placeholder="# My Journey&#10;&#10;Write your career story here..."
-                [rows]="10"
-                formControlName="en"
-              ></app-markdown-editor>
-            </div>
-            <div [class.hidden]="activeAboutLang() !== 'kh'">
-              <app-markdown-editor
-                label="Khmer Biography"
-                placeholder="# ដំណើរជីវិតការងារ&#10;&#10;សរសេររឿងរ៉ាវការងាររបស់អ្នកនៅទីនេះ..."
-                [rows]="10"
-                formControlName="kh"
-              ></app-markdown-editor>
-            </div>
+            <app-markdown-editor
+              label="Biography Story"
+              placeholder="# My Journey&#10;&#10;Write your career story here..."
+              [rows]="10"
+              formControlName="en"
+            ></app-markdown-editor>
           </div>
         </div>
 
@@ -306,12 +293,26 @@ export class ProfileFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly portfolioService = inject(PortfolioService);
   private readonly notificationService = inject(NotificationService);
+  public readonly languageService = inject(LanguageService, { optional: true });
+  public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
 
   public readonly isSubmitting = signal<boolean>(false);
   public readonly activeAboutLang = signal<'en' | 'kh'>('en');
 
   public selectedProfileFile: File | null = null;
   public selectedAboutFile: File | null = null;
+
+  public readonly demoAvatars: string[] = [
+    'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png',
+    'https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png',
+    'https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png',
+  ];
+
+  public selectPresetAvatar(url: string): void {
+    this.selectedProfileFile = null;
+    this.profileForm.patchValue({ profileImage: url });
+    this.profileForm.markAsDirty();
+  }
 
   public readonly profileForm: FormGroup = this.fb.group({
     fullName: [{ en: '', kh: '' }, Validators.required],

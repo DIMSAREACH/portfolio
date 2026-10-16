@@ -89,4 +89,47 @@ describe('AdminHeaderComponent', () => {
     expect(authServiceMock.logout).toHaveBeenCalled();
     expect(router.navigateByUrl).toHaveBeenCalledWith('/admin/login');
   });
+
+  it('should render language switcher component', () => {
+    const langSwitcher = fixture.nativeElement.querySelector('app-language-switcher');
+    expect(langSwitcher).toBeTruthy();
+  });
+
+  it('should toggle notifications dropdown when notifications button is clicked', () => {
+    const notifBtn = fixture.nativeElement.querySelector('#admin-notifications-btn');
+    expect(notifBtn).toBeTruthy();
+
+    expect(component.isNotificationsOpen()).toBe(false);
+    notifBtn.click();
+    fixture.detectChanges();
+
+    expect(component.isNotificationsOpen()).toBe(true);
+    const dropdown = fixture.nativeElement.querySelector('#admin-notifications-dropdown');
+    expect(dropdown).toBeTruthy();
+
+    notifBtn.click();
+    fixture.detectChanges();
+    expect(component.isNotificationsOpen()).toBe(false);
+  });
+
+  it('should display unread badge when unreadCount > 0', () => {
+    component.unreadCount.set(5);
+    fixture.detectChanges();
+
+    const badge = fixture.nativeElement.querySelector('#admin-notifications-badge');
+    expect(badge).toBeTruthy();
+    expect(badge.textContent.trim()).toBe('5');
+  });
+
+  it('should initialize account menu items with My Account, Notifications, and Appearance', () => {
+    expect(component.accountMenuItems.length).toBeGreaterThanOrEqual(4);
+    const labels = component.accountMenuItems.map((item) => item.label).filter(Boolean);
+    expect(labels).toContain('My Account');
+    expect(labels).toContain('Notifications');
+    expect(labels).toContain('Appearance');
+    expect(labels).toContain('Session');
+
+    const avatarBtn = fixture.nativeElement.querySelector('#admin-account-avatar-btn');
+    expect(avatarBtn).toBeTruthy();
+  });
 });

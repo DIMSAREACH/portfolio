@@ -66,7 +66,6 @@ export const mediaSchema = new Schema<IMedia>(
 );
 
 // Explicit indexes matching PRD Section 11.13
-mediaSchema.index({ publicId: 1 }, { unique: true });
 mediaSchema.index({ mimeType: 1 });
 mediaSchema.index({ createdAt: -1 });
 

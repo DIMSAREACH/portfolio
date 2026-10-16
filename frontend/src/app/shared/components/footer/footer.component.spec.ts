@@ -51,12 +51,11 @@ describe('FooterComponent', () => {
     expect(socialLinks.length).toBe(component.socialLinks.length);
   });
 
-  it('should trigger window.scrollTo when back to top is clicked', () => {
+  it('should trigger window.scrollTo when scrollToTop is called', () => {
     const scrollToSpy = vi.fn();
     window.scrollTo = scrollToSpy;
 
-    const backToTopBtn = fixture.nativeElement.querySelector('#back-to-top-btn');
-    backToTopBtn.click();
+    component.scrollToTop();
 
     expect(scrollToSpy).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
   });

@@ -63,4 +63,22 @@ describe('LanguageSwitcherComponent', () => {
     expect(buttons[0].classList.contains('active')).toBe(false);
     expect(buttons[1].classList.contains('active')).toBe(true);
   });
+
+  it('should switch language on track click', () => {
+    const track = fixture.nativeElement.querySelector('.lang-switch-track') as HTMLElement;
+    vi.spyOn(track, 'getBoundingClientRect').mockReturnValue({
+      left: 0,
+      width: 100,
+      top: 0,
+      bottom: 36,
+      height: 36,
+      right: 100,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    track.dispatchEvent(new MouseEvent('click', { clientX: 75 }));
+    expect(languageServiceMock.setLanguage).toHaveBeenCalledWith('kh');
+  });
 });

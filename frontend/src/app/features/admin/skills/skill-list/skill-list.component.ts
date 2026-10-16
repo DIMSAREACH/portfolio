@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { LanguageService } from '../../../../core/services/language.service';
 import { Skill } from '../../../../core/models';
 import { AdminDataTableComponent, TableColumn, SortEvent } from '../../shared';
 import { ConfirmDialogComponent } from '../../../../shared';
@@ -18,26 +19,27 @@ import { ConfirmDialogComponent } from '../../../../shared';
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-              CMS Expertise
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400" [class.font-khmer]="isKhmer()">
+              {{ isKhmer() ? 'ការគ្រប់គ្រងជំនាញ' : 'CMS Expertise' }}
             </span>
           </div>
-          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">
-            Skills & Competencies
+          <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1 tracking-tight" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'ជំនាញ និងសមត្ថភាពបច្ចេកទេស' : 'Skills & Competencies' }}
           </h1>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Organize tech stack proficiencies, bilingual category groupings, and display priorities.
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'រៀបចំកម្រិតជំនាញបច្ចេកវិទ្យា ចាត់ក្រុមតាមប្រភេទ និងកំណត់លំដាប់បង្ហាញ។' : 'Organize tech stack proficiencies, bilingual category groupings, and display priorities.' }}
           </p>
         </div>
 
         <a
           routerLink="/admin/skills/create"
-          class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto"
+          class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto cursor-pointer"
+          [class.font-khmer]="isKhmer()"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          <span>New Skill</span>
+          <span>{{ isKhmer() ? 'ជំនាញថ្មី' : 'New Skill' }}</span>
         </a>
       </div>
 
@@ -50,10 +52,10 @@ import { ConfirmDialogComponent } from '../../../../shared';
         [pageSize]="pageSize()"
         [isLoading]="isLoading()"
         [activeFilter]="activeFilter()"
-        [filterOptions]="filterOptions"
-        searchPlaceholder="Search skills by name, category..."
-        createButtonLabel="New Skill"
-        emptyMessage="No skills found. Create your first technical skill!"
+        [filterOptions]="filterOptions()"
+        [searchPlaceholder]="isKhmer() ? 'ស្វែងរកជំនាញតាមឈ្មោះ, ប្រភេទ...' : 'Search skills by name, category...'"
+        [createButtonLabel]="isKhmer() ? 'ជំនាញថ្មី' : 'New Skill'"
+        [emptyMessage]="isKhmer() ? 'មិនមានជំនាញត្រូវបានរកឃើញទេ។ សូមបង្កើតជំនាញបច្ចេកទេសដំបូងរបស់អ្នក!' : 'No skills found. Create your first technical skill!'"
         (searchChange)="onSearchChange($event)"
         (filterChange)="onFilterChange($event)"
         (sortChange)="onSortChange($event)"
@@ -71,6 +73,8 @@ export class SkillListComponent implements OnInit {
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
+  public readonly languageService = inject(LanguageService, { optional: true });
+  public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
 
   public readonly skills = signal<Skill[]>([]);
   public readonly totalItems = signal<number>(0);
@@ -82,11 +86,11 @@ export class SkillListComponent implements OnInit {
   public readonly sortKey = signal<string>('order');
   public readonly sortDirection = signal<'asc' | 'desc'>('asc');
 
-  public readonly filterOptions = [
-    { label: 'All Statuses', value: 'all' },
-    { label: 'Visible', value: 'true' },
-    { label: 'Hidden', value: 'false' },
-  ];
+  public readonly filterOptions = computed(() => [
+    { label: this.isKhmer() ? 'ស្ថានភាពទាំងអស់' : 'All Statuses', value: 'all' },
+    { label: this.isKhmer() ? 'បង្ហាញ' : 'Visible', value: 'true' },
+    { label: this.isKhmer() ? 'លាក់' : 'Hidden', value: 'false' },
+  ]);
 
   public readonly columns: TableColumn[] = [
     {

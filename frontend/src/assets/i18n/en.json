@@ -6,7 +6,6 @@
     "experience": "Experience",
     "education": "Education",
     "projects": "Projects",
-    "blog": "Blog",
     "achievements": "Achievements",
     "contact": "Contact",
     "admin": "Admin",
@@ -64,19 +63,6 @@
     "related_projects": "Related Projects",
     "empty": "No projects found",
     "empty_desc": "No projects match your current filter criteria."
-  },
-  "blog": {
-    "title": "Insights & Articles",
-    "subtitle": "Thoughts, tutorials, and deep dives on software architecture, full-stack development, and modern engineering.",
-    "min_read": "min read",
-    "published_on": "Published on",
-    "views": "views",
-    "share": "Share Article",
-    "related_posts": "Related Articles",
-    "empty": "No articles found",
-    "empty_desc": "Check back soon for new technical writings and updates.",
-    "copy_link": "Copy Link",
-    "back_to_blog": "Back to all articles"
   },
   "contact": {
     "badge": "Get In Touch",

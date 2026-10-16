@@ -20,7 +20,7 @@ describe('SettingsFormComponent', () => {
 
   const mockSettings: Settings = {
     _id: 'settings-1',
-    siteTitle: { en: 'Sareach Dim | Portfolio', kh: 'ឌីម សារាជ | គេហទំព័រ' },
+    siteTitle: { en: 'Sareach Dim | Portfolio', kh: 'ឌឹម សារាជ | គេហទំព័រ' },
     siteDescription: { en: 'Cloud architect portfolio', kh: 'គេហទំព័រផ្ទាល់ខ្លួន' },
     enableCvDownload: true,
     enableContactForm: true,

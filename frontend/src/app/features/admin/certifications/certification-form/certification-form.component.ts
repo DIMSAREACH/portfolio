@@ -18,7 +18,7 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
     ImageUploadComponent,
   ],
   template: `
-    <div class="max-w-4xl mx-auto space-y-8 animate-fadeIn">
+    <div class="w-full space-y-8 animate-fadeIn">
       <!-- Top Breadcrumb & Header -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, ActivatedRoute } from '@angular/router';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { ProjectListComponent } from './project-list.component';
@@ -108,6 +109,22 @@ describe('ProjectListComponent', () => {
     data: mockCategories,
   };
 
+  beforeAll(() => {
+    if (typeof window !== 'undefined' && !window.IntersectionObserver) {
+      class MockIntersectionObserver {
+        root = null;
+        rootMargin = '';
+        thresholds = [];
+        observe = vi.fn();
+        unobserve = vi.fn();
+        disconnect = vi.fn();
+        takeRecords = vi.fn().mockReturnValue([]);
+      }
+      window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+      globalThis.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+    }
+  });
+
   beforeEach(async () => {
     portfolioServiceMock = {
       getProjects: vi.fn().mockReturnValue(of(mockPaginatedProjects)),
@@ -122,6 +139,7 @@ describe('ProjectListComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ProjectListComponent],
       providers: [
+        provideAnimationsAsync(),
         provideRouter([]),
         { provide: PortfolioService, useValue: portfolioServiceMock },
         { provide: LanguageService, useValue: languageServiceMock },
@@ -165,16 +183,6 @@ describe('ProjectListComponent', () => {
     );
   });
 
-  it('should filter by technology and update state', () => {
-    fixture.detectChanges();
-
-    component.onTechSelect('Python');
-    expect(component.selectedTech()).toBe('Python');
-    expect(portfolioServiceMock.getProjects).toHaveBeenCalledWith(
-      expect.objectContaining({ tech: 'Python' }),
-    );
-  });
-
   it('should filter by search query', () => {
     fixture.detectChanges();
 
@@ -212,13 +220,11 @@ describe('ProjectListComponent', () => {
     fixture.detectChanges();
 
     component.selectedCategory.set('ai-ml');
-    component.selectedTech.set('Python');
     component.searchQuery.set('test');
 
     component.resetFilters();
 
     expect(component.selectedCategory()).toBe('all');
-    expect(component.selectedTech()).toBe('all');
     expect(component.searchQuery()).toBe('');
     expect(component.currentPage()).toBe(1);
   });
@@ -255,6 +261,28 @@ describe('ProjectListComponent', () => {
 
     expect(component.projects().length).toBe(0);
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-empty-state')).toBeTruthy();
+    expect(compiled.textContent).toContain('No matching projects found');
+  });
+
+  it('should handle CascadeSelect change, clear, and category filtering', () => {
+    fixture.detectChanges();
+
+    const cascadeOptions = component.cascadeCategories();
+    expect(cascadeOptions.length).toBe(3); // 'all' + 2 categories
+    expect(cascadeOptions[0].id).toBe('all');
+    expect(cascadeOptions[1].id).toBe('ai-ml');
+
+    // Select category option from CascadeSelect
+    const aiCategoryOption = cascadeOptions[1];
+    component.onCascadeChange({ value: aiCategoryOption });
+    fixture.detectChanges();
+    expect(component.selectedCategory()).toBe('ai-ml');
+    expect(component.selectedCascadeItem()?.id).toBe('ai-ml');
+
+    // Clear cascade select
+    component.onCascadeClear();
+    fixture.detectChanges();
+    expect(component.selectedCategory()).toBe('all');
+    expect(component.selectedCascadeItem()?.id).toBe('all');
   });
 });

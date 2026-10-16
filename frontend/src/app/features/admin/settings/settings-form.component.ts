@@ -1,8 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { LanguageService } from '../../../core/services/language.service';
 import { Settings } from '../../../core/models';
 import { BilingualFieldComponent } from '../shared';
 
@@ -11,28 +12,28 @@ import { BilingualFieldComponent } from '../shared';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, BilingualFieldComponent],
   template: `
-    <div class="max-w-4xl mx-auto space-y-6 animate-fadeIn pb-12">
+    <div class="w-full space-y-6 animate-fadeIn pb-12">
       <!-- Header -->
       <div>
         <div class="flex items-center gap-2">
-          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-            System Preferences
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'ចំណូលចិត្តប្រព័ន្ធ' : 'System Preferences' }}
           </span>
         </div>
-        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">
-          Website & System Settings
+        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1 tracking-tight" [class.font-khmer]="isKhmer()">
+          {{ isKhmer() ? 'ការកំណត់គេហទំព័រ & ប្រព័ន្ធ' : 'Website & System Settings' }}
         </h1>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-          Configure global platform metadata, feature flags, email alerts, and maintenance switch.
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'កំណត់ទិន្នន័យ SEO សកល លក្ខណៈពិសេសប្រព័ន្ធ ការជូនដំណឹងតាមអ៊ីមែល និងកុងតាក់ថែទាំ។' : 'Configure global platform metadata, feature flags, email alerts, and maintenance switch.' }}
         </p>
       </div>
 
       <!-- Settings Form -->
       <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" class="space-y-8">
         <!-- Section 1: Global SEO & Titles -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
-          <h2 class="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 border-b border-slate-100 dark:border-slate-800 pb-3">
-            Global Site Metadata & SEO
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-6">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 border-b border-slate-100 dark:border-slate-800 pb-3" [class.font-khmer]="isKhmer()">
+            {{ isKhmer() ? 'ទិន្នន័យមេតាគេហទំព័រសកល & SEO' : 'Global Site Metadata & SEO' }}
           </h2>
 
           <div class="space-y-4">
@@ -40,7 +41,7 @@ import { BilingualFieldComponent } from '../shared';
               label="Default Site Title"
               [required]="true"
               placeholderEn="e.g. Sareach Dim | Full-Stack Cloud Architect"
-              placeholderKh="e.g. ឌីម សារាជ | វិស្វករ Cloud និង Full-Stack"
+              placeholderKh="e.g. ឌឹម សារាជ | វិស្វករ Cloud និង Full-Stack"
               formControlName="siteTitle"
             ></app-bilingual-field>
 
@@ -48,7 +49,7 @@ import { BilingualFieldComponent } from '../shared';
               label="Default Meta Description"
               fieldType="textarea"
               placeholderEn="Portfolio of Sareach Dim, specializing in scalable web systems..."
-              placeholderKh="គេហទំព័រផ្ទាល់ខ្លួនរបស់ ឌីម សារាជ..."
+              placeholderKh="គេហទំព័រផ្ទាល់ខ្លួនរបស់ ឌឹម សារាជ..."
               formControlName="siteDescription"
               [rows]="3"
             ></app-bilingual-field>
@@ -161,6 +162,8 @@ export class SettingsFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly portfolioService = inject(PortfolioService);
   private readonly notificationService = inject(NotificationService);
+  public readonly languageService = inject(LanguageService, { optional: true });
+  public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
 
   public readonly isSaving = signal<boolean>(false);
 

@@ -66,6 +66,14 @@ describe('AdminLayoutComponent', () => {
     expect(component.isSidebarOpen).toBe(false);
   });
 
+  it('should toggle collapse state when toggleCollapse is called', () => {
+    expect(component.isCollapsed).toBe(false);
+    component.toggleCollapse();
+    expect(component.isCollapsed).toBe(true);
+    component.toggleCollapse();
+    expect(component.isCollapsed).toBe(false);
+  });
+
   it('should render sidebar, header, and main router outlet', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-admin-sidebar')).toBeTruthy();

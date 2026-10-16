@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { of, throwError } from 'rxjs';
 import { AchievementsComponent } from './achievements.component';
 import { PortfolioService } from '../../../core/services/portfolio.service';
@@ -62,6 +64,22 @@ describe('AchievementsComponent', () => {
     data: mockCertifications,
   };
 
+  beforeAll(() => {
+    if (typeof window !== 'undefined' && !window.IntersectionObserver) {
+      class MockIntersectionObserver {
+        root = null;
+        rootMargin = '';
+        thresholds = [];
+        observe = vi.fn();
+        unobserve = vi.fn();
+        disconnect = vi.fn();
+        takeRecords = vi.fn().mockReturnValue([]);
+      }
+      window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+      globalThis.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+    }
+  });
+
   beforeEach(async () => {
     portfolioServiceMock = {
       getCertifications: vi.fn().mockReturnValue(of(mockResponse)),
@@ -75,6 +93,8 @@ describe('AchievementsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AchievementsComponent],
       providers: [
+        provideAnimationsAsync(),
+        provideRouter([]),
         { provide: PortfolioService, useValue: portfolioServiceMock },
         { provide: LanguageService, useValue: languageServiceMock },
       ],
@@ -177,5 +197,29 @@ describe('AchievementsComponent', () => {
     expect(component.getTypeLabel('award')).toBe('ពានរង្វាន់');
     expect(component.getTypeLabel('achievement')).toBe('សមិទ្ធផល');
     expect(component.getTypeLabel('certification')).toBe('វិញ្ញាបនបត្រ');
+  });
+
+  it('should handle CascadeSelect change, clear, and category filtering', () => {
+    fixture.detectChanges();
+
+    const cascadeOptions = component.cascadeCategories();
+    expect(cascadeOptions.length).toBe(4);
+    expect(cascadeOptions[0].id).toBe('all');
+    expect(cascadeOptions[1].id).toBe('certification');
+
+    // Select certification option
+    const certOption = cascadeOptions[1];
+    component.onCascadeChange({ value: certOption });
+    fixture.detectChanges();
+    expect(component.selectedType()).toBe('certification');
+    expect(component.selectedCascadeItem()?.id).toBe('certification');
+    expect(component.displayedItems().length).toBe(1);
+
+    // Clear cascade select
+    component.onCascadeClear();
+    fixture.detectChanges();
+    expect(component.selectedType()).toBe('all');
+    expect(component.selectedCascadeItem()?.id).toBe('all');
+    expect(component.displayedItems().length).toBe(3);
   });
 });
