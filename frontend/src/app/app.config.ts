@@ -11,11 +11,13 @@ import { provideTranslateService, provideTranslateLoader } from '@ngx-translate/
 import { TranslateHttpLoader, provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
+import { MessageService } from 'primeng/api';
 import { routes } from './app.routes';
 import { authInterceptor, errorInterceptor } from './core/interceptors';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    MessageService,
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,
