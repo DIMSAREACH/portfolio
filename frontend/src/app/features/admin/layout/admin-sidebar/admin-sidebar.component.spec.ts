@@ -34,23 +34,23 @@ describe('AdminSidebarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render active navigation items with Blog Management and Achievements consolidated', () => {
+  it('should render active navigation items with Categories and Achievements aligned', () => {
     const totalItems = component.navGroups.reduce((acc, g) => acc + g.items.length, 0);
-    expect(totalItems).toBe(12);
+    expect(totalItems).toBe(13);
 
     const links = fixture.nativeElement.querySelectorAll('nav a');
-    expect(links.length).toBe(12);
+    expect(links.length).toBe(13);
   });
 
-  it('should include key sections like Dashboard, Projects, Messages, and Settings, and show only Certifications', () => {
+  it('should include key sections like Dashboard, Projects, Categories, Achievements, Messages, and Settings', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('Dashboard');
     expect(compiled.textContent).toContain('Projects');
+    expect(compiled.textContent).toContain('Categories');
     expect(compiled.textContent).toContain('Skills');
     expect(compiled.textContent).toContain('Experience');
     expect(compiled.textContent).toContain('Education');
-    expect(compiled.textContent).toContain('Certifications');
-    expect(compiled.textContent).not.toContain('Achievements');
+    expect(compiled.textContent).toContain('Achievements');
     expect(compiled.textContent).not.toContain('Blog Management');
     expect(compiled.textContent).not.toContain('Blog Posts');
     expect(compiled.textContent).toContain('Messages');

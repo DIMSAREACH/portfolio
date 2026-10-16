@@ -111,13 +111,13 @@ describe('CategoryListComponent', () => {
     component.categoryForm.patchValue({
       name: { en: 'Mobile Apps', kh: 'កម្មវិធីទូរស័ព្ទ' },
       slug: 'mobile-apps',
-      type: 'both',
+      type: 'project',
     });
 
     component.saveCategory();
 
     expect(portfolioServiceMock.createAdminCategory).toHaveBeenCalledWith(
-      expect.objectContaining({ slug: 'mobile-apps', type: 'both' }),
+      expect.objectContaining({ slug: 'mobile-apps', type: 'project' }),
     );
     expect(notificationServiceMock.showSuccess).toHaveBeenCalledWith('Category created successfully!');
     expect(component.showModal()).toBe(false);

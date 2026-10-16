@@ -280,10 +280,11 @@ export class AdminSidebarComponent implements OnInit {
       groupNameKh: 'មាតិកាផលប័ត្រ',
       items: [
         { label: 'Projects', labelKh: 'គម្រោង', path: '/admin/projects', icon: 'projects' },
+        { label: 'Categories', labelKh: 'ប្រភេទទិន្នន័យ', path: '/admin/categories', icon: 'categories' },
         { label: 'Skills', labelKh: 'ជំនាញ', path: '/admin/skills', icon: 'skills' },
         { label: 'Experience', labelKh: 'បទពិសោធន៍', path: '/admin/experience', icon: 'experience' },
         { label: 'Education', labelKh: 'ការអប់រំ', path: '/admin/education', icon: 'education' },
-        { label: 'Certifications', labelKh: 'វិញ្ញាបនបត្រ', path: '/admin/certifications', icon: 'certifications' },
+        { label: 'Achievements', labelKh: 'សមិទ្ធផល & វិញ្ញាបនបត្រ', path: '/admin/certifications', icon: 'certifications' },
       ],
     },
     {

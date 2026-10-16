@@ -489,7 +489,6 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   public initAccountMenu(kh = false): void {
-    const unread = this.unreadCount();
     this.accountMenuItems = [
       {
         label: kh ? 'គណនី & ប្រវត្តិរូប' : 'My Account',
@@ -519,35 +518,7 @@ export class AdminHeaderComponent implements OnInit {
       },
       { separator: true },
       {
-        label: kh ? 'គ្រប់គ្រងផលប័ត្រ' : 'Portfolio CMS',
-        items: [
-          {
-            label: kh ? 'គ្រប់គ្រងគម្រោង' : 'Projects Showcase',
-            icon: 'pi pi-folder',
-            command: () => {
-              this.router.navigate(['/admin/projects']);
-            },
-          },
-          {
-            label: kh ? 'ជំនាញ & បច្ចេកវិទ្យា' : 'Skills & Tech Stack',
-            icon: 'pi pi-bolt',
-            command: () => {
-              this.router.navigate(['/admin/skills']);
-            },
-          },
-          {
-            label: kh ? 'សារសាកសួរពីភ្ញៀវ' : 'Client Inquiries',
-            icon: 'pi pi-envelope',
-            badge: unread > 0 ? String(unread) : undefined,
-            command: () => {
-              this.router.navigate(['/admin/messages']);
-            },
-          },
-        ],
-      },
-      { separator: true },
-      {
-        label: kh ? 'ប្រព័ន្ធ & រូបរាង' : 'Appearance',
+        label: kh ? 'សម័យការ & គេហទំព័រ' : 'Session',
         items: [
           {
             label: kh ? 'មើលគេហទំព័រផ្ទាល់' : 'View Live Portfolio',
@@ -556,33 +527,6 @@ export class AdminHeaderComponent implements OnInit {
               window.open('/', '_blank');
             },
           },
-          {
-            label: kh ? 'ពន្លឺ' : 'Light Mode',
-            icon: 'pi pi-sun',
-            command: () => {
-              this.themeService?.setTheme('light');
-            },
-          },
-          {
-            label: kh ? 'ងងឹត' : 'Dark Mode',
-            icon: 'pi pi-moon',
-            command: () => {
-              this.themeService?.setTheme('dark');
-            },
-          },
-          {
-            label: kh ? 'ប្រព័ន្ធ' : 'System Theme',
-            icon: 'pi pi-desktop',
-            command: () => {
-              this.setSystemTheme();
-            },
-          },
-        ],
-      },
-      { separator: true },
-      {
-        label: kh ? 'សម័យការ' : 'Session',
-        items: [
           {
             label: kh ? 'ចាកចេញពីប្រព័ន្ធ' : 'Sign Out / Logout',
             icon: 'pi pi-sign-out',

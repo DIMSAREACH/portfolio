@@ -120,12 +120,10 @@ describe('AdminHeaderComponent', () => {
     expect(badge.textContent.trim()).toBe('5');
   });
 
-  it('should initialize account menu items with My Account, Portfolio CMS, Appearance, and Session', () => {
-    expect(component.accountMenuItems.length).toBeGreaterThanOrEqual(4);
+  it('should initialize account menu items with My Account and Session', () => {
+    expect(component.accountMenuItems.length).toBeGreaterThanOrEqual(2);
     const labels = component.accountMenuItems.map((item) => item.label).filter(Boolean);
     expect(labels).toContain('My Account');
-    expect(labels).toContain('Portfolio CMS');
-    expect(labels).toContain('Appearance');
     expect(labels).toContain('Session');
 
     const avatarBtn = fixture.nativeElement.querySelector('#admin-account-avatar-btn');
