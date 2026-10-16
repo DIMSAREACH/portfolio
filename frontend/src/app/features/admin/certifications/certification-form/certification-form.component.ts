@@ -44,7 +44,7 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
         <div class="flex items-center gap-3">
           <a
             routerLink="/admin/certifications"
-            class="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
+            class="px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             Cancel
           </a>
@@ -52,7 +52,7 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
             type="button"
             (click)="onSubmit()"
             [disabled]="isSubmitting()"
-            class="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
           >
             @if (isSubmitting()) {
               <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,7 +83,7 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
                 formControlName="name"
               ></app-bilingual-field>
               @if (isFieldInvalid('name')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">English credential name is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">English credential name is required.</p>
               }
             </div>
 
@@ -97,13 +97,13 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
                 formControlName="organization"
               ></app-bilingual-field>
               @if (isFieldInvalid('organization')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">English issuing organization is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">English issuing organization is required.</p>
               }
             </div>
 
             <!-- Type -->
             <div>
-              <label for="cert-type-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="cert-type-select" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Credential Category <span class="text-rose-500 font-bold">*</span>
               </label>
               <p-cascadeselect
@@ -132,7 +132,7 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <!-- Issue Date -->
             <div>
-              <label for="cert-issue-date" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="cert-issue-date" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Issue Date <span class="text-rose-500 font-bold">*</span>
               </label>
               <p-datepicker
@@ -145,16 +145,16 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
                 appendTo="body"
                 placeholder="YYYY-MM-DD"
                 styleClass="w-full"
-                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                inputStyleClass="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
               @if (isFieldInvalid('issueDate')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">Issue date is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">Issue date is required.</p>
               }
             </div>
 
             <!-- Expiration Date -->
             <div>
-              <label for="cert-exp-date" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="cert-exp-date" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Expiration Date (Leave blank if lifetime/no expiry)
               </label>
               <p-datepicker
@@ -167,13 +167,13 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
                 appendTo="body"
                 placeholder="YYYY-MM-DD"
                 styleClass="w-full"
-                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                inputStyleClass="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
 
             <!-- Credential ID -->
             <div>
-              <label for="cert-credential-id" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="cert-credential-id" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Credential ID / License Number
               </label>
               <input
@@ -181,13 +181,13 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
                 type="text"
                 formControlName="credentialId"
                 placeholder="e.g. AWS-SAA-123456"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
 
             <!-- Credential URL -->
             <div>
-              <label for="cert-credential-url" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="cert-credential-url" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Verification URL
               </label>
               <input
@@ -195,7 +195,7 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
                 type="url"
                 formControlName="credentialUrl"
                 placeholder="https://credly.com/badges/..."
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
           </div>
@@ -233,14 +233,14 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
           <!-- Order & Visibility -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2 border-t border-slate-100 dark:border-slate-800">
             <div>
-              <label for="cert-order" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="cert-order" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Display Order Priority
               </label>
               <input
                 id="cert-order"
                 type="number"
                 formControlName="order"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
 
@@ -251,7 +251,7 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
                   formControlName="isVisible"
                   class="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500/30"
                 />
-                <span class="text-xs font-semibold text-slate-900 dark:text-white">
+                <span class="text-sm font-medium text-slate-900 dark:text-white">
                   Show on public portfolio achievements page
                 </span>
               </label>
@@ -263,14 +263,14 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
         <div class="flex items-center justify-end gap-3 pt-2">
           <a
             routerLink="/admin/certifications"
-            class="px-5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
+            class="px-5 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             Cancel
           </a>
           <button
             type="submit"
             [disabled]="isSubmitting()"
-            class="inline-flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
           >
             @if (isSubmitting()) {
               <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">

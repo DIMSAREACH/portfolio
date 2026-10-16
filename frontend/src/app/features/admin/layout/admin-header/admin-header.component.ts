@@ -57,14 +57,14 @@ import { Message } from '../../../../core/models';
 
         <!-- Breadcrumb & Control Center Identity -->
         <div class="flex items-center gap-2 text-xs sm:text-sm">
-          <span class="text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider text-[11px]" [class.font-khmer]="isKhmer()">
+          <span class="text-slate-400 dark:text-slate-500 font-extrabold uppercase tracking-wider text-xs" [class.font-khmer]="isKhmer()">
             {{ isKhmer() ? 'អ្នកគ្រប់គ្រង' : 'Admin' }}
           </span>
-          <i class="pi pi-angle-right text-[10px] text-slate-400 dark:text-slate-600"></i>
+          <i class="pi pi-angle-right text-xs text-slate-400 dark:text-slate-600"></i>
           <span class="font-extrabold text-slate-900 dark:text-white tracking-tight" [class.font-khmer]="isKhmer()">
             {{ isKhmer() ? 'មជ្ឈមណ្ឌលបញ្ជា' : 'Control Center' }}
           </span>
-          <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60 ml-2" [class.font-khmer]="isKhmer()">
+          <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60 ml-2" [class.font-khmer]="isKhmer()">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             {{ isKhmer() ? 'បន្តផ្ទាល់' : 'Live' }}
           </span>
@@ -77,11 +77,11 @@ import { Message } from '../../../../core/models';
         <a
           routerLink="/"
           target="_blank"
-          class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 transition-colors"
+          class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 transition-colors"
           [class.font-khmer]="isKhmer()"
           [title]="isKhmer() ? 'មើលគេហទំព័រផលប័ត្រផ្ទាល់' : 'Open live public portfolio website'"
         >
-          <i class="pi pi-external-link text-[11px]"></i>
+          <i class="pi pi-external-link text-xs"></i>
           <span>{{ isKhmer() ? 'គេហទំព័រផ្ទាល់' : 'Live Site' }}</span>
         </a>
 
@@ -129,7 +129,7 @@ import { Message } from '../../../../core/models';
                     {{ isKhmer() ? 'សារសាកសួរ & ការជូនដំណឹង' : 'Inquiries & Alerts' }}
                   </span>
                   @if (unreadCount() > 0) {
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400" [class.font-khmer]="isKhmer()">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'ថ្មី ' + unreadCount() : unreadCount() + ' new' }}
                     </span>
                   }
@@ -139,7 +139,7 @@ import { Message } from '../../../../core/models';
                     <button
                       type="button"
                       (click)="markAllAsRead()"
-                      class="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+                      class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
                       [class.font-khmer]="isKhmer()"
                       title="Mark all as read"
                     >
@@ -149,7 +149,7 @@ import { Message } from '../../../../core/models';
                   <button
                     type="button"
                     (click)="closeNotifications()"
-                    class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg cursor-pointer transition-colors"
+                    class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg cursor-pointer transition-colors"
                     aria-label="Close notifications panel"
                   >
                     <i class="pi pi-times text-xs"></i>
@@ -165,7 +165,7 @@ import { Message } from '../../../../core/models';
                     <p class="text-xs font-semibold text-slate-700 dark:text-slate-300" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'បានរួចរាល់ទាំងអស់!' : 'All caught up!' }}
                     </p>
-                    <p class="text-[11px]" [class.font-khmer]="isKhmer()">
+                    <p class="text-xs text-slate-400" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'គ្មានសារសាកសួរ ឬការជូនដំណឹងដែលមិនទាន់អានទេ។' : 'No unread inquiries or system alerts.' }}
                     </p>
                   </div>
@@ -185,14 +185,14 @@ import { Message } from '../../../../core/models';
                             <span class="text-xs font-bold text-slate-900 dark:text-white truncate">
                               {{ msg.name }}
                             </span>
-                            <span class="text-[10px] text-slate-400 whitespace-nowrap">
+                            <span class="text-xs text-slate-400 whitespace-nowrap">
                               {{ formatTimeAgo(msg.createdAt) }}
                             </span>
                           </div>
-                          <p class="text-[11px] font-medium text-slate-700 dark:text-slate-300 truncate mt-0.5">
+                          <p class="text-xs font-medium text-slate-700 dark:text-slate-300 truncate mt-0.5">
                             {{ msg.subject || (isKhmer() ? 'សារសាកសួរថ្មី' : 'New Contact Inquiry') }}
                           </p>
-                          <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                          <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
                             {{ msg.message }}
                           </p>
                         </div>
@@ -203,15 +203,15 @@ import { Message } from '../../../../core/models';
               </div>
 
               <!-- Panel Footer -->
-              <div class="p-2.5 bg-slate-50/80 dark:bg-slate-900/80 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <div class="p-3 bg-slate-50/80 dark:bg-slate-900/80 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <a
                   routerLink="/admin/messages"
                   (click)="closeNotifications()"
-                  class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1.5 px-2 py-1 rounded-lg transition-colors cursor-pointer"
+                  class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
                   [class.font-khmer]="isKhmer()"
                 >
                   <span>{{ isKhmer() ? 'មើលសារទាំងអស់' : 'View all messages' }}</span>
-                  <i class="pi pi-arrow-right text-[10px]"></i>
+                  <i class="pi pi-arrow-right text-xs"></i>
                 </a>
               </div>
             </div>
@@ -261,9 +261,9 @@ import { Message } from '../../../../core/models';
                 <div class="flex flex-col min-w-0 text-left">
                   <div class="flex items-center gap-1.5">
                     <span class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ userName() }}</span>
-                    <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-800/50">Admin</span>
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-800/50">Admin</span>
                   </div>
-                  <span class="text-[11px] font-normal text-slate-500 dark:text-slate-400 truncate mt-0.5 font-sans tracking-tight">{{ userEmail() }}</span>
+                  <span class="text-xs font-normal text-slate-500 dark:text-slate-400 truncate mt-0.5 font-sans tracking-tight">{{ userEmail() }}</span>
                 </div>
               </div>
 
@@ -272,14 +272,14 @@ import { Message } from '../../../../core/models';
                 @if (group.separator) {
                   <div class="my-1 border-t border-slate-100 dark:border-slate-800"></div>
                 } @else if (group.items && group.items.length > 0) {
-                  <div class="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500" [class.font-khmer]="isKhmer()">
+                  <div class="px-3 pt-2 pb-1 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500" [class.font-khmer]="isKhmer()">
                     {{ group.label }}
                   </div>
                   @for (item of group.items; track item.label) {
                     <button
                       type="button"
                       (click)="onMenuItemClick(item)"
-                      class="w-full flex items-center justify-between gap-2.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-left focus:outline-none group/item"
+                      class="w-full flex items-center justify-between gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-left focus:outline-none group/item"
                       [class.hover:!text-rose-600]="item.icon === 'pi pi-sign-out'"
                       [class.dark:hover:!text-rose-400]="item.icon === 'pi pi-sign-out'"
                       [class.hover:!bg-rose-50]="item.icon === 'pi pi-sign-out'"
@@ -291,7 +291,7 @@ import { Message } from '../../../../core/models';
                         <span class="truncate">{{ item.label }}</span>
                       </div>
                       @if (item.badge) {
-                        <span class="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white shadow-2xs">
+                        <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-500 text-white shadow-2xs">
                           {{ item.badge }}
                         </span>
                       }

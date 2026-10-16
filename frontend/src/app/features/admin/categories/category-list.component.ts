@@ -34,7 +34,7 @@ import { ConfirmDialogComponent } from '../../../shared';
         <button
           type="button"
           (click)="openCreateModal()"
-          class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto"
+          class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -52,9 +52,9 @@ import { ConfirmDialogComponent } from '../../../shared';
               type="text"
               [(ngModel)]="searchQuery"
               placeholder="Filter categories..."
-              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             />
-            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
@@ -64,7 +64,7 @@ import { ConfirmDialogComponent } from '../../../shared';
             <button
               type="button"
               (click)="typeFilter.set('all')"
-              class="px-3 py-1.5 text-xs font-semibold rounded-xl transition-all"
+              class="px-3.5 py-2 text-xs font-semibold rounded-xl transition-all"
               [class.bg-indigo-600]="typeFilter() === 'all'"
               [class.text-white]="typeFilter() === 'all'"
               [class.bg-slate-100]="typeFilter() !== 'all'"
@@ -77,7 +77,7 @@ import { ConfirmDialogComponent } from '../../../shared';
             <button
               type="button"
               (click)="typeFilter.set('project')"
-              class="px-3 py-1.5 text-xs font-semibold rounded-xl transition-all"
+              class="px-3.5 py-2 text-xs font-semibold rounded-xl transition-all"
               [class.bg-indigo-600]="typeFilter() === 'project'"
               [class.text-white]="typeFilter() === 'project'"
               [class.bg-slate-100]="typeFilter() !== 'project'"
@@ -94,15 +94,15 @@ import { ConfirmDialogComponent } from '../../../shared';
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse" aria-label="Categories Table">
             <thead>
-              <tr class="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                <th scope="col" class="px-6 py-3.5">Name (English & Khmer)</th>
-                <th scope="col" class="px-6 py-3.5">Slug</th>
-                <th scope="col" class="px-6 py-3.5 text-center">Type</th>
-                <th scope="col" class="px-6 py-3.5 text-center">Order</th>
-                <th scope="col" class="px-6 py-3.5 text-right">Actions</th>
+              <tr class="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <th scope="col" class="px-6 py-4">Name (English & Khmer)</th>
+                <th scope="col" class="px-6 py-4">Slug</th>
+                <th scope="col" class="px-6 py-4 text-center">Type</th>
+                <th scope="col" class="px-6 py-4 text-center">Order</th>
+                <th scope="col" class="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs">
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-sm">
               @if (isLoading()) {
                 @for (_ of [1, 2, 3]; track $index) {
                   <tr class="animate-pulse">
@@ -125,18 +125,18 @@ import { ConfirmDialogComponent } from '../../../shared';
                     <td class="px-6 py-4">
                       <div class="font-semibold text-slate-900 dark:text-white">{{ cat.name.en }}</div>
                       @if (cat.name.kh) {
-                        <div class="text-[11px] text-slate-400">{{ cat.name.kh }}</div>
+                        <div class="text-xs text-slate-400 mt-0.5">{{ cat.name.kh }}</div>
                       }
                       @if (cat.description?.en) {
-                        <div class="text-[11px] text-slate-500 line-clamp-1 mt-0.5">{{ cat.description?.en }}</div>
+                        <div class="text-xs text-slate-500 line-clamp-1 mt-0.5">{{ cat.description?.en }}</div>
                       }
                     </td>
-                    <td class="px-6 py-4 font-mono text-slate-600 dark:text-slate-400">
+                    <td class="px-6 py-4 font-mono text-xs text-slate-600 dark:text-slate-400">
                       {{ cat.slug }}
                     </td>
                     <td class="px-6 py-4 text-center">
                       <span
-                        class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border"
+                        class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider border"
                         [class.bg-sky-50]="cat.type === 'project'"
                         [class.text-sky-700]="cat.type === 'project'"
                         [class.border-sky-200]="cat.type === 'project'"
@@ -156,15 +156,15 @@ import { ConfirmDialogComponent } from '../../../shared';
                         {{ cat.type }}
                       </span>
                     </td>
-                    <td class="px-6 py-4 text-center text-slate-600 dark:text-slate-400 font-mono">
+                    <td class="px-6 py-4 text-center text-slate-600 dark:text-slate-400 font-mono text-sm">
                       {{ cat.order ?? '-' }}
                     </td>
                     <td class="px-6 py-4 text-right whitespace-nowrap">
-                      <div class="inline-flex items-center gap-1">
+                      <div class="inline-flex items-center gap-1.5">
                         <button
                           type="button"
                           (click)="openEditModal(cat)"
-                          class="p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded-lg transition-colors"
+                          class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded-xl transition-colors cursor-pointer"
                           title="Edit"
                           aria-label="Edit category"
                         >
@@ -175,7 +175,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                         <button
                           type="button"
                           (click)="onDeleteCategory(cat)"
-                          class="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg transition-colors"
+                          class="p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-xl transition-colors cursor-pointer"
                           title="Delete"
                           aria-label="Delete category"
                         >
@@ -222,8 +222,8 @@ import { ConfirmDialogComponent } from '../../../shared';
               ></app-bilingual-field>
 
               <!-- Slug -->
-              <div class="space-y-1">
-                <label for="cat-slug-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <div class="space-y-1.5">
+                <label for="cat-slug-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                   URL Slug <span class="text-rose-500 font-bold ml-0.5">*</span>
                 </label>
                 <input
@@ -231,13 +231,13 @@ import { ConfirmDialogComponent } from '../../../shared';
                   type="text"
                   formControlName="slug"
                   placeholder="cloud-computing"
-                  class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
 
               <!-- Type -->
-              <div class="space-y-1">
-                <label for="cat-type-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <div class="space-y-1.5">
+                <label for="cat-type-select" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                   Category Type <span class="text-rose-500 font-bold ml-0.5">*</span>
                 </label>
                 <p-cascadeselect
@@ -266,8 +266,8 @@ import { ConfirmDialogComponent } from '../../../shared';
               ></app-bilingual-field>
 
               <!-- Order -->
-              <div class="space-y-1">
-                <label for="cat-order-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <div class="space-y-1.5">
+                <label for="cat-order-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                   Display Order
                 </label>
                 <input
@@ -275,22 +275,22 @@ import { ConfirmDialogComponent } from '../../../shared';
                   type="number"
                   formControlName="order"
                   placeholder="0"
-                  class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
 
-              <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+              <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <button
                   type="button"
                   (click)="closeModal()"
-                  class="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"
+                  class="px-4 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   [disabled]="isSaving()"
-                  class="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow transition-all disabled:opacity-50"
+                  class="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow transition-all disabled:opacity-50"
                 >
                   {{ isSaving() ? 'Saving...' : (editingCategoryId ? 'Save Changes' : 'Create Category') }}
                 </button>

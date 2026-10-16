@@ -44,7 +44,7 @@ import { BilingualFieldComponent } from '../../shared';
         <div class="flex items-center gap-3">
           <a
             routerLink="/admin/experience"
-            class="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
+            class="px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             Cancel
           </a>
@@ -52,7 +52,7 @@ import { BilingualFieldComponent } from '../../shared';
             type="button"
             (click)="onSubmit()"
             [disabled]="isSubmitting()"
-            class="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
           >
             @if (isSubmitting()) {
               <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,7 +83,7 @@ import { BilingualFieldComponent } from '../../shared';
                 formControlName="title"
               ></app-bilingual-field>
               @if (isFieldInvalid('title')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">English title is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">English title is required.</p>
               }
             </div>
 
@@ -97,7 +97,7 @@ import { BilingualFieldComponent } from '../../shared';
                 formControlName="organization"
               ></app-bilingual-field>
               @if (isFieldInvalid('organization')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">English organization name is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">English organization name is required.</p>
               }
             </div>
 
@@ -113,7 +113,7 @@ import { BilingualFieldComponent } from '../../shared';
 
             <!-- Engagement Type -->
             <div>
-              <label for="experience-type-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="experience-type-select" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Engagement Type <span class="text-rose-500 font-bold">*</span>
               </label>
               <p-cascadeselect
@@ -133,14 +133,14 @@ import { BilingualFieldComponent } from '../../shared';
 
             <!-- Display Order -->
             <div>
-              <label for="experience-order-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="experience-order-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Display Order Priority
               </label>
               <input
                 id="experience-order-input"
                 type="number"
                 formControlName="order"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
           </div>
@@ -155,7 +155,7 @@ import { BilingualFieldComponent } from '../../shared';
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <!-- Start Date -->
             <div>
-              <label for="experience-start-date" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="experience-start-date" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Start Date <span class="text-rose-500 font-bold">*</span>
               </label>
               <p-datepicker
@@ -168,16 +168,16 @@ import { BilingualFieldComponent } from '../../shared';
                 appendTo="body"
                 placeholder="YYYY-MM-DD"
                 styleClass="w-full"
-                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                inputStyleClass="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
               @if (isFieldInvalid('startDate')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">Start date is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">Start date is required.</p>
               }
             </div>
 
             <!-- End Date -->
             <div>
-              <label for="experience-end-date" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="experience-end-date" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 End Date (Leave blank if currently working)
               </label>
               <p-datepicker
@@ -190,7 +190,7 @@ import { BilingualFieldComponent } from '../../shared';
                 appendTo="body"
                 placeholder="YYYY-MM-DD"
                 styleClass="w-full"
-                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono disabled:opacity-40 disabled:cursor-not-allowed"
+                inputStyleClass="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono disabled:opacity-40 disabled:cursor-not-allowed"
               />
             </div>
 
@@ -203,7 +203,7 @@ import { BilingualFieldComponent } from '../../shared';
                   (change)="onCurrentStatusToggle()"
                   class="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500/30"
                 />
-                <span class="text-xs font-semibold text-slate-900 dark:text-white">
+                <span class="text-sm font-medium text-slate-900 dark:text-white">
                   I currently work or serve in this position (Displays as "Present")
                 </span>
               </label>
@@ -231,7 +231,7 @@ import { BilingualFieldComponent } from '../../shared';
 
           <!-- Technologies Tag Manager -->
           <div class="space-y-3 pt-2">
-            <label for="experience-tech-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <label for="experience-tech-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
               Technologies & Tools Used
             </label>
             <div class="flex items-center gap-2">
@@ -242,12 +242,12 @@ import { BilingualFieldComponent } from '../../shared';
                 [ngModelOptions]="{ standalone: true }"
                 (keydown.enter)="addTechTag($event)"
                 placeholder="Type technology (e.g. Angular, AWS, Docker) and press Enter"
-                class="flex-1 px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                class="flex-1 px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
               />
               <button
                 type="button"
                 (click)="addTechTag()"
-                class="px-4 py-2 text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-colors shrink-0"
+                class="px-5 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-colors shrink-0"
               >
                 Add Tag
               </button>
@@ -256,7 +256,7 @@ import { BilingualFieldComponent } from '../../shared';
             <!-- Tag Chips -->
             <div class="flex flex-wrap gap-2 pt-1 min-h-[32px]">
               @for (tag of techTags(); track tag) {
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/50 animate-fadeIn">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/50 animate-fadeIn">
                   <span>{{ tag }}</span>
                   <button
                     type="button"
@@ -281,14 +281,14 @@ import { BilingualFieldComponent } from '../../shared';
         <div class="flex items-center justify-end gap-3 pt-2">
           <a
             routerLink="/admin/experience"
-            class="px-5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
+            class="px-5 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             Cancel
           </a>
           <button
             type="submit"
             [disabled]="isSubmitting()"
-            class="inline-flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
           >
             @if (isSubmitting()) {
               <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">

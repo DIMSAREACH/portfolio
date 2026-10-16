@@ -108,7 +108,7 @@ export interface AdminNavGroup {
           <div class="space-y-1">
             <!-- Group Header (hidden in collapsed mode) -->
             <h3
-              class="px-3 text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1 transition-opacity duration-200"
+              class="px-3 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1 transition-opacity duration-200"
               [class.font-khmer]="isKhmer()"
               [class.hidden]="isCollapsed"
             >
@@ -126,11 +126,11 @@ export interface AdminNavGroup {
                   routerLinkActive="sidebar-item-active"
                   [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
                   [title]="isKhmer() ? (item.labelKh || item.label) : item.label"
-                  class="flex items-center rounded-xl text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-white transition-all group relative cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 select-none"
-                  [ngClass]="isCollapsed ? 'p-2 justify-center' : 'px-3 py-2 gap-2.5'"
+                  class="flex items-center rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-white transition-all group relative cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 select-none"
+                  [ngClass]="isCollapsed ? 'p-2 justify-center' : 'px-3 py-2.5 gap-3'"
                 >
                   <!-- Icon Box -->
-                  <span class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-slate-100/70 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-950/60 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors item-icon-box relative">
+                  <span class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-slate-100/70 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-950/60 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors item-icon-box relative">
                     <i class="pi text-xs" [ngClass]="getIconClass(item.icon)"></i>
 
                     <!-- Collapsed Unread Dot Indicator -->
@@ -147,7 +147,7 @@ export interface AdminNavGroup {
                   <!-- Expanded Unread Messages Count Badge -->
                   @if (item.path === '/admin/messages' && unreadMessageCount() > 0) {
                     <span
-                      class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white shadow-xs ml-auto"
+                      class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500 text-white shadow-xs ml-auto"
                       [class.hidden]="isCollapsed"
                       id="sidebar-unread-badge"
                     >

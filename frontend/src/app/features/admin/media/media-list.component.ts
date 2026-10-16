@@ -41,7 +41,7 @@ import { ConfirmDialogComponent } from '../../../shared';
             type="button"
             (click)="mediaFileInput.click()"
             [disabled]="isUploading()"
-            class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50 cursor-pointer"
           >
             @if (isUploading()) {
               <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -60,8 +60,8 @@ import { ConfirmDialogComponent } from '../../../shared';
       </div>
 
       <!-- Filter Tabs Toolbar -->
-      <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 shadow-sm">
-        <div class="flex items-center gap-1.5">
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 shadow-xs">
+        <div class="flex items-center gap-2">
           <button
             type="button"
             (click)="setFilter('')"
@@ -71,7 +71,7 @@ import { ConfirmDialogComponent } from '../../../shared';
             [class.dark:bg-slate-800]="activeMimeType() !== ''"
             [class.text-slate-600]="activeMimeType() !== ''"
             [class.dark:text-slate-300]="activeMimeType() !== ''"
-            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+            class="px-4 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
           >
             All Files
           </button>
@@ -84,7 +84,7 @@ import { ConfirmDialogComponent } from '../../../shared';
             [class.dark:bg-slate-800]="activeMimeType() !== 'image'"
             [class.text-slate-600]="activeMimeType() !== 'image'"
             [class.dark:text-slate-300]="activeMimeType() !== 'image'"
-            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+            class="px-4 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
           >
             Images
           </button>
@@ -97,7 +97,7 @@ import { ConfirmDialogComponent } from '../../../shared';
             [class.dark:bg-slate-800]="activeMimeType() !== 'pdf'"
             [class.text-slate-600]="activeMimeType() !== 'pdf'"
             [class.dark:text-slate-300]="activeMimeType() !== 'pdf'"
-            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+            class="px-4 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
           >
             Documents / PDF
           </button>
@@ -109,7 +109,7 @@ import { ConfirmDialogComponent } from '../../../shared';
       </div>
 
       <!-- Media Grid -->
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 space-y-6">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 space-y-6">
         @if (isLoading()) {
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             @for (_ of [1, 2, 3, 4, 5, 6, 7, 8]; track $index) {
@@ -134,7 +134,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                       <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                       </svg>
-                      <span class="text-[10px] font-bold uppercase tracking-wider mt-1 text-slate-500">PDF</span>
+                      <span class="text-xs font-bold uppercase tracking-wider mt-1 text-slate-500">PDF</span>
                     </div>
                   } @else {
                     <img
@@ -149,7 +149,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                     <button
                       type="button"
                       (click)="copyUrl(item.url)"
-                      class="px-2.5 py-1.5 rounded-lg bg-white/90 hover:bg-white text-slate-900 font-semibold text-[11px] shadow transition-transform active:scale-95 flex items-center gap-1 cursor-pointer"
+                      class="px-3 py-1.5 rounded-xl bg-white/95 hover:bg-white text-slate-900 font-semibold text-xs shadow-xs transition-transform active:scale-95 flex items-center gap-1.5 cursor-pointer"
                       title="Copy URL to clipboard"
                     >
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,7 +160,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                     <button
                       type="button"
                       (click)="onDelete(item)"
-                      class="p-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow transition-transform active:scale-95 cursor-pointer"
+                      class="p-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition-transform active:scale-95 cursor-pointer"
                       title="Delete Image"
                       aria-label="Delete image"
                     >
@@ -172,11 +172,11 @@ import { ConfirmDialogComponent } from '../../../shared';
                 </div>
 
                 <!-- Metadata Footer -->
-                <div class="p-3 text-[11px] space-y-1">
-                  <div class="font-bold text-slate-900 dark:text-white truncate" [title]="item.fileName">
+                <div class="p-3.5 text-xs space-y-1">
+                  <div class="font-bold text-sm text-slate-900 dark:text-white truncate" [title]="item.fileName">
                     {{ item.fileName }}
                   </div>
-                  <div class="flex items-center justify-between text-slate-400 font-mono text-[10px]">
+                  <div class="flex items-center justify-between text-slate-400 font-mono text-xs">
                     <span>{{ formatBytes(item.size) }}</span>
                     <span>{{ item.createdAt | date: 'shortDate' }}</span>
                   </div>

@@ -33,7 +33,7 @@ import { ConfirmDialogComponent } from '../../../shared';
         <button
           type="button"
           (click)="openCreateModal()"
-          class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto"
+          class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 self-start sm:self-auto"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -47,16 +47,16 @@ import { ConfirmDialogComponent } from '../../../shared';
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse" aria-label="Social Links Table">
             <thead>
-              <tr class="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                <th scope="col" class="px-6 py-3.5">Platform</th>
-                <th scope="col" class="px-6 py-3.5">Label</th>
-                <th scope="col" class="px-6 py-3.5">Target Destination URL</th>
-                <th scope="col" class="px-6 py-3.5 text-center">Visibility</th>
-                <th scope="col" class="px-6 py-3.5 text-center">Order</th>
-                <th scope="col" class="px-6 py-3.5 text-right">Actions</th>
+              <tr class="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <th scope="col" class="px-6 py-4">Platform</th>
+                <th scope="col" class="px-6 py-4">Label</th>
+                <th scope="col" class="px-6 py-4">Target Destination URL</th>
+                <th scope="col" class="px-6 py-4 text-center">Visibility</th>
+                <th scope="col" class="px-6 py-4 text-center">Order</th>
+                <th scope="col" class="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs">
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-sm">
               @if (isLoading()) {
                 @for (_ of [1, 2, 3]; track $index) {
                   <tr class="animate-pulse">
@@ -77,8 +77,8 @@ import { ConfirmDialogComponent } from '../../../shared';
               } @else {
                 @for (link of socialLinks(); track link._id) {
                   <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition-colors">
-                    <td class="px-6 py-4 font-bold text-slate-900 dark:text-white capitalize flex items-center gap-2">
-                      <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-[10px]">
+                    <td class="px-6 py-4 font-bold text-slate-900 dark:text-white capitalize flex items-center gap-2.5">
+                      <span class="w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-xs">
                         {{ link.platform.slice(0, 2).toUpperCase() }}
                       </span>
                       <span>{{ link.platform }}</span>
@@ -88,7 +88,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                       {{ link.label }}
                     </td>
 
-                    <td class="px-6 py-4 font-mono text-slate-500 max-w-xs truncate">
+                    <td class="px-6 py-4 font-mono text-xs text-slate-500 max-w-xs truncate">
                       <a [href]="link.url" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-600 dark:hover:text-indigo-400 underline decoration-slate-300 dark:decoration-slate-700">
                         {{ link.url }}
                       </a>
@@ -98,7 +98,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                       <button
                         type="button"
                         (click)="toggleVisibility(link)"
-                        class="px-2.5 py-1 rounded-full text-[10px] font-bold border transition-colors"
+                        class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors cursor-pointer"
                         [class.bg-emerald-50]="link.isVisible"
                         [class.text-emerald-700]="link.isVisible"
                         [class.border-emerald-200]="link.isVisible"
@@ -114,16 +114,16 @@ import { ConfirmDialogComponent } from '../../../shared';
                       </button>
                     </td>
 
-                    <td class="px-6 py-4 text-center text-slate-600 dark:text-slate-400 font-mono">
+                    <td class="px-6 py-4 text-center text-slate-600 dark:text-slate-400 font-mono text-sm">
                       {{ link.order ?? 0 }}
                     </td>
 
                     <td class="px-6 py-4 text-right whitespace-nowrap">
-                      <div class="inline-flex items-center gap-1">
+                      <div class="inline-flex items-center gap-1.5">
                         <button
                           type="button"
                           (click)="openEditModal(link)"
-                          class="p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded-lg transition-colors"
+                          class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded-xl transition-colors cursor-pointer"
                           title="Edit"
                           aria-label="Edit link"
                         >
@@ -134,7 +134,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                         <button
                           type="button"
                           (click)="onDelete(link)"
-                          class="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg transition-colors"
+                          class="p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-xl transition-colors cursor-pointer"
                           title="Delete"
                           aria-label="Delete link"
                         >
@@ -172,8 +172,8 @@ import { ConfirmDialogComponent } from '../../../shared';
 
             <form [formGroup]="linkForm" (ngSubmit)="saveLink()" class="space-y-4">
               <!-- Platform -->
-              <div class="space-y-1">
-                <label for="link-platform-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <div class="space-y-1.5">
+                <label for="link-platform-select" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                   Platform <span class="text-rose-500 font-bold ml-0.5">*</span>
                 </label>
                 <p-cascadeselect
@@ -193,8 +193,8 @@ import { ConfirmDialogComponent } from '../../../shared';
               </div>
 
               <!-- Label -->
-              <div class="space-y-1">
-                <label for="link-label-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <div class="space-y-1.5">
+                <label for="link-label-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                   Display Label <span class="text-rose-500 font-bold ml-0.5">*</span>
                 </label>
                 <input
@@ -202,13 +202,13 @@ import { ConfirmDialogComponent } from '../../../shared';
                   type="text"
                   formControlName="label"
                   placeholder="e.g. GitHub Profile"
-                  class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
 
               <!-- URL -->
-              <div class="space-y-1">
-                <label for="link-url-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <div class="space-y-1.5">
+                <label for="link-url-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                   Target URL <span class="text-rose-500 font-bold ml-0.5">*</span>
                 </label>
                 <input
@@ -216,14 +216,14 @@ import { ConfirmDialogComponent } from '../../../shared';
                   type="url"
                   formControlName="url"
                   placeholder="https://github.com/username"
-                  class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
 
               <!-- Order and Visibility -->
               <div class="grid grid-cols-2 gap-4">
-                <div class="space-y-1">
-                  <label for="link-order-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <div class="space-y-1.5">
+                  <label for="link-order-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                     Display Order
                   </label>
                   <input
@@ -231,12 +231,12 @@ import { ConfirmDialogComponent } from '../../../shared';
                     type="number"
                     formControlName="order"
                     placeholder="0"
-                    class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                    class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                   />
                 </div>
 
-                <div class="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 self-end">
-                  <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Visible</span>
+                <div class="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 self-end min-h-[42px]">
+                  <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Visible</span>
                   <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" formControlName="isVisible" class="sr-only peer" />
                     <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600 dark:bg-slate-700"></div>
@@ -244,18 +244,18 @@ import { ConfirmDialogComponent } from '../../../shared';
                 </div>
               </div>
 
-              <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+              <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <button
                   type="button"
                   (click)="closeModal()"
-                  class="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"
+                  class="px-4 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   [disabled]="isSaving()"
-                  class="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow transition-all disabled:opacity-50"
+                  class="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow transition-all disabled:opacity-50"
                 >
                   {{ isSaving() ? 'Saving...' : (editingLinkId ? 'Save Changes' : 'Create Link') }}
                 </button>

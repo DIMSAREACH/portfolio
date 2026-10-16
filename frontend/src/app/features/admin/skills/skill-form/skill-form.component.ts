@@ -46,7 +46,7 @@ interface CategoryPreset {
         <div class="flex items-center gap-3">
           <a
             routerLink="/admin/skills"
-            class="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
+            class="px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             Cancel
           </a>
@@ -54,7 +54,7 @@ interface CategoryPreset {
             type="button"
             (click)="onSubmit()"
             [disabled]="isSubmitting()"
-            class="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
           >
             @if (isSubmitting()) {
               <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@ interface CategoryPreset {
 
           <!-- Skill Name -->
           <div>
-            <label for="skill-name-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            <label for="skill-name-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
               Skill Name <span class="text-rose-500 font-bold">*</span>
             </label>
             <input
@@ -83,10 +83,10 @@ interface CategoryPreset {
               type="text"
               formControlName="name"
               placeholder="e.g. Angular, Node.js, TypeScript, PostgreSQL"
-              class="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
+              class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
             />
             @if (isFieldInvalid('name')) {
-              <p class="text-[11px] text-rose-500 mt-1 font-medium">Skill name is required.</p>
+              <p class="text-xs text-rose-500 mt-1.5 font-medium">Skill name is required.</p>
             }
           </div>
 
@@ -100,12 +100,12 @@ interface CategoryPreset {
               formControlName="category"
             ></app-bilingual-field>
             @if (isFieldInvalid('category')) {
-              <p class="text-[11px] text-rose-500 mt-1 font-medium">English category name is required.</p>
+              <p class="text-xs text-rose-500 mt-1.5 font-medium">English category name is required.</p>
             }
 
             <!-- Quick Presets -->
             <div>
-              <p class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-2">
+              <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">
                 Quick Category Suggestions:
               </p>
               <div class="flex flex-wrap gap-2">
@@ -113,7 +113,7 @@ interface CategoryPreset {
                   <button
                     type="button"
                     (click)="applyPreset(preset)"
-                    class="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 transition-colors"
+                    class="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 transition-colors"
                   >
                     {{ preset.label }}
                   </button>
@@ -125,7 +125,7 @@ interface CategoryPreset {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
             <!-- Icon Input & Preview -->
             <div>
-              <label for="skill-icon-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="skill-icon-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Icon Identifier / URL (Optional)
               </label>
               <div class="flex items-center gap-3">
@@ -134,7 +134,7 @@ interface CategoryPreset {
                   type="text"
                   formControlName="icon"
                   placeholder="e.g. devicon-angularjs-plain, si-typescript, or https://..."
-                  class="flex-1 px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                  class="flex-1 px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
                 />
                 @if (iconPreview()) {
                   <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 border border-slate-200 dark:border-slate-700 overflow-hidden">
@@ -146,23 +146,23 @@ interface CategoryPreset {
                   </div>
                 }
               </div>
-              <p class="text-[10px] text-slate-400 mt-1">
+              <p class="text-[11px] text-slate-400 mt-1">
                 Supports Devicon CSS class name or absolute image URL.
               </p>
             </div>
 
             <!-- Display Order -->
             <div>
-              <label for="skill-order-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="skill-order-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Display Order Priority
               </label>
               <input
                 id="skill-order-input"
                 type="number"
                 formControlName="order"
-                class="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
-              <p class="text-[10px] text-slate-400 mt-1">
+              <p class="text-[11px] text-slate-400 mt-1">
                 Lower numbers appear first within category (e.g. 1 before 2).
               </p>
             </div>
@@ -178,8 +178,8 @@ interface CategoryPreset {
               />
               <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-500/20 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-indigo-600"></div>
               <div>
-                <span class="text-xs font-bold text-slate-900 dark:text-white">Public Visibility</span>
-                <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                <span class="text-sm font-semibold text-slate-900 dark:text-white">Public Visibility</span>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   When enabled, this skill is featured in your public portfolio and about sections.
                 </p>
               </div>
@@ -191,14 +191,14 @@ interface CategoryPreset {
         <div class="flex items-center justify-end gap-3 pt-2">
           <a
             routerLink="/admin/skills"
-            class="px-5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
+            class="px-5 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             Cancel
           </a>
           <button
             type="submit"
             [disabled]="isSubmitting()"
-            class="inline-flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
           >
             @if (isSubmitting()) {
               <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">

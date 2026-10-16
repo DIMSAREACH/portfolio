@@ -37,7 +37,7 @@ import { DashboardStats } from '../../../core/models';
             type="button"
             (click)="loadStats()"
             [disabled]="isLoading()"
-            class="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xs transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50 cursor-pointer"
             [class.font-khmer]="isKhmer()"
             [title]="isKhmer() ? 'ផ្ទុកទិន្នន័យឡើងវិញ' : 'Refresh statistics'"
             [attr.aria-label]="isKhmer() ? 'ផ្ទុកទិន្នន័យឡើងវិញ' : 'Refresh statistics'"
@@ -56,7 +56,7 @@ import { DashboardStats } from '../../../core/models';
 
           <a
             routerLink="/admin/projects"
-            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+            class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
             [class.font-khmer]="isKhmer()"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -299,7 +299,7 @@ import { DashboardStats } from '../../../core/models';
                         <h3 class="text-sm font-semibold text-slate-900 dark:text-white truncate">
                           {{ msg.name }}
                         </h3>
-                        <span class="text-[11px] text-slate-400 shrink-0 font-sans whitespace-nowrap">
+                        <span class="text-xs text-slate-400 shrink-0 font-sans whitespace-nowrap">
                           {{ formatDate(msg.createdAt) }}
                         </span>
                       </div>
@@ -332,7 +332,7 @@ import { DashboardStats } from '../../../core/models';
                 </p>
                 <a
                   routerLink="/admin/messages"
-                  class="mt-4 px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all"
+                  class="mt-4 px-5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all"
                   [class.font-khmer]="isKhmer()"
                 >
                   {{ isKhmer() ? 'មើលប័ណ្ណសារសារ' : 'Browse Message Archive' }}
@@ -367,7 +367,7 @@ import { DashboardStats } from '../../../core/models';
                     <div class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'ព័ត៌មានប្រវត្តិរូប' : 'Profile Information' }}
                     </div>
-                    <div class="text-[11px] text-slate-500 dark:text-slate-400" [class.font-khmer]="isKhmer()">
+                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'ធ្វើបច្ចុប្បន្នភាពជីវប្រវត្តិ ចំណងជើង និងរូបថត' : 'Update bio, titles, and avatar' }}
                     </div>
                   </div>
@@ -389,7 +389,7 @@ import { DashboardStats } from '../../../core/models';
                     <div class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'ការបង្ហាញគម្រោង' : 'Portfolio Showcase' }}
                     </div>
-                    <div class="text-[11px] text-slate-500 dark:text-slate-400" [class.font-khmer]="isKhmer()">
+                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'គ្រប់គ្រងករណីសិក្សា និងស្លាកបច្ចេកវិទ្យា' : 'Manage case studies and stack tags' }}
                     </div>
                   </div>
@@ -411,7 +411,7 @@ import { DashboardStats } from '../../../core/models';
                     <div class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'ជំនាញបច្ចេកទេស' : 'Technical Skills' }}
                     </div>
-                    <div class="text-[11px] text-slate-500 dark:text-slate-400" [class.font-khmer]="isKhmer()">
+                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'គ្រប់គ្រងជំនាញ និងកម្រិតជំនាញ' : 'Manage stack tags and proficiencies' }}
                     </div>
                   </div>
@@ -433,7 +433,7 @@ import { DashboardStats } from '../../../core/models';
                     <div class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'ឯកសារប្រវត្តិរូប CV' : 'Resume & CV Asset' }}
                     </div>
-                    <div class="text-[11px] text-slate-500 dark:text-slate-400" [class.font-khmer]="isKhmer()">
+                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'ផ្ទុកឡើង PDF និងតាមដានការទាញយក' : 'Upload PDF and monitor downloads' }}
                     </div>
                   </div>

@@ -18,7 +18,7 @@ import { BilingualField } from '../../../../core/models';
     <div class="space-y-1.5">
       <!-- Field Header: Label, Optional/Required Tag, and Language Switcher Tabs -->
       <div class="flex items-center justify-between">
-        <label [attr.for]="fieldId" class="block text-xs sm:text-[13px] font-semibold text-slate-700 dark:text-slate-300">
+        <label [attr.for]="fieldId" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
           {{ label }}
           @if (required) {
             <span class="text-rose-500 font-bold ml-0.5">*</span>
@@ -37,7 +37,7 @@ import { BilingualField } from '../../../../core/models';
             [value]="value.en || value.kh || ''"
             (input)="onInputElement($event)"
             (blur)="onBlur()"
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed leading-relaxed"
+            class="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed leading-relaxed"
           ></textarea>
         } @else {
           <input
@@ -48,7 +48,7 @@ import { BilingualField } from '../../../../core/models';
             [value]="value.en || value.kh || ''"
             (input)="onInputElement($event)"
             (blur)="onBlur()"
-            class="w-full px-3.5 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            class="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed min-h-[42px]"
           />
         }
       </div>

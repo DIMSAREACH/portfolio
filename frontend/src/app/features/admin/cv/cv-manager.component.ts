@@ -53,7 +53,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                     <span class="font-bold text-sm text-slate-900 dark:text-white" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'ឯកសារ CV ផ្លូវការ' : 'Official CV Document' }}
                     </span>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300" [class.font-khmer]="isKhmer()">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'សកម្ម' : 'Active' }}
                     </span>
                   </div>
@@ -61,7 +61,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                     {{ currentCv()?.cvUrl }}
                   </div>
                   @if (currentCv()?.updatedAt) {
-                    <div class="text-[11px] text-slate-400 mt-1" [class.font-khmer]="isKhmer()">
+                    <div class="text-xs text-slate-400 mt-1" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'បានផ្ទុកឡើងចុងក្រោយ:' : 'Last uploaded:' }} {{ currentCv()?.updatedAt | date: 'medium' }}
                     </div>
                   }
@@ -74,7 +74,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                   [href]="currentCv()?.cvUrl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-all shadow-xs cursor-pointer"
+                  class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-all shadow-xs cursor-pointer"
                   [class.font-khmer]="isKhmer()"
                 >
                   <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,7 +87,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                 <button
                   type="button"
                   (click)="onDeleteCv()"
-                  class="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-xl transition-colors cursor-pointer"
+                  class="p-2.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-xl transition-colors cursor-pointer"
                   [title]="isKhmer() ? 'លុប CV' : 'Remove CV'"
                   aria-label="Remove CV"
                 >
@@ -102,10 +102,10 @@ import { ConfirmDialogComponent } from '../../../shared';
               <svg class="w-10 h-10 mx-auto text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              <div class="text-xs font-semibold text-slate-700 dark:text-slate-300" [class.font-khmer]="isKhmer()">
+              <div class="text-sm font-semibold text-slate-700 dark:text-slate-300" [class.font-khmer]="isKhmer()">
                 {{ isKhmer() ? 'មិនមាន CV សកម្មត្រូវបានរកឃើញទេ' : 'No active CV found' }}
               </div>
-              <p class="text-[11px] text-slate-400 max-w-sm mx-auto" [class.font-khmer]="isKhmer()">
+              <p class="text-xs text-slate-400 max-w-sm mx-auto" [class.font-khmer]="isKhmer()">
                 {{ isKhmer() ? 'ផ្ទុកឡើងប្រវត្តិរូបសង្ខេប PDF របស់អ្នកខាងក្រោមដើម្បីបើកការទាញយក CV ជាសាធារណៈ។' : 'Upload your resume PDF below to enable public CV downloads on your header and contact pages.' }}
               </p>
             </div>
@@ -123,10 +123,10 @@ import { ConfirmDialogComponent } from '../../../shared';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
             <div>
-              <p class="text-xs font-semibold text-slate-800 dark:text-slate-200" [class.font-khmer]="isKhmer()">
+              <p class="text-sm font-semibold text-slate-800 dark:text-slate-200" [class.font-khmer]="isKhmer()">
                 {{ isKhmer() ? 'ផ្ទុកឡើងឯកសារប្រវត្តិរូបសង្ខេប PDF ថ្មីរបស់អ្នក' : 'Upload your new Curriculum Vitae PDF file' }}
               </p>
-              <p class="text-[11px] text-slate-400 mt-0.5" [class.font-khmer]="isKhmer()">
+              <p class="text-xs text-slate-400 mt-1" [class.font-khmer]="isKhmer()">
                 {{ isKhmer() ? 'ទំហំឯកសារអតិបរមា: 10MB (ទម្រង់ PDF តែប៉ុណ្ណោះ)' : 'Maximum file size: 10MB (PDF format only).' }}
               </p>
             </div>
@@ -143,7 +143,7 @@ import { ConfirmDialogComponent } from '../../../shared';
               type="button"
               (click)="cvFileInput.click()"
               [disabled]="isUploading()"
-              class="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50 cursor-pointer"
+              class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50 cursor-pointer"
               [class.font-khmer]="isKhmer()"
             >
               @if (isUploading()) {

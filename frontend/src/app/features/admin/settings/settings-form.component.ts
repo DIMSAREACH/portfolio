@@ -66,8 +66,8 @@ import { BilingualFieldComponent } from '../shared';
             <!-- CV Download Toggle -->
             <div class="py-4 flex items-center justify-between">
               <div>
-                <span class="block text-xs font-bold text-slate-900 dark:text-white">Enable CV Download</span>
-                <span class="text-[11px] text-slate-400">Display "Download CV" button in header and navigation</span>
+                <span class="block text-sm font-semibold text-slate-900 dark:text-white">Enable CV Download</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Display "Download CV" button in header and navigation</span>
               </div>
               <label class="relative inline-flex items-center cursor-pointer ml-4">
                 <input type="checkbox" formControlName="enableCvDownload" class="sr-only peer" />
@@ -78,8 +78,8 @@ import { BilingualFieldComponent } from '../shared';
             <!-- Contact Form Toggle -->
             <div class="py-4 flex items-center justify-between">
               <div>
-                <span class="block text-xs font-bold text-slate-900 dark:text-white">Enable Contact Inquiries</span>
-                <span class="text-[11px] text-slate-400">Allow visitors to send messages through the /contact page</span>
+                <span class="block text-sm font-semibold text-slate-900 dark:text-white">Enable Contact Inquiries</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Allow visitors to send messages through the /contact page</span>
               </div>
               <label class="relative inline-flex items-center cursor-pointer ml-4">
                 <input type="checkbox" formControlName="enableContactForm" class="sr-only peer" />
@@ -90,8 +90,8 @@ import { BilingualFieldComponent } from '../shared';
             <!-- Email Notification Toggle -->
             <div class="py-4 flex items-center justify-between">
               <div>
-                <span class="block text-xs font-bold text-slate-900 dark:text-white">New Message Email Alerts</span>
-                <span class="text-[11px] text-slate-400">Dispatch an immediate email when a new inquiry is submitted</span>
+                <span class="block text-sm font-semibold text-slate-900 dark:text-white">New Message Email Alerts</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Dispatch an immediate email when a new inquiry is submitted</span>
               </div>
               <label class="relative inline-flex items-center cursor-pointer ml-4">
                 <input type="checkbox" formControlName="emailNotifications" class="sr-only peer" />
@@ -102,8 +102,8 @@ import { BilingualFieldComponent } from '../shared';
             <!-- Maintenance Mode Toggle -->
             <div class="py-4 flex items-center justify-between">
               <div>
-                <span class="block text-xs font-bold text-slate-900 dark:text-white">Maintenance Mode</span>
-                <span class="text-[11px] text-slate-400">Display "Under Maintenance" placeholder to non-admin visitors</span>
+                <span class="block text-sm font-semibold text-slate-900 dark:text-white">Maintenance Mode</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Display "Under Maintenance" placeholder to non-admin visitors</span>
               </div>
               <label class="relative inline-flex items-center cursor-pointer ml-4">
                 <input type="checkbox" formControlName="maintenanceMode" class="sr-only peer" />
@@ -120,7 +120,7 @@ import { BilingualFieldComponent } from '../shared';
           </h2>
 
           <div class="max-w-md space-y-1.5">
-            <label for="settings-notif-email" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <label for="settings-notif-email" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
               Inquiry Alert Destination Email
             </label>
             <input
@@ -128,9 +128,9 @@ import { BilingualFieldComponent } from '../shared';
               type="email"
               formControlName="notificationEmail"
               placeholder="admin@example.com"
-              class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             />
-            <p class="text-[11px] text-slate-400">
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
               When email notifications are enabled, messages sent via the contact form will be forwarded here.
             </p>
           </div>
@@ -141,7 +141,7 @@ import { BilingualFieldComponent } from '../shared';
           <button
             type="submit"
             [disabled]="isSaving()"
-            class="inline-flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all disabled:opacity-50"
           >
             @if (isSaving()) {
               <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">

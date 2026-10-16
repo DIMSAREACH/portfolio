@@ -42,7 +42,7 @@ import { BilingualFieldComponent } from '../../shared';
         <div class="flex items-center gap-3">
           <a
             routerLink="/admin/education"
-            class="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
+            class="px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             Cancel
           </a>
@@ -50,7 +50,7 @@ import { BilingualFieldComponent } from '../../shared';
             type="button"
             (click)="onSubmit()"
             [disabled]="isSubmitting()"
-            class="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
           >
             @if (isSubmitting()) {
               <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,7 +81,7 @@ import { BilingualFieldComponent } from '../../shared';
                 formControlName="institution"
               ></app-bilingual-field>
               @if (isFieldInvalid('institution')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">English institution name is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">English institution name is required.</p>
               }
             </div>
 
@@ -95,7 +95,7 @@ import { BilingualFieldComponent } from '../../shared';
                 formControlName="degree"
               ></app-bilingual-field>
               @if (isFieldInvalid('degree')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">English degree title is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">English degree title is required.</p>
               }
             </div>
 
@@ -109,7 +109,7 @@ import { BilingualFieldComponent } from '../../shared';
                 formControlName="field"
               ></app-bilingual-field>
               @if (isFieldInvalid('field')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">English field of study is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">English field of study is required.</p>
               }
             </div>
           </div>
@@ -124,7 +124,7 @@ import { BilingualFieldComponent } from '../../shared';
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <!-- Start Year -->
             <div>
-              <label for="education-start-year" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="education-start-year" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Start Year <span class="text-rose-500 font-bold">*</span>
               </label>
               <p-datepicker
@@ -140,16 +140,16 @@ import { BilingualFieldComponent } from '../../shared';
                 appendTo="body"
                 placeholder="Select start year"
                 styleClass="w-full"
-                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                inputStyleClass="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
               @if (isFieldInvalid('startYear')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">Valid start year is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">Valid start year is required.</p>
               }
             </div>
 
             <!-- End Year -->
             <div>
-              <label for="education-end-year" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="education-end-year" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 End Year (Leave blank if ongoing)
               </label>
               <p-datepicker
@@ -165,13 +165,13 @@ import { BilingualFieldComponent } from '../../shared';
                 appendTo="body"
                 placeholder="Select end year"
                 styleClass="w-full"
-                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                inputStyleClass="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
 
             <!-- GPA / Honors -->
             <div>
-              <label for="education-gpa" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="education-gpa" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 GPA / Honors (Optional)
               </label>
               <input
@@ -179,7 +179,7 @@ import { BilingualFieldComponent } from '../../shared';
                 type="text"
                 formControlName="gpa"
                 placeholder="e.g. 3.8 / 4.0 or Summa Cum Laude"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
               />
             </div>
           </div>
@@ -205,14 +205,14 @@ import { BilingualFieldComponent } from '../../shared';
 
           <!-- Order -->
           <div class="w-full sm:w-1/3">
-            <label for="education-order" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            <label for="education-order" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
               Display Order Priority
             </label>
             <input
               id="education-order"
               type="number"
               formControlName="order"
-              class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+              class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
             />
           </div>
         </div>
@@ -221,14 +221,14 @@ import { BilingualFieldComponent } from '../../shared';
         <div class="flex items-center justify-end gap-3 pt-2">
           <a
             routerLink="/admin/education"
-            class="px-5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
+            class="px-5 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             Cancel
           </a>
           <button
             type="submit"
             [disabled]="isSubmitting()"
-            class="inline-flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
           >
             @if (isSubmitting()) {
               <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">

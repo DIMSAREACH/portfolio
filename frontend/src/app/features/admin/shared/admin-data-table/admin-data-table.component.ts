@@ -41,7 +41,7 @@ export interface SortEvent {
             (ngModelChange)="onSearchInput($event)"
             [placeholder]="isKhmer() ? 'ស្វែងរក...' : searchPlaceholder"
             [class.font-khmer]="isKhmer()"
-            class="w-full pl-10 pr-9 py-2 text-xs sm:text-sm rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+            class="w-full pl-10 pr-9 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs"
             aria-label="Search records"
           />
           @if (searchTerm) {
@@ -61,7 +61,7 @@ export interface SortEvent {
         <div class="flex flex-wrap items-center gap-3">
           <!-- Filter Dropdown -->
           @if (filterOptions && filterOptions.length > 0) {
-            <div class="relative min-w-[140px]">
+            <div class="relative min-w-[150px]">
               <p-cascadeselect
                 [ngModel]="activeFilter"
                 (ngModelChange)="onFilterSelect($event)"
@@ -81,7 +81,7 @@ export interface SortEvent {
             <button
               type="button"
               (click)="createClick.emit()"
-              class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+              class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 cursor-pointer"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -168,7 +168,7 @@ export interface SortEvent {
                       <!-- Badge Type -->
                       @if (col.type === 'badge') {
                         <span
-                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap"
+                          class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap shadow-2xs"
                           [ngClass]="getBadgeClass(col, getItemValue(item, col.key))"
                         >
                           {{ formatCellValue(col, item) }}
@@ -181,11 +181,11 @@ export interface SortEvent {
                             <img
                               [src]="getItemString(item, col.key)"
                               [alt]="col.label"
-                              class="w-9 h-9 rounded-lg object-cover border border-slate-200 dark:border-slate-700"
+                              class="w-10 h-10 rounded-xl object-cover border border-slate-200 dark:border-slate-700 shadow-2xs"
                             />
                           } @else {
-                            <div class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
-                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+                              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
                             </div>
@@ -194,7 +194,7 @@ export interface SortEvent {
                       }
                       <!-- Date Type -->
                       @else if (col.type === 'date') {
-                        <span class="text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                        <span class="text-slate-500 dark:text-slate-400 whitespace-nowrap font-medium">
                           {{ formatDate(getItemValue(item, col.key)) }}
                         </span>
                       }
@@ -227,7 +227,7 @@ export interface SortEvent {
                           <button
                             type="button"
                             (click)="togglePublishClick.emit(item)"
-                            class="p-1.5 rounded-lg transition-colors cursor-pointer"
+                            class="p-2 rounded-xl transition-colors cursor-pointer"
                             [class.text-emerald-600]="getItemValue(item, 'status') === 'published'"
                             [class.hover:bg-emerald-50]="getItemValue(item, 'status') === 'published'"
                             [class.dark:hover:bg-emerald-950/50]="getItemValue(item, 'status') === 'published'"
@@ -251,7 +251,7 @@ export interface SortEvent {
                         <button
                           type="button"
                           (click)="viewClick.emit(item)"
-                          class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                          class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
                           [title]="isKhmer() ? 'មើល' : 'View'"
                           aria-label="View item"
                         >
@@ -263,7 +263,7 @@ export interface SortEvent {
                         <button
                           type="button"
                           (click)="editClick.emit(item)"
-                          class="p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded-lg transition-colors cursor-pointer"
+                          class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded-xl transition-colors cursor-pointer"
                           [title]="isKhmer() ? 'កែសម្រួល' : 'Edit'"
                           aria-label="Edit item"
                         >
@@ -274,7 +274,7 @@ export interface SortEvent {
                         <button
                           type="button"
                           (click)="deleteClick.emit(item)"
-                          class="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg transition-colors cursor-pointer"
+                          class="p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-xl transition-colors cursor-pointer"
                           [title]="isKhmer() ? 'លុប' : 'Delete'"
                           aria-label="Delete item"
                         >
@@ -297,17 +297,17 @@ export interface SortEvent {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                       </svg>
                     </div>
-                    <p class="text-sm font-semibold text-slate-900 dark:text-white" [class.font-khmer]="isKhmer()">
+                    <p class="text-base font-bold text-slate-900 dark:text-white" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'មិនមានទិន្នន័យត្រូវបានរកឃើញទេ។' : emptyMessage }}
                     </p>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm" [class.font-khmer]="isKhmer()">
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'ចាប់ផ្តើមដោយការបង្កើតទិន្នន័យថ្មី ឬកែសម្រួលតម្រងស្វែងរករបស់អ្នក។' : 'Get started by creating a new entry or adjust your search filter.' }}
                     </p>
                     @if (showCreateButton) {
                       <button
                         type="button"
                         (click)="createClick.emit()"
-                        class="mt-4 px-4 py-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-xl transition-all cursor-pointer"
+                        class="mt-4 px-4 py-2.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-xl transition-all cursor-pointer"
                         [class.font-khmer]="isKhmer()"
                       >
                         {{ isKhmer() ? (createButtonLabel === 'Create New' ? 'បង្កើតថ្មី' : createButtonLabel) : createButtonLabel }}
@@ -322,7 +322,7 @@ export interface SortEvent {
       </div>
 
       <!-- Pagination Footer -->
-      <div class="p-4 border-t border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
+      <div class="p-4 sm:p-5 border-t border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500 dark:text-slate-400">
         <div [class.font-khmer]="isKhmer()">
           {{ isKhmer() ? 'បង្ហាញពី' : 'Showing' }}
           <span class="font-semibold text-slate-700 dark:text-slate-300">{{ startItemIndex }}</span>
@@ -340,7 +340,7 @@ export interface SortEvent {
             <select
               [ngModel]="pageSize"
               (ngModelChange)="onPageSizeChange($event)"
-              class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer shadow-2xs"
+              class="px-3 py-1.5 text-xs font-semibold rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer shadow-2xs"
             >
               @for (size of pageSizeOptions; track size) {
                 <option [value]="size">{{ size }}</option>
@@ -353,7 +353,7 @@ export interface SortEvent {
             type="button"
             (click)="onPageChange(currentPage - 1)"
             [disabled]="currentPage <= 1 || isLoading"
-            class="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
+            class="px-3.5 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
             [class.font-khmer]="isKhmer()"
             aria-label="Previous Page"
           >
@@ -366,7 +366,7 @@ export interface SortEvent {
             type="button"
             (click)="onPageChange(currentPage + 1)"
             [disabled]="currentPage >= totalPages || isLoading"
-            class="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
+            class="px-3.5 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
             [class.font-khmer]="isKhmer()"
             aria-label="Next Page"
           >

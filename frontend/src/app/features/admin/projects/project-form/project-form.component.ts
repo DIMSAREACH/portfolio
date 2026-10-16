@@ -48,7 +48,7 @@ import {
         <div class="flex items-center gap-3">
           <a
             routerLink="/admin/projects"
-            class="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
+            class="px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             Cancel
           </a>
@@ -56,7 +56,7 @@ import {
             type="button"
             (click)="onSubmit()"
             [disabled]="isSubmitting()"
-            class="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
           >
             @if (isSubmitting()) {
               <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,13 +88,13 @@ import {
                 (ngModelChange)="onTitleChange($event)"
               ></app-bilingual-field>
               @if (isFieldInvalid('title')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">English title is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">English title is required.</p>
               }
             </div>
 
             <!-- Slug (Auto-generated from EN title, editable) -->
             <div>
-              <label for="project-slug-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="project-slug-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 URL Slug <span class="text-rose-500 font-bold">*</span>
               </label>
               <input
@@ -102,16 +102,16 @@ import {
                 type="text"
                 formControlName="slug"
                 placeholder="enterprise-cloud-analytics"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
               @if (isFieldInvalid('slug')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">URL slug is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">URL slug is required.</p>
               }
             </div>
 
             <!-- Category -->
             <div>
-              <label for="project-category-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="project-category-select" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Category <span class="text-rose-500 font-bold">*</span>
               </label>
               <p-cascadeselect
@@ -128,13 +128,13 @@ import {
                 ariaLabel="Project Category"
               />
               @if (isFieldInvalid('category')) {
-                <p class="text-[11px] text-rose-500 mt-1 font-medium">Category is required.</p>
+                <p class="text-xs text-rose-500 mt-1.5 font-medium">Category is required.</p>
               }
             </div>
 
             <!-- Status -->
             <div>
-              <label for="project-status-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="project-status-select" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Publication Status <span class="text-rose-500 font-bold">*</span>
               </label>
               <p-cascadeselect
@@ -154,7 +154,7 @@ import {
 
             <!-- Display Order -->
             <div>
-              <label for="project-order-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="project-order-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Display Order
               </label>
               <input
@@ -162,7 +162,7 @@ import {
                 type="number"
                 formControlName="order"
                 placeholder="1"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
               />
             </div>
 
@@ -175,7 +175,7 @@ import {
                   class="sr-only peer"
                 />
                 <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
-                <span class="ml-3 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <span class="ml-3 text-sm font-medium text-slate-700 dark:text-slate-300">
                   Feature on Home Showcase Hero
                 </span>
               </label>
@@ -193,7 +193,7 @@ import {
               formControlName="shortDescription"
             ></app-bilingual-field>
             @if (isFieldInvalid('shortDescription')) {
-              <p class="text-[11px] text-rose-500 mt-1 font-medium">Short summary is required.</p>
+              <p class="text-xs text-rose-500 mt-1.5 font-medium">Short summary is required.</p>
             }
           </div>
         </div>
@@ -214,12 +214,12 @@ import {
               (imageRemoved)="onMainImageRemoved()"
             ></app-image-upload>
             @if (isFieldInvalid('mainImage')) {
-              <p class="text-[11px] text-rose-500 font-medium">Cover image is required.</p>
+              <p class="text-xs text-rose-500 mt-1 font-medium">Cover image is required.</p>
             }
 
             <!-- Direct URL fallback for Main Image -->
             <div>
-              <label for="project-main-image-url-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="project-main-image-url-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Or Direct Cover Image URL
               </label>
               <input
@@ -227,7 +227,7 @@ import {
                 type="url"
                 formControlName="mainImage"
                 placeholder="https://images.unsplash.com/photo-..."
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
           </div>
@@ -247,12 +247,12 @@ import {
                 [ngModelOptions]="{ standalone: true }"
                 (keydown.enter)="addTechTag($event)"
                 placeholder="Add technology tag (e.g. Angular, Node.js, Docker, MongoDB)..."
-                class="flex-1 px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                class="flex-1 px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
               />
               <button
                 type="button"
                 (click)="addTechTag($event)"
-                class="px-4 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all"
+                class="px-5 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all"
               >
                 Add Tag
               </button>
@@ -261,7 +261,7 @@ import {
             <!-- Current Tags Pill List -->
             <div class="flex flex-wrap items-center gap-2 mt-3 min-h-[2rem]">
               @for (tag of techTags(); track tag) {
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900/50">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900/50">
                   <span>{{ tag }}</span>
                   <button
                     type="button"
@@ -277,7 +277,7 @@ import {
               }
             </div>
             @if (techTags().length === 0 && isSubmitted()) {
-              <p class="text-[11px] text-rose-500 mt-1 font-medium">At least one technology tag is required.</p>
+              <p class="text-xs text-rose-500 mt-1.5 font-medium">At least one technology tag is required.</p>
             }
           </div>
         </div>
@@ -290,7 +290,7 @@ import {
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label for="project-github-url-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="project-github-url-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 GitHub Repository URL
               </label>
               <input
@@ -298,12 +298,12 @@ import {
                 type="url"
                 formControlName="githubUrl"
                 placeholder="https://github.com/..."
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
 
             <div>
-              <label for="project-live-url-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="project-live-url-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Live Deployment URL
               </label>
               <input
@@ -311,12 +311,12 @@ import {
                 type="url"
                 formControlName="liveUrl"
                 placeholder="https://myproject.dev"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
 
             <div>
-              <label for="project-video-url-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="project-video-url-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Demo Video URL
               </label>
               <input
@@ -324,12 +324,12 @@ import {
                 type="url"
                 formControlName="videoUrl"
                 placeholder="https://youtube.com/watch?v=..."
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
 
             <div>
-              <label for="project-start-date-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="project-start-date-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Start Date
               </label>
               <p-datepicker
@@ -342,12 +342,12 @@ import {
                 appendTo="body"
                 placeholder="YYYY-MM-DD"
                 styleClass="w-full"
-                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                inputStyleClass="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
 
             <div>
-              <label for="project-completion-date-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="project-completion-date-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Completion Date
               </label>
               <p-datepicker
@@ -360,7 +360,7 @@ import {
                 appendTo="body"
                 placeholder="YYYY-MM-DD"
                 styleClass="w-full"
-                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                inputStyleClass="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
           </div>
@@ -414,14 +414,14 @@ import {
         <div class="flex items-center justify-end gap-3 pt-4">
           <a
             routerLink="/admin/projects"
-            class="px-5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
+            class="px-5 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             Cancel
           </a>
           <button
             type="submit"
             [disabled]="isSubmitting()"
-            class="inline-flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
           >
             @if (isSubmitting()) {
               <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">

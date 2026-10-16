@@ -40,26 +40,26 @@ import { ConfirmDialogComponent } from '../../../shared';
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs overflow-hidden">
         <!-- Filter Toolbar -->
         <div class="p-4 border-b border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div class="relative w-full sm:w-72">
+          <div class="relative w-full sm:w-80">
             <input
               type="text"
               [(ngModel)]="searchQuery"
               (ngModelChange)="onSearchChange()"
               [placeholder]="isKhmer() ? 'ស្វែងរកអ្នកផ្ញើ, ប្រធានបទ...' : 'Search sender, subject...'"
               [class.font-khmer]="isKhmer()"
-              class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="w-full pl-10 pr-4 py-2.5 min-h-[42px] text-sm rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             />
-            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
 
           <!-- Status Filters -->
-          <div class="flex items-center gap-1.5 self-start sm:self-auto">
+          <div class="flex items-center gap-2 self-start sm:self-auto">
             <button
               type="button"
               (click)="onFilterChange('all')"
-              class="px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer"
+              class="px-4 py-2 min-h-[38px] text-xs font-semibold rounded-xl transition-all cursor-pointer"
               [class.font-khmer]="isKhmer()"
               [class.bg-indigo-600]="activeFilter() === 'all'"
               [class.text-white]="activeFilter() === 'all'"
@@ -73,7 +73,7 @@ import { ConfirmDialogComponent } from '../../../shared';
             <button
               type="button"
               (click)="onFilterChange('unread')"
-              class="px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer"
+              class="px-4 py-2 min-h-[38px] text-xs font-semibold rounded-xl transition-all cursor-pointer"
               [class.font-khmer]="isKhmer()"
               [class.bg-indigo-600]="activeFilter() === 'unread'"
               [class.text-white]="activeFilter() === 'unread'"
@@ -87,7 +87,7 @@ import { ConfirmDialogComponent } from '../../../shared';
             <button
               type="button"
               (click)="onFilterChange('read')"
-              class="px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer"
+              class="px-4 py-2 min-h-[38px] text-xs font-semibold rounded-xl transition-all cursor-pointer"
               [class.font-khmer]="isKhmer()"
               [class.bg-indigo-600]="activeFilter() === 'read'"
               [class.text-white]="activeFilter() === 'read'"
@@ -105,15 +105,15 @@ import { ConfirmDialogComponent } from '../../../shared';
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse" aria-label="Contact Inquiries Table">
             <thead>
-              <tr class="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400" [class.font-khmer]="isKhmer()">
-                <th scope="col" class="px-6 py-3.5">{{ isKhmer() ? 'ស្ថានភាព' : 'Status' }}</th>
-                <th scope="col" class="px-6 py-3.5">{{ isKhmer() ? 'អ្នកផ្ញើ' : 'Sender' }}</th>
-                <th scope="col" class="px-6 py-3.5">{{ isKhmer() ? 'ប្រធានបទ & សារ' : 'Subject & Message Preview' }}</th>
-                <th scope="col" class="px-6 py-3.5">{{ isKhmer() ? 'កាលបរិច្ឆេទ' : 'Received Date' }}</th>
-                <th scope="col" class="px-6 py-3.5 text-right">{{ isKhmer() ? 'សកម្មភាព' : 'Actions' }}</th>
+              <tr class="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400" [class.font-khmer]="isKhmer()">
+                <th scope="col" class="px-6 py-4">{{ isKhmer() ? 'ស្ថានភាព' : 'Status' }}</th>
+                <th scope="col" class="px-6 py-4">{{ isKhmer() ? 'អ្នកផ្ញើ' : 'Sender' }}</th>
+                <th scope="col" class="px-6 py-4">{{ isKhmer() ? 'ប្រធានបទ & សារ' : 'Subject & Message Preview' }}</th>
+                <th scope="col" class="px-6 py-4">{{ isKhmer() ? 'កាលបរិច្ឆេទ' : 'Received Date' }}</th>
+                <th scope="col" class="px-6 py-4 text-right">{{ isKhmer() ? 'សកម្មភាព' : 'Actions' }}</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs">
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-sm">
               @if (isLoading()) {
                 @for (_ of [1, 2, 3]; track $index) {
                   <tr class="animate-pulse">
@@ -141,46 +141,46 @@ import { ConfirmDialogComponent } from '../../../shared';
                     <!-- Read/Unread Status Indicator -->
                     <td class="px-6 py-4 whitespace-nowrap">
                       @if (!msg.isRead) {
-                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
                           <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
                           Unread
                         </span>
                       } @else {
-                        <span class="text-slate-400 text-[11px]">Read</span>
+                        <span class="text-slate-400 text-xs font-medium">Read</span>
                       }
                     </td>
 
                     <!-- Sender Name & Email -->
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="font-bold text-slate-900 dark:text-white" [class.font-black]="!msg.isRead">
+                      <div class="font-bold text-sm text-slate-900 dark:text-white" [class.font-black]="!msg.isRead">
                         {{ msg.name }}
                       </div>
-                      <div class="text-[11px] text-slate-400">{{ msg.email }}</div>
+                      <div class="text-xs text-slate-400 mt-0.5">{{ msg.email }}</div>
                     </td>
 
                     <!-- Subject & Preview -->
                     <td class="px-6 py-4 max-w-md">
-                      <div class="font-semibold text-slate-800 dark:text-slate-200 truncate">
+                      <div class="font-semibold text-sm text-slate-800 dark:text-slate-200 truncate">
                         {{ msg.subject }}
                       </div>
-                      <div class="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
+                      <div class="text-xs text-slate-400 line-clamp-1 mt-0.5">
                         {{ msg.message }}
                       </div>
                     </td>
 
                     <!-- Date -->
-                    <td class="px-6 py-4 whitespace-nowrap text-slate-500 dark:text-slate-400">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
                       {{ msg.createdAt | date: 'mediumDate' }}
                     </td>
 
                     <!-- Actions -->
                     <td class="px-6 py-4 text-right whitespace-nowrap" (click)="$event.stopPropagation()">
-                      <div class="inline-flex items-center gap-1">
+                      <div class="inline-flex items-center gap-1.5">
                         <!-- Toggle Read/Unread -->
                         <button
                           type="button"
                           (click)="toggleReadStatus(msg)"
-                          class="p-1.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                          class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
                           [title]="msg.isRead ? 'Mark as Unread' : 'Mark as Read'"
                           [attr.aria-label]="msg.isRead ? 'Mark as Unread' : 'Mark as Read'"
                         >
@@ -199,7 +199,7 @@ import { ConfirmDialogComponent } from '../../../shared';
                         <button
                           type="button"
                           (click)="onDelete(msg)"
-                          class="p-1.5 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg transition-colors"
+                          class="p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-xl transition-colors cursor-pointer"
                           title="Delete Message"
                           aria-label="Delete message"
                         >
@@ -226,14 +226,14 @@ import { ConfirmDialogComponent } from '../../../shared';
                 <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                   Inquiry Details
                 </span>
-                <h2 class="text-lg font-black text-slate-900 dark:text-white mt-1">
+                <h2 class="text-xl font-black text-slate-900 dark:text-white mt-1">
                   {{ selectedMessage()?.subject }}
                 </h2>
               </div>
               <button
                 type="button"
                 (click)="selectedMessage.set(null)"
-                class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl leading-none"
+                class="p-1 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-2xl leading-none cursor-pointer"
                 aria-label="Close dialog"
               >
                 &times;
@@ -241,36 +241,36 @@ import { ConfirmDialogComponent } from '../../../shared';
             </div>
 
             <!-- Sender info card -->
-            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 flex items-center justify-between text-xs">
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 flex items-center justify-between text-sm">
               <div>
                 <span class="block font-bold text-slate-900 dark:text-white">{{ selectedMessage()?.name }}</span>
-                <a [href]="'mailto:' + selectedMessage()?.email" class="text-indigo-600 dark:text-indigo-400 hover:underline">
+                <a [href]="'mailto:' + selectedMessage()?.email" class="text-indigo-600 dark:text-indigo-400 hover:underline text-xs">
                   {{ selectedMessage()?.email }}
                 </a>
               </div>
-              <div class="text-right text-slate-400">
+              <div class="text-right text-slate-400 text-xs">
                 <div>{{ selectedMessage()?.createdAt | date: 'medium' }}</div>
                 @if (selectedMessage()?.ipAddress) {
-                  <div class="font-mono text-[10px]">IP: {{ selectedMessage()?.ipAddress }}</div>
+                  <div class="font-mono text-xs mt-0.5">IP: {{ selectedMessage()?.ipAddress }}</div>
                 }
               </div>
             </div>
 
             <!-- Full Message Body -->
             <div class="space-y-2">
-              <h3 class="text-xs font-bold text-slate-700 dark:text-slate-300">Message Body:</h3>
-              <div class="p-4 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
+              <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300">Message Body:</h3>
+              <div class="p-4 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
                 {{ selectedMessage()?.message }}
               </div>
             </div>
 
             <!-- Action buttons in modal -->
-            <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
               <a
                 [href]="'mailto:' + selectedMessage()?.email + '?subject=Re: ' + selectedMessage()?.subject"
-                class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow transition-all"
+                class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition-all"
               >
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <span>Reply by Email</span>
@@ -279,7 +279,7 @@ import { ConfirmDialogComponent } from '../../../shared';
               <button
                 type="button"
                 (click)="selectedMessage.set(null)"
-                class="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"
+                class="px-5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer"
               >
                 Close
               </button>

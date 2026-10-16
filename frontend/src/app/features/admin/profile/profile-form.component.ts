@@ -88,7 +88,7 @@ import { AvatarModule } from 'primeng/avatar';
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label for="profile-email-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="profile-email-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Public Email
               </label>
               <input
@@ -96,12 +96,12 @@ import { AvatarModule } from 'primeng/avatar';
                 type="email"
                 formControlName="email"
                 placeholder="developer@example.com"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
             <div>
-              <label for="profile-phone-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label for="profile-phone-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Phone Number
               </label>
               <input
@@ -109,7 +109,7 @@ import { AvatarModule } from 'primeng/avatar';
                 type="tel"
                 formControlName="phone"
                 placeholder="+855 12 345 678"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
@@ -142,7 +142,7 @@ import { AvatarModule } from 'primeng/avatar';
               ></app-image-upload>
 
               <div>
-                <label for="profile-image-url-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                <label for="profile-image-url-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Direct Profile Image URL
                 </label>
                 <input
@@ -150,7 +150,7 @@ import { AvatarModule } from 'primeng/avatar';
                   type="url"
                   formControlName="profileImage"
                   placeholder="https://..."
-                  class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
 
@@ -187,7 +187,7 @@ import { AvatarModule } from 'primeng/avatar';
               ></app-image-upload>
 
               <div>
-                <label for="about-image-url-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                <label for="about-image-url-input" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Direct About Image URL
                 </label>
                 <input
@@ -195,7 +195,7 @@ import { AvatarModule } from 'primeng/avatar';
                   type="url"
                   formControlName="aboutImage"
                   placeholder="https://..."
-                  class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
             </div>
@@ -272,7 +272,7 @@ import { AvatarModule } from 'primeng/avatar';
           <button
             type="submit"
             [disabled]="isSubmitting()"
-            class="inline-flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all disabled:opacity-50"
+            class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm hover:shadow transition-all disabled:opacity-50"
           >
             @if (isSubmitting()) {
               <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
