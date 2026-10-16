@@ -747,4 +747,77 @@ app-root {
   font-weight: 500 !important;
 }
 
+/* ==========================================================================
+   PrimeNG DatePicker / Calendar Theme Overrides (Indigo/Slate Design System)
+   ========================================================================== */
+
+.p-datepicker-panel {
+  border-radius: 1rem !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(16px) !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  padding: 0.75rem !important;
+}
+
+.dark .p-datepicker-panel,
+[data-theme="dark"] .p-datepicker-panel {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border: 1px solid rgba(51, 65, 85, 0.8) !important;
+  color: #f1f5f9 !important;
+}
+
+.p-datepicker-panel .p-datepicker-header {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  padding-bottom: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.dark .p-datepicker-panel .p-datepicker-header,
+[data-theme="dark"] .p-datepicker-panel .p-datepicker-header {
+  border-bottom-color: rgba(51, 65, 85, 0.8) !important;
+}
+
+.p-datepicker-year-view .p-datepicker-year,
+.p-datepicker-month-view .p-datepicker-month {
+  border-radius: 0.75rem !important;
+  font-weight: 600 !important;
+  font-size: 0.8125rem !important;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+}
+
+.p-datepicker-year-view .p-datepicker-year:hover,
+.p-datepicker-month-view .p-datepicker-month:hover {
+  background-color: #e0e7ff !important;
+  color: #4338ca !important;
+}
+
+.dark .p-datepicker-year-view .p-datepicker-year:hover,
+[data-theme="dark"] .p-datepicker-year-view .p-datepicker-year:hover,
+.dark .p-datepicker-month-view .p-datepicker-month:hover,
+[data-theme="dark"] .p-datepicker-month-view .p-datepicker-month:hover {
+  background-color: rgba(99, 102, 241, 0.25) !important;
+  color: #c7d2fe !important;
+}
+
+.p-datepicker-year-view .p-datepicker-year.p-datepicker-year-selected,
+.p-datepicker-year-view .p-datepicker-year[aria-selected="true"],
+.p-datepicker-year-view .p-datepicker-year.p-highlight,
+.p-datepicker-month-view .p-datepicker-month.p-datepicker-month-selected,
+.p-datepicker-month-view .p-datepicker-month[aria-selected="true"],
+.p-datepicker-month-view .p-datepicker-month.p-highlight {
+  background-color: #6366f1 !important;
+  color: #ffffff !important;
+}
+
+.p-datepicker-input-icon-container {
+  cursor: pointer !important;
+  color: #6366f1 !important;
+}
+
+.dark .p-datepicker-input-icon-container {
+  color: #818cf8 !important;
+}
+
 

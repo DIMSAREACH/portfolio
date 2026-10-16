@@ -1,10 +1,11 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Education } from '../../../../core/models';
+import { DatePickerModule } from 'primeng/datepicker';
 import { BilingualFieldComponent } from '../../shared';
 
 @Component({
@@ -13,7 +14,9 @@ import { BilingualFieldComponent } from '../../shared';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     RouterLink,
+    DatePickerModule,
     BilingualFieldComponent,
   ],
   template: `
@@ -124,12 +127,20 @@ import { BilingualFieldComponent } from '../../shared';
               <label for="education-start-year" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Start Year <span class="text-rose-500 font-bold">*</span>
               </label>
-              <input
-                id="education-start-year"
-                type="number"
-                formControlName="startYear"
-                placeholder="2020"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+              <p-datepicker
+                inputId="education-start-year"
+                [ngModel]="startYearDate"
+                (ngModelChange)="onStartYearChange($event)"
+                [ngModelOptions]="{ standalone: true }"
+                view="year"
+                dateFormat="yy"
+                [showIcon]="true"
+                iconDisplay="input"
+                [showButtonBar]="true"
+                appendTo="body"
+                placeholder="Select start year"
+                styleClass="w-full"
+                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
               @if (isFieldInvalid('startYear')) {
                 <p class="text-[11px] text-rose-500 mt-1 font-medium">Valid start year is required.</p>
@@ -141,12 +152,20 @@ import { BilingualFieldComponent } from '../../shared';
               <label for="education-end-year" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 End Year (Leave blank if ongoing)
               </label>
-              <input
-                id="education-end-year"
-                type="number"
-                formControlName="endYear"
-                placeholder="2024"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+              <p-datepicker
+                inputId="education-end-year"
+                [ngModel]="endYearDate"
+                (ngModelChange)="onEndYearChange($event)"
+                [ngModelOptions]="{ standalone: true }"
+                view="year"
+                dateFormat="yy"
+                [showIcon]="true"
+                iconDisplay="input"
+                [showButtonBar]="true"
+                appendTo="body"
+                placeholder="Select end year"
+                styleClass="w-full"
+                inputStyleClass="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
               />
             </div>
 
@@ -246,6 +265,44 @@ export class EducationFormComponent implements OnInit {
     order: [0],
   });
 
+  public get startYearDate(): Date | null {
+    const y = this.educationForm.get('startYear')?.value;
+    if (!y) return null;
+    if (y instanceof Date) return y;
+    const num = Number(y);
+    return isNaN(num) || num < 1000 ? null : new Date(num, 0, 1);
+  }
+
+  public onStartYearChange(val: Date | null): void {
+    if (!val) {
+      this.educationForm.get('startYear')?.setValue(null);
+      this.educationForm.get('startYear')?.markAsTouched();
+      return;
+    }
+    const year = val instanceof Date ? val.getFullYear() : Number(val);
+    this.educationForm.get('startYear')?.setValue(year);
+    this.educationForm.get('startYear')?.markAsTouched();
+  }
+
+  public get endYearDate(): Date | null {
+    const y = this.educationForm.get('endYear')?.value;
+    if (!y) return null;
+    if (y instanceof Date) return y;
+    const num = Number(y);
+    return isNaN(num) || num < 1000 ? null : new Date(num, 0, 1);
+  }
+
+  public onEndYearChange(val: Date | null): void {
+    if (!val) {
+      this.educationForm.get('endYear')?.setValue(null);
+      this.educationForm.get('endYear')?.markAsTouched();
+      return;
+    }
+    const year = val instanceof Date ? val.getFullYear() : Number(val);
+    this.educationForm.get('endYear')?.setValue(year);
+    this.educationForm.get('endYear')?.markAsTouched();
+  }
+
   public ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -319,10 +376,17 @@ export class EducationFormComponent implements OnInit {
     this.isSubmitting.set(true);
     const formVal = this.educationForm.value;
 
+    const parseYearNum = (v: unknown): number | undefined => {
+      if (!v && v !== 0) return undefined;
+      if (v instanceof Date) return v.getFullYear();
+      const n = Number(v);
+      return isNaN(n) ? undefined : n;
+    };
+
     const payload: Partial<Education> = {
       ...formVal,
-      startYear: Number(formVal.startYear),
-      endYear: formVal.endYear ? Number(formVal.endYear) : undefined,
+      startYear: parseYearNum(formVal.startYear) ?? new Date().getFullYear(),
+      endYear: parseYearNum(formVal.endYear),
     };
 
     if (this.isEditMode() && this.educationId()) {
