@@ -302,21 +302,6 @@ import { Message } from '../../../../core/models';
             </div>
           }
         </div>
-
-        <!-- Logout Button -->
-        <button
-          type="button"
-          (click)="onLogout()"
-          [disabled]="authService.isLoading()"
-          class="p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 transition-colors flex items-center gap-1.5 focus:outline-none cursor-pointer shadow-2xs"
-          [class.font-khmer]="isKhmer()"
-          id="admin-logout-btn"
-          [attr.aria-label]="isKhmer() ? 'ចាកចេញពីផ្ទាំងគ្រប់គ្រង' : 'Sign out of admin session'"
-          [title]="isKhmer() ? 'ចាកចេញពីផ្ទាំងគ្រប់គ្រង' : 'Sign out of admin session'"
-        >
-          <i class="pi pi-sign-out text-xs"></i>
-          <span class="hidden sm:inline">{{ isKhmer() ? 'ចាកចេញ' : 'Logout' }}</span>
-        </button>
       </div>
     </header>
   `,

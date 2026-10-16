@@ -82,9 +82,8 @@ describe('AdminHeaderComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should call authService.logout and navigate to /admin/login', () => {
-    const logoutBtn = fixture.nativeElement.querySelector('#admin-logout-btn');
-    logoutBtn.click();
+  it('should call authService.logout and navigate to /admin/login when onLogout is called', () => {
+    component.onLogout();
 
     expect(authServiceMock.logout).toHaveBeenCalled();
     expect(router.navigateByUrl).toHaveBeenCalledWith('/admin/login');
