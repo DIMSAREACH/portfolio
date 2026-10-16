@@ -350,22 +350,24 @@ export interface SortEvent {
         <div class="flex items-center gap-2">
           <!-- Page Size Selector -->
           <div class="flex items-center gap-2 mr-3" [class.font-khmer]="isKhmer()">
-            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">{{ isKhmer() ? 'ក្នុងមួយទំព័រ:' : 'Per page:' }}</span>
-            <p-cascadeselect
-              id="admin-table-page-size-select"
-              inputId="admin-table-page-size-select"
-              [ngModel]="pageSize"
-              (onChange)="onPageSizeChange($event.value)"
-              (ngModelChange)="onPageSizeChange($event)"
-              [options]="pageSizeSelectOptions"
-              optionLabel="label"
-              optionValue="value"
-              [placeholder]="pageSize.toString()"
-              appendTo="body"
-              styleClass="portfolio-cascadeselect portfolio-cascadeselect-compact portfolio-cascadeselect-pagesize"
-              [style]="{ width: '74px' }"
-              ariaLabel="Items per page"
-            />
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 whitespace-nowrap">{{ isKhmer() ? 'ក្នុងមួយទំព័រ:' : 'Per page:' }}</span>
+            <div class="relative min-w-[90px]">
+              <p-cascadeselect
+                id="admin-table-page-size-select"
+                inputId="admin-table-page-size-select"
+                [ngModel]="pageSize"
+                (onChange)="onPageSizeChange($event.value)"
+                (ngModelChange)="onPageSizeChange($event)"
+                [options]="pageSizeSelectOptions"
+                optionLabel="label"
+                optionValue="value"
+                [placeholder]="pageSize.toString()"
+                appendTo="body"
+                styleClass="w-full portfolio-cascadeselect portfolio-cascadeselect-admin portfolio-cascadeselect-pagesize"
+                [style]="{ width: '90px', minWidth: '90px' }"
+                ariaLabel="Items per page"
+              />
+            </div>
           </div>
 
           <!-- Page Navigation Buttons -->
@@ -373,20 +375,20 @@ export interface SortEvent {
             type="button"
             (click)="onPageChange(currentPage - 1)"
             [disabled]="currentPage <= 1 || isLoading"
-            class="px-3.5 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
+            class="h-[38px] px-3.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-300 shadow-2xs hover:shadow-xs disabled:opacity-40 disabled:pointer-events-none transition-all cursor-pointer flex items-center justify-center"
             [class.font-khmer]="isKhmer()"
             aria-label="Previous Page"
           >
             {{ isKhmer() ? 'មុន' : 'Previous' }}
           </button>
-          <span class="px-2 font-semibold text-slate-700 dark:text-slate-300" [class.font-khmer]="isKhmer()">
+          <span class="px-2 font-semibold text-xs text-slate-700 dark:text-slate-300 whitespace-nowrap" [class.font-khmer]="isKhmer()">
             {{ isKhmer() ? 'ទំព័រទី ' + currentPage + ' នៃ ' + totalPages : 'Page ' + currentPage + ' of ' + totalPages }}
           </span>
           <button
             type="button"
             (click)="onPageChange(currentPage + 1)"
             [disabled]="currentPage >= totalPages || isLoading"
-            class="px-3.5 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer"
+            class="h-[38px] px-3.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-300 shadow-2xs hover:shadow-xs disabled:opacity-40 disabled:pointer-events-none transition-all cursor-pointer flex items-center justify-center"
             [class.font-khmer]="isKhmer()"
             aria-label="Next Page"
           >
