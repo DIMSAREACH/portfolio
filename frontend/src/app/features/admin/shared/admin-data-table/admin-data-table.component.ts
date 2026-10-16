@@ -335,17 +335,23 @@ export interface SortEvent {
 
         <div class="flex items-center gap-2">
           <!-- Page Size Selector -->
-          <div class="flex items-center gap-1.5 mr-3" [class.font-khmer]="isKhmer()">
-            <span>{{ isKhmer() ? 'ក្នុងមួយទំព័រ:' : 'Per page:' }}</span>
-            <select
+          <div class="flex items-center gap-2 mr-3" [class.font-khmer]="isKhmer()">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">{{ isKhmer() ? 'ក្នុងមួយទំព័រ:' : 'Per page:' }}</span>
+            <p-cascadeselect
+              id="admin-table-page-size-select"
+              inputId="admin-table-page-size-select"
               [ngModel]="pageSize"
+              (onChange)="onPageSizeChange($event.value)"
               (ngModelChange)="onPageSizeChange($event)"
-              class="px-3 py-1.5 text-xs font-semibold rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer shadow-2xs"
-            >
-              @for (size of pageSizeOptions; track size) {
-                <option [value]="size">{{ size }}</option>
-              }
-            </select>
+              [options]="pageSizeSelectOptions"
+              optionLabel="label"
+              optionValue="value"
+              [placeholder]="pageSize.toString()"
+              appendTo="body"
+              styleClass="portfolio-cascadeselect portfolio-cascadeselect-compact portfolio-cascadeselect-pagesize"
+              [style]="{ width: '74px' }"
+              ariaLabel="Items per page"
+            />
           </div>
 
           <!-- Page Navigation Buttons -->
@@ -463,9 +469,16 @@ export class AdminDataTableComponent {
     }
   }
 
-  public onPageSizeChange(size: number | string): void {
-    const numSize = Number(size);
-    this.pageSizeChange.emit(numSize);
+  public onPageSizeChange(size: number | string | { value?: unknown } | unknown): void {
+    let rawVal: unknown = size;
+    if (typeof size === 'object' && size !== null && 'value' in size) {
+      rawVal = (size as { value: unknown }).value;
+    }
+    const numSize = Number(rawVal);
+    if (!isNaN(numSize) && numSize > 0) {
+      this.pageSize = numSize;
+      this.pageSizeChange.emit(numSize);
+    }
   }
 
   public formatCellValue(col: TableColumn, item: Record<string, unknown>): string {

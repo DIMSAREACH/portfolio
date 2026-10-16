@@ -727,26 +727,126 @@ app-root {
   line-height: 1.25rem !important;
 }
 
-/* Compact Table Variant */
-.portfolio-cascadeselect.portfolio-cascadeselect-compact {
-  border-radius: 0.5rem !important;
+/* Compact Table Variant & Page Size Selector */
+.portfolio-cascadeselect.portfolio-cascadeselect-compact,
+.portfolio-cascadeselect.portfolio-cascadeselect-pagesize {
+  border-radius: 0.75rem !important;
   font-size: 0.8125rem !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   width: auto !important;
-  background-color: rgba(248, 250, 252, 0.9) !important;
-  border-color: rgba(226, 232, 240, 1) !important;
+  min-height: 36px !important;
+  height: 36px !important;
+  background-color: rgba(248, 250, 252, 0.95) !important;
+  border: 1px solid rgba(226, 232, 240, 1) !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  display: inline-flex !important;
+  align-items: center !important;
 }
 
 .dark .portfolio-cascadeselect.portfolio-cascadeselect-compact,
-[data-theme="dark"] .portfolio-cascadeselect.portfolio-cascadeselect-compact {
-  background-color: rgba(30, 41, 59, 0.8) !important;
+[data-theme="dark"] .portfolio-cascadeselect.portfolio-cascadeselect-compact,
+.dark .portfolio-cascadeselect.portfolio-cascadeselect-pagesize,
+[data-theme="dark"] .portfolio-cascadeselect.portfolio-cascadeselect-pagesize {
+  background-color: rgba(30, 41, 59, 0.9) !important;
   border-color: rgba(51, 65, 85, 1) !important;
+  color: #f1f5f9 !important;
 }
 
-.portfolio-cascadeselect.portfolio-cascadeselect-compact .p-cascadeselect-label {
-  padding: 0.375rem 0.625rem !important;
+.portfolio-cascadeselect.portfolio-cascadeselect-compact .p-cascadeselect-label,
+.portfolio-cascadeselect.portfolio-cascadeselect-pagesize .p-cascadeselect-label {
+  padding: 0.25rem 0.625rem !important;
   font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  line-height: 1.25rem !important;
+}
+
+.portfolio-cascadeselect.portfolio-cascadeselect-compact .p-cascadeselect-dropdown,
+.portfolio-cascadeselect.portfolio-cascadeselect-pagesize .p-cascadeselect-dropdown {
+  width: 1.5rem !important;
+  color: #64748b !important;
+}
+
+.dark .portfolio-cascadeselect.portfolio-cascadeselect-compact .p-cascadeselect-dropdown,
+.dark .portfolio-cascadeselect.portfolio-cascadeselect-pagesize .p-cascadeselect-dropdown {
+  color: #94a3b8 !important;
+}
+
+/* CascadeSelect Overlay & List Items (Sleek Modern Indigo/Slate Styling) */
+.p-cascadeselect-overlay {
+  border-radius: 0.875rem !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(16px) !important;
+  padding: 0.375rem !important;
+  min-width: 5rem !important;
+}
+
+.dark .p-cascadeselect-overlay,
+[data-theme="dark"] .p-cascadeselect-overlay {
+  background: rgba(15, 23, 42, 0.98) !important;
+  border: 1px solid rgba(51, 65, 85, 0.9) !important;
+  box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.5) !important;
+  color: #f1f5f9 !important;
+}
+
+.p-cascadeselect-list {
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+}
+
+.p-cascadeselect-item {
+  border-radius: 0.5rem !important;
+  margin: 0.125rem 0 !important;
+  transition: all 0.15s ease !important;
+  font-size: 0.875rem !important;
   font-weight: 500 !important;
+  cursor: pointer !important;
+}
+
+.p-cascadeselect-item-content {
+  padding: 0.45rem 0.75rem !important;
+  border-radius: 0.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.p-cascadeselect-item:hover,
+.p-cascadeselect-item.p-focus,
+.p-cascadeselect-item:focus {
+  background-color: #e0e7ff !important;
+  color: #4338ca !important;
+}
+
+.dark .p-cascadeselect-item:hover,
+[data-theme="dark"] .p-cascadeselect-item:hover,
+.dark .p-cascadeselect-item.p-focus,
+[data-theme="dark"] .p-cascadeselect-item.p-focus,
+.dark .p-cascadeselect-item:focus,
+[data-theme="dark"] .p-cascadeselect-item:focus {
+  background-color: rgba(99, 102, 241, 0.25) !important;
+  color: #c7d2fe !important;
+}
+
+.p-cascadeselect-item.p-highlight,
+.p-cascadeselect-item[aria-selected="true"],
+.p-cascadeselect-item.p-cascadeselect-item-active {
+  background-color: #6366f1 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.dark .p-cascadeselect-item.p-highlight,
+[data-theme="dark"] .p-cascadeselect-item.p-highlight,
+.dark .p-cascadeselect-item[aria-selected="true"],
+[data-theme="dark"] .p-cascadeselect-item[aria-selected="true"],
+.dark .p-cascadeselect-item.p-cascadeselect-item-active,
+[data-theme="dark"] .p-cascadeselect-item.p-cascadeselect-item-active {
+  background-color: #6366f1 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 /* ==========================================================================
