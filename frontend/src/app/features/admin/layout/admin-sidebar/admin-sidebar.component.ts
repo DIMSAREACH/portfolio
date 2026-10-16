@@ -197,7 +197,7 @@ export interface AdminNavGroup {
                 <span class="text-xs font-bold text-slate-900 dark:text-white truncate leading-tight">
                   {{ userName() }}
                 </span>
-                <span class="text-[10px] text-slate-500 dark:text-slate-400 truncate leading-tight font-mono">
+                <span class="text-[11px] font-normal text-slate-500 dark:text-slate-400 truncate leading-tight font-sans tracking-tight">
                   {{ userEmail() }}
                 </span>
               </div>

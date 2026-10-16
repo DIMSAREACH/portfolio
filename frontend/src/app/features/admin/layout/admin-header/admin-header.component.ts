@@ -263,7 +263,7 @@ import { Message } from '../../../../core/models';
                     <span class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ userName() }}</span>
                     <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-800/50">Admin</span>
                   </div>
-                  <span class="text-[10px] text-slate-500 dark:text-slate-400 truncate font-mono mt-0.5">{{ userEmail() }}</span>
+                  <span class="text-[11px] font-normal text-slate-500 dark:text-slate-400 truncate mt-0.5 font-sans tracking-tight">{{ userEmail() }}</span>
                 </div>
               </div>
 
