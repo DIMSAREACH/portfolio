@@ -335,20 +335,17 @@ export interface SortEvent {
 
         <div class="flex items-center gap-2">
           <!-- Page Size Selector -->
-          <div class="flex items-center gap-1.5 mr-2" [class.font-khmer]="isKhmer()">
+          <div class="flex items-center gap-1.5 mr-3" [class.font-khmer]="isKhmer()">
             <span>{{ isKhmer() ? 'ក្នុងមួយទំព័រ:' : 'Per page:' }}</span>
-            <div class="w-20">
-              <p-cascadeselect
-                [ngModel]="pageSize"
-                (ngModelChange)="onPageSizeChange($event)"
-                [options]="pageSizeSelectOptions"
-                optionLabel="label"
-                optionValue="value"
-                appendTo="body"
-                styleClass="w-full portfolio-cascadeselect portfolio-cascadeselect-compact"
-                ariaLabel="Page size"
-              />
-            </div>
+            <select
+              [ngModel]="pageSize"
+              (ngModelChange)="onPageSizeChange($event)"
+              class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer shadow-2xs"
+            >
+              @for (size of pageSizeOptions; track size) {
+                <option [value]="size">{{ size }}</option>
+              }
+            </select>
           </div>
 
           <!-- Page Navigation Buttons -->

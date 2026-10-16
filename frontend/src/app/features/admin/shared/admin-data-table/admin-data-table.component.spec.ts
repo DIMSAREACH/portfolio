@@ -143,3 +143,4 @@ describe('AdminDataTableComponent', () => {
     expect(animatedSkeletons.length).toBeGreaterThan(0);
   });
 });
+
