@@ -35,9 +35,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             req.url.includes('/auth/logout');
 
           if (isAuthEndpoint) {
-            if (req.url.includes('/auth/refresh')) {
+            if (req.url.includes('/auth/refresh') || req.url.includes('/auth/logout')) {
               authService.clearSession();
-              redirectToLogin(router);
             }
             return throwError(() => error);
           }
@@ -132,6 +131,17 @@ function handle401Error(
 }
 
 function redirectToLogin(router: Router): void {
+  // Prevent duplicate/canceling navigations if already transitioning to /admin/login
+  const currentNav = router.getCurrentNavigation ? router.getCurrentNavigation() : null;
+  const targetUrl =
+    currentNav?.extractedUrl?.toString() ||
+    currentNav?.initialUrl?.toString() ||
+    '';
+
+  if (targetUrl.includes('/admin/login')) {
+    return;
+  }
+
   const currentUrl = router.url;
   if (currentUrl.startsWith('/admin') && !currentUrl.includes('/admin/login')) {
     router.navigate(['/admin/login'], { queryParams: { returnUrl: currentUrl } });

@@ -14,6 +14,7 @@ export interface LoginResult {
 
 export interface RefreshResult {
   accessToken: string;
+  user?: Record<string, unknown>;
 }
 
 /**
@@ -78,7 +79,7 @@ export class AuthService {
 
     const accessToken = generateAccessToken(user._id.toString(), user.role);
 
-    return { accessToken };
+    return { accessToken, user: sanitizeUser(user) };
   }
 
   /**

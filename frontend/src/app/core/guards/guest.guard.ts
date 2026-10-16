@@ -17,6 +17,11 @@ export const guestGuard: CanActivateFn = (
     return router.createUrlTree(['/admin/dashboard']);
   }
 
+  // If user explicitly logged out in this session, skip silent refresh
+  if (typeof authService.isExplicitlyLoggedOut === 'function' && authService.isExplicitlyLoggedOut()) {
+    return true;
+  }
+
   // Attempt silent refresh to check for active cookie session
   return authService.refreshToken().pipe(
     map((response) => {

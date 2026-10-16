@@ -43,7 +43,11 @@ export class AuthController {
     }
 
     const result = await authService.refreshAccessToken(refreshToken);
-    sendSuccess(res, { accessToken: result.accessToken }, 'Token refreshed successfully');
+    sendSuccess(
+      res,
+      { accessToken: result.accessToken, user: result.user },
+      'Token refreshed successfully',
+    );
   });
 
   me = catchAsync(async (req: Request, res: Response): Promise<void> => {

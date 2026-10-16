@@ -22,6 +22,7 @@ export class AuthService {
   public readonly currentUser = signal<User | null>(null);
   public readonly accessToken = signal<string | null>(null);
   public readonly isLoading = signal<boolean>(false);
+  public readonly isExplicitlyLoggedOut = signal<boolean>(false);
 
   /**
    * Computed boolean indicating if user is currently authenticated
@@ -52,6 +53,7 @@ export class AuthService {
    */
   public logout(): Observable<ApiResponse<null>> {
     this.isLoading.set(true);
+    this.isExplicitlyLoggedOut.set(true);
     return this.apiService.post<ApiResponse<null>>('/auth/logout', {}).pipe(
       tap(() => this.clearSession()),
       catchError((err) => {
@@ -72,8 +74,12 @@ export class AuthService {
   public refreshToken(): Observable<ApiResponse<AuthResponse>> {
     return this.apiService.post<ApiResponse<AuthResponse>>('/auth/refresh', {}).pipe(
       tap((response) => {
-        if (response?.data?.accessToken && response?.data?.user) {
-          this.setSession(response.data.user, response.data.accessToken);
+        if (response?.data?.accessToken) {
+          this.accessToken.set(response.data.accessToken);
+          if (response.data.user) {
+            this.currentUser.set(response.data.user);
+          }
+          this.isExplicitlyLoggedOut.set(false);
         }
       }),
       catchError((error) => {
@@ -107,6 +113,7 @@ export class AuthService {
    * Internal session setters
    */
   public setSession(user: User, token: string): void {
+    this.isExplicitlyLoggedOut.set(false);
     this.currentUser.set(user);
     this.accessToken.set(token);
   }
