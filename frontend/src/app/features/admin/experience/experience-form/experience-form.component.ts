@@ -6,6 +6,7 @@ import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Experience, ExperienceType } from '../../../../core/models';
 import { DatePickerModule } from 'primeng/datepicker';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { BilingualFieldComponent } from '../../shared';
 
 @Component({
@@ -17,6 +18,7 @@ import { BilingualFieldComponent } from '../../shared';
     FormsModule,
     RouterLink,
     DatePickerModule,
+    CascadeSelectModule,
     BilingualFieldComponent,
   ],
   template: `
@@ -114,16 +116,19 @@ import { BilingualFieldComponent } from '../../shared';
               <label for="experience-type-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Engagement Type <span class="text-rose-500 font-bold">*</span>
               </label>
-              <select
+              <p-cascadeselect
                 id="experience-type-select"
+                inputId="experience-type-select"
                 formControlName="type"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
-              >
-                <option value="work">Work (Full-time / Part-time Employment)</option>
-                <option value="volunteer">Volunteer (Community & Civic)</option>
-                <option value="internship">Internship (Apprenticeship)</option>
-                <option value="freelance">Freelance (Contract & Consulting)</option>
-              </select>
+                [options]="typeOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Engagement Type"
+                appendTo="body"
+                styleClass="w-full portfolio-cascadeselect portfolio-cascadeselect-admin"
+                [style]="{ width: '100%' }"
+                ariaLabel="Engagement Type"
+              />
             </div>
 
             <!-- Display Order -->
@@ -309,6 +314,12 @@ export class ExperienceFormComponent implements OnInit {
   public readonly isSubmitting = signal<boolean>(false);
   public readonly isSubmitted = signal<boolean>(false);
   public readonly techTags = signal<string[]>([]);
+  public readonly typeOptions = [
+    { label: 'Work (Full-time / Part-time Employment)', value: 'work' },
+    { label: 'Volunteer (Community & Civic)', value: 'volunteer' },
+    { label: 'Internship (Apprenticeship)', value: 'internship' },
+    { label: 'Freelance (Contract & Consulting)', value: 'freelance' },
+  ];
 
   public newTagInput = '';
 
@@ -325,6 +336,15 @@ export class ExperienceFormComponent implements OnInit {
   });
 
   public ngOnInit(): void {
+    let previousType = this.experienceForm.get('type')?.value;
+    this.experienceForm.get('type')?.valueChanges.subscribe((val) => {
+      if (val === null && previousType) {
+        this.experienceForm.get('type')?.setValue(previousType, { emitEvent: false });
+      } else if (val !== null) {
+        previousType = val;
+      }
+    });
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode.set(true);

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -6,6 +6,7 @@ import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Category, Project } from '../../../../core/models';
 import { DatePickerModule } from 'primeng/datepicker';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
 import {
   BilingualFieldComponent,
   ImageUploadComponent,
@@ -20,6 +21,7 @@ import {
     FormsModule,
     RouterLink,
     DatePickerModule,
+    CascadeSelectModule,
     BilingualFieldComponent,
     ImageUploadComponent,
   ],
@@ -112,16 +114,19 @@ import {
               <label for="project-category-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Category <span class="text-rose-500 font-bold">*</span>
               </label>
-              <select
+              <p-cascadeselect
                 id="project-category-select"
+                inputId="project-category-select"
                 formControlName="category"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-              >
-                <option value="">Select a Category</option>
-                @for (cat of categories(); track cat._id) {
-                  <option [value]="cat._id">{{ cat.name.en }}</option>
-                }
-              </select>
+                [options]="categoryOptions()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select a Category"
+                appendTo="body"
+                styleClass="w-full portfolio-cascadeselect portfolio-cascadeselect-admin"
+                [style]="{ width: '100%' }"
+                ariaLabel="Project Category"
+              />
               @if (isFieldInvalid('category')) {
                 <p class="text-[11px] text-rose-500 mt-1 font-medium">Category is required.</p>
               }
@@ -132,14 +137,19 @@ import {
               <label for="project-status-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Publication Status <span class="text-rose-500 font-bold">*</span>
               </label>
-              <select
+              <p-cascadeselect
                 id="project-status-select"
+                inputId="project-status-select"
                 formControlName="status"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-              >
-                <option value="published">Published (Visible on public portfolio)</option>
-                <option value="draft">Draft (Private admin only)</option>
-              </select>
+                [options]="statusOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Publication Status"
+                appendTo="body"
+                styleClass="w-full portfolio-cascadeselect portfolio-cascadeselect-admin"
+                [style]="{ width: '100%' }"
+                ariaLabel="Publication Status"
+              />
             </div>
 
             <!-- Display Order -->
@@ -435,6 +445,16 @@ export class ProjectFormComponent implements OnInit {
   public readonly isEditMode = signal<boolean>(false);
   public readonly projectId = signal<string | null>(null);
   public readonly categories = signal<Category[]>([]);
+  public readonly categoryOptions = computed(() =>
+    this.categories().map((c) => ({
+      label: c.name?.en || c.slug,
+      value: c._id,
+    }))
+  );
+  public readonly statusOptions = [
+    { label: 'Published (Visible on public portfolio)', value: 'published' },
+    { label: 'Draft (Private admin only)', value: 'draft' },
+  ];
   public readonly techTags = signal<string[]>([]);
   public readonly isSubmitting = signal<boolean>(false);
   public readonly isSubmitted = signal<boolean>(false);
@@ -462,6 +482,24 @@ export class ProjectFormComponent implements OnInit {
   });
 
   public ngOnInit(): void {
+    let previousCategory = this.projectForm.get('category')?.value;
+    this.projectForm.get('category')?.valueChanges.subscribe((val) => {
+      if (val === null && previousCategory) {
+        this.projectForm.get('category')?.setValue(previousCategory, { emitEvent: false });
+      } else if (val !== null) {
+        previousCategory = val;
+      }
+    });
+
+    let previousStatus = this.projectForm.get('status')?.value;
+    this.projectForm.get('status')?.valueChanges.subscribe((val) => {
+      if (val === null && previousStatus) {
+        this.projectForm.get('status')?.setValue(previousStatus, { emitEvent: false });
+      } else if (val !== null) {
+        previousStatus = val;
+      }
+    });
+
     this.loadCategories();
 
     const id = this.route.snapshot.paramMap.get('id');

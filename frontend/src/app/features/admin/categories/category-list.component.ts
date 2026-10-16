@@ -5,13 +5,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Category, CategoryType } from '../../../core/models';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { BilingualFieldComponent } from '../shared';
 import { ConfirmDialogComponent } from '../../../shared';
 
 @Component({
   selector: 'app-admin-category-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, BilingualFieldComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, CascadeSelectModule, BilingualFieldComponent],
   template: `
     <div class="space-y-6 animate-fadeIn pb-12">
       <!-- Header -->
@@ -239,13 +240,19 @@ import { ConfirmDialogComponent } from '../../../shared';
                 <label for="cat-type-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Category Type <span class="text-rose-500 font-bold ml-0.5">*</span>
                 </label>
-                <select
+                <p-cascadeselect
                   id="cat-type-select"
+                  inputId="cat-type-select"
                   formControlName="type"
-                  class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer"
-                >
-                  <option value="project">Project Category</option>
-                </select>
+                  [options]="typeOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Select Category Type"
+                  appendTo="body"
+                  styleClass="w-full portfolio-cascadeselect portfolio-cascadeselect-admin"
+                  [style]="{ width: '100%' }"
+                  ariaLabel="Category Type"
+                />
               </div>
 
               <!-- Description (Bilingual) -->
@@ -309,6 +316,9 @@ export class CategoryListComponent implements OnInit {
 
   public searchQuery = '';
   public editingCategoryId: string | null = null;
+  public readonly typeOptions = [
+    { label: 'Project Category', value: 'project' },
+  ];
 
   public readonly categoryForm: FormGroup = this.fb.group({
     name: [{ en: '', kh: '' }, Validators.required],

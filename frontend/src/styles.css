@@ -704,4 +704,47 @@ app-root {
   border: 1px solid rgba(51, 65, 85, 0.8) !important;
 }
 
+/* Admin Form Variant */
+.portfolio-cascadeselect.portfolio-cascadeselect-admin {
+  border-radius: 0.75rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  background-color: rgba(248, 250, 252, 0.9) !important;
+  border-color: rgba(226, 232, 240, 1) !important;
+}
+
+.dark .portfolio-cascadeselect.portfolio-cascadeselect-admin,
+[data-theme="dark"] .portfolio-cascadeselect.portfolio-cascadeselect-admin {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: rgba(51, 65, 85, 1) !important;
+}
+
+.portfolio-cascadeselect.portfolio-cascadeselect-admin .p-cascadeselect-label {
+  padding: 0.5rem 0.875rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+}
+
+/* Compact Table Variant */
+.portfolio-cascadeselect.portfolio-cascadeselect-compact {
+  border-radius: 0.5rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  width: auto !important;
+  background-color: rgba(248, 250, 252, 0.9) !important;
+  border-color: rgba(226, 232, 240, 1) !important;
+}
+
+.dark .portfolio-cascadeselect.portfolio-cascadeselect-compact,
+[data-theme="dark"] .portfolio-cascadeselect.portfolio-cascadeselect-compact {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: rgba(51, 65, 85, 1) !important;
+}
+
+.portfolio-cascadeselect.portfolio-cascadeselect-compact .p-cascadeselect-label {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+}
+
 

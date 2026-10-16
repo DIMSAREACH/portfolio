@@ -6,6 +6,7 @@ import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Certification, CertificationType } from '../../../../core/models';
 import { DatePickerModule } from 'primeng/datepicker';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
 
 @Component({
@@ -16,6 +17,7 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
     ReactiveFormsModule,
     RouterLink,
     DatePickerModule,
+    CascadeSelectModule,
     BilingualFieldComponent,
     ImageUploadComponent,
   ],
@@ -104,15 +106,19 @@ import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
               <label for="cert-type-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Credential Category <span class="text-rose-500 font-bold">*</span>
               </label>
-              <select
+              <p-cascadeselect
                 id="cert-type-select"
+                inputId="cert-type-select"
                 formControlName="type"
-                class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
-              >
-                <option value="certification">Professional Certification</option>
-                <option value="award">Honor / Competition Award</option>
-                <option value="achievement">Key Milestone / Achievement</option>
-              </select>
+                [options]="typeOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Select Credential Category"
+                appendTo="body"
+                styleClass="w-full portfolio-cascadeselect portfolio-cascadeselect-admin"
+                [style]="{ width: '100%' }"
+                ariaLabel="Credential Category"
+              />
             </div>
           </div>
         </div>
@@ -289,6 +295,11 @@ export class CertificationFormComponent implements OnInit {
   public readonly certId = signal<string | null>(null);
   public readonly isSubmitting = signal<boolean>(false);
   public readonly isSubmitted = signal<boolean>(false);
+  public readonly typeOptions = [
+    { label: 'Professional Certification', value: 'certification' },
+    { label: 'Honor / Competition Award', value: 'award' },
+    { label: 'Key Milestone / Achievement', value: 'achievement' },
+  ];
 
   public selectedImageFile: File | null = null;
 
@@ -307,6 +318,15 @@ export class CertificationFormComponent implements OnInit {
   });
 
   public ngOnInit(): void {
+    let previousType = this.certForm.get('type')?.value;
+    this.certForm.get('type')?.valueChanges.subscribe((val) => {
+      if (val === null && previousType) {
+        this.certForm.get('type')?.setValue(previousType, { emitEvent: false });
+      } else if (val !== null) {
+        previousType = val;
+      }
+    });
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode.set(true);

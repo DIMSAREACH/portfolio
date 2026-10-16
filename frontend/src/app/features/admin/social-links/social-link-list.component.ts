@@ -5,12 +5,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { SocialLink, SocialPlatform } from '../../../core/models';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { ConfirmDialogComponent } from '../../../shared';
 
 @Component({
   selector: 'app-admin-social-link-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, CascadeSelectModule],
   template: `
     <div class="space-y-6 animate-fadeIn pb-12">
       <!-- Header -->
@@ -175,20 +176,20 @@ import { ConfirmDialogComponent } from '../../../shared';
                 <label for="link-platform-select" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Platform <span class="text-rose-500 font-bold ml-0.5">*</span>
                 </label>
-                <select
+                <p-cascadeselect
                   id="link-platform-select"
+                  inputId="link-platform-select"
                   formControlName="platform"
-                  (change)="onPlatformChange()"
-                  class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer"
-                >
-                  <option value="github">GitHub</option>
-                  <option value="linkedin">LinkedIn</option>
-                  <option value="facebook">Facebook</option>
-                  <option value="email">Email</option>
-                  <option value="twitter">Twitter / X</option>
-                  <option value="youtube">YouTube</option>
-                  <option value="other">Other</option>
-                </select>
+                  [options]="platformOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Select Platform"
+                  appendTo="body"
+                  styleClass="w-full portfolio-cascadeselect portfolio-cascadeselect-admin"
+                  [style]="{ width: '100%' }"
+                  ariaLabel="Social Platform"
+                  (onChange)="onPlatformChange()"
+                />
               </div>
 
               <!-- Label -->
@@ -278,6 +279,15 @@ export class SocialLinkListComponent implements OnInit {
   public readonly showModal = signal<boolean>(false);
 
   public editingLinkId: string | null = null;
+  public readonly platformOptions = [
+    { label: 'GitHub', value: 'github' },
+    { label: 'LinkedIn', value: 'linkedin' },
+    { label: 'Facebook', value: 'facebook' },
+    { label: 'Email', value: 'email' },
+    { label: 'Twitter / X', value: 'twitter' },
+    { label: 'YouTube', value: 'youtube' },
+    { label: 'Other', value: 'other' },
+  ];
 
   public readonly linkForm: FormGroup = this.fb.group({
     platform: ['github' as SocialPlatform, Validators.required],

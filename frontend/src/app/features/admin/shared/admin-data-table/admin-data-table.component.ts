@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, inject, computed } from '@angul
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LanguageService } from '../../../../core/services/language.service';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 export interface TableColumn<T = Record<string, unknown>> {
   key: string;
@@ -23,7 +24,7 @@ export interface SortEvent {
 @Component({
   selector: 'app-admin-data-table',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CascadeSelectModule],
   template: `
     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
       <!-- Table Controls: Header, Search, Filters, Create Button -->
@@ -60,17 +61,18 @@ export interface SortEvent {
         <div class="flex flex-wrap items-center gap-3">
           <!-- Filter Dropdown -->
           @if (filterOptions && filterOptions.length > 0) {
-            <div class="relative">
-              <select
+            <div class="relative min-w-[140px]">
+              <p-cascadeselect
                 [ngModel]="activeFilter"
                 (ngModelChange)="onFilterSelect($event)"
-                class="px-3.5 py-2 text-xs font-medium rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer"
-                aria-label="Filter records"
-              >
-                @for (opt of filterOptions; track opt.value) {
-                  <option [value]="opt.value">{{ opt.label }}</option>
-                }
-              </select>
+                [options]="filterOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Filter"
+                appendTo="body"
+                styleClass="w-full portfolio-cascadeselect portfolio-cascadeselect-admin"
+                ariaLabel="Filter records"
+              />
             </div>
           }
 
@@ -335,15 +337,18 @@ export interface SortEvent {
           <!-- Page Size Selector -->
           <div class="flex items-center gap-1.5 mr-2" [class.font-khmer]="isKhmer()">
             <span>{{ isKhmer() ? 'ក្នុងមួយទំព័រ:' : 'Per page:' }}</span>
-            <select
-              [ngModel]="pageSize"
-              (ngModelChange)="onPageSizeChange($event)"
-              class="px-2 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs focus:outline-none cursor-pointer"
-            >
-              @for (size of pageSizeOptions; track size) {
-                <option [value]="size">{{ size }}</option>
-              }
-            </select>
+            <div class="w-20">
+              <p-cascadeselect
+                [ngModel]="pageSize"
+                (ngModelChange)="onPageSizeChange($event)"
+                [options]="pageSizeSelectOptions"
+                optionLabel="label"
+                optionValue="value"
+                appendTo="body"
+                styleClass="w-full portfolio-cascadeselect portfolio-cascadeselect-compact"
+                ariaLabel="Page size"
+              />
+            </div>
           </div>
 
           <!-- Page Navigation Buttons -->
@@ -412,6 +417,13 @@ export class AdminDataTableComponent {
 
   public get totalPages(): number {
     return Math.max(1, Math.ceil(this.totalItems / (this.pageSize || 10)));
+  }
+
+  public get pageSizeSelectOptions(): { label: string; value: number }[] {
+    return (this.pageSizeOptions || [10, 25, 50]).map((size) => ({
+      label: String(size),
+      value: size,
+    }));
   }
 
   public get startItemIndex(): number {
