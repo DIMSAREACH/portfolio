@@ -178,6 +178,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public readonly profile = signal<Profile | null>(null);
   public readonly featuredProjects = signal<Project[]>([]);
+  public readonly totalProjectsCount = signal<number>(0);
   public readonly carouselSlidesPerPage = signal<number>(2.5);
   private resizeListener: (() => void) | null = null;
   public readonly skills = signal<Skill[]>([]);
@@ -247,13 +248,13 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Dynamic metrics computed from live database entries
    */
   public readonly metricsProjects = computed<string>(() => {
-    const count = this.featuredProjects().length;
-    return `${Math.max(count, 3)}+`;
+    const count = this.totalProjectsCount() || this.featuredProjects().length;
+    return count > 0 ? `${count}+` : '0';
   });
 
   public readonly metricsSkills = computed<string>(() => {
     const count = this.skills().length;
-    return `${Math.max(count, 12)}+`;
+    return count > 0 ? `${count}+` : '0';
   });
 
   /**
@@ -342,11 +343,20 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.profile.set(results.profile.data);
         }
         if (results.projects?.data) {
+          const projectData = results.projects.data;
           const items =
-            'items' in results.projects.data
-              ? results.projects.data.items
-              : (results.projects.data as unknown as Project[]);
+            'items' in projectData
+              ? projectData.items
+              : (projectData as unknown as Project[]);
           this.featuredProjects.set(items || []);
+          const total =
+            'pagination' in projectData && projectData.pagination?.total !== undefined
+              ? projectData.pagination.total
+              : (items?.length || 0);
+          this.totalProjectsCount.set(total);
+        } else {
+          this.featuredProjects.set([]);
+          this.totalProjectsCount.set(0);
         }
         if (results.skills?.data) {
           this.skills.set(results.skills.data);

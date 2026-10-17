@@ -310,4 +310,28 @@ describe('HomeComponent', () => {
   it('should safely handle scrollToSection when element does not exist', () => {
     expect(() => component.scrollToSection('non-existent-id')).not.toThrow();
   });
+
+  it('should dynamically compute metricsProjects reflecting actual database counts without hardcoded minimums', () => {
+    // When no projects exist (e.g. user deleted all projects in admin)
+    component.featuredProjects.set([]);
+    component.totalProjectsCount.set(0);
+    expect(component.metricsProjects()).toBe('0');
+
+    // When 1 project exists
+    component.featuredProjects.set([mockProjects.data.items[0]]);
+    component.totalProjectsCount.set(1);
+    expect(component.metricsProjects()).toBe('1+');
+
+    // When 2 projects exist
+    component.totalProjectsCount.set(2);
+    expect(component.metricsProjects()).toBe('2+');
+  });
+
+  it('should dynamically compute metricsSkills reflecting actual database counts without hardcoded minimums', () => {
+    component.skills.set([]);
+    expect(component.metricsSkills()).toBe('0');
+
+    component.skills.set([mockSkills.data[0]]);
+    expect(component.metricsSkills()).toBe('1+');
+  });
 });

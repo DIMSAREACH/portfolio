@@ -3,6 +3,8 @@ import {
   ElementRef,
   Input,
   OnInit,
+  OnChanges,
+  SimpleChanges,
   OnDestroy,
   AfterViewInit,
   inject,
@@ -21,7 +23,7 @@ import { isPlatformBrowser } from '@angular/common';
   selector: '[appCountUp]',
   standalone: true,
 })
-export class CountUpDirective implements OnInit, AfterViewInit, OnDestroy {
+export class CountUpDirective implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   private readonly el = inject(ElementRef<HTMLElement>);
   private readonly ngZone = inject(NgZone);
   private readonly renderer = inject(Renderer2);
@@ -78,6 +80,16 @@ export class CountUpDirective implements OnInit, AfterViewInit, OnDestroy {
     this.parseInput();
   }
 
+  public ngOnChanges(changes: SimpleChanges): void {
+    const change = changes['appCountUp'] || changes['target'];
+    if (change) {
+      this.target = change.currentValue;
+      this.parseInput();
+      this.renderValue(this.parsedTarget);
+      this.hasAnimated = true;
+    }
+  }
+
   public ngAfterViewInit(): void {
     if (!this.isBrowser) {
       return;
@@ -91,6 +103,7 @@ export class CountUpDirective implements OnInit, AfterViewInit, OnDestroy {
 
     if (prefersReducedMotion || typeof IntersectionObserver === 'undefined') {
       this.renderValue(this.parsedTarget);
+      this.hasAnimated = true;
       return;
     }
 
