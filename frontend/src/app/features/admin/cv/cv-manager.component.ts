@@ -84,7 +84,8 @@ import { ConfirmDialogComponent } from '../../../shared';
                 </a>
 
                 <a
-                  [href]="cvDisplayUrl()"
+                  [href]="publicCvPreviewUrl()"
+                  (click)="onPreviewCv($event)"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-all shadow-xs cursor-pointer"
@@ -198,8 +199,33 @@ export class CvManagerComponent implements OnInit {
   public readonly cvDisplayUrl = computed(() => this.currentCv()?.cvUrl || this.currentCv()?.url || '');
   public readonly cvFileName = computed(() => this.currentCv()?.fileName || 'Dim_Sareach_CV.pdf');
   public readonly publicCvDownloadUrl = computed(() => this.portfolioService.getCvDownloadUrl());
+  public readonly publicCvPreviewUrl = computed(() => this.portfolioService.getCvPreviewUrl());
   public readonly isLoading = signal<boolean>(true);
   public readonly isUploading = signal<boolean>(false);
+
+  public onPreviewCv(event: MouseEvent): void {
+    const rawUrl = this.cvDisplayUrl();
+    if (rawUrl && rawUrl.startsWith('data:')) {
+      event.preventDefault();
+      try {
+        const base64Data = rawUrl.split(',')[1] || '';
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        const blobUrl = URL.createObjectURL(blob);
+        window.open(blobUrl, '_blank');
+        return;
+      } catch (err) {
+        console.error('Failed to parse base64 PDF, falling back to server preview endpoint', err);
+        window.open(this.publicCvPreviewUrl(), '_blank');
+        return;
+      }
+    }
+  }
 
   public ngOnInit(): void {
     this.loadCv();

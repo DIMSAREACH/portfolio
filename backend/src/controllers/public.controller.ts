@@ -18,6 +18,7 @@ import logger from '../utils/logger';
 import { CategoryType } from '../models/Category';
 import { ExperienceType } from '../models/Experience';
 import { CertificationType } from '../models/Certification';
+import Settings from '../models/Settings';
 
 /**
  * 1. GET /api/v1/profile
@@ -265,7 +266,8 @@ export const submitContactForm = catchAsync(async (req: Request, res: Response) 
  * 14. GET /api/v1/cv/download
  * Redirect to active CV file URL and atomically increment download count
  */
-export const downloadCv = catchAsync(async (_req: Request, res: Response) => {
+export const downloadCv = catchAsync(async (req: Request, res: Response) => {
+  const isInline = req.query.inline === 'true' || req.query.preview === 'true';
   const fileUrl = await settingsService.downloadCv();
   if (fileUrl.startsWith('data:')) {
     const matches = fileUrl.match(/^data:([^;]+);base64,(.+)$/);
@@ -273,7 +275,34 @@ export const downloadCv = catchAsync(async (_req: Request, res: Response) => {
       const mimeType = matches[1];
       const buffer = Buffer.from(matches[2], 'base64');
       res.setHeader('Content-Type', mimeType);
-      res.setHeader('Content-Disposition', 'attachment; filename="Dim_Sareach_CV.pdf"');
+      const disposition = isInline ? 'inline' : 'attachment';
+      res.setHeader('Content-Disposition', `${disposition}; filename="Dim_Sareach_CV.pdf"`);
+      return res.send(buffer);
+    }
+  }
+  return res.redirect(fileUrl);
+});
+
+/**
+ * 15. GET /api/v1/cv/preview
+ * Stream active CV for in-browser PDF preview without incrementing download count
+ */
+export const previewCv = catchAsync(async (_req: Request, res: Response) => {
+  const settings = await Settings.findOne();
+  if (!settings || !settings.cvFile?.url) {
+    throw new NotFoundError('CV file is not available for preview');
+  }
+
+  const fileUrl = settings.cvFile.url;
+  const fileName = settings.cvFile.fileName || 'Dim_Sareach_CV.pdf';
+
+  if (fileUrl.startsWith('data:')) {
+    const matches = fileUrl.match(/^data:([^;]+);base64,(.+)$/);
+    if (matches) {
+      const mimeType = matches[1];
+      const buffer = Buffer.from(matches[2], 'base64');
+      res.setHeader('Content-Type', mimeType);
+      res.setHeader('Content-Disposition', `inline; filename="${fileName}"`);
       return res.send(buffer);
     }
   }

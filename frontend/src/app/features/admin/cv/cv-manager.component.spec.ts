@@ -14,6 +14,7 @@ describe('CvManagerComponent', () => {
     uploadAdminCv: ReturnType<typeof vi.fn>;
     deleteAdminCv: ReturnType<typeof vi.fn>;
     getCvDownloadUrl: ReturnType<typeof vi.fn>;
+    getCvPreviewUrl: ReturnType<typeof vi.fn>;
   };
   let notificationServiceMock: {
     showSuccess: ReturnType<typeof vi.fn>;
@@ -36,6 +37,7 @@ describe('CvManagerComponent', () => {
       uploadAdminCv: vi.fn().mockReturnValue(of({ success: true, data: { cvUrl: 'https://cloudinary.com/new.pdf' } })),
       deleteAdminCv: vi.fn().mockReturnValue(of({ success: true, data: null })),
       getCvDownloadUrl: vi.fn().mockReturnValue('http://localhost:5000/api/v1/cv/download'),
+      getCvPreviewUrl: vi.fn().mockReturnValue('http://localhost:5000/api/v1/cv/preview'),
     };
 
     notificationServiceMock = {
@@ -112,4 +114,50 @@ describe('CvManagerComponent', () => {
     component.loadCv();
     expect(notificationServiceMock.showError).toHaveBeenCalledWith('Failed to load CV information.');
   });
+
+  it('should create blob URL and prevent default when previewing base64 CV', () => {
+    const dummyBase64Pdf = 'data:application/pdf;base64,JVBERi0xLjQKJWR1bW15';
+    component.currentCv.set({
+      cvUrl: dummyBase64Pdf,
+      fileName: 'test.pdf',
+    });
+
+    const preventDefaultSpy = vi.fn();
+    const event = {
+      preventDefault: preventDefaultSpy,
+    } as unknown as MouseEvent;
+
+    const originalCreateObjectURL = URL.createObjectURL;
+    const originalOpen = window.open;
+    const createObjectURLSpy = vi.fn().mockReturnValue('blob:http://localhost:4200/dummy-uuid');
+    const openSpy = vi.fn();
+    URL.createObjectURL = createObjectURLSpy;
+    window.open = openSpy;
+
+    try {
+      component.onPreviewCv(event);
+      expect(preventDefaultSpy).toHaveBeenCalled();
+      expect(createObjectURLSpy).toHaveBeenCalled();
+      expect(openSpy).toHaveBeenCalledWith('blob:http://localhost:4200/dummy-uuid', '_blank');
+    } finally {
+      URL.createObjectURL = originalCreateObjectURL;
+      window.open = originalOpen;
+    }
+  });
+
+  it('should not prevent default when previewing remote http CV URL', () => {
+    component.currentCv.set({
+      cvUrl: 'https://cloudinary.com/test.pdf',
+      fileName: 'test.pdf',
+    });
+
+    const preventDefaultSpy = vi.fn();
+    const event = {
+      preventDefault: preventDefaultSpy,
+    } as unknown as MouseEvent;
+
+    component.onPreviewCv(event);
+    expect(preventDefaultSpy).not.toHaveBeenCalled();
+  });
 });
+

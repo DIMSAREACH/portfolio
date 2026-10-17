@@ -153,6 +153,13 @@ export class PortfolioService {
   }
 
   /**
+   * Get direct URL to preview CV in-browser
+   */
+  public getCvPreviewUrl(): string {
+    return this.apiService.getUrl('/cv/preview');
+  }
+
+  /**
    * Fetch admin dashboard statistics (PRD Section 9.2, API-015)
    */
   public getDashboardStats(): Observable<ApiResponse<DashboardStats>> {

@@ -184,6 +184,11 @@ describe('PortfolioService', () => {
     expect(url).toBe('http://localhost:5000/api/v1/cv/download');
   });
 
+  it('should return correct CV preview URL', () => {
+    const url = service.getCvPreviewUrl();
+    expect(url).toBe('http://localhost:5000/api/v1/cv/preview');
+  });
+
   it('should fetch admin dashboard statistics', () => {
     const mockStats = {
       success: true,
