@@ -224,6 +224,7 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
             <div class="flex flex-col gap-3.5">
               <!-- Submit Button with Explicit Text & State -->
               <button
+                id="login-submit-btn"
                 type="button"
                 (click)="onSubmit()"
                 pButton
