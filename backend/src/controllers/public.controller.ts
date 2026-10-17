@@ -267,6 +267,16 @@ export const submitContactForm = catchAsync(async (req: Request, res: Response) 
  */
 export const downloadCv = catchAsync(async (_req: Request, res: Response) => {
   const fileUrl = await settingsService.downloadCv();
+  if (fileUrl.startsWith('data:')) {
+    const matches = fileUrl.match(/^data:([^;]+);base64,(.+)$/);
+    if (matches) {
+      const mimeType = matches[1];
+      const buffer = Buffer.from(matches[2], 'base64');
+      res.setHeader('Content-Type', mimeType);
+      res.setHeader('Content-Disposition', 'attachment; filename="Dim_Sareach_CV.pdf"');
+      return res.send(buffer);
+    }
+  }
   return res.redirect(fileUrl);
 });
 

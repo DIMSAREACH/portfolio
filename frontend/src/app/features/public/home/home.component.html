@@ -61,6 +61,19 @@
             <i class="pi pi-arrow-right text-xs"></i>
           </a>
 
+          @if (settings()?.enableCvDownload !== false) {
+            <a
+              [href]="cvDownloadUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="hero-download-cv-btn"
+              class="btn-secondary-action inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl font-semibold text-sm"
+            >
+              <i class="pi pi-download text-xs"></i>
+              <span>{{ isKhmer() ? 'ទាញយក CV' : 'Download CV' }}</span>
+            </a>
+          }
+
           <a
             routerLink="/contact"
             id="hero-contact-btn"

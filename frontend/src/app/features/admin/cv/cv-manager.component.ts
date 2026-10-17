@@ -40,7 +40,7 @@ import { ConfirmDialogComponent } from '../../../shared';
               <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-48"></div>
               <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-64"></div>
             </div>
-          } @else if (currentCv()?.cvUrl) {
+          } @else if (cvDisplayUrl()) {
             <div class="p-6 rounded-2xl border border-emerald-200 dark:border-emerald-800/50 bg-emerald-50/40 dark:bg-emerald-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div class="flex items-center gap-4">
                 <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
@@ -51,14 +51,14 @@ import { ConfirmDialogComponent } from '../../../shared';
                 <div>
                   <div class="flex items-center gap-2">
                     <span class="font-bold text-sm text-slate-900 dark:text-white" [class.font-khmer]="isKhmer()">
-                      {{ isKhmer() ? 'ឯកសារ CV ផ្លូវការ' : 'Official CV Document' }}
+                      {{ cvFileName() }}
                     </span>
                     <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300" [class.font-khmer]="isKhmer()">
                       {{ isKhmer() ? 'សកម្ម' : 'Active' }}
                     </span>
                   </div>
                   <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-mono truncate max-w-sm">
-                    {{ currentCv()?.cvUrl }}
+                    {{ cvDisplayUrl() }}
                   </div>
                   @if (currentCv()?.updatedAt) {
                     <div class="text-xs text-slate-400 mt-1" [class.font-khmer]="isKhmer()">
@@ -71,7 +71,20 @@ import { ConfirmDialogComponent } from '../../../shared';
               <!-- Action Buttons -->
               <div class="flex items-center gap-2 self-start sm:self-auto">
                 <a
-                  [href]="currentCv()?.cvUrl"
+                  [href]="publicCvDownloadUrl()"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-xs cursor-pointer"
+                  [class.font-khmer]="isKhmer()"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  <span>{{ isKhmer() ? 'ទាញយក CV' : 'Download CV' }}</span>
+                </a>
+
+                <a
+                  [href]="cvDisplayUrl()"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-all shadow-xs cursor-pointer"
@@ -172,7 +185,19 @@ export class CvManagerComponent implements OnInit {
   public readonly languageService = inject(LanguageService, { optional: true });
   public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
 
-  public readonly currentCv = signal<{ cvUrl?: string; cvPublicId?: string; updatedAt?: string } | null>(null);
+  public readonly currentCv = signal<{
+    cvUrl?: string;
+    url?: string;
+    cvPublicId?: string;
+    publicId?: string;
+    fileName?: string;
+    downloadCount?: number;
+    updatedAt?: string;
+  } | null>(null);
+
+  public readonly cvDisplayUrl = computed(() => this.currentCv()?.cvUrl || this.currentCv()?.url || '');
+  public readonly cvFileName = computed(() => this.currentCv()?.fileName || 'Dim_Sareach_CV.pdf');
+  public readonly publicCvDownloadUrl = computed(() => this.portfolioService.getCvDownloadUrl());
   public readonly isLoading = signal<boolean>(true);
   public readonly isUploading = signal<boolean>(false);
 

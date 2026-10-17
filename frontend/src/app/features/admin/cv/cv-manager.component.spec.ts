@@ -13,6 +13,7 @@ describe('CvManagerComponent', () => {
     getAdminCv: ReturnType<typeof vi.fn>;
     uploadAdminCv: ReturnType<typeof vi.fn>;
     deleteAdminCv: ReturnType<typeof vi.fn>;
+    getCvDownloadUrl: ReturnType<typeof vi.fn>;
   };
   let notificationServiceMock: {
     showSuccess: ReturnType<typeof vi.fn>;
@@ -25,6 +26,7 @@ describe('CvManagerComponent', () => {
   const mockCvData = {
     cvUrl: 'https://cloudinary.com/resume.pdf',
     cvPublicId: 'resume_123',
+    fileName: 'resume.pdf',
     updatedAt: '2026-09-01T00:00:00Z',
   };
 
@@ -33,6 +35,7 @@ describe('CvManagerComponent', () => {
       getAdminCv: vi.fn().mockReturnValue(of({ success: true, data: mockCvData })),
       uploadAdminCv: vi.fn().mockReturnValue(of({ success: true, data: { cvUrl: 'https://cloudinary.com/new.pdf' } })),
       deleteAdminCv: vi.fn().mockReturnValue(of({ success: true, data: null })),
+      getCvDownloadUrl: vi.fn().mockReturnValue('http://localhost:5000/api/v1/cv/download'),
     };
 
     notificationServiceMock = {

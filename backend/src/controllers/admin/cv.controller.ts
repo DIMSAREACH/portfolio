@@ -9,7 +9,16 @@ export class CvController {
    */
   getCv = catchAsync(async (_req: Request, res: Response): Promise<void> => {
     const cv = await cvService.getCv();
-    sendSuccess(res, cv, 'CV information retrieved successfully');
+    const data = cv
+      ? {
+          url: cv.url,
+          cvUrl: cv.url,
+          publicId: cv.publicId,
+          cvPublicId: cv.publicId,
+          fileName: cv.fileName,
+        }
+      : null;
+    sendSuccess(res, data, 'CV information retrieved successfully');
   });
 
   /**
@@ -17,7 +26,14 @@ export class CvController {
    */
   uploadCv = catchAsync(async (req: Request, res: Response): Promise<void> => {
     const cv = await cvService.uploadCv(req.file);
-    sendCreated(res, cv, 'CV uploaded and activated successfully');
+    const data = {
+      url: cv.url,
+      cvUrl: cv.url,
+      publicId: cv.publicId,
+      cvPublicId: cv.publicId,
+      fileName: cv.fileName,
+    };
+    sendCreated(res, data, 'CV uploaded and activated successfully');
   });
 
   /**
