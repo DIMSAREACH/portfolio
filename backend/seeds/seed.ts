@@ -38,9 +38,9 @@ export interface SeedOptions {
 }
 
 export const ADMIN_DEFAULTS = {
-  email: 'admin@portfolio.dev',
-  password: 'Admin@123456',
-  fullName: 'Dim Sareach',
+  email: process.env.INITIAL_ADMIN_EMAIL || 'admin@portfolio.dev',
+  password: process.env.INITIAL_ADMIN_PASSWORD || 'Admin@123456',
+  fullName: process.env.INITIAL_ADMIN_NAME || 'Dim Sareach',
   role: 'admin' as const,
 };
 

@@ -46,6 +46,15 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     );
   }
 
+  // Security guard: Prevent deploying to production with default development secrets
+  if (env.NODE_ENV === 'production') {
+    if (jwtSecret.includes('change-this') || jwtRefreshSecret.includes('change-this')) {
+      throw new Error(
+        'SECURITY VIOLATION: Default development JWT secrets cannot be used in production. Please set unique, cryptographically strong secrets in your production environment variables.',
+      );
+    }
+  }
+
   return {
     NODE_ENV: (env.NODE_ENV as Config['NODE_ENV']) || 'development',
     PORT: env.PORT ? parseInt(env.PORT, 10) : 3000,

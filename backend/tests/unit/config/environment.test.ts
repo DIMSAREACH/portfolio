@@ -70,4 +70,30 @@ describe('Environment Configuration Module', () => {
       'Missing required environment variable(s): JWT_REFRESH_SECRET',
     );
   });
+
+  it('should throw security error in production mode when default secrets are used', () => {
+    const prodEnvWithDefaultSecrets: NodeJS.ProcessEnv = {
+      ...validMockEnv,
+      NODE_ENV: 'production',
+      JWT_SECRET: 'your-super-secret-jwt-key-change-this',
+      JWT_REFRESH_SECRET: 'strong-secret',
+    };
+
+    expect(() => loadConfig(prodEnvWithDefaultSecrets)).toThrow(
+      /SECURITY VIOLATION: Default development JWT secrets cannot be used in production/,
+    );
+  });
+
+  it('should succeed in production mode when strong secrets are provided', () => {
+    const prodEnvWithStrongSecrets: NodeJS.ProcessEnv = {
+      ...validMockEnv,
+      NODE_ENV: 'production',
+      JWT_SECRET: 'c679a0293db27a81389c9213bc5412cf88c7d853e3518a2d',
+      JWT_REFRESH_SECRET: 'f928e182390ab1289c0912bc5812cf88c7d853e3518a2d',
+    };
+
+    const config = loadConfig(prodEnvWithStrongSecrets);
+    expect(config.NODE_ENV).toBe('production');
+    expect(config.JWT_SECRET).toBe('c679a0293db27a81389c9213bc5412cf88c7d853e3518a2d');
+  });
 });
