@@ -10,7 +10,8 @@
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "test": "jest --passWithNoTests",
-    "seed": "ts-node seeds/seed.ts"
+    "seed": "ts-node seeds/seed.ts",
+    "seed:sync": "ts-node seeds/sync-db.ts"
   },
   "keywords": [
     "portfolio",
