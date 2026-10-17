@@ -1,5 +1,6 @@
 import { UploadApiOptions, UploadApiResponse } from 'cloudinary';
 import cloudinary from '../config/cloudinary';
+import config from '../config/environment';
 import logger from '../utils/logger';
 
 export interface CloudinaryUploadResult {
@@ -59,6 +60,25 @@ export class CloudinaryService {
     folder: string,
     publicId?: string,
   ): Promise<CloudinaryUploadResult> {
+    const isMockOrDev =
+      config.NODE_ENV === 'development' &&
+      (!config.CLOUDINARY_API_KEY ||
+        config.CLOUDINARY_API_KEY.startsWith('dev_') ||
+        config.CLOUDINARY_API_KEY.startsWith('your-') ||
+        config.CLOUDINARY_CLOUD_NAME === 'dev_cloud');
+
+    if (isMockOrDev) {
+      const base64 = fileBuffer.toString('base64');
+      const dataUri = `data:image/jpeg;base64,${base64}`;
+      return {
+        url: dataUri,
+        secureUrl: dataUri,
+        publicId: `local_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`,
+        bytes: fileBuffer.length,
+        resourceType: 'image',
+      };
+    }
+
     const options: UploadApiOptions = {
       folder,
       resource_type: 'image',
@@ -69,7 +89,23 @@ export class CloudinaryService {
       options.public_id = publicId;
     }
 
-    return this.uploadFromBuffer(fileBuffer, options);
+    try {
+      return await this.uploadFromBuffer(fileBuffer, options);
+    } catch (err) {
+      if (config.NODE_ENV === 'development') {
+        logger.warn('Cloudinary upload failed in development mode, falling back to data URI:', err);
+        const base64 = fileBuffer.toString('base64');
+        const dataUri = `data:image/jpeg;base64,${base64}`;
+        return {
+          url: dataUri,
+          secureUrl: dataUri,
+          publicId: `local_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`,
+          bytes: fileBuffer.length,
+          resourceType: 'image',
+        };
+      }
+      throw err;
+    }
   }
 
   /**
@@ -80,6 +116,25 @@ export class CloudinaryService {
     folder: string,
     publicId?: string,
   ): Promise<CloudinaryUploadResult> {
+    const isMockOrDev =
+      config.NODE_ENV === 'development' &&
+      (!config.CLOUDINARY_API_KEY ||
+        config.CLOUDINARY_API_KEY.startsWith('dev_') ||
+        config.CLOUDINARY_API_KEY.startsWith('your-') ||
+        config.CLOUDINARY_CLOUD_NAME === 'dev_cloud');
+
+    if (isMockOrDev) {
+      const base64 = fileBuffer.toString('base64');
+      const dataUri = `data:application/pdf;base64,${base64}`;
+      return {
+        url: dataUri,
+        secureUrl: dataUri,
+        publicId: `local_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`,
+        bytes: fileBuffer.length,
+        resourceType: 'raw',
+      };
+    }
+
     const options: UploadApiOptions = {
       folder,
       resource_type: 'raw',
@@ -89,7 +144,23 @@ export class CloudinaryService {
       options.public_id = publicId;
     }
 
-    return this.uploadFromBuffer(fileBuffer, options);
+    try {
+      return await this.uploadFromBuffer(fileBuffer, options);
+    } catch (err) {
+      if (config.NODE_ENV === 'development') {
+        logger.warn('Cloudinary PDF upload failed in development mode, falling back to data URI:', err);
+        const base64 = fileBuffer.toString('base64');
+        const dataUri = `data:application/pdf;base64,${base64}`;
+        return {
+          url: dataUri,
+          secureUrl: dataUri,
+          publicId: `local_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`,
+          bytes: fileBuffer.length,
+          resourceType: 'raw',
+        };
+      }
+      throw err;
+    }
   }
 
   /**
@@ -99,6 +170,10 @@ export class CloudinaryService {
     publicId: string,
     resourceType: 'image' | 'raw' | 'video' = 'image',
   ): Promise<CloudinaryDeleteResult> {
+    if (publicId.startsWith('local_')) {
+      return { result: 'ok' };
+    }
+
     try {
       const result = await cloudinary.uploader.destroy(publicId, {
         resource_type: resourceType,

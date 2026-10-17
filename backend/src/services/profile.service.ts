@@ -46,6 +46,18 @@ async function safeDeleteCloudinaryFile(url: string): Promise<void> {
   }
 }
 
+function parseBilingualField(val: unknown): BilingualField | undefined {
+  if (!val) return undefined;
+  if (typeof val === 'string') {
+    try {
+      return JSON.parse(val);
+    } catch {
+      return { en: val, kh: val };
+    }
+  }
+  return val as BilingualField;
+}
+
 export class ProfileService {
   /**
    * Get current profile (or null if none exists)
@@ -87,49 +99,59 @@ export class ProfileService {
       data.aboutImage = uploadResult.secureUrl;
     }
 
+    const fullName = parseBilingualField(data.fullName);
+    const title = parseBilingualField(data.title);
+    const introduction = parseBilingualField(data.introduction);
+    const about = parseBilingualField(data.about);
+    const location = parseBilingualField(data.location);
+    const professionalSummary = parseBilingualField(data.professionalSummary);
+    const careerInterests = parseBilingualField(data.careerInterests);
+    const background = parseBilingualField(data.background);
+    const goals = parseBilingualField(data.goals);
+
     if (profile) {
       // Update existing profile
-      if (data.fullName) {
+      if (fullName) {
         profile.fullName = {
-          en: data.fullName.en ?? profile.fullName.en,
-          kh: data.fullName.kh ?? profile.fullName.kh,
+          en: fullName.en ?? profile.fullName.en,
+          kh: fullName.kh ?? profile.fullName.kh,
         };
       }
-      if (data.title) {
+      if (title) {
         profile.title = {
-          en: data.title.en ?? profile.title.en,
-          kh: data.title.kh ?? profile.title.kh,
+          en: title.en ?? profile.title.en,
+          kh: title.kh ?? profile.title.kh,
         };
       }
-      if (data.introduction) {
+      if (introduction) {
         profile.introduction = {
-          en: data.introduction.en ?? profile.introduction.en,
-          kh: data.introduction.kh ?? profile.introduction.kh,
+          en: introduction.en ?? profile.introduction.en,
+          kh: introduction.kh ?? profile.introduction.kh,
         };
       }
-      if (data.about) {
+      if (about) {
         profile.about = {
-          en: data.about.en ?? profile.about.en,
-          kh: data.about.kh ?? profile.about.kh,
+          en: about.en ?? profile.about.en,
+          kh: about.kh ?? profile.about.kh,
         };
       }
-      if (data.professionalSummary !== undefined) {
-        profile.professionalSummary = data.professionalSummary;
+      if (professionalSummary !== undefined) {
+        profile.professionalSummary = professionalSummary;
       }
-      if (data.careerInterests !== undefined) {
-        profile.careerInterests = data.careerInterests;
+      if (careerInterests !== undefined) {
+        profile.careerInterests = careerInterests;
       }
-      if (data.background !== undefined) {
-        profile.background = data.background;
+      if (background !== undefined) {
+        profile.background = background;
       }
       if (data.strengths !== undefined) {
         profile.strengths = data.strengths;
       }
-      if (data.goals !== undefined) {
-        profile.goals = data.goals;
+      if (goals !== undefined) {
+        profile.goals = goals;
       }
-      if (data.location !== undefined) {
-        profile.location = data.location;
+      if (location !== undefined) {
+        profile.location = location;
       }
       if (data.email !== undefined) {
         profile.email = data.email;
@@ -148,7 +170,18 @@ export class ProfileService {
     }
 
     // Create new profile if none exists
-    profile = new Profile(data);
+    const newProfileData: Record<string, unknown> = { ...data };
+    if (fullName) newProfileData.fullName = fullName;
+    if (title) newProfileData.title = title;
+    if (introduction) newProfileData.introduction = introduction;
+    if (about) newProfileData.about = about;
+    if (location) newProfileData.location = location;
+    if (professionalSummary) newProfileData.professionalSummary = professionalSummary;
+    if (careerInterests) newProfileData.careerInterests = careerInterests;
+    if (background) newProfileData.background = background;
+    if (goals) newProfileData.goals = goals;
+
+    profile = new Profile(newProfileData);
     return await profile.save();
   }
 }

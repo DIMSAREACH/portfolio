@@ -149,6 +149,7 @@ import { AvatarModule } from 'primeng/avatar';
                   id="profile-image-url-input"
                   type="url"
                   formControlName="profileImage"
+                  (input)="onDirectProfileUrlInput()"
                   placeholder="https://..."
                   class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
@@ -194,6 +195,7 @@ import { AvatarModule } from 'primeng/avatar';
                   id="about-image-url-input"
                   type="url"
                   formControlName="aboutImage"
+                  (input)="onDirectAboutUrlInput()"
                   placeholder="https://..."
                   class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
@@ -314,6 +316,16 @@ export class ProfileFormComponent implements OnInit {
     this.profileForm.markAsDirty();
   }
 
+  public onDirectProfileUrlInput(): void {
+    this.selectedProfileFile = null;
+    this.profileForm.markAsDirty();
+  }
+
+  public onDirectAboutUrlInput(): void {
+    this.selectedAboutFile = null;
+    this.profileForm.markAsDirty();
+  }
+
   public readonly profileForm: FormGroup = this.fb.group({
     fullName: [{ en: '', kh: '' }, Validators.required],
     title: [{ en: '', kh: '' }, Validators.required],
@@ -370,22 +382,24 @@ export class ProfileFormComponent implements OnInit {
 
   public onProfileImageSelected(file: File): void {
     this.selectedProfileFile = file;
-    this.profileForm.patchValue({ profileImage: 'file://' + file.name });
+    this.profileForm.markAsDirty();
   }
 
   public onProfileImageRemoved(): void {
     this.selectedProfileFile = null;
     this.profileForm.patchValue({ profileImage: '' });
+    this.profileForm.markAsDirty();
   }
 
   public onAboutImageSelected(file: File): void {
     this.selectedAboutFile = file;
-    this.profileForm.patchValue({ aboutImage: 'file://' + file.name });
+    this.profileForm.markAsDirty();
   }
 
   public onAboutImageRemoved(): void {
     this.selectedAboutFile = null;
     this.profileForm.patchValue({ aboutImage: '' });
+    this.profileForm.markAsDirty();
   }
 
   public onSubmit(): void {
@@ -403,6 +417,67 @@ export class ProfileFormComponent implements OnInit {
     this.isSubmitting.set(true);
     const formVal = this.profileForm.value;
 
+    // If binary image files are selected, send via FormData multipart
+    if (this.selectedProfileFile || this.selectedAboutFile) {
+      const formData = new FormData();
+      formData.append('fullName', JSON.stringify({
+        en: formVal.fullName.en,
+        kh: formVal.fullName.kh || formVal.fullName.en,
+      }));
+      formData.append('title', JSON.stringify({
+        en: formVal.title.en,
+        kh: formVal.title.kh || formVal.title.en,
+      }));
+      formData.append('introduction', JSON.stringify({
+        en: formVal.introduction.en,
+        kh: formVal.introduction.kh || formVal.introduction.en,
+      }));
+      formData.append('about', JSON.stringify({
+        en: formVal.about.en,
+        kh: formVal.about.kh || formVal.about.en,
+      }));
+      if (formVal.email) formData.append('email', formVal.email);
+      if (formVal.phone) formData.append('phone', formVal.phone);
+      if (formVal.location) formData.append('location', JSON.stringify(formVal.location));
+      if (formVal.professionalSummary) formData.append('professionalSummary', JSON.stringify(formVal.professionalSummary));
+      if (formVal.careerInterests) formData.append('careerInterests', JSON.stringify(formVal.careerInterests));
+      if (formVal.background) formData.append('background', JSON.stringify(formVal.background));
+      if (formVal.goals) formData.append('goals', JSON.stringify(formVal.goals));
+
+      if (this.selectedProfileFile) {
+        formData.append('profileImage', this.selectedProfileFile);
+      } else if (formVal.profileImage && !formVal.profileImage.startsWith('file://')) {
+        formData.append('profileImage', formVal.profileImage);
+      }
+
+      if (this.selectedAboutFile) {
+        formData.append('aboutImage', this.selectedAboutFile);
+      } else if (formVal.aboutImage && !formVal.aboutImage.startsWith('file://')) {
+        formData.append('aboutImage', formVal.aboutImage);
+      }
+
+      this.portfolioService.upsertAdminProfile(formData).subscribe({
+        next: (res) => {
+          this.isSubmitting.set(false);
+          this.selectedProfileFile = null;
+          this.selectedAboutFile = null;
+          this.notificationService.showSuccess('Profile updated successfully!');
+          if (res.data) {
+            this.profileForm.patchValue({
+              profileImage: res.data.profileImage || '',
+              aboutImage: res.data.aboutImage || '',
+            });
+          }
+        },
+        error: (err) => {
+          this.isSubmitting.set(false);
+          this.notificationService.showError(err?.error?.message || 'Failed to save profile.');
+        },
+      });
+      return;
+    }
+
+    // Otherwise, send JSON payload
     const payload: Partial<Profile> = {
       fullName: {
         en: formVal.fullName.en,

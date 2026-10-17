@@ -70,20 +70,39 @@ describe('ProfileFormComponent', () => {
     expect(component.profileForm.get('email')?.value).toBe('developer@example.com');
   });
 
-  it('should handle profile and about image selection and removal', () => {
+  it('should handle profile and about image selection, removal, and direct url typing', () => {
     const file = new File(['dummy'], 'pic.jpg', { type: 'image/jpeg' });
     component.onProfileImageSelected(file);
     expect(component.selectedProfileFile).toBe(file);
-    expect(component.profileForm.get('profileImage')?.value).toBe('file://pic.jpg');
 
+    component.onDirectProfileUrlInput();
+    expect(component.selectedProfileFile).toBeNull();
+
+    component.onProfileImageSelected(file);
     component.onProfileImageRemoved();
     expect(component.selectedProfileFile).toBeNull();
     expect(component.profileForm.get('profileImage')?.value).toBe('');
 
     component.onAboutImageSelected(file);
     expect(component.selectedAboutFile).toBe(file);
+    component.onDirectAboutUrlInput();
+    expect(component.selectedAboutFile).toBeNull();
+
+    component.onAboutImageSelected(file);
     component.onAboutImageRemoved();
     expect(component.selectedAboutFile).toBeNull();
+    expect(component.profileForm.get('aboutImage')?.value).toBe('');
+  });
+
+  it('should submit FormData when image files are selected', () => {
+    const file = new File(['dummy'], 'avatar.jpg', { type: 'image/jpeg' });
+    component.onProfileImageSelected(file);
+
+    component.onSubmit();
+
+    expect(portfolioServiceMock.upsertAdminProfile).toHaveBeenCalledWith(expect.any(FormData));
+    expect(notificationServiceMock.showSuccess).toHaveBeenCalledWith('Profile updated successfully!');
+    expect(component.selectedProfileFile).toBeNull();
   });
 
   it('should show error when required fullName is missing on submit', () => {
