@@ -155,6 +155,32 @@ import { AvatarModule } from 'primeng/avatar';
                 />
               </div>
 
+              <!-- Live Circular Avatar Preview Badge -->
+              @if (profileForm.get('profileImage')?.value) {
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/80 flex items-center gap-3.5">
+                  <div class="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-indigo-500/40 shrink-0 shadow-sm bg-slate-100 dark:bg-slate-700">
+                    <img
+                      [src]="profileForm.get('profileImage')?.value"
+                      alt="Avatar Circular Preview"
+                      class="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-xs font-bold text-slate-800 dark:text-slate-200">
+                        Public Avatar Preview
+                      </span>
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-semibold border border-indigo-200/50 dark:border-indigo-800/50">
+                        Hero & Nav
+                      </span>
+                    </div>
+                    <span class="block text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                      Circular top-centered crop displayed across public pages
+                    </span>
+                  </div>
+                </div>
+              }
+
               <!-- Quick Demo Preset Avatars with PrimeNG p-avatar -->
               <div class="pt-1">
                 <span class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
@@ -200,6 +226,32 @@ import { AvatarModule } from 'primeng/avatar';
                   class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
               </div>
+
+              <!-- Live About Section Card Preview Badge -->
+              @if (profileForm.get('aboutImage')?.value) {
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/80 flex items-center gap-3.5">
+                  <div class="relative w-12 h-12 rounded-xl overflow-hidden ring-2 ring-emerald-500/40 shrink-0 shadow-sm bg-slate-100 dark:bg-slate-700">
+                    <img
+                      [src]="profileForm.get('aboutImage')?.value"
+                      alt="About Photo Preview"
+                      class="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-xs font-bold text-slate-800 dark:text-slate-200">
+                        About Card Preview
+                      </span>
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-200/50 dark:border-emerald-800/50">
+                        About Page
+                      </span>
+                    </div>
+                    <span class="block text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                      Showcase photo displayed on the personal narrative card
+                    </span>
+                  </div>
+                </div>
+              }
             </div>
           </div>
         </div>

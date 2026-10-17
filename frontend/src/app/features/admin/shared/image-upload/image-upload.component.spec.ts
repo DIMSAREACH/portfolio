@@ -73,15 +73,33 @@ describe('ImageUploadComponent', () => {
     expect(component.errorMessage).toBeNull();
   });
 
-  it('should reset preview and emit imageRemoved on removeImage()', () => {
+  it('should toggle fitMode between contain and cover', () => {
+    expect(component.fitMode).toBe('contain');
+    component.toggleFitMode();
+    expect(component.fitMode).toBe('cover');
+    component.toggleFitMode();
+    expect(component.fitMode).toBe('contain');
+  });
+
+  it('should open and close lightbox modal', () => {
+    expect(component.isLightboxOpen).toBe(false);
+    component.openLightbox();
+    expect(component.isLightboxOpen).toBe(true);
+    component.closeLightbox();
+    expect(component.isLightboxOpen).toBe(false);
+  });
+
+  it('should close lightbox and reset preview on removeImage()', () => {
     const removeSpy = vi.spyOn(component.imageRemoved, 'emit');
     component.previewUrl = 'data:image/png;base64,1234';
     component.value = 'https://example.com/image.jpg';
+    component.isLightboxOpen = true;
 
     component.removeImage();
 
     expect(component.previewUrl).toBeNull();
     expect(component.value).toBeUndefined();
+    expect(component.isLightboxOpen).toBe(false);
     expect(removeSpy).toHaveBeenCalled();
   });
 
@@ -103,3 +121,4 @@ describe('ImageUploadComponent', () => {
     expect(component.isDragging).toBe(false);
   });
 });
+
