@@ -48,7 +48,7 @@ describe('Public CV Download & Preview API Integration Tests', () => {
       expect(res.headers['content-disposition']).toContain('inline; filename="Dim_Sareach_CV.pdf"');
     });
 
-    it('should return 404 when CV downloads are disabled or CV file is not found', async () => {
+    it('should return 404 when CV downloads are disabled or CV file is not found (API request)', async () => {
       jest
         .spyOn(settingsService, 'downloadCv')
         .mockRejectedValue(new NotFoundError('CV file is not available for download'));
@@ -58,6 +58,19 @@ describe('Public CV Download & Preview API Integration Tests', () => {
       expect(res.status).toBe(404);
       expect(res.body.success).toBe(false);
       expect(res.body.message).toBe('CV file is not available for download');
+    });
+
+    it('should redirect (302) to frontend when browser navigation (text/html) encounters missing CV', async () => {
+      jest
+        .spyOn(settingsService, 'downloadCv')
+        .mockRejectedValue(new NotFoundError('CV file is not available for download'));
+
+      const res = await request(app)
+        .get('/api/v1/cv/download')
+        .set('Accept', 'text/html,application/xhtml+xml');
+
+      expect(res.status).toBe(302);
+      expect(res.headers.location).toContain('/about?cv_unavailable=true');
     });
   });
 

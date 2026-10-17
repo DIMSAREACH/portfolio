@@ -357,6 +357,11 @@ describe('Public API Integration Tests (/api/v1/*)', () => {
         siteTitle: { en: 'Developer Portfolio', kh: 'គេហទំព័រផ្ទាល់ខ្លួន' },
         siteDescription: { en: 'Full stack engineer portfolio', kh: 'គេហទំព័រវិស្វករ' },
         enableCvDownload: true,
+        cvFile: {
+          url: 'https://example.com/cv.pdf',
+          publicId: 'cv1',
+          fileName: 'cv.pdf',
+        },
         enableContactForm: true,
         emailNotifications: true,
         notificationEmail: 'private-admin@example.com',
@@ -382,6 +387,22 @@ describe('Public API Integration Tests (/api/v1/*)', () => {
       expect(res.body.data.emailNotifications).toBeUndefined();
       expect(res.body.data.maintenanceMode).toBeUndefined();
       expect(res.body.data.cvDownloadCount).toBeUndefined();
+    });
+
+    it('should return enableCvDownload as false when cvFile is not present', async () => {
+      const mockSettingsWithoutCv: any = {
+        siteTitle: { en: 'Developer Portfolio', kh: 'គេហទំព័រផ្ទាល់ខ្លួន' },
+        siteDescription: { en: 'Full stack engineer portfolio', kh: 'គេហទំព័រវិស្វករ' },
+        enableCvDownload: true,
+        enableContactForm: true,
+      };
+
+      jest.spyOn(settingsService, 'getSettings').mockResolvedValue(mockSettingsWithoutCv);
+
+      const res = await request(app).get('/api/v1/settings/public');
+
+      expect(res.status).toBe(200);
+      expect(res.body.data.enableCvDownload).toBe(false);
     });
   });
 });

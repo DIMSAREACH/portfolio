@@ -150,6 +150,7 @@ export class CvService {
     };
 
     settings.cvFile = cvData;
+    settings.enableCvDownload = true;
     await settings.save();
 
     return cvData;
@@ -171,6 +172,7 @@ export class CvService {
     }
 
     settings.cvFile = undefined;
+    settings.enableCvDownload = false;
     await settings.save();
   }
 }

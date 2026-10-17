@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
-import { Experience, ExperienceType } from '../../../core/models';
+import { Experience, ExperienceType, Settings } from '../../../core/models';
 import {
   SkeletonLoaderComponent,
   EmptyStateComponent,
@@ -81,17 +81,19 @@ import { AnimateOnScrollModule } from 'primeng/animateonscroll';
             </div>
           }
 
-          <a
-            [href]="cvDownloadUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-600/20 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/50 hover:translate-y-[-1px]"
-          >
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <span>{{ isKhmer() ? 'ទាញយកប្រវត្តិរូបសង្ខេប (CV)' : 'Download Full CV (PDF)' }}</span>
-          </a>
+          @if (settings()?.enableCvDownload) {
+            <a
+              [href]="cvDownloadUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-600/20 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/50 hover:translate-y-[-1px]"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>{{ isKhmer() ? 'ទាញយកប្រវត្តិរូបសង្ខេប (CV)' : 'Download Full CV (PDF)' }}</span>
+            </a>
+          }
         </div>
       </section>
 
@@ -442,6 +444,7 @@ export class ExperienceComponent implements OnInit {
   public readonly experiences = signal<Experience[]>([]);
   public readonly isLoading = signal<boolean>(true);
   public readonly error = signal<string | null>(null);
+  public readonly settings = signal<Settings | null>(null);
 
   public readonly selectedType = signal<'all' | ExperienceType>('all');
   public readonly searchQuery = signal<string>('');
@@ -525,6 +528,17 @@ export class ExperienceComponent implements OnInit {
   public loadExperiences(): void {
     this.isLoading.set(true);
     this.error.set(null);
+
+    this.portfolioService.getSettings().subscribe({
+      next: (res) => {
+        if (res && res.data) {
+          this.settings.set(res.data);
+        }
+      },
+      error: () => {
+        // Silently continue if settings fail to load
+      },
+    });
 
     this.portfolioService.getExperiences().subscribe({
       next: (response) => {

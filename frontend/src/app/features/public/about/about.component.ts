@@ -195,7 +195,7 @@ import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 
               <!-- Action Buttons -->
               <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-2.5">
-                @if (settings()?.enableCvDownload !== false) {
+                @if (settings()?.enableCvDownload) {
                   <a
                     [href]="cvDownloadUrl"
                     target="_blank"

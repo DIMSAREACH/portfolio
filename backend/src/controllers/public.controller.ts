@@ -19,6 +19,7 @@ import { CategoryType } from '../models/Category';
 import { ExperienceType } from '../models/Experience';
 import { CertificationType } from '../models/Certification';
 import Settings from '../models/Settings';
+import config from '../config/environment';
 
 /**
  * 1. GET /api/v1/profile
@@ -207,10 +208,11 @@ export const getSocialLinks = catchAsync(async (_req: Request, res: Response) =>
 export const getPublicSettings = catchAsync(async (_req: Request, res: Response) => {
   const settings = await settingsService.getSettings();
 
+  const hasCv = Boolean(settings.cvFile?.url);
   const publicSettings = {
     siteTitle: settings.siteTitle,
     siteDescription: settings.siteDescription,
-    enableCvDownload: settings.enableCvDownload,
+    enableCvDownload: Boolean(settings.enableCvDownload && hasCv),
     enableContactForm: settings.enableContactForm,
   };
 
@@ -268,19 +270,27 @@ export const submitContactForm = catchAsync(async (req: Request, res: Response) 
  */
 export const downloadCv = catchAsync(async (req: Request, res: Response) => {
   const isInline = req.query.inline === 'true' || req.query.preview === 'true';
-  const fileUrl = await settingsService.downloadCv();
-  if (fileUrl.startsWith('data:')) {
-    const matches = fileUrl.match(/^data:([^;]+);base64,(.+)$/);
-    if (matches) {
-      const mimeType = matches[1];
-      const buffer = Buffer.from(matches[2], 'base64');
-      res.setHeader('Content-Type', mimeType);
-      const disposition = isInline ? 'inline' : 'attachment';
-      res.setHeader('Content-Disposition', `${disposition}; filename="Dim_Sareach_CV.pdf"`);
-      return res.send(buffer);
+  try {
+    const fileUrl = await settingsService.downloadCv();
+    if (fileUrl.startsWith('data:')) {
+      const matches = fileUrl.match(/^data:([^;]+);base64,(.+)$/);
+      if (matches) {
+        const mimeType = matches[1];
+        const buffer = Buffer.from(matches[2], 'base64');
+        res.setHeader('Content-Type', mimeType);
+        const disposition = isInline ? 'inline' : 'attachment';
+        res.setHeader('Content-Disposition', `${disposition}; filename="Dim_Sareach_CV.pdf"`);
+        return res.send(buffer);
+      }
     }
+    return res.redirect(fileUrl);
+  } catch (err) {
+    if (req.headers.accept?.includes('text/html') && !req.xhr) {
+      const clientUrl = config.CORS_ORIGIN || 'http://localhost:4200';
+      return res.redirect(`${clientUrl}/about?cv_unavailable=true`);
+    }
+    throw err;
   }
-  return res.redirect(fileUrl);
 });
 
 /**

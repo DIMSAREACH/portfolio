@@ -9,7 +9,7 @@ import {
   LanguageService,
   SupportedLanguage,
 } from '../../../core/services/language.service';
-import { Experience, ApiResponse } from '../../../core/models';
+import { Experience, ApiResponse, Settings } from '../../../core/models';
 
 describe('ExperienceComponent', () => {
   let component: ExperienceComponent;
@@ -18,6 +18,7 @@ describe('ExperienceComponent', () => {
   let portfolioServiceMock: {
     getExperiences: ReturnType<typeof vi.fn>;
     getCvDownloadUrl: ReturnType<typeof vi.fn>;
+    getSettings: ReturnType<typeof vi.fn>;
   };
 
   let languageServiceMock: {
@@ -93,6 +94,7 @@ describe('ExperienceComponent', () => {
     portfolioServiceMock = {
       getExperiences: vi.fn().mockReturnValue(of(mockApiResponse)),
       getCvDownloadUrl: vi.fn().mockReturnValue('/api/v1/cv/download'),
+      getSettings: vi.fn().mockReturnValue(of({ success: true, data: { enableCvDownload: true } })),
     };
 
     languageServiceMock = {
@@ -235,6 +237,21 @@ describe('ExperienceComponent', () => {
   it('should provide CV download URL from portfolio service', () => {
     expect(component.cvDownloadUrl).toBe('/api/v1/cv/download');
     expect(portfolioServiceMock.getCvDownloadUrl).toHaveBeenCalled();
+  });
+
+  it('should load settings and conditionally show/hide CV download button', () => {
+    fixture.detectChanges();
+    expect(portfolioServiceMock.getSettings).toHaveBeenCalled();
+    expect(component.settings()?.enableCvDownload).toBe(true);
+
+    const btnWithCv = fixture.nativeElement.querySelector('a[href="/api/v1/cv/download"]');
+    expect(btnWithCv).toBeTruthy();
+
+    component.settings.set({ enableCvDownload: false } as unknown as Settings);
+    fixture.detectChanges();
+
+    const btnWithoutCv = fixture.nativeElement.querySelector('a[href="/api/v1/cv/download"]');
+    expect(btnWithoutCv).toBeNull();
   });
 
   it('should handle CascadeSelect change, clear, and type filtering', () => {

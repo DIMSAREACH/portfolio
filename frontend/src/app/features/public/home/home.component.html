@@ -61,7 +61,7 @@
             <i class="pi pi-arrow-right text-xs"></i>
           </a>
 
-          @if (settings()?.enableCvDownload !== false) {
+          @if (settings()?.enableCvDownload) {
             <a
               [href]="cvDownloadUrl"
               target="_blank"
