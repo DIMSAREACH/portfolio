@@ -231,7 +231,7 @@ describe('Database Seed Script (backend/seeds/seed.ts)', () => {
         certifications: 2,
         socialLinks: 3,
         settings: 1,
-        projects: 3,
+        projects: 6,
         blogPosts: 3,
         messages: 2,
         media: 2,

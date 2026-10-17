@@ -685,6 +685,156 @@ export const getProjectsSeed = (categoryMap: Map<string, Types.ObjectId>) => [
     order: 3,
     viewCount: 215,
   },
+  {
+    title: {
+      en: 'Smart Campus Mobile Portal',
+      kh: 'កម្មវិធីទូរស័ព្ទ Smart Campus សម្រាប់និស្សិត',
+    },
+    slug: 'smart-campus-mobile-portal',
+    shortDescription: {
+      en: 'Cross-platform mobile application for university students with QR attendance, timetable sync, and campus notices.',
+      kh: 'កម្មវិធីទូរស័ព្ទឆ្លាតវៃសម្រាប់និស្សិតសាកលវិទ្យាល័យ ជាមួយការស្កេនវត្តមាន QR កាលវិភាគសិក្សា និងសេចក្តីជូនដំណឹង។',
+    },
+    fullDescription: {
+      en: 'A high-performance cross-platform university portal built with Flutter and Node.js. Enables students to review course schedules, track GPAs, scan cryptographic QR codes for lecture attendance, and receive instant push notifications from university faculty.',
+      kh: 'កម្មវិធីទូរស័ព្ទសម្រាប់សាកលវិទ្យាល័យបង្កើតឡើងដោយ Flutter និង Node.js។ អនុញ្ញាតឱ្យនិស្សិតពិនិត្យកាលវិភាគសិក្សា តាមដានពិន្ទុ GPA ស្កេនកូដ QR សុវត្ថិភាពសម្រាប់វត្តមាន និងទទួលការជូនដំណឹងបន្ទាន់ពីសាកលវិទ្យាល័យ។',
+    },
+    problem: {
+      en: 'University students frequently miss class schedule updates, paper-based attendance tracking leads to fraudulent sign-ins, and grade announcements are slow.',
+      kh: 'និស្សិតតែងតែខកខានការផ្លាស់ប្តូរកាលវិភាគ ការស្រង់វត្តមានលើក្រដាសងាយមានការក្លែងបន្លំ និងការប្រកាសពិន្ទុមានភាពយឺតយ៉ាវ។',
+    },
+    solution: {
+      en: 'Implemented dynamic QR code authentication with geolocation verification, real-time timetable synchronization, and instant Firebase cloud messaging.',
+      kh: 'បានបង្កើតប្រព័ន្ធផ្ទៀងផ្ទាត់ QR កូដស្វ័យប្រវត្តជាមួយទីតាំងភូមិសាស្ត្រ ការធ្វើសមកាលកម្មកាលវិភាគផ្ទាល់ និងការជូនដំណឹងភ្លាមៗតាម Firebase Cloud Messaging។',
+    },
+    features: {
+      en: [
+        'Time-sensitive encrypted QR code attendance scanner',
+        'Offline-capable timetable and exam schedule sync',
+        'Bilingual English/Khmer notification center',
+        'Academic transcripts and GPA calculator',
+      ],
+      kh: [
+        'ការស្កេន QR កូដវត្តមានប្រកបដោយសុវត្ថិភាព និងកំណត់ពេលវេលា',
+        'ការមើលកាលវិភាគ និងការប្រឡងដោយមិនចាំបាច់មានអ៊ីនធឺណិត',
+        'មជ្ឈមណ្ឌលជូនដំណឹងជាពីរភាសា (អង់គ្លេស និងខ្មែរ)',
+        'របាយការណ៍ពិន្ទុ និងការគណនា GPA ស្វ័យប្រវត្តិ',
+      ],
+    },
+    technologies: ['Flutter', 'Dart', 'Node.js', 'Express.js', 'MongoDB', 'Firebase'],
+    category: categoryMap.get('mobile-app') || new Types.ObjectId(),
+    mainImage:
+      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop',
+    screenshots: [
+      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&auto=format&fit=crop',
+    ],
+    githubUrl: 'https://github.com/dimsareach/smart-campus-mobile',
+    liveUrl: 'https://campus.demo.dev',
+    status: 'published' as const,
+    featured: true,
+    order: 4,
+    viewCount: 168,
+  },
+  {
+    title: {
+      en: 'Angkor Mart - E-Commerce Platform',
+      kh: 'វេទិកាពាណិជ្ជកម្មអេឡិចត្រូនិក Angkor Mart',
+    },
+    slug: 'angkor-mart-ecommerce-platform',
+    shortDescription: {
+      en: 'Modern full-stack online marketplace with KHQR Bakong payment integration and automated order fulfillment.',
+      kh: 'ផ្សារទំនើបអនឡាញទំនើបជាមួយការទូទាត់ប្រាក់ KHQR បាគង និងការគ្រប់គ្រងការបញ្ជាទិញស្វ័យប្រវត្តិ។',
+    },
+    fullDescription: {
+      en: 'An enterprise e-commerce platform engineered for Cambodia’s digital economy. Features dynamic product filtering, cart persistence, automated stock deduction, real-time Bakong KHQR checkout, and a merchant analytics control room.',
+      kh: 'ប្រព័ន្ធពាណិជ្ជកម្មអេឡិចត្រូនិកកម្រិតសហគ្រាសសម្រាប់សេដ្ឋកិច្ចឌីជីថលនៅកម្ពុជា។ មានមុខងារច្រោះទំនិញរហ័ស រក្សាទំនិញក្នុងកន្ត្រក កាត់ស្តុកស្វ័យប្រវត្ត ការទូទាត់ប្រាក់តាម KHQR បាគងផ្ទាល់ និងផ្ទាំងវិភាគទិន្នន័យសម្រាប់អាជីវករ។',
+    },
+    problem: {
+      en: 'Local retail merchants rely on manual Telegram chat receipts, resulting in payment mismatches, missed orders, and poor inventory oversight.',
+      kh: 'អាជីវករក្នុងស្រុកភាគច្រើនពឹងផ្អែកលើការផ្ញើវិក្កយបត្រតាម Telegram ដោយដៃ ដែលបណ្តាលឱ្យមានកំហុសក្នុងការទូទាត់ បាត់បង់ការបញ្ជាទិញ និងខ្វះការគ្រប់គ្រងស្តុក។',
+    },
+    solution: {
+      en: 'Delivered an automated checkout flow generating dynamic Bakong KHQR payloads, instant webhook transaction verification, and centralized warehouse inventory tracking.',
+      kh: 'បានបង្កើតដំណើរការទូទាត់ប្រាក់ស្វ័យប្រវត្តដោយបង្កើតកូដ KHQR បាគង ការផ្ទៀងផ្ទាត់ប្រតិបត្តិការភ្លាមៗតាម Webhook និងការតាមដានស្តុកទំនិញពីកណ្តាល។',
+    },
+    features: {
+      en: [
+        'Dynamic KHQR payments with automated webhook reconciliation',
+        'Real-time multi-attribute product catalog and elastic search',
+        'Customer order tracking with SMS/Telegram notifications',
+        'Comprehensive merchant revenue analytics',
+      ],
+      kh: [
+        'ការទូទាត់ប្រាក់ KHQR ស្វ័យប្រវត្តជាមួយការផ្ទៀងផ្ទាត់តាម Webhook',
+        'កាតាឡុកទំនិញ និងការស្វែងរករហ័ស',
+        'ការតាមដានស្ថានភាពការបញ្ជាទិញតាម SMS និង Telegram',
+        'របាយការណ៍វិភាគប្រាក់ចំណូលលម្អិតសម្រាប់អាជីវករ',
+      ],
+    },
+    technologies: ['React', 'Next.js', 'Tailwind CSS', 'Node.js', 'PostgreSQL', 'Redis', 'KHQR'],
+    category: categoryMap.get('web-application') || new Types.ObjectId(),
+    mainImage:
+      'https://images.unsplash.com/photo-1557821552-17105176677c?w=800&auto=format&fit=crop',
+    screenshots: [
+      'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&auto=format&fit=crop',
+    ],
+    githubUrl: 'https://github.com/dimsareach/angkor-mart-ecommerce',
+    liveUrl: 'https://angkormart.demo.dev',
+    status: 'published' as const,
+    featured: true,
+    order: 5,
+    viewCount: 195,
+  },
+  {
+    title: {
+      en: 'Distributed Event Streaming Engine',
+      kh: 'ម៉ាស៊ីនដំណើរការស្ទ្រីមទិន្នន័យចែករំលែក',
+    },
+    slug: 'distributed-event-streaming-engine',
+    shortDescription: {
+      en: 'High-throughput fault-tolerant event broker and log stream processor with sub-millisecond p99 latency.',
+      kh: 'ប្រព័ន្ធដំណើរការទិន្នន័យព្រឹត្តិការណ៍ចែករំលែកដែលមានល្បឿនលឿនខ្ពស់ និងភាពធន់នឹងបញ្ហា។',
+    },
+    fullDescription: {
+      en: 'A high-throughput distributed message processing and telemetry ingestion system. Designed with partitioned log segments, write-ahead logging (WAL), distributed consumer groups, and Redis cache clusters capable of handling 50,000+ events/sec.',
+      kh: 'ប្រព័ន្ធបញ្ជូនសារ និងប្រមូលទិន្នន័យ telemetry បែបចែករំលែកដែលមានល្បឿនលឿនខ្ពស់។ រចនាឡើងជាមួយ Partitioned Log Segments, Write-Ahead Logging (WAL) និង Consumer Groups ដែលអាចគ្រប់គ្រងព្រឹត្តិការណ៍ជាង ៥០,០០០ ក្នុងមួយវិនាទី។',
+    },
+    problem: {
+      en: 'Microservices architectures degrade rapidly under flash traffic spikes without an asynchronous backpressure and message queuing tier.',
+      kh: 'ស្ថាបត្យកម្ម Microservices ងាយនឹងធ្លាក់ចុះប្រសិទ្ធភាពនៅពេលមានចរាចរណ៍ទិន្នន័យកើនឡើងខ្ពស់ ប្រសិនបើគ្មានប្រព័ន្ធ Message Queue គ្រប់គ្រង Backpressure។',
+    },
+    solution: {
+      en: 'Architected a horizontally scalable Go-based pub/sub broker with persistent log storage, automatic failover, and Prometheus telemetry exporters.',
+      kh: 'បានរចនាប្រព័ន្ធ Pub/Sub Broker ដោយភាសា Go ដែលអាចពង្រីកបានដោយរលូន ជាមួយការរក្សាទុកទិន្នន័យរឹងមាំ ការផ្លាស់ប្តូរម៉ាស៊ីនបម្រុងស្វ័យប្រវត្ត និងប្រព័ន្ធតាមដាន Prometheus។',
+    },
+    features: {
+      en: [
+        'Persistent write-ahead log with configurable retention',
+        'Consumer group offsets with at-least-once delivery semantics',
+        'Sub-millisecond p99 dispatch latency',
+        'Prometheus and Grafana dashboard integration',
+      ],
+      kh: [
+        'ការកត់ត្រា Write-Ahead Log ប្រកបដោយសុវត្ថិភាព',
+        'ការគ្រប់គ្រង Consumer Group ជាមួយការធានាបញ្ជូនសារយ៉ាងហោចម្តង',
+        'កម្រិត Latency ទាបជាង ១ មីលីវិនាទី (p99)',
+        'ការរួមបញ្ចូលជាមួយផ្ទាំងតាមដាន Prometheus និង Grafana',
+      ],
+    },
+    technologies: ['Go', 'Docker', 'Redis', 'Kafka', 'Prometheus', 'Grafana', 'Kubernetes'],
+    category: categoryMap.get('system-design') || new Types.ObjectId(),
+    mainImage:
+      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop',
+    screenshots: [
+      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop',
+    ],
+    githubUrl: 'https://github.com/dimsareach/distributed-event-engine',
+    liveUrl: 'https://events.demo.dev',
+    status: 'published' as const,
+    featured: true,
+    order: 6,
+    viewCount: 134,
+  },
 ];
 
 export const getBlogPostsSeed = (

@@ -332,6 +332,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     forkJoin({
       profile: this.portfolioService.getProfile().pipe(catchError(() => of(null))),
       projects: this.portfolioService.getFeaturedProjects(6).pipe(catchError(() => of(null))),
+      allProjects: this.portfolioService.getProjects({ limit: 1 }).pipe(catchError(() => of(null))),
       skills: this.portfolioService.getSkills().pipe(catchError(() => of(null))),
       experiences: this.portfolioService.getExperiences().pipe(catchError(() => of(null))),
       education: this.portfolioService.getEducation().pipe(catchError(() => of(null))),
@@ -349,13 +350,24 @@ export class HomeComponent implements OnInit, OnDestroy {
               ? projectData.items
               : (projectData as unknown as Project[]);
           this.featuredProjects.set(items || []);
+        } else {
+          this.featuredProjects.set([]);
+        }
+
+        if (results.allProjects?.data?.pagination?.total !== undefined) {
+          this.totalProjectsCount.set(results.allProjects.data.pagination.total);
+        } else if (results.projects?.data) {
+          const projectData = results.projects.data;
+          const items =
+            'items' in projectData
+              ? projectData.items
+              : (projectData as unknown as Project[]);
           const total =
             'pagination' in projectData && projectData.pagination?.total !== undefined
               ? projectData.pagination.total
               : (items?.length || 0);
           this.totalProjectsCount.set(total);
         } else {
-          this.featuredProjects.set([]);
           this.totalProjectsCount.set(0);
         }
         if (results.skills?.data) {

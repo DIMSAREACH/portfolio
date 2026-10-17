@@ -67,6 +67,8 @@ export class CountUpDirective implements OnInit, AfterViewInit, OnChanges, OnDes
   private observer: IntersectionObserver | null = null;
   private animationFrameId: number | null = null;
   private hasAnimated = false;
+  private isInViewport = false;
+  private currentAnimatedValue = 0;
   private isBrowser = false;
 
   private parsedTarget = 0;
@@ -78,15 +80,41 @@ export class CountUpDirective implements OnInit, AfterViewInit, OnChanges, OnDes
   public ngOnInit(): void {
     this.isBrowser = isPlatformBrowser(this.platformId);
     this.parseInput();
+    if (!this.isBrowser) {
+      this.renderValue(this.parsedTarget);
+    }
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
     const change = changes['appCountUp'] || changes['target'];
     if (change) {
+      const isFirstChange = change.isFirstChange();
       this.target = change.currentValue;
       this.parseInput();
-      this.renderValue(this.parsedTarget);
-      this.hasAnimated = true;
+
+      if (!this.isBrowser) {
+        this.renderValue(this.parsedTarget);
+        return;
+      }
+
+      const prefersReducedMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReducedMotion || typeof IntersectionObserver === 'undefined') {
+        this.renderValue(this.parsedTarget);
+        this.hasAnimated = true;
+        return;
+      }
+
+      // If already in viewport and previously animated, smoothly update to the new target
+      if (this.isInViewport && this.hasAnimated) {
+        this.startCountUp(this.currentAnimatedValue);
+      } else if (!this.hasAnimated && !isFirstChange) {
+        // While waiting to be scrolled into view, keep at 0 so it animates when entered
+        this.renderValue(0);
+      }
     }
   }
 
@@ -109,7 +137,6 @@ export class CountUpDirective implements OnInit, AfterViewInit, OnChanges, OnDes
 
     // Initialize with start value (0) while waiting for scroll into view
     this.renderValue(0);
-
     this.setupIntersectionObserver();
   }
 
@@ -152,32 +179,46 @@ export class CountUpDirective implements OnInit, AfterViewInit, OnChanges, OnDes
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            this.isInViewport = true;
             if (!this.hasAnimated || this.replay) {
-              this.startCountUp();
               this.hasAnimated = true;
+              this.startCountUp(this.replay ? 0 : this.currentAnimatedValue);
               if (!this.replay && this.observer) {
                 this.observer.unobserve(this.el.nativeElement);
               }
             }
-          } else if (this.replay) {
-            this.cancelCurrentAnimation();
-            this.renderValue(0);
+          } else {
+            this.isInViewport = false;
+            if (this.replay) {
+              this.cancelCurrentAnimation();
+              this.currentAnimatedValue = 0;
+              this.renderValue(0);
+              this.hasAnimated = false;
+            }
           }
         });
       },
       {
         threshold: this.threshold,
+        rootMargin: '0px 0px -10px 0px',
       }
     );
 
     this.observer.observe(this.el.nativeElement);
   }
 
-  private startCountUp(): void {
+  private startCountUp(fromVal = 0): void {
     this.cancelCurrentAnimation();
 
-    const start = 0;
+    const start = fromVal;
     const end = this.parsedTarget;
+
+    if (start === end) {
+      this.currentAnimatedValue = end;
+      this.renderValue(end);
+      return;
+    }
+
     const duration = Math.max(500, this.duration);
     const startTime = performance.now();
 
@@ -190,12 +231,14 @@ export class CountUpDirective implements OnInit, AfterViewInit, OnChanges, OnDes
         // Easing: easeOutCubic (smooth deceleration)
         const ease = 1 - Math.pow(1 - progress, 3);
         const currentVal = start + (end - start) * ease;
+        this.currentAnimatedValue = currentVal;
 
         if (progress < 1) {
           this.renderValue(currentVal);
           this.animationFrameId = requestAnimationFrame(step);
         } else {
           // Completed: set exact final target
+          this.currentAnimatedValue = end;
           this.renderValue(end);
           this.animationFrameId = null;
         }
@@ -213,8 +256,10 @@ export class CountUpDirective implements OnInit, AfterViewInit, OnChanges, OnDes
         minimumFractionDigits: this.parsedDecimals,
         maximumFractionDigits: this.parsedDecimals,
       });
-    } else {
+    } else if (this.parsedDecimals > 0) {
       formattedNumber = val.toFixed(this.parsedDecimals);
+    } else {
+      formattedNumber = Math.round(val).toString();
     }
 
     const output = `${this.parsedPrefix}${formattedNumber}${this.parsedSuffix}`;

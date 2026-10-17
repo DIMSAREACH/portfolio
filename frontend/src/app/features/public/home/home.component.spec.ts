@@ -27,6 +27,7 @@ describe('HomeComponent', () => {
   let portfolioServiceMock: {
     getProfile: ReturnType<typeof vi.fn>;
     getFeaturedProjects: ReturnType<typeof vi.fn>;
+    getProjects: ReturnType<typeof vi.fn>;
     getSkills: ReturnType<typeof vi.fn>;
     getExperiences: ReturnType<typeof vi.fn>;
     getEducation: ReturnType<typeof vi.fn>;
@@ -210,6 +211,7 @@ describe('HomeComponent', () => {
     portfolioServiceMock = {
       getProfile: vi.fn().mockReturnValue(of(mockProfile)),
       getFeaturedProjects: vi.fn().mockReturnValue(of(mockProjects)),
+      getProjects: vi.fn().mockReturnValue(of(mockProjects)),
       getSkills: vi.fn().mockReturnValue(of(mockSkills)),
       getExperiences: vi.fn().mockReturnValue(of(mockExperiences)),
       getEducation: vi.fn().mockReturnValue(of(mockEducation)),
@@ -246,6 +248,7 @@ describe('HomeComponent', () => {
   it('should load all home data on initialization', () => {
     expect(portfolioServiceMock.getProfile).toHaveBeenCalled();
     expect(portfolioServiceMock.getFeaturedProjects).toHaveBeenCalledWith(6);
+    expect(portfolioServiceMock.getProjects).toHaveBeenCalledWith({ limit: 1 });
     expect(portfolioServiceMock.getSkills).toHaveBeenCalled();
     expect(portfolioServiceMock.getExperiences).toHaveBeenCalled();
     expect(portfolioServiceMock.getEducation).toHaveBeenCalled();

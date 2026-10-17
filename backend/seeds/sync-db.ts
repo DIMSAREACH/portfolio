@@ -121,15 +121,12 @@ async function syncDatabase(): Promise<void> {
 
     // 9. Settings
     const existingSettings = await Settings.findOne();
-    if (existingSettings) {
-      existingSettings.enableCvDownload = true;
-      existingSettings.enableContactForm = true;
-      existingSettings.cvFile = SETTINGS_SEED.cvFile;
-      await existingSettings.save();
-    } else {
+    if (!existingSettings) {
       await Settings.create(SETTINGS_SEED);
+      logger.info('Settings seeded.');
+    } else {
+      logger.info('Settings preserved without overwriting CV or custom toggles.');
     }
-    logger.info('Settings synced.');
 
     // 10. Projects
     await Project.deleteMany({});
