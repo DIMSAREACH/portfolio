@@ -530,7 +530,7 @@ export const SETTINGS_SEED = {
     publicId: 'portfolio/cv/dim_sareach_cv',
     fileName: 'Dim_Sareach_CV.pdf',
   },
-  cvDownloadCount: 15,
+  cvDownloadCount: 0,
   enableContactForm: true,
   emailNotifications: true,
   notificationEmail: 'dimsareach009@gmail.com',
