@@ -11,6 +11,7 @@ import { FirebaseAuthService } from '../../../core/services/firebase-auth.servic
 import { NotificationService } from '../../../core/services/notification.service';
 import { AlertMessageComponent, MessageSeverity } from '../../../shared/components/alert-message/alert-message.component';
 import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/theme-toggle.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-admin-login',
@@ -161,7 +162,7 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
             </div>
           }
 
-          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5" novalidate>
+          <form id="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4" novalidate>
             <!-- Email Field -->
             <div class="flex flex-col gap-1.5">
               <label pLabel for="email" class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
@@ -171,15 +172,20 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
               <input
                 pInputText
                 id="email"
+                name="email"
                 type="email"
                 formControlName="email"
                 autocomplete="username"
+                autocapitalize="none"
+                spellcheck="false"
                 placeholder="admin@portfolio.dev"
+                [attr.aria-invalid]="isFieldInvalid('email')"
+                [attr.aria-describedby]="isFieldInvalid('email') ? 'email-error' : null"
                 class="w-full !rounded-xl !text-sm !py-3 !px-3.5 bg-slate-50/80 dark:bg-slate-900/70 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 focus:!border-indigo-500 transition-all"
                 [ngClass]="{ '!border-rose-500': isFieldInvalid('email') }"
               />
               @if (isFieldInvalid('email')) {
-                <span class="text-xs text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1 mt-0.5">
+                <span id="email-error" role="alert" class="text-xs text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1 mt-0.5">
                   <i class="pi pi-times-circle text-xs"></i>
                   {{ getEmailError() }}
                 </span>
@@ -207,10 +213,14 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
                 <input
                   pInputText
                   id="password"
+                  name="password"
                   [type]="showPassword() ? 'text' : 'password'"
                   formControlName="password"
                   autocomplete="current-password"
+                  spellcheck="false"
                   placeholder="••••••••••••"
+                  [attr.aria-invalid]="isFieldInvalid('password')"
+                  [attr.aria-describedby]="isFieldInvalid('password') ? 'password-error' : null"
                   class="w-full !rounded-xl !text-sm !py-3 !pl-3.5 !pr-10 bg-slate-50/80 dark:bg-slate-900/70 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 font-mono focus:!border-indigo-500 transition-all"
                   [ngClass]="{ '!border-rose-500': isFieldInvalid('password') }"
                 />
@@ -224,20 +234,34 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
                 </button>
               </div>
               @if (isFieldInvalid('password')) {
-                <span class="text-xs text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1 mt-0.5">
+                <span id="password-error" role="alert" class="text-xs text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1 mt-0.5">
                   <i class="pi pi-times-circle text-xs"></i>
                   {{ getPasswordError() }}
                 </span>
               }
             </div>
+
+            <!-- Options Row: Remember Email Address -->
+            <div class="flex items-center justify-between text-xs pt-0.5">
+              <label class="flex items-center gap-2 cursor-pointer text-slate-600 dark:text-slate-400 select-none">
+                <input
+                  type="checkbox"
+                  [checked]="rememberEmail()"
+                  (change)="toggleRememberEmail()"
+                  class="rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
+                />
+                <span>Remember email address</span>
+              </label>
+            </div>
           </form>
 
           <ng-template #footer>
             <div class="flex flex-col gap-3.5">
-              <!-- Submit Button with Explicit Text & State -->
+              <!-- Submit Button with Explicit Form Linkage & Keyboard Submit Support -->
               <button
                 id="login-submit-btn"
-                type="button"
+                type="submit"
+                form="login-form"
                 (click)="onSubmit()"
                 pButton
                 [disabled]="isLoading()"
@@ -252,33 +276,36 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
                 }
               </button>
 
-              <!-- Autofill Demo Button with explicit label & icon -->
-              <button
-                type="button"
-                (click)="fillDemoCredentials()"
-                pButton
-                severity="secondary"
-                [outlined]="true"
-                class="w-full !py-2.5 !px-4 !rounded-xl !text-xs !font-bold !border-slate-300 dark:!border-slate-700 !bg-slate-100/70 dark:!bg-slate-800/40 hover:!bg-slate-200/80 dark:hover:!bg-slate-800 !text-slate-800 dark:!text-slate-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <i class="pi pi-key text-indigo-600 dark:text-indigo-400 text-xs"></i>
-                <span>Autofill Demo Credentials</span>
-              </button>
+              <!-- Development Only Helpers (Hidden in Production) -->
+              @if (!isProduction) {
+                <div class="flex flex-col gap-2 pt-1 border-t border-slate-200/60 dark:border-slate-800/60">
+                  <button
+                    type="button"
+                    (click)="fillDemoCredentials()"
+                    pButton
+                    severity="secondary"
+                    [outlined]="true"
+                    class="w-full !py-2.5 !px-4 !rounded-xl !text-xs !font-bold !border-slate-300 dark:!border-slate-700 !bg-slate-100/70 dark:!bg-slate-800/40 hover:!bg-slate-200/80 dark:hover:!bg-slate-800 !text-slate-800 dark:!text-slate-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <i class="pi pi-key text-indigo-600 dark:text-indigo-400 text-xs"></i>
+                    <span>Autofill Demo Credentials</span>
+                  </button>
 
-              <!-- Demo Credential Information Hint -->
-              <div class="p-2.5 rounded-xl bg-slate-100/60 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700/60 text-[11px] text-slate-600 dark:text-slate-400 flex items-center justify-between">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-                  <span class="font-medium">Admin:</span>
-                  <code class="font-mono text-indigo-700 dark:text-indigo-300 font-semibold">admin&#64;portfolio.dev</code>
-                </div>
-                <code class="font-mono text-slate-500 dark:text-slate-400">Admin&#64;123456</code>
-              </div>
+                  <div class="p-2 rounded-xl bg-slate-100/60 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700/60 text-[11px] text-slate-600 dark:text-slate-400 flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                      <span class="font-medium">Admin:</span>
+                      <code class="font-mono text-indigo-700 dark:text-indigo-300 font-semibold">admin&#64;portfolio.dev</code>
+                    </div>
+                    <code class="font-mono text-slate-500 dark:text-slate-400">Admin&#64;123456</code>
+                  </div>
 
-              @if (!isFirebaseConfigured()) {
-                <div class="p-2.5 rounded-xl bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 text-[11px] text-indigo-700 dark:text-indigo-300 flex items-start gap-2">
-                  <i class="pi pi-info-circle text-xs shrink-0 mt-0.5"></i>
-                  <span>Firebase Auth architecture ready. Paste your credentials into <code class="font-mono font-bold">environment.ts</code> &amp; backend <code class="font-mono font-bold">.env</code> to activate Firebase Email sign-in.</span>
+                  @if (!isFirebaseConfigured()) {
+                    <div class="p-2 rounded-xl bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 text-[10.5px] text-indigo-700 dark:text-indigo-300 flex items-start gap-1.5">
+                      <i class="pi pi-info-circle text-xs shrink-0 mt-0.5"></i>
+                      <span>Firebase Auth ready. Add credentials to activate Firebase sign-in.</span>
+                    </div>
+                  }
                 </div>
               }
 
@@ -319,14 +346,32 @@ export class LoginComponent {
   public readonly alertSeverity = signal<MessageSeverity>('error');
   public readonly alertSummary = signal<string>('Authentication Failed');
   public readonly showPassword = signal<boolean>(false);
+  public readonly isProduction = environment.production;
+  public readonly rememberEmail = signal<boolean>(false);
 
   public isFirebaseConfigured(): boolean {
     return this.firebaseAuthService.isConfigured();
   }
 
+  public toggleRememberEmail(): void {
+    this.rememberEmail.update((val) => !val);
+  }
+
   constructor() {
+    let savedEmail = '';
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        savedEmail = localStorage.getItem('portfolio_admin_saved_email') || '';
+      } catch {
+        // Silently continue in environments without localStorage
+      }
+    }
+    if (savedEmail) {
+      this.rememberEmail.set(true);
+    }
+
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [savedEmail || '', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
@@ -415,6 +460,19 @@ export class LoginComponent {
       return;
     }
 
+    if (this.isProduction) {
+      this.setAlert(
+        'For account recovery and credentials management in production, please contact your systems administrator or review your server environment settings.',
+        'info',
+        'Account Recovery',
+      );
+      this.notificationService.showSecondary(
+        'Production password reset is managed via server administrator settings.',
+        'Password Assistance',
+      );
+      return;
+    }
+
     this.setAlert(
       'Use the default admin credentials provided below to access the CMS.',
       'info',
@@ -447,6 +505,19 @@ export class LoginComponent {
     auth$.subscribe({
       next: () => {
         this.isLoading.set(false);
+
+        if (typeof window !== 'undefined' && window.localStorage) {
+          try {
+            if (this.rememberEmail()) {
+              localStorage.setItem('portfolio_admin_saved_email', cleanEmail);
+            } else {
+              localStorage.removeItem('portfolio_admin_saved_email');
+            }
+          } catch {
+            // Silently continue
+          }
+        }
+
         const notice = this.isFirebaseConfigured() ? ' (Authenticated via Firebase)' : '';
         this.notificationService.showSuccess(
           `Welcome back, Admin! Redirecting to CMS...${notice}`,

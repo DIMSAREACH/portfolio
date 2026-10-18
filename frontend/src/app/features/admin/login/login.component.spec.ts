@@ -281,4 +281,12 @@ describe('Admin LoginComponent', () => {
       'Email Required',
     );
   });
+
+  it('should toggle rememberEmail signal on toggleRememberEmail()', () => {
+    expect(component.rememberEmail()).toBe(false);
+    component.toggleRememberEmail();
+    expect(component.rememberEmail()).toBe(true);
+    component.toggleRememberEmail();
+    expect(component.rememberEmail()).toBe(false);
+  });
 });
