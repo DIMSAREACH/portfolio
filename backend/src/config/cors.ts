@@ -11,7 +11,15 @@ export const corsOptions: CorsOptions = {
     : config.CORS_ORIGIN,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With',
+    'Accept',
+    'Cache-Control',
+    'Pragma',
+    'Expires',
+  ],
   exposedHeaders: ['RateLimit-Limit', 'RateLimit-Remaining', 'RateLimit-Reset'],
   maxAge: 86400, // 24 hours preflight cache
 };
