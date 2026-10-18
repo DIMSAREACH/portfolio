@@ -511,7 +511,7 @@ export class AdminHeaderComponent implements OnInit, OnDestroy {
     return (
       user?.avatar ||
       this.profileAvatarFallback() ||
-      'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'
+      `https://ui-avatars.com/api/?name=${encodeURIComponent(this.userName())}&background=6366f1&color=fff&bold=true`
     );
   }
 

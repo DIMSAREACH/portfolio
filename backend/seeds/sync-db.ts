@@ -85,6 +85,12 @@ async function syncDatabase(): Promise<void> {
       logger.info('Profile created.');
     }
 
+    if (profile?.profileImage && adminUser.avatar !== profile.profileImage) {
+      adminUser.avatar = profile.profileImage;
+      await adminUser.save();
+      logger.info('Admin user avatar synced with profile photo.');
+    }
+
     // 3. Categories
     await Category.deleteMany({});
     const categoryDocs = await Category.create(CATEGORIES_SEED);

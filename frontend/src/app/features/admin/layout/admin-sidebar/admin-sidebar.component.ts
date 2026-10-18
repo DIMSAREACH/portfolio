@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, HostListener, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
-import { catchError, of } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth.service';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { LanguageService } from '../../../../core/services/language.service';
@@ -217,11 +217,12 @@ export interface AdminNavGroup {
     </aside>
   `,
 })
-export class AdminSidebarComponent implements OnInit {
+export class AdminSidebarComponent implements OnInit, OnDestroy {
   public readonly authService = inject(AuthService);
   private readonly portfolioService = inject(PortfolioService, { optional: true });
   public readonly languageService = inject(LanguageService);
   public readonly isKhmer = this.languageService.isKhmer;
+  private syncSub?: Subscription;
 
   @Input() public isOpen = false;
   @Input() public isCollapsed = false;
@@ -229,6 +230,8 @@ export class AdminSidebarComponent implements OnInit {
   @Output() public toggleCollapse = new EventEmitter<void>();
 
   public readonly unreadMessageCount = signal<number>(0);
+  public readonly profileAvatarFallback = signal<string | null>(null);
+  public readonly profileEmailFallback = signal<string | null>(null);
 
   public readonly userName = computed<string>(() => {
     const user = this.authService.currentUser();
@@ -237,7 +240,7 @@ export class AdminSidebarComponent implements OnInit {
 
   public readonly userEmail = computed<string>(() => {
     const user = this.authService.currentUser();
-    return user?.email || 'admin@portfolio.dev';
+    return this.profileEmailFallback() || user?.email || 'dimsareach009@gmail.com';
   });
 
   public readonly userInitials = computed<string>(() => {
@@ -250,10 +253,40 @@ export class AdminSidebarComponent implements OnInit {
 
   public readonly userAvatar = computed<string>(() => {
     const user = this.authService.currentUser();
-    return user?.avatar || 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png';
+    return (
+      user?.avatar ||
+      this.profileAvatarFallback() ||
+      `https://ui-avatars.com/api/?name=${encodeURIComponent(this.userName())}&background=6366f1&color=fff&bold=true`
+    );
   });
 
   public ngOnInit(): void {
+    this.loadStats();
+    this.loadProfileInfo();
+
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'message') {
+          this.loadStats();
+        }
+        if (!mutation.type || mutation.type === 'profile') {
+          this.loadProfileInfo();
+        }
+      });
+    }
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadStats();
+    this.loadProfileInfo();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
+  }
+
+  private loadStats(): void {
     if (this.portfolioService) {
       this.portfolioService.getDashboardStats().pipe(catchError(() => of(null))).subscribe({
         next: (res) => {
@@ -262,6 +295,22 @@ export class AdminSidebarComponent implements OnInit {
           }
         },
       });
+    }
+  }
+
+  private loadProfileInfo(): void {
+    if (this.portfolioService) {
+      this.portfolioService
+        .getProfile()
+        .pipe(catchError(() => of(null)))
+        .subscribe((res) => {
+          if (res?.data?.profileImage) {
+            this.profileAvatarFallback.set(res.data.profileImage);
+          }
+          if (res?.data?.email) {
+            this.profileEmailFallback.set(res.data.email);
+          }
+        });
     }
   }
 

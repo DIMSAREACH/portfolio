@@ -1,4 +1,6 @@
+import mongoose from 'mongoose';
 import User, { IUser } from '../models/User';
+import Profile from '../models/Profile';
 import { UnauthorizedError, NotFoundError } from '../utils/AppError';
 import {
   generateAccessToken,
@@ -47,6 +49,8 @@ export class AuthService {
     const accessToken = generateAccessToken(userId, user.role);
     const refreshToken = generateRefreshToken(userId);
 
+    await this.ensureUserAvatar(user);
+
     user.lastLogin = new Date();
     await user.save();
 
@@ -55,6 +59,23 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  /**
+   * Backfill user avatar from Profile if not set
+   */
+  private async ensureUserAvatar(user: IUser): Promise<void> {
+    if (!user.avatar && mongoose.connection?.readyState === 1) {
+      try {
+        const profile = await Profile.findOne();
+        if (profile?.profileImage) {
+          user.avatar = profile.profileImage;
+          await user.save();
+        }
+      } catch {
+        // Silently continue if profile lookup fails
+      }
+    }
   }
 
   /**
@@ -77,6 +98,8 @@ export class AuthService {
       throw new UnauthorizedError('Invalid or expired refresh token');
     }
 
+    await this.ensureUserAvatar(user);
+
     const accessToken = generateAccessToken(user._id.toString(), user.role);
 
     return { accessToken, user: sanitizeUser(user) };
@@ -90,6 +113,8 @@ export class AuthService {
     if (!user) {
       throw new NotFoundError('User not found');
     }
+
+    await this.ensureUserAvatar(user);
 
     return sanitizeUser(user);
   }
