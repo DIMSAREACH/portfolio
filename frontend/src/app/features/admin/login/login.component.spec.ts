@@ -3,6 +3,7 @@ import { provideRouter, Router, ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { LoginComponent } from './login.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { FirebaseAuthService } from '../../../core/services/firebase-auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AuthResponse, ApiResponse } from '../../../core/models';
 
@@ -13,6 +14,14 @@ describe('Admin LoginComponent', () => {
 
   let authServiceMock: {
     login: ReturnType<typeof vi.fn>;
+    loginWithFirebase: ReturnType<typeof vi.fn>;
+  };
+
+  let firebaseAuthServiceMock: {
+    isConfigured: ReturnType<typeof vi.fn>;
+    signInWithEmail: ReturnType<typeof vi.fn>;
+    sendPasswordReset: ReturnType<typeof vi.fn>;
+    logout: ReturnType<typeof vi.fn>;
   };
 
   let notificationServiceMock: {
@@ -43,6 +52,14 @@ describe('Admin LoginComponent', () => {
   beforeEach(async () => {
     authServiceMock = {
       login: vi.fn().mockReturnValue(of(mockAuthResponse)),
+      loginWithFirebase: vi.fn().mockReturnValue(of(mockAuthResponse)),
+    };
+
+    firebaseAuthServiceMock = {
+      isConfigured: vi.fn().mockReturnValue(false),
+      signInWithEmail: vi.fn().mockResolvedValue('mock-token'),
+      sendPasswordReset: vi.fn().mockResolvedValue(undefined),
+      logout: vi.fn().mockResolvedValue(undefined),
     };
 
     notificationServiceMock = {
@@ -58,6 +75,7 @@ describe('Admin LoginComponent', () => {
       providers: [
         provideRouter([]),
         { provide: AuthService, useValue: authServiceMock },
+        { provide: FirebaseAuthService, useValue: firebaseAuthServiceMock },
         { provide: NotificationService, useValue: notificationServiceMock },
         {
           provide: ActivatedRoute,
@@ -214,6 +232,53 @@ describe('Admin LoginComponent', () => {
     expect(notificationServiceMock.showSecondary).toHaveBeenCalledWith(
       'Default admin credentials are displayed below. Autofill to sign in.',
       'Password Assistance',
+    );
+  });
+
+  it('should authenticate via loginWithFirebase when Firebase is configured', () => {
+    firebaseAuthServiceMock.isConfigured.mockReturnValue(true);
+
+    component.loginForm.setValue({
+      email: 'admin@portfolio.dev',
+      password: 'password123',
+    });
+
+    component.onSubmit();
+
+    expect(authServiceMock.loginWithFirebase).toHaveBeenCalledWith(
+      'admin@portfolio.dev',
+      'password123',
+    );
+    expect(notificationServiceMock.showSuccess).toHaveBeenCalledWith(
+      expect.stringContaining('(Authenticated via Firebase)'),
+      'Authentication Successful',
+    );
+  });
+
+  it('should send password reset email via Firebase when Firebase is configured and email is entered', async () => {
+    firebaseAuthServiceMock.isConfigured.mockReturnValue(true);
+    component.loginForm.patchValue({ email: 'admin@portfolio.dev' });
+
+    component.onForgotPassword();
+
+    await vi.waitFor(() => {
+      expect(firebaseAuthServiceMock.sendPasswordReset).toHaveBeenCalledWith('admin@portfolio.dev');
+      expect(notificationServiceMock.showSuccess).toHaveBeenCalledWith(
+        'Password reset email sent successfully.',
+        'Reset Link Sent',
+      );
+    });
+  });
+
+  it('should prompt for email on forgot password when Firebase is configured but email is missing', () => {
+    firebaseAuthServiceMock.isConfigured.mockReturnValue(true);
+    component.loginForm.patchValue({ email: '' });
+
+    component.onForgotPassword();
+
+    expect(notificationServiceMock.showWarning).toHaveBeenCalledWith(
+      'Please enter a valid email address in the field above.',
+      'Email Required',
     );
   });
 });

@@ -21,6 +21,9 @@ export interface Config {
   RATE_LIMIT_WINDOW_MS: number;
   RATE_LIMIT_MAX_REQUESTS: number;
   LOG_LEVEL: string;
+  FIREBASE_PROJECT_ID?: string;
+  FIREBASE_CLIENT_EMAIL?: string;
+  FIREBASE_PRIVATE_KEY?: string;
 }
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
@@ -79,6 +82,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
       ? parseInt(env.RATE_LIMIT_MAX_REQUESTS, 10)
       : 100,
     LOG_LEVEL: env.LOG_LEVEL || 'debug',
+    FIREBASE_PROJECT_ID: env.FIREBASE_PROJECT_ID || '',
+    FIREBASE_CLIENT_EMAIL: env.FIREBASE_CLIENT_EMAIL || '',
+    FIREBASE_PRIVATE_KEY: env.FIREBASE_PRIVATE_KEY || '',
   };
 }
 

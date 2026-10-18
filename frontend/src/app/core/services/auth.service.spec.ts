@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ApiService } from './api.service';
+import { FirebaseAuthService } from './firebase-auth.service';
 import { User, AuthResponse, ApiResponse } from '../models';
 
 describe('AuthService', () => {
@@ -9,6 +10,11 @@ describe('AuthService', () => {
   let apiServiceMock: {
     get: ReturnType<typeof vi.fn>;
     post: ReturnType<typeof vi.fn>;
+  };
+  let firebaseAuthServiceMock: {
+    isConfigured: ReturnType<typeof vi.fn>;
+    signInWithEmail: ReturnType<typeof vi.fn>;
+    logout: ReturnType<typeof vi.fn>;
   };
 
   const mockUser: User = {
@@ -27,10 +33,17 @@ describe('AuthService', () => {
       post: vi.fn(),
     };
 
+    firebaseAuthServiceMock = {
+      isConfigured: vi.fn().mockReturnValue(true),
+      signInWithEmail: vi.fn().mockResolvedValue('mock-firebase-id-token'),
+      logout: vi.fn().mockResolvedValue(undefined),
+    };
+
     TestBed.configureTestingModule({
       providers: [
         AuthService,
         { provide: ApiService, useValue: apiServiceMock },
+        { provide: FirebaseAuthService, useValue: firebaseAuthServiceMock },
       ],
     });
 
@@ -140,4 +153,62 @@ describe('AuthService', () => {
 
     expect(service.currentUser()).toEqual(mockUser);
   });
+
+  it('should authenticate user via loginWithFirebaseToken and store token in memory', () => {
+    const mockResponse: ApiResponse<AuthResponse> = {
+      success: true,
+      message: 'Firebase login successful',
+      data: {
+        user: mockUser,
+        accessToken: 'firebase_jwt_token_789',
+      },
+    };
+    apiServiceMock.post.mockReturnValue(of(mockResponse));
+
+    service.loginWithFirebaseToken('mock-id-token').subscribe((res) => {
+      expect(res.data.accessToken).toBe('firebase_jwt_token_789');
+    });
+
+    expect(apiServiceMock.post).toHaveBeenCalledWith('/auth/firebase', {
+      idToken: 'mock-id-token',
+    });
+    expect(service.accessToken()).toBe('firebase_jwt_token_789');
+    expect(service.currentUser()).toEqual(mockUser);
+    expect(service.isAuthenticated()).toBe(true);
+  });
+
+  it('should authenticate via loginWithFirebase by getting idToken then calling /auth/firebase', async () => {
+    const mockResponse: ApiResponse<AuthResponse> = {
+      success: true,
+      message: 'Firebase login successful',
+      data: {
+        user: mockUser,
+        accessToken: 'firebase_jwt_token_789',
+      },
+    };
+    apiServiceMock.post.mockReturnValue(of(mockResponse));
+
+    service.loginWithFirebase('admin@portfolio.dev', 'secret123').subscribe((res) => {
+      expect(res.data.accessToken).toBe('firebase_jwt_token_789');
+    });
+
+    await vi.waitFor(() => {
+      expect(firebaseAuthServiceMock.signInWithEmail).toHaveBeenCalledWith(
+        'admin@portfolio.dev',
+        'secret123',
+      );
+      expect(apiServiceMock.post).toHaveBeenCalledWith('/auth/firebase', {
+        idToken: 'mock-firebase-id-token',
+      });
+    });
+  });
+
+  it('should call firebaseAuthService.logout() on logout', () => {
+    apiServiceMock.post.mockReturnValue(of({ success: true, message: 'Logged out', data: null }));
+
+    service.logout().subscribe();
+
+    expect(firebaseAuthServiceMock.logout).toHaveBeenCalled();
+  });
 });
+

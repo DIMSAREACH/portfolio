@@ -18,3 +18,18 @@ dotenv.config();
 if (!process.env.DEBUG) {
   jest.spyOn(console, 'info').mockImplementation(() => {});
 }
+
+// Mock Firebase Admin modules to avoid pure-ESM jose dependency during Jest runs
+jest.mock('firebase-admin/app', () => ({
+  initializeApp: jest.fn().mockReturnValue({ name: '[DEFAULT]' }),
+  cert: jest.fn().mockReturnValue({}),
+  getApps: jest.fn().mockReturnValue([]),
+  deleteApp: jest.fn(),
+}));
+
+jest.mock('firebase-admin/auth', () => ({
+  getAuth: jest.fn().mockReturnValue({
+    verifyIdToken: jest.fn(),
+  }),
+}));
+

@@ -6,6 +6,7 @@ import { validate } from '../middleware/validate.middleware';
 import {
   loginValidator,
   changePasswordValidator,
+  firebaseLoginValidator,
 } from '../validators/auth.validator';
 
 const router = Router();
@@ -48,6 +49,39 @@ router.post(
   loginLimiter,
   validate(loginValidator),
   authController.login,
+);
+
+/**
+ * @swagger
+ * /auth/firebase:
+ *   post:
+ *     summary: Authenticate user via Firebase
+ *     description: Verifies Firebase ID token, sets an HTTP-only refresh token cookie, and returns a JWT access token.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - idToken
+ *             properties:
+ *               idToken:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Firebase login successful
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Invalid or expired Firebase token
+ */
+router.post(
+  '/firebase',
+  loginLimiter,
+  validate(firebaseLoginValidator),
+  authController.firebaseLogin,
 );
 
 /**

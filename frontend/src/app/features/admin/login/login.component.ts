@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { LabelModule } from 'primeng/label';
 import { AuthService } from '../../../core/services/auth.service';
+import { FirebaseAuthService } from '../../../core/services/firebase-auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AlertMessageComponent, MessageSeverity } from '../../../shared/components/alert-message/alert-message.component';
 import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/theme-toggle.component';
@@ -122,11 +123,22 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
               Sareach<span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent font-black ml-0.5">.dev</span>
             </span>
           </a>
-          <div class="flex items-center justify-center">
+          <div class="flex items-center justify-center gap-2 flex-wrap">
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-indigo-50/90 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/80 shadow-2xs">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               CMS Control Center
             </span>
+            @if (isFirebaseConfigured()) {
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-50/90 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/80 shadow-2xs">
+                <i class="pi pi-bolt text-amber-500 text-[10px]"></i>
+                Firebase Auth Active
+              </span>
+            } @else {
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-slate-100/90 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs">
+                <i class="pi pi-shield text-indigo-500 text-[10px]"></i>
+                Firebase Auth Ready
+              </span>
+            }
           </div>
         </div>
 
@@ -134,7 +146,7 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
         <p-card
           class="w-full login-card"
           header="Welcome back"
-          subheader="Sign in with your email to continue."
+          [subheader]="isFirebaseConfigured() ? 'Sign in securely with your Firebase administrator account.' : 'Sign in with your email to continue.'"
         >
           <!-- Alert Banner using AlertMessageComponent with Dynamic Severity -->
           @if (errorMessage()) {
@@ -263,6 +275,13 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
                 <code class="font-mono text-slate-500 dark:text-slate-400">Admin&#64;123456</code>
               </div>
 
+              @if (!isFirebaseConfigured()) {
+                <div class="p-2.5 rounded-xl bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 text-[11px] text-indigo-700 dark:text-indigo-300 flex items-start gap-2">
+                  <i class="pi pi-info-circle text-xs shrink-0 mt-0.5"></i>
+                  <span>Firebase Auth architecture ready. Paste your credentials into <code class="font-mono font-bold">environment.ts</code> &amp; backend <code class="font-mono font-bold">.env</code> to activate Firebase Email sign-in.</span>
+                </div>
+              }
+
               <!-- Return to Portfolio Site Link -->
               <div class="mt-1 text-center text-slate-500 dark:text-slate-400 text-xs">
                 Don't need to log in?
@@ -289,6 +308,7 @@ import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/th
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly firebaseAuthService = inject(FirebaseAuthService);
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -299,6 +319,10 @@ export class LoginComponent {
   public readonly alertSeverity = signal<MessageSeverity>('error');
   public readonly alertSummary = signal<string>('Authentication Failed');
   public readonly showPassword = signal<boolean>(false);
+
+  public isFirebaseConfigured(): boolean {
+    return this.firebaseAuthService.isConfigured();
+  }
 
   constructor() {
     this.loginForm = this.fb.group({
@@ -352,6 +376,45 @@ export class LoginComponent {
   }
 
   public onForgotPassword(): void {
+    if (this.isFirebaseConfigured()) {
+      const email = this.loginForm.get('email')?.value?.trim();
+      if (!email || this.loginForm.get('email')?.invalid) {
+        this.setAlert(
+          'Please enter your admin email address above, then click Forgot Password to receive a reset link.',
+          'info',
+          'Email Required',
+        );
+        this.notificationService.showWarning(
+          'Please enter a valid email address in the field above.',
+          'Email Required',
+        );
+        return;
+      }
+
+      this.isLoading.set(true);
+      this.firebaseAuthService
+        .sendPasswordReset(email)
+        .then(() => {
+          this.isLoading.set(false);
+          this.setAlert(
+            `A password reset link has been dispatched to ${email} via Firebase.`,
+            'success',
+            'Password Reset Sent',
+          );
+          this.notificationService.showSuccess(
+            'Password reset email sent successfully.',
+            'Reset Link Sent',
+          );
+        })
+        .catch((err) => {
+          this.isLoading.set(false);
+          const msg = err?.message || 'Failed to dispatch password reset email.';
+          this.setAlert(msg, 'error', 'Reset Failed');
+          this.notificationService.showError(msg, 'Reset Failed');
+        });
+      return;
+    }
+
     this.setAlert(
       'Use the default admin credentials provided below to access the CMS.',
       'info',
@@ -375,11 +438,20 @@ export class LoginComponent {
 
     this.isLoading.set(true);
     const { email, password } = this.loginForm.value;
+    const cleanEmail = email.trim();
 
-    this.authService.login({ email: email.trim(), password }).subscribe({
+    const auth$ = this.isFirebaseConfigured()
+      ? this.authService.loginWithFirebase(cleanEmail, password)
+      : this.authService.login({ email: cleanEmail, password });
+
+    auth$.subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.notificationService.showSuccess('Welcome back, Admin! Redirecting to CMS...', 'Authentication Successful');
+        const notice = this.isFirebaseConfigured() ? ' (Authenticated via Firebase)' : '';
+        this.notificationService.showSuccess(
+          `Welcome back, Admin! Redirecting to CMS...${notice}`,
+          'Authentication Successful',
+        );
         const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/admin/dashboard';
         this.router.navigateByUrl(returnUrl);
       },

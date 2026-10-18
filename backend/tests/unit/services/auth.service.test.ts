@@ -2,8 +2,9 @@ import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals
 import mongoose from 'mongoose';
 import User from '../../../src/models/User';
 import authService from '../../../src/services/auth.service';
-import { UnauthorizedError, NotFoundError } from '../../../src/utils/AppError';
+import { UnauthorizedError, NotFoundError, BadRequestError } from '../../../src/utils/AppError';
 import * as jwtUtils from '../../../src/utils/jwt';
+import * as firebaseConfig from '../../../src/config/firebase';
 
 describe('AuthService', () => {
   const dummyUserId = new mongoose.Types.ObjectId();
@@ -173,4 +174,71 @@ describe('AuthService', () => {
       ).rejects.toThrow(UnauthorizedError);
     });
   });
+
+  describe('loginWithFirebase', () => {
+    it('should authenticate user with valid Firebase token and link firebaseUid', async () => {
+      const mockDecodedToken: any = {
+        uid: 'firebase-uid-123',
+        email: 'admin@portfolio.dev',
+        name: 'Dim Sareach',
+      };
+      jest.spyOn(firebaseConfig, 'verifyFirebaseIdToken').mockResolvedValue(mockDecodedToken);
+      jest.spyOn(User, 'findOne').mockResolvedValue(mockUserInstance as any);
+
+      const result = await authService.loginWithFirebase('mock-id-token');
+
+      expect(firebaseConfig.verifyFirebaseIdToken).toHaveBeenCalledWith('mock-id-token');
+      expect(User.findOne).toHaveBeenCalledWith({ email: 'admin@portfolio.dev' });
+      expect(mockUserInstance.firebaseUid).toBe('firebase-uid-123');
+      expect(result.accessToken).toBeDefined();
+      expect(result.refreshToken).toBeDefined();
+      expect(result.user.email).toBe('admin@portfolio.dev');
+    });
+
+    it('should throw BadRequestError if token does not contain an email', async () => {
+      const mockDecodedToken: any = {
+        uid: 'firebase-uid-123',
+      };
+      jest.spyOn(firebaseConfig, 'verifyFirebaseIdToken').mockResolvedValue(mockDecodedToken);
+
+      await expect(authService.loginWithFirebase('token-without-email')).rejects.toThrow(
+        BadRequestError,
+      );
+    });
+
+    it('should throw UnauthorizedError if user is not in database and count > 0', async () => {
+      const mockDecodedToken: any = {
+        uid: 'firebase-uid-999',
+        email: 'unregistered@portfolio.dev',
+      };
+      jest.spyOn(firebaseConfig, 'verifyFirebaseIdToken').mockResolvedValue(mockDecodedToken);
+      jest.spyOn(User, 'findOne').mockResolvedValue(null);
+      jest.spyOn(User, 'countDocuments').mockResolvedValue(1 as any);
+
+      await expect(authService.loginWithFirebase('unregistered-token')).rejects.toThrow(
+        UnauthorizedError,
+      );
+    });
+
+    it('should auto-create initial admin user if user table is empty', async () => {
+      const mockDecodedToken: any = {
+        uid: 'firebase-uid-new',
+        email: 'initial-admin@portfolio.dev',
+        name: 'Initial Admin',
+      };
+      jest.spyOn(firebaseConfig, 'verifyFirebaseIdToken').mockResolvedValue(mockDecodedToken);
+      jest.spyOn(User, 'findOne').mockResolvedValue(null);
+      jest.spyOn(User, 'countDocuments').mockResolvedValue(0 as any);
+      jest.spyOn(User, 'create').mockResolvedValue({
+        ...mockUserInstance,
+        email: 'initial-admin@portfolio.dev',
+        fullName: 'Initial Admin',
+      } as any);
+
+      const result = await authService.loginWithFirebase('initial-admin-token');
+      expect(User.create).toHaveBeenCalled();
+      expect(result.accessToken).toBeDefined();
+    });
+  });
 });
+

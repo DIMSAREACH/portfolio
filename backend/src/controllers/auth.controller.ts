@@ -25,6 +25,25 @@ export class AuthController {
     );
   });
 
+  firebaseLogin = catchAsync(async (req: Request, res: Response): Promise<void> => {
+    const { idToken } = req.body;
+    const result = await authService.loginWithFirebase(idToken);
+
+    res.cookie('refreshToken', result.refreshToken, {
+      httpOnly: true,
+      secure: config.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/api/v1/auth',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    sendSuccess(
+      res,
+      { user: result.user, accessToken: result.accessToken },
+      'Firebase login successful',
+    );
+  });
+
   logout = catchAsync(async (_req: Request, res: Response): Promise<void> => {
     res.clearCookie('refreshToken', {
       httpOnly: true,

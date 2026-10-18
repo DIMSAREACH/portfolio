@@ -1,6 +1,10 @@
 import { describe, it, expect } from '@jest/globals';
 import { Request, Response, NextFunction } from 'express';
-import { loginValidator, changePasswordValidator } from '../../../src/validators/auth.validator';
+import {
+  loginValidator,
+  changePasswordValidator,
+  firebaseLoginValidator,
+} from '../../../src/validators/auth.validator';
 import { validate } from '../../../src/middleware/validate.middleware';
 
 describe('Auth Validators', () => {
@@ -156,6 +160,45 @@ describe('Auth Validators', () => {
           expect.objectContaining({
             field: 'newPassword',
             message: 'New password must be at least 8 characters long',
+          }),
+        ]),
+      );
+    });
+  });
+
+  describe('firebaseLoginValidator', () => {
+    const middleware = validate(firebaseLoginValidator);
+
+    it('should pass validation when idToken is provided and valid', async () => {
+      let nextCalled = false;
+      const { req, res } = createMockReqRes({
+        idToken: 'valid-firebase-jwt-token-string',
+      });
+
+      await middleware(req, res, () => {
+        nextCalled = true;
+      });
+
+      expect(nextCalled).toBe(true);
+    });
+
+    it('should fail validation when idToken is missing or empty', async () => {
+      let nextCalled = false;
+      const { req, res, getStatus, getJson } = createMockReqRes({
+        idToken: '',
+      });
+
+      await middleware(req, res, () => {
+        nextCalled = true;
+      });
+
+      expect(nextCalled).toBe(false);
+      expect(getStatus()).toBe(400);
+      expect(getJson().errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            field: 'idToken',
+            message: 'Firebase ID token is required',
           }),
         ]),
       );

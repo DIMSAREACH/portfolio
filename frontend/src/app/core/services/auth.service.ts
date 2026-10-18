@@ -1,6 +1,7 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
-import { Observable, tap, catchError, throwError, finalize } from 'rxjs';
+import { Observable, from, tap, catchError, throwError, finalize, switchMap } from 'rxjs';
 import { ApiService } from './api.service';
+import { FirebaseAuthService } from './firebase-auth.service';
 import {
   User,
   LoginCredentials,
@@ -14,6 +15,7 @@ import {
 })
 export class AuthService {
   private readonly apiService = inject(ApiService);
+  private readonly firebaseAuthService = inject(FirebaseAuthService);
 
   /**
    * Signal-based state management per PRD Section 10.2
@@ -49,11 +51,40 @@ export class AuthService {
   }
 
   /**
+   * Authenticate admin user with Firebase ID Token
+   */
+  public loginWithFirebaseToken(idToken: string): Observable<ApiResponse<AuthResponse>> {
+    this.isLoading.set(true);
+    return this.apiService
+      .post<ApiResponse<AuthResponse>>('/auth/firebase', { idToken })
+      .pipe(
+        tap((response) => {
+          if (response?.data?.accessToken && response?.data?.user) {
+            this.setSession(response.data.user, response.data.accessToken);
+          }
+        }),
+        finalize(() => this.isLoading.set(false)),
+      );
+  }
+
+  /**
+   * Authenticate admin user with Firebase Email and Password
+   */
+  public loginWithFirebase(email: string, password: string): Observable<ApiResponse<AuthResponse>> {
+    this.isLoading.set(true);
+    return from(this.firebaseAuthService.signInWithEmail(email, password)).pipe(
+      switchMap((idToken) => this.loginWithFirebaseToken(idToken)),
+      finalize(() => this.isLoading.set(false)),
+    );
+  }
+
+  /**
    * Clear session and revoke refresh token on backend
    */
   public logout(): Observable<ApiResponse<null>> {
     this.isLoading.set(true);
     this.isExplicitlyLoggedOut.set(true);
+    this.firebaseAuthService.logout();
     return this.apiService.post<ApiResponse<null>>('/auth/logout', {}).pipe(
       tap(() => this.clearSession()),
       catchError((err) => {

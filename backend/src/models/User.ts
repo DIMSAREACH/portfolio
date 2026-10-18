@@ -7,6 +7,7 @@ export interface IUser extends Document {
   fullName: string;
   role: 'admin';
   avatar?: string;
+  firebaseUid?: string;
   lastLogin?: Date;
   isActive: boolean;
   createdAt: Date;
@@ -50,6 +51,12 @@ export const userSchema = new Schema<IUser>(
     },
     avatar: {
       type: String,
+      trim: true,
+    },
+    firebaseUid: {
+      type: String,
+      sparse: true,
+      index: true,
       trim: true,
     },
     lastLogin: {

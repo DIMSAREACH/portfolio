@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 import User, { IUser } from '../models/User';
 import Profile from '../models/Profile';
-import { UnauthorizedError, NotFoundError } from '../utils/AppError';
+import { UnauthorizedError, NotFoundError, BadRequestError } from '../utils/AppError';
+import { verifyFirebaseIdToken } from '../config/firebase';
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -53,6 +54,66 @@ export class AuthService {
 
     user.lastLogin = new Date();
     await user.save();
+
+    return {
+      user: sanitizeUser(user),
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  /**
+   * Authenticate user with verified Firebase ID token
+   */
+  async loginWithFirebase(idToken: string): Promise<LoginResult> {
+    const decodedToken = await verifyFirebaseIdToken(idToken);
+    const email = decodedToken.email?.toLowerCase().trim();
+
+    if (!email) {
+      throw new BadRequestError('Firebase account does not have an associated email address');
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Check if this is the initial admin or if user table is empty
+      const userCount = await User.countDocuments();
+      if (userCount === 0) {
+        user = await User.create({
+          email,
+          fullName: decodedToken.name || 'Admin',
+          password: Math.random().toString(36).slice(-10) + 'A1!random',
+          role: 'admin',
+          avatar: decodedToken.picture,
+          firebaseUid: decodedToken.uid,
+          isActive: true,
+        });
+      } else {
+        throw new UnauthorizedError(
+          `User with email ${email} is not authorized as an administrator`,
+        );
+      }
+    } else {
+      if (!user.isActive) {
+        throw new UnauthorizedError('User account is inactive');
+      }
+
+      if (!user.firebaseUid) {
+        user.firebaseUid = decodedToken.uid;
+      }
+      if (!user.avatar && decodedToken.picture) {
+        user.avatar = decodedToken.picture;
+      }
+    }
+
+    await this.ensureUserAvatar(user);
+
+    user.lastLogin = new Date();
+    await user.save();
+
+    const userId = user._id.toString();
+    const accessToken = generateAccessToken(userId, user.role);
+    const refreshToken = generateRefreshToken(userId);
 
     return {
       user: sanitizeUser(user),

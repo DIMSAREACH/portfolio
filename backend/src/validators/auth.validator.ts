@@ -30,7 +30,19 @@ export const changePasswordValidator: ValidationChain[] = [
     .withMessage('New password must be at least 8 characters long'),
 ];
 
+/**
+ * Validation rules for POST /api/v1/auth/firebase
+ */
+export const firebaseLoginValidator: ValidationChain[] = [
+  body('idToken')
+    .trim()
+    .notEmpty()
+    .withMessage('Firebase ID token is required'),
+];
+
 export default {
   loginValidator,
   changePasswordValidator,
+  firebaseLoginValidator,
 };
+
