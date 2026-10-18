@@ -2,11 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "angular",
   "outputDirectory": "dist/frontend/browser",
-  "cleanUrls": true,
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/"
     }
   ],
   "headers": [
