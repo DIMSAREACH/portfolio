@@ -11,7 +11,9 @@
     "lint:fix": "eslint src/ --fix",
     "test": "jest --passWithNoTests",
     "seed": "ts-node seeds/seed.ts",
-    "seed:sync": "ts-node seeds/sync-db.ts"
+    "seed:sync": "ts-node seeds/sync-db.ts",
+    "set-admin": "ts-node scripts/set-admin.ts",
+    "test-email": "ts-node scripts/test-email.ts"
   },
   "keywords": [
     "portfolio",
