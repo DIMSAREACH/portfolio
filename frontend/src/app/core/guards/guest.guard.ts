@@ -22,15 +22,26 @@ export const guestGuard: CanActivateFn = (
     return true;
   }
 
+  // If there is no active session hint, skip silent refresh to avoid unneeded 401s in console
+  if (typeof authService.hasSessionHint === 'function' && !authService.hasSessionHint()) {
+    return true;
+  }
+
   // Attempt silent refresh to check for active cookie session
   return authService.refreshToken().pipe(
     map((response) => {
       if (response?.data?.accessToken && response?.data?.user) {
         return router.createUrlTree(['/admin/dashboard']);
       }
+      if (typeof authService.clearSession === 'function') {
+        authService.clearSession();
+      }
       return true;
     }),
     catchError(() => {
+      if (typeof authService.clearSession === 'function') {
+        authService.clearSession();
+      }
       return of(true);
     }),
   );

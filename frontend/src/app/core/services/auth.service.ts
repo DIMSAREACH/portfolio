@@ -163,16 +163,44 @@ export class AuthService {
   }
 
   /**
+   * Check whether an active session hint exists in client storage
+   */
+  public hasSessionHint(): boolean {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        return localStorage.getItem('portfolio_has_session') === '1';
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Internal session setters
    */
   public setSession(user: User, token: string): void {
     this.isExplicitlyLoggedOut.set(false);
     this.currentUser.set(user);
     this.accessToken.set(token);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        localStorage.setItem('portfolio_has_session', '1');
+      } catch {
+        // Silently continue in environments without localStorage
+      }
+    }
   }
 
   public clearSession(): void {
     this.currentUser.set(null);
     this.accessToken.set(null);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        localStorage.removeItem('portfolio_has_session');
+      } catch {
+        // Silently continue in environments without localStorage
+      }
+    }
   }
 }

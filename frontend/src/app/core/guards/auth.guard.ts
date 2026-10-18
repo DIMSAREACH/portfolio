@@ -25,17 +25,30 @@ export const authGuard: CanActivateFn = (
     return true;
   }
 
-  // Attempt silent refresh via HTTP-only cookie (e.g. on full page reload)
+  // If user has no active session hint, redirect directly to login without triggering 401
+  if (typeof authService.hasSessionHint === 'function' && !authService.hasSessionHint()) {
+    return router.createUrlTree(['/admin/login'], {
+      queryParams: { returnUrl: state.url },
+    });
+  }
+
+  // Attempt silent refresh via HTTP-only cookie (e.g. on full page reload with active session)
   return authService.refreshToken().pipe(
     map((response) => {
       if (response?.data?.accessToken && response?.data?.user) {
         return true;
+      }
+      if (typeof authService.clearSession === 'function') {
+        authService.clearSession();
       }
       return router.createUrlTree(['/admin/login'], {
         queryParams: { returnUrl: state.url },
       });
     }),
     catchError(() => {
+      if (typeof authService.clearSession === 'function') {
+        authService.clearSession();
+      }
       return of(
         router.createUrlTree(['/admin/login'], {
           queryParams: { returnUrl: state.url },
