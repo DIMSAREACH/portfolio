@@ -1,6 +1,7 @@
 import Media, { IMedia } from '../models/Media';
 import Settings, { ICvFile } from '../models/Settings';
 import cloudinaryService from './cloudinary.service';
+import r2Service from './r2.service';
 import { NotFoundError, ValidationError } from '../utils/AppError';
 import { getPaginationParams, buildPaginationMetadata } from '../utils/pagination';
 import { PaginatedData } from '../utils/apiResponse';
@@ -56,7 +57,7 @@ export class MediaService {
   }
 
   /**
-   * Upload an image to Cloudinary and register in Media library
+   * Upload an image/video/file to Cloudflare R2 or Cloudinary and register in Media library
    */
   async upload(
     file?: Express.Multer.File,
@@ -69,7 +70,28 @@ export class MediaService {
       ]);
     }
 
-    const uploadResult = await cloudinaryService.uploadImage(file.buffer, folder);
+    let uploadResult: {
+      secureUrl: string;
+      publicId: string;
+      bytes?: number;
+      width?: number;
+      height?: number;
+    };
+
+    if (r2Service.isAvailable()) {
+      const isVideo = file.mimetype.startsWith('video/');
+      const isPdf = file.mimetype === 'application/pdf';
+      const resourceType = isVideo ? 'video' : isPdf ? 'raw' : 'image';
+      uploadResult = await r2Service.uploadBuffer(
+        file.buffer,
+        folder,
+        file.originalname,
+        file.mimetype,
+        resourceType,
+      );
+    } else {
+      uploadResult = await cloudinaryService.uploadImage(file.buffer, folder);
+    }
 
     const media = new Media({
       fileName: file.originalname,
@@ -87,7 +109,7 @@ export class MediaService {
   }
 
   /**
-   * Delete media file from Cloudinary and database
+   * Delete media file from Cloudflare R2 / Cloudinary and database
    */
   async delete(id: string): Promise<void> {
     const media = await Media.findById(id);
@@ -96,9 +118,18 @@ export class MediaService {
     }
 
     try {
-      await cloudinaryService.deleteFile(media.publicId);
+      if (
+        r2Service.isAvailable() &&
+        (media.publicId.includes('/') ||
+          media.url.includes('.r2.dev') ||
+          media.url.includes('r2.cloudflarestorage.com'))
+      ) {
+        await r2Service.deleteFile(media.publicId);
+      } else {
+        await cloudinaryService.deleteFile(media.publicId);
+      }
     } catch (err) {
-      logger.warn(`Could not delete Cloudinary file (${media.publicId}):`, err);
+      logger.warn(`Could not delete storage file (${media.publicId}):`, err);
     }
 
     await Media.findByIdAndDelete(id);
@@ -132,16 +163,36 @@ export class CvService {
       });
     }
 
-    // If an existing CV is registered, clean it up from Cloudinary
+    // If an existing CV is registered, clean it up from storage
     if (settings.cvFile?.publicId) {
       try {
-        await cloudinaryService.deleteFile(settings.cvFile.publicId, 'raw');
+        if (
+          r2Service.isAvailable() &&
+          (settings.cvFile.publicId.includes('/') ||
+            settings.cvFile.url?.includes('.r2.dev') ||
+            settings.cvFile.url?.includes('r2.cloudflarestorage.com'))
+        ) {
+          await r2Service.deleteFile(settings.cvFile.publicId);
+        } else {
+          await cloudinaryService.deleteFile(settings.cvFile.publicId, 'raw');
+        }
       } catch (err) {
-        logger.warn(`Could not delete old Cloudinary CV (${settings.cvFile.publicId}):`, err);
+        logger.warn(`Could not delete old storage CV (${settings.cvFile.publicId}):`, err);
       }
     }
 
-    const uploadResult = await cloudinaryService.uploadPdf(file.buffer, 'portfolio/cv');
+    let uploadResult: { secureUrl: string; publicId: string };
+    if (r2Service.isAvailable()) {
+      uploadResult = await r2Service.uploadBuffer(
+        file.buffer,
+        'portfolio/cv',
+        file.originalname,
+        'application/pdf',
+        'raw',
+      );
+    } else {
+      uploadResult = await cloudinaryService.uploadPdf(file.buffer, 'portfolio/cv');
+    }
 
     const cvData: ICvFile = {
       url: uploadResult.secureUrl,
@@ -166,9 +217,18 @@ export class CvService {
     }
 
     try {
-      await cloudinaryService.deleteFile(settings.cvFile.publicId, 'raw');
+      if (
+        r2Service.isAvailable() &&
+        (settings.cvFile.publicId.includes('/') ||
+          settings.cvFile.url?.includes('.r2.dev') ||
+          settings.cvFile.url?.includes('r2.cloudflarestorage.com'))
+      ) {
+        await r2Service.deleteFile(settings.cvFile.publicId);
+      } else {
+        await cloudinaryService.deleteFile(settings.cvFile.publicId, 'raw');
+      }
     } catch (err) {
-      logger.warn(`Could not delete Cloudinary CV (${settings.cvFile.publicId}):`, err);
+      logger.warn(`Could not delete storage CV (${settings.cvFile.publicId}):`, err);
     }
 
     settings.cvFile = undefined;

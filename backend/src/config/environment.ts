@@ -24,6 +24,12 @@ export interface Config {
   FIREBASE_PROJECT_ID?: string;
   FIREBASE_CLIENT_EMAIL?: string;
   FIREBASE_PRIVATE_KEY?: string;
+  R2_ACCOUNT_ID?: string;
+  R2_ACCESS_KEY_ID?: string;
+  R2_SECRET_ACCESS_KEY?: string;
+  R2_BUCKET_NAME?: string;
+  R2_PUBLIC_URL?: string;
+  R2_ENDPOINT?: string;
 }
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
@@ -85,6 +91,12 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     FIREBASE_PROJECT_ID: env.FIREBASE_PROJECT_ID || '',
     FIREBASE_CLIENT_EMAIL: env.FIREBASE_CLIENT_EMAIL || '',
     FIREBASE_PRIVATE_KEY: env.FIREBASE_PRIVATE_KEY || '',
+    R2_ACCOUNT_ID: env.R2_ACCOUNT_ID || '',
+    R2_ACCESS_KEY_ID: env.R2_ACCESS_KEY_ID || '',
+    R2_SECRET_ACCESS_KEY: env.R2_SECRET_ACCESS_KEY || '',
+    R2_BUCKET_NAME: env.R2_BUCKET_NAME || 'portfolio-media',
+    R2_PUBLIC_URL: env.R2_PUBLIC_URL || '',
+    R2_ENDPOINT: env.R2_ENDPOINT || '',
   };
 }
 

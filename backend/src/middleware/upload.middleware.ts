@@ -11,11 +11,21 @@ export const IMAGE_MIME_TYPES = [
 
 export const IMAGE_EXTENSIONS = /\.(jpe?g|png|webp)$/i;
 
+export const VIDEO_MIME_TYPES = [
+  'video/mp4',
+  'video/webm',
+  'video/quicktime',
+  'video/ogg',
+  'video/x-matroska',
+];
+export const VIDEO_EXTENSIONS = /\.(mp4|webm|mov|ogg|mkv)$/i;
+
 export const PDF_MIME_TYPES = ['application/pdf'];
 export const PDF_EXTENSIONS = /\.pdf$/i;
 
 export const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
 export const MAX_PDF_SIZE = 10 * 1024 * 1024; // 10 MB
+export const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100 MB
 
 const storage = multer.memoryStorage();
 
@@ -147,13 +157,44 @@ const multerProfileImages = multer({
   { name: 'aboutImage', maxCount: 1 },
 ]);
 
+const mediaFileFilter = (
+  _req: Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback,
+): void => {
+  const mime = file.mimetype.toLowerCase();
+  const name = file.originalname;
+  const isImage = IMAGE_MIME_TYPES.includes(mime) && IMAGE_EXTENSIONS.test(name);
+  const isVideo = VIDEO_MIME_TYPES.includes(mime) && VIDEO_EXTENSIONS.test(name);
+  const isPdf = PDF_MIME_TYPES.includes(mime) && PDF_EXTENSIONS.test(name);
+
+  if (isImage || isVideo || isPdf) {
+    cb(null, true);
+  } else {
+    cb(
+      new ValidationError(
+        'Invalid file type. Only JPG, PNG, WebP images, MP4/WebM videos, and PDF documents are allowed.',
+        [
+          {
+            field: file.fieldname,
+            message:
+              'Only JPG, PNG, WebP images, MP4/WebM videos, and PDF documents are allowed.',
+          },
+        ],
+      ),
+    );
+  }
+};
+
 const multerMediaFile = multer({
   storage,
-  limits: { fileSize: MAX_IMAGE_SIZE },
-  fileFilter: imageFileFilter,
+  limits: { fileSize: MAX_VIDEO_SIZE },
+  fileFilter: mediaFileFilter,
 }).fields([
   { name: 'file', maxCount: 1 },
   { name: 'image', maxCount: 1 },
+  { name: 'video', maxCount: 1 },
+  { name: 'media', maxCount: 1 },
 ]);
 
 export const uploadSingleImage = wrapMulter(multerSingleImage);
@@ -164,9 +205,17 @@ export const uploadProfileImages = wrapMulter(multerProfileImages);
 export const uploadMediaFile = (req: Request, res: Response, next: NextFunction): void => {
   wrapMulter(multerMediaFile)(req, res, (err) => {
     if (err) return next(err);
-    const files = req.files as { file?: Express.Multer.File[]; image?: Express.Multer.File[] } | undefined;
+    const files = req.files as
+      | {
+          file?: Express.Multer.File[];
+          image?: Express.Multer.File[];
+          video?: Express.Multer.File[];
+          media?: Express.Multer.File[];
+        }
+      | undefined;
     if (files) {
-      req.file = files.file?.[0] || files.image?.[0];
+      req.file =
+        files.file?.[0] || files.image?.[0] || files.video?.[0] || files.media?.[0];
     }
     next();
   });
