@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { forkJoin, catchError, of } from 'rxjs';
+import { forkJoin, catchError, of, Subscription } from 'rxjs';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
 import {
@@ -174,6 +174,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       window.removeEventListener('resize', this.resizeListener);
       this.resizeListener = null;
     }
+    this.syncSub?.unsubscribe();
   }
 
   public readonly profile = signal<Profile | null>(null);
@@ -305,12 +306,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this.portfolioService.getCvDownloadUrl();
   }
 
+  private syncSub?: Subscription;
+
   public ngOnInit(): void {
     this.updateSlidesPerPage();
     if (typeof window !== 'undefined') {
       this.resizeListener = () => this.updateSlidesPerPage();
       window.addEventListener('resize', this.resizeListener);
     }
+    this.loadHomeData();
+
+    this.syncSub = this.portfolioService?.dataMutated$?.subscribe(() => {
+      this.loadHomeData();
+    });
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
     this.loadHomeData();
   }
 

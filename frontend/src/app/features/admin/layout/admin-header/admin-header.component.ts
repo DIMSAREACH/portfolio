@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit, HostListener, inject, signal, effect } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, HostListener, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
-import { catchError, of } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth.service';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { ThemeService } from '../../../../core/services/theme.service';
@@ -306,7 +306,7 @@ import { Message } from '../../../../core/models';
     </header>
   `,
 })
-export class AdminHeaderComponent implements OnInit {
+export class AdminHeaderComponent implements OnInit, OnDestroy {
   public readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly portfolioService = inject(PortfolioService, { optional: true });
@@ -322,7 +322,9 @@ export class AdminHeaderComponent implements OnInit {
   public readonly isProfileMenuOpen = signal<boolean>(false);
   public readonly unreadCount = signal<number>(0);
   public readonly recentMessages = signal<Message[]>([]);
+  public readonly profileAvatarFallback = signal<string | null>(null);
   public accountMenuItems: MenuItem[] = [];
+  private syncSub?: Subscription;
 
   constructor() {
     effect(() => {
@@ -333,6 +335,33 @@ export class AdminHeaderComponent implements OnInit {
   public ngOnInit(): void {
     this.initAccountMenu(this.isKhmer());
     this.loadNotifications();
+    this.loadProfileAvatarIfMissing();
+
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (mutation.type === 'message') {
+          this.loadNotifications();
+        } else if (mutation.type === 'profile') {
+          this.loadProfileAvatarIfMissing();
+        }
+      });
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
+  }
+
+  private loadProfileAvatarIfMissing(): void {
+    if (!this.portfolioService) return;
+    this.portfolioService
+      .getProfile()
+      .pipe(catchError(() => of(null)))
+      .subscribe((res) => {
+        if (res?.data?.profileImage) {
+          this.profileAvatarFallback.set(res.data.profileImage);
+        }
+      });
   }
 
   public loadNotifications(): void {
@@ -388,6 +417,11 @@ export class AdminHeaderComponent implements OnInit {
   public onEscapeKey(): void {
     this.isNotificationsOpen.set(false);
     this.isProfileMenuOpen.set(false);
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadNotifications();
   }
 
   public toggleProfileMenu(event?: MouseEvent): void {
@@ -474,7 +508,11 @@ export class AdminHeaderComponent implements OnInit {
 
   public userAvatar(): string {
     const user = this.authService.currentUser();
-    return user?.avatar || 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png';
+    return (
+      user?.avatar ||
+      this.profileAvatarFallback() ||
+      'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'
+    );
   }
 
   public onLogout(): void {

@@ -20,13 +20,18 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   // Attach Authorization header if access token exists in memory and header isn't already present
+  const headersToAdd: Record<string, string> = {
+    'Cache-Control': 'no-cache',
+    Pragma: 'no-cache',
+  };
+
   if (token && !modifiedReq.headers.has('Authorization')) {
-    modifiedReq = modifiedReq.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    headersToAdd['Authorization'] = `Bearer ${token}`;
   }
+
+  modifiedReq = modifiedReq.clone({
+    setHeaders: headersToAdd,
+  });
 
   return next(modifiedReq);
 };

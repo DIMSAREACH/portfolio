@@ -1,7 +1,8 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Category, CategoryType } from '../../../core/models';
@@ -302,11 +303,12 @@ import { ConfirmDialogComponent } from '../../../shared';
     </div>
   `,
 })
-export class CategoryListComponent implements OnInit {
+export class CategoryListComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly notificationService = inject(NotificationService);
   private readonly dialog = inject(MatDialog);
   private readonly fb = inject(FormBuilder);
+  private syncSub?: Subscription;
 
   public readonly categories = signal<Category[]>([]);
   public readonly isLoading = signal<boolean>(true);
@@ -330,12 +332,28 @@ export class CategoryListComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadCategories();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'category') {
+          this.loadCategories();
+        }
+      });
+    }
 
     this.categoryForm.get('name')?.valueChanges.subscribe((val: { en?: string }) => {
       if (!this.editingCategoryId && val?.en) {
         this.categoryForm.get('slug')?.setValue(this.slugify(val.en), { emitEvent: false });
       }
     });
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadCategories();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public loadCategories(): void {

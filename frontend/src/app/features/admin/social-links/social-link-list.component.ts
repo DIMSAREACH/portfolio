@@ -1,7 +1,8 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { SocialLink, SocialPlatform } from '../../../core/models';
@@ -267,11 +268,12 @@ import { ConfirmDialogComponent } from '../../../shared';
     </div>
   `,
 })
-export class SocialLinkListComponent implements OnInit {
+export class SocialLinkListComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly notificationService = inject(NotificationService);
   private readonly dialog = inject(MatDialog);
   private readonly fb = inject(FormBuilder);
+  private syncSub?: Subscription;
 
   public readonly socialLinks = signal<SocialLink[]>([]);
   public readonly isLoading = signal<boolean>(true);
@@ -300,6 +302,22 @@ export class SocialLinkListComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadSocialLinks();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'social-link') {
+          this.loadSocialLinks();
+        }
+      });
+    }
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadSocialLinks();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public loadSocialLinks(): void {

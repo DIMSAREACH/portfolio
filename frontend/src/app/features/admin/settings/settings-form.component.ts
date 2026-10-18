@@ -1,6 +1,7 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { LanguageService } from '../../../core/services/language.service';
@@ -158,12 +159,13 @@ import { BilingualFieldComponent } from '../shared';
     </div>
   `,
 })
-export class SettingsFormComponent implements OnInit {
+export class SettingsFormComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly portfolioService = inject(PortfolioService);
   private readonly notificationService = inject(NotificationService);
   public readonly languageService = inject(LanguageService, { optional: true });
   public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
+  private syncSub?: Subscription;
 
   public readonly isSaving = signal<boolean>(false);
 
@@ -179,6 +181,22 @@ export class SettingsFormComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadSettings();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'settings') {
+          this.loadSettings();
+        }
+      });
+    }
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadSettings();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public loadSettings(): void {

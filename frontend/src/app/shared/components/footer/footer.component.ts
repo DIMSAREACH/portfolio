@@ -1,7 +1,7 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { catchError, of } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 import { LanguageService } from '../../../core/services/language.service';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { Profile, SocialLink as BackendSocialLink } from '../../../core/models';
@@ -261,9 +261,10 @@ interface SocialLink {
     }
   `],
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent implements OnInit, OnDestroy {
   private readonly languageService = inject(LanguageService);
   private readonly portfolioService = inject(PortfolioService, { optional: true });
+  private syncSub?: Subscription;
 
   public readonly isKhmer = this.languageService.isKhmer;
   public readonly currentYear = new Date().getFullYear();
@@ -294,6 +295,21 @@ export class FooterComponent implements OnInit {
   ];
 
   public ngOnInit(): void {
+    this.loadFooterData();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'social-link' || mutation.type === 'profile') {
+          this.loadFooterData();
+        }
+      });
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
+  }
+
+  public loadFooterData(): void {
     if (this.portfolioService) {
       this.portfolioService
         .getSocialLinks()

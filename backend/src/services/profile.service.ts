@@ -1,4 +1,6 @@
+import mongoose from 'mongoose';
 import Profile, { IProfile } from '../models/Profile';
+import User from '../models/User';
 import cloudinaryService from './cloudinary.service';
 import logger from '../utils/logger';
 import { BilingualField, BilingualArrayField } from '../types';
@@ -166,7 +168,9 @@ export class ProfileService {
         profile.aboutImage = data.aboutImage;
       }
 
-      return await profile.save();
+      const saved = await profile.save();
+      await this.syncUserAvatarAndName(saved);
+      return saved;
     }
 
     // Create new profile if none exists
@@ -182,7 +186,29 @@ export class ProfileService {
     if (goals) newProfileData.goals = goals;
 
     profile = new Profile(newProfileData);
-    return await profile.save();
+    const saved = await profile.save();
+    await this.syncUserAvatarAndName(saved);
+    return saved;
+  }
+
+  private async syncUserAvatarAndName(profile: IProfile): Promise<void> {
+    try {
+      if (mongoose.connection.readyState !== 1) {
+        return;
+      }
+      const updates: Record<string, unknown> = {};
+      if (profile.profileImage) {
+        updates.avatar = profile.profileImage;
+      }
+      if (profile.fullName?.en) {
+        updates.fullName = profile.fullName.en;
+      }
+      if (Object.keys(updates).length > 0) {
+        await User.updateMany({ role: 'admin' }, { $set: updates }).exec();
+      }
+    } catch (err) {
+      logger.warn('Failed to synchronize profile avatar to User accounts:', err);
+    }
   }
 }
 

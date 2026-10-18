@@ -1,7 +1,8 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { DataViewModule } from 'primeng/dataview';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -612,9 +613,10 @@ export interface AchievementCascadeItem {
     `,
   ],
 })
-export class AchievementsComponent implements OnInit {
+export class AchievementsComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly languageService = inject(LanguageService);
+  private syncSub?: Subscription;
 
   public readonly items = signal<Certification[]>([]);
   public readonly selectedType = signal<string>('all');
@@ -716,6 +718,22 @@ export class AchievementsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadCertifications();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'certification') {
+          this.loadCertifications();
+        }
+      });
+    }
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadCertifications();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public loadCertifications(): void {

@@ -1,7 +1,7 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { of, catchError } from 'rxjs';
+import { of, catchError, Subscription } from 'rxjs';
 import { marked } from 'marked';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { PortfolioService } from '../../../core/services/portfolio.service';
@@ -610,17 +610,19 @@ import {
     </div>
   `,
 })
-export class ProjectDetailComponent implements OnInit {
+export class ProjectDetailComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly languageService = inject(LanguageService);
   private readonly seoService = inject(SeoService);
   private readonly route = inject(ActivatedRoute);
+  private syncSub?: Subscription;
 
   public readonly project = signal<Project | null>(null);
   public readonly relatedProjects = signal<Project[]>([]);
   public readonly isLoading = signal<boolean>(true);
   public readonly error = signal<string | null>(null);
   public readonly imageError = signal<boolean>(false);
+  public readonly currentSlug = signal<string | null>(null);
 
   public readonly isKhmer = computed(() => this.languageService.currentLang() === 'kh');
 
@@ -650,6 +652,7 @@ export class ProjectDetailComponent implements OnInit {
   public ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       const slug = params.get('slug');
+      this.currentSlug.set(slug);
       if (slug) {
         this.loadProjectDetails(slug);
       } else {
@@ -657,6 +660,29 @@ export class ProjectDetailComponent implements OnInit {
         this.isLoading.set(false);
       }
     });
+
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'project' || mutation.type === 'category') {
+          const s = this.currentSlug();
+          if (s) {
+            this.loadProjectDetails(s);
+          }
+        }
+      });
+    }
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    const s = this.currentSlug();
+    if (s) {
+      this.loadProjectDetails(s);
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public loadProjectDetails(slug: string): void {

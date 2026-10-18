@@ -1,6 +1,7 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/services/language.service';
@@ -470,7 +471,7 @@ import { DashboardStats } from '../../../core/models';
     </div>
   `,
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly authService = inject(AuthService);
   public readonly languageService = inject(LanguageService);
@@ -479,6 +480,7 @@ export class DashboardComponent implements OnInit {
   public readonly stats = signal<DashboardStats | null>(null);
   public readonly isLoading = signal<boolean>(true);
   public readonly errorMessage = signal<string | null>(null);
+  private syncSub?: Subscription;
 
   public get adminName(): string {
     const user = this.authService.currentUser();
@@ -486,6 +488,20 @@ export class DashboardComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.loadStats();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe(() => {
+        this.loadStats();
+      });
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
     this.loadStats();
   }
 

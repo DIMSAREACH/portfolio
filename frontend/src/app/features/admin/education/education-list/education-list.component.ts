@@ -1,7 +1,8 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { LanguageService } from '../../../../core/services/language.service';
@@ -65,13 +66,14 @@ import { ConfirmDialogComponent } from '../../../../shared';
     </div>
   `,
 })
-export class EducationListComponent implements OnInit {
+export class EducationListComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
   public readonly languageService = inject(LanguageService, { optional: true });
   public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
+  private syncSub?: Subscription;
 
   public readonly educationList = signal<Education[]>([]);
   public readonly totalItems = signal<number>(0);
@@ -144,6 +146,22 @@ export class EducationListComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadEducation();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'education') {
+          this.loadEducation();
+        }
+      });
+    }
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadEducation();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public loadEducation(): void {

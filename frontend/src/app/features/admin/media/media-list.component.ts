@@ -1,7 +1,8 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Media } from '../../../core/models';
@@ -189,10 +190,11 @@ import { ConfirmDialogComponent } from '../../../shared';
     </div>
   `,
 })
-export class MediaListComponent implements OnInit {
+export class MediaListComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly notificationService = inject(NotificationService);
   private readonly dialog = inject(MatDialog);
+  private syncSub?: Subscription;
 
   public readonly mediaItems = signal<Media[]>([]);
   public readonly isLoading = signal<boolean>(true);
@@ -201,6 +203,22 @@ export class MediaListComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadMedia();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'media') {
+          this.loadMedia();
+        }
+      });
+    }
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadMedia();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public setFilter(mimeType: string): void {

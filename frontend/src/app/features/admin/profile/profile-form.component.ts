@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { LanguageService } from '../../../core/services/language.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Profile } from '../../../core/models';
 import { BilingualFieldComponent, ImageUploadComponent, MarkdownEditorComponent } from '../shared';
 import { AvatarModule } from 'primeng/avatar';
@@ -347,6 +348,7 @@ export class ProfileFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly portfolioService = inject(PortfolioService);
   private readonly notificationService = inject(NotificationService);
+  private readonly authService = inject(AuthService, { optional: true });
   public readonly languageService = inject(LanguageService, { optional: true });
   public readonly isKhmer = computed(() => this.languageService?.isKhmer() ?? false);
 
@@ -519,6 +521,18 @@ export class ProfileFormComponent implements OnInit {
               profileImage: res.data.profileImage || '',
               aboutImage: res.data.aboutImage || '',
             });
+            if (this.authService) {
+              const newAvatar = res.data.profileImage || formVal.profileImage;
+              const newName = formVal.fullName?.en;
+              this.authService.currentUser.update((u) => {
+                if (!u) return u;
+                return {
+                  ...u,
+                  ...(newName ? { fullName: newName } : {}),
+                  ...(newAvatar ? { avatar: newAvatar } : {}),
+                };
+              });
+            }
           }
         },
         error: (err) => {
@@ -567,6 +581,18 @@ export class ProfileFormComponent implements OnInit {
             profileImage: res.data.profileImage || this.profileForm.get('profileImage')?.value,
             aboutImage: res.data.aboutImage || this.profileForm.get('aboutImage')?.value,
           });
+          if (this.authService) {
+            const newAvatar = res.data.profileImage || formVal.profileImage;
+            const newName = formVal.fullName?.en;
+            this.authService.currentUser.update((u) => {
+              if (!u) return u;
+              return {
+                ...u,
+                ...(newName ? { fullName: newName } : {}),
+                ...(newAvatar ? { avatar: newAvatar } : {}),
+              };
+            });
+          }
         }
       },
       error: (err) => {

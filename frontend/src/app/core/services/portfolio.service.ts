@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import {
   Profile,
@@ -25,6 +25,39 @@ import {
 })
 export class PortfolioService {
   private readonly apiService = inject(ApiService);
+
+  /**
+   * Reactive stream fired on every CMS mutation (create/update/delete)
+   * Synchronized across components and browser tabs via BroadcastChannel.
+   */
+  public readonly dataMutated$ = new Subject<{ type: string; id?: string }>();
+  private syncChannel?: BroadcastChannel;
+
+  constructor() {
+    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+      try {
+        this.syncChannel = new BroadcastChannel('portfolio_sync_channel');
+        this.syncChannel.onmessage = (event) => {
+          if (event?.data && event.data.type) {
+            this.dataMutated$.next({ type: event.data.type, id: event.data.id });
+          }
+        };
+      } catch {
+        // BroadcastChannel unavailable or unsupported in environment
+      }
+    }
+  }
+
+  public notifyMutation(type: string, id?: string): void {
+    this.dataMutated$.next({ type, id });
+    try {
+      if (this.syncChannel) {
+        this.syncChannel.postMessage({ type, id, timestamp: Date.now() });
+      }
+    } catch {
+      // Ignore broadcast channel errors
+    }
+  }
 
   /**
    * Fetch developer public profile details
@@ -142,7 +175,9 @@ export class PortfolioService {
    * Submit public contact form message
    */
   public submitContact(message: ContactFormPayload): Observable<ApiResponse<Message>> {
-    return this.apiService.post<ApiResponse<Message>>('/contact', message);
+    return this.apiService
+      .post<ApiResponse<Message>>('/contact', message)
+      .pipe(tap(() => this.notifyMutation('message')));
   }
 
   /**
@@ -191,21 +226,27 @@ export class PortfolioService {
    * Admin: Create project (PRD 9.4, API-005)
    */
   public createAdminProject(project: Partial<Project> | FormData): Observable<ApiResponse<Project>> {
-    return this.apiService.post<ApiResponse<Project>>('/admin/projects', project);
+    return this.apiService
+      .post<ApiResponse<Project>>('/admin/projects', project)
+      .pipe(tap((res) => this.notifyMutation('project', res?.data?._id)));
   }
 
   /**
    * Admin: Update project by ID (PRD 9.4, API-005)
    */
   public updateAdminProject(id: string, project: Partial<Project> | FormData): Observable<ApiResponse<Project>> {
-    return this.apiService.patch<ApiResponse<Project>>(`/admin/projects/${id}`, project);
+    return this.apiService
+      .patch<ApiResponse<Project>>(`/admin/projects/${id}`, project)
+      .pipe(tap((res) => this.notifyMutation('project', res?.data?._id || id)));
   }
 
   /**
    * Admin: Delete project by ID (PRD 9.4, API-005)
    */
   public deleteAdminProject(id: string): Observable<ApiResponse<null>> {
-    return this.apiService.delete<ApiResponse<null>>(`/admin/projects/${id}`);
+    return this.apiService
+      .delete<ApiResponse<null>>(`/admin/projects/${id}`)
+      .pipe(tap(() => this.notifyMutation('project', id)));
   }
 
   /**
@@ -232,21 +273,27 @@ export class PortfolioService {
    * Admin: Create skill (PRD 9.5, API-006)
    */
   public createAdminSkill(skill: Partial<Skill>): Observable<ApiResponse<Skill>> {
-    return this.apiService.post<ApiResponse<Skill>>('/admin/skills', skill);
+    return this.apiService
+      .post<ApiResponse<Skill>>('/admin/skills', skill)
+      .pipe(tap((res) => this.notifyMutation('skill', res?.data?._id)));
   }
 
   /**
    * Admin: Update skill by ID (PRD 9.5, API-006)
    */
   public updateAdminSkill(id: string, skill: Partial<Skill>): Observable<ApiResponse<Skill>> {
-    return this.apiService.patch<ApiResponse<Skill>>(`/admin/skills/${id}`, skill);
+    return this.apiService
+      .patch<ApiResponse<Skill>>(`/admin/skills/${id}`, skill)
+      .pipe(tap((res) => this.notifyMutation('skill', res?.data?._id || id)));
   }
 
   /**
    * Admin: Delete skill by ID (PRD 9.5, API-006)
    */
   public deleteAdminSkill(id: string): Observable<ApiResponse<null>> {
-    return this.apiService.delete<ApiResponse<null>>(`/admin/skills/${id}`);
+    return this.apiService
+      .delete<ApiResponse<null>>(`/admin/skills/${id}`)
+      .pipe(tap(() => this.notifyMutation('skill', id)));
   }
 
   /**
@@ -273,21 +320,27 @@ export class PortfolioService {
    * Admin: Create experience (PRD 9.6, API-007)
    */
   public createAdminExperience(experience: Partial<Experience>): Observable<ApiResponse<Experience>> {
-    return this.apiService.post<ApiResponse<Experience>>('/admin/experiences', experience);
+    return this.apiService
+      .post<ApiResponse<Experience>>('/admin/experiences', experience)
+      .pipe(tap((res) => this.notifyMutation('experience', res?.data?._id)));
   }
 
   /**
    * Admin: Update experience by ID (PRD 9.6, API-007)
    */
   public updateAdminExperience(id: string, experience: Partial<Experience>): Observable<ApiResponse<Experience>> {
-    return this.apiService.patch<ApiResponse<Experience>>(`/admin/experiences/${id}`, experience);
+    return this.apiService
+      .patch<ApiResponse<Experience>>(`/admin/experiences/${id}`, experience)
+      .pipe(tap((res) => this.notifyMutation('experience', res?.data?._id || id)));
   }
 
   /**
    * Admin: Delete experience by ID (PRD 9.6, API-007)
    */
   public deleteAdminExperience(id: string): Observable<ApiResponse<null>> {
-    return this.apiService.delete<ApiResponse<null>>(`/admin/experiences/${id}`);
+    return this.apiService
+      .delete<ApiResponse<null>>(`/admin/experiences/${id}`)
+      .pipe(tap(() => this.notifyMutation('experience', id)));
   }
 
   /**
@@ -312,21 +365,27 @@ export class PortfolioService {
    * Admin: Create education (PRD 9.7, API-008)
    */
   public createAdminEducation(education: Partial<Education>): Observable<ApiResponse<Education>> {
-    return this.apiService.post<ApiResponse<Education>>('/admin/education', education);
+    return this.apiService
+      .post<ApiResponse<Education>>('/admin/education', education)
+      .pipe(tap((res) => this.notifyMutation('education', res?.data?._id)));
   }
 
   /**
    * Admin: Update education by ID (PRD 9.7, API-008)
    */
   public updateAdminEducation(id: string, education: Partial<Education>): Observable<ApiResponse<Education>> {
-    return this.apiService.patch<ApiResponse<Education>>(`/admin/education/${id}`, education);
+    return this.apiService
+      .patch<ApiResponse<Education>>(`/admin/education/${id}`, education)
+      .pipe(tap((res) => this.notifyMutation('education', res?.data?._id || id)));
   }
 
   /**
    * Admin: Delete education by ID (PRD 9.7, API-008)
    */
   public deleteAdminEducation(id: string): Observable<ApiResponse<null>> {
-    return this.apiService.delete<ApiResponse<null>>(`/admin/education/${id}`);
+    return this.apiService
+      .delete<ApiResponse<null>>(`/admin/education/${id}`)
+      .pipe(tap(() => this.notifyMutation('education', id)));
   }
 
   /**
@@ -353,21 +412,27 @@ export class PortfolioService {
    * Admin: Create certification (PRD 9.8, API-009)
    */
   public createAdminCertification(cert: Partial<Certification> | FormData): Observable<ApiResponse<Certification>> {
-    return this.apiService.post<ApiResponse<Certification>>('/admin/certifications', cert);
+    return this.apiService
+      .post<ApiResponse<Certification>>('/admin/certifications', cert)
+      .pipe(tap((res) => this.notifyMutation('certification', res?.data?._id)));
   }
 
   /**
    * Admin: Update certification by ID (PRD 9.8, API-009)
    */
   public updateAdminCertification(id: string, cert: Partial<Certification> | FormData): Observable<ApiResponse<Certification>> {
-    return this.apiService.patch<ApiResponse<Certification>>(`/admin/certifications/${id}`, cert);
+    return this.apiService
+      .patch<ApiResponse<Certification>>(`/admin/certifications/${id}`, cert)
+      .pipe(tap((res) => this.notifyMutation('certification', res?.data?._id || id)));
   }
 
   /**
    * Admin: Delete certification by ID (PRD 9.8, API-009)
    */
   public deleteAdminCertification(id: string): Observable<ApiResponse<null>> {
-    return this.apiService.delete<ApiResponse<null>>(`/admin/certifications/${id}`);
+    return this.apiService
+      .delete<ApiResponse<null>>(`/admin/certifications/${id}`)
+      .pipe(tap(() => this.notifyMutation('certification', id)));
   }
 
   /**
@@ -396,35 +461,45 @@ export class PortfolioService {
    * Admin: Create blog post (PRD 9.9, API-010)
    */
   public createAdminBlogPost(post: Partial<BlogPost> | FormData): Observable<ApiResponse<BlogPost>> {
-    return this.apiService.post<ApiResponse<BlogPost>>('/admin/blog', post);
+    return this.apiService
+      .post<ApiResponse<BlogPost>>('/admin/blog', post)
+      .pipe(tap((res) => this.notifyMutation('blog', res?.data?._id)));
   }
 
   /**
    * Admin: Update blog post by ID (PRD 9.9, API-010)
    */
   public updateAdminBlogPost(id: string, post: Partial<BlogPost> | FormData): Observable<ApiResponse<BlogPost>> {
-    return this.apiService.patch<ApiResponse<BlogPost>>(`/admin/blog/${id}`, post);
+    return this.apiService
+      .patch<ApiResponse<BlogPost>>(`/admin/blog/${id}`, post)
+      .pipe(tap((res) => this.notifyMutation('blog', res?.data?._id || id)));
   }
 
   /**
    * Admin: Delete blog post by ID (PRD 9.9, API-010)
    */
   public deleteAdminBlogPost(id: string): Observable<ApiResponse<null>> {
-    return this.apiService.delete<ApiResponse<null>>(`/admin/blog/${id}`);
+    return this.apiService
+      .delete<ApiResponse<null>>(`/admin/blog/${id}`)
+      .pipe(tap(() => this.notifyMutation('blog', id)));
   }
 
   /**
    * Admin: Publish blog post by ID (PRD 9.9, API-010)
    */
   public publishAdminBlogPost(id: string): Observable<ApiResponse<BlogPost>> {
-    return this.apiService.patch<ApiResponse<BlogPost>>(`/admin/blog/${id}/publish`, {});
+    return this.apiService
+      .patch<ApiResponse<BlogPost>>(`/admin/blog/${id}/publish`, {})
+      .pipe(tap(() => this.notifyMutation('blog', id)));
   }
 
   /**
    * Admin: Unpublish blog post by ID (PRD 9.9, API-010)
    */
   public unpublishAdminBlogPost(id: string): Observable<ApiResponse<BlogPost>> {
-    return this.apiService.patch<ApiResponse<BlogPost>>(`/admin/blog/${id}/unpublish`, {});
+    return this.apiService
+      .patch<ApiResponse<BlogPost>>(`/admin/blog/${id}/unpublish`, {})
+      .pipe(tap(() => this.notifyMutation('blog', id)));
   }
 
   // ==========================================
@@ -436,15 +511,21 @@ export class PortfolioService {
   }
 
   public createAdminCategory(data: Partial<Category>): Observable<ApiResponse<Category>> {
-    return this.apiService.post<ApiResponse<Category>>('/admin/categories', data);
+    return this.apiService
+      .post<ApiResponse<Category>>('/admin/categories', data)
+      .pipe(tap((res) => this.notifyMutation('category', res?.data?._id)));
   }
 
   public updateAdminCategory(id: string, data: Partial<Category>): Observable<ApiResponse<Category>> {
-    return this.apiService.patch<ApiResponse<Category>>(`/admin/categories/${id}`, data);
+    return this.apiService
+      .patch<ApiResponse<Category>>(`/admin/categories/${id}`, data)
+      .pipe(tap((res) => this.notifyMutation('category', res?.data?._id || id)));
   }
 
   public deleteAdminCategory(id: string): Observable<ApiResponse<null>> {
-    return this.apiService.delete<ApiResponse<null>>(`/admin/categories/${id}`);
+    return this.apiService
+      .delete<ApiResponse<null>>(`/admin/categories/${id}`)
+      .pipe(tap(() => this.notifyMutation('category', id)));
   }
 
   // ==========================================
@@ -466,19 +547,27 @@ export class PortfolioService {
   }
 
   public markAdminMessageAsRead(id: string): Observable<ApiResponse<Message>> {
-    return this.apiService.patch<ApiResponse<Message>>(`/admin/messages/${id}/read`, {});
+    return this.apiService
+      .patch<ApiResponse<Message>>(`/admin/messages/${id}/read`, {})
+      .pipe(tap(() => this.notifyMutation('message', id)));
   }
 
   public markAdminMessageAsUnread(id: string): Observable<ApiResponse<Message>> {
-    return this.apiService.patch<ApiResponse<Message>>(`/admin/messages/${id}/unread`, {});
+    return this.apiService
+      .patch<ApiResponse<Message>>(`/admin/messages/${id}/unread`, {})
+      .pipe(tap(() => this.notifyMutation('message', id)));
   }
 
   public archiveAdminMessage(id: string): Observable<ApiResponse<Message>> {
-    return this.apiService.patch<ApiResponse<Message>>(`/admin/messages/${id}/archive`, {});
+    return this.apiService
+      .patch<ApiResponse<Message>>(`/admin/messages/${id}/archive`, {})
+      .pipe(tap(() => this.notifyMutation('message', id)));
   }
 
   public deleteAdminMessage(id: string): Observable<ApiResponse<null>> {
-    return this.apiService.delete<ApiResponse<null>>(`/admin/messages/${id}`);
+    return this.apiService
+      .delete<ApiResponse<null>>(`/admin/messages/${id}`)
+      .pipe(tap(() => this.notifyMutation('message', id)));
   }
 
   // ==========================================
@@ -490,7 +579,9 @@ export class PortfolioService {
   }
 
   public upsertAdminProfile(data: Partial<Profile> | FormData): Observable<ApiResponse<Profile>> {
-    return this.apiService.put<ApiResponse<Profile>>('/admin/profile', data);
+    return this.apiService
+      .put<ApiResponse<Profile>>('/admin/profile', data)
+      .pipe(tap(() => this.notifyMutation('profile')));
   }
 
   // ==========================================
@@ -502,19 +593,27 @@ export class PortfolioService {
   }
 
   public createAdminSocialLink(data: Partial<SocialLink>): Observable<ApiResponse<SocialLink>> {
-    return this.apiService.post<ApiResponse<SocialLink>>('/admin/social-links', data);
+    return this.apiService
+      .post<ApiResponse<SocialLink>>('/admin/social-links', data)
+      .pipe(tap((res) => this.notifyMutation('social-link', res?.data?._id)));
   }
 
   public updateAdminSocialLink(id: string, data: Partial<SocialLink>): Observable<ApiResponse<SocialLink>> {
-    return this.apiService.patch<ApiResponse<SocialLink>>(`/admin/social-links/${id}`, data);
+    return this.apiService
+      .patch<ApiResponse<SocialLink>>(`/admin/social-links/${id}`, data)
+      .pipe(tap((res) => this.notifyMutation('social-link', res?.data?._id || id)));
   }
 
   public deleteAdminSocialLink(id: string): Observable<ApiResponse<null>> {
-    return this.apiService.delete<ApiResponse<null>>(`/admin/social-links/${id}`);
+    return this.apiService
+      .delete<ApiResponse<null>>(`/admin/social-links/${id}`)
+      .pipe(tap(() => this.notifyMutation('social-link', id)));
   }
 
   public reorderAdminSocialLinks(linkIds: string[]): Observable<ApiResponse<SocialLink[]>> {
-    return this.apiService.patch<ApiResponse<SocialLink[]>>('/admin/social-links/reorder', { linkIds });
+    return this.apiService
+      .patch<ApiResponse<SocialLink[]>>('/admin/social-links/reorder', { linkIds })
+      .pipe(tap(() => this.notifyMutation('social-link')));
   }
 
   // ==========================================
@@ -531,11 +630,15 @@ export class PortfolioService {
   }
 
   public uploadAdminMedia(formData: FormData): Observable<ApiResponse<Media>> {
-    return this.apiService.post<ApiResponse<Media>>('/admin/media/upload', formData);
+    return this.apiService
+      .post<ApiResponse<Media>>('/admin/media/upload', formData)
+      .pipe(tap((res) => this.notifyMutation('media', res?.data?._id)));
   }
 
   public deleteAdminMedia(id: string): Observable<ApiResponse<null>> {
-    return this.apiService.delete<ApiResponse<null>>(`/admin/media/${id}`);
+    return this.apiService
+      .delete<ApiResponse<null>>(`/admin/media/${id}`)
+      .pipe(tap(() => this.notifyMutation('media', id)));
   }
 
   // ==========================================
@@ -547,11 +650,15 @@ export class PortfolioService {
   }
 
   public uploadAdminCv(formData: FormData): Observable<ApiResponse<{ cvUrl: string }>> {
-    return this.apiService.post<ApiResponse<{ cvUrl: string }>>('/admin/cv/upload', formData);
+    return this.apiService
+      .post<ApiResponse<{ cvUrl: string }>>('/admin/cv/upload', formData)
+      .pipe(tap(() => this.notifyMutation('cv')));
   }
 
   public deleteAdminCv(): Observable<ApiResponse<null>> {
-    return this.apiService.delete<ApiResponse<null>>('/admin/cv');
+    return this.apiService
+      .delete<ApiResponse<null>>('/admin/cv')
+      .pipe(tap(() => this.notifyMutation('cv')));
   }
 
   // ==========================================
@@ -563,7 +670,9 @@ export class PortfolioService {
   }
 
   public updateAdminSettings(settings: Partial<Settings>): Observable<ApiResponse<Settings>> {
-    return this.apiService.put<ApiResponse<Settings>>('/admin/settings', settings);
+    return this.apiService
+      .put<ApiResponse<Settings>>('/admin/settings', settings)
+      .pipe(tap(() => this.notifyMutation('settings')));
   }
 }
 

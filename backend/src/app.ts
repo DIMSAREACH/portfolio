@@ -52,6 +52,14 @@ app.use(
   }),
 );
 
+// 6. Disable client caching for real-time API routes (ensures immediate updates without page refresh)
+app.use('/api', (_req: Request, res: Response, next: NextFunction) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
 // 7. API Routes (/api/v1/*)
 app.use('/api/v1', apiRoutes);
 

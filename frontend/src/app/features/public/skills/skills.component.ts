@@ -1,7 +1,8 @@
-import { Component, OnInit, inject, signal, computed, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
@@ -588,9 +589,10 @@ import { AnimateOnScrollModule } from 'primeng/animateonscroll';
     </div>
   `,
 })
-export class SkillsComponent implements OnInit {
+export class SkillsComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly languageService = inject(LanguageService);
+  private syncSub?: Subscription;
 
   public readonly skills = signal<Skill[]>([]);
   public readonly isLoading = signal<boolean>(true);
@@ -747,6 +749,22 @@ export class SkillsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadSkills();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'skill' || mutation.type === 'category') {
+          this.loadSkills();
+        }
+      });
+    }
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadSkills();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public loadSkills(): void {

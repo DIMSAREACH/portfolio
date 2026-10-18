@@ -1,8 +1,8 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { catchError, of } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
@@ -460,9 +460,10 @@ export interface EducationCascadeItem {
     </div>
   `,
 })
-export class EducationComponent implements OnInit {
+export class EducationComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly languageService = inject(LanguageService);
+  private syncSub?: Subscription;
 
   public readonly education = signal<Education[]>([]);
   public readonly isLoading = signal<boolean>(true);
@@ -553,6 +554,22 @@ export class EducationComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadEducationData();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'education') {
+          this.loadEducationData();
+        }
+      });
+    }
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadEducationData();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public loadEducationData(): void {

@@ -1,7 +1,7 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { of, catchError } from 'rxjs';
+import { of, catchError, Subscription } from 'rxjs';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -439,11 +439,12 @@ import { AnimateOnScrollModule } from 'primeng/animateonscroll';
     </div>
   `,
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly portfolioService = inject(PortfolioService);
   private readonly languageService = inject(LanguageService);
   private readonly notificationService = inject(NotificationService);
+  private syncSub?: Subscription;
 
   public readonly contactForm: FormGroup;
   public readonly isSubmitting = signal<boolean>(false);
@@ -469,6 +470,24 @@ export class ContactComponent implements OnInit {
   public ngOnInit(): void {
     this.loadProfile();
     this.loadSocialLinks();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (!mutation.type || mutation.type === 'profile' || mutation.type === 'social-link') {
+          this.loadProfile();
+          this.loadSocialLinks();
+        }
+      });
+    }
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadProfile();
+    this.loadSocialLinks();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public loadProfile(): void {

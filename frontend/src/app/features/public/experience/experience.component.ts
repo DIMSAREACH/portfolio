@@ -1,7 +1,8 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
@@ -437,9 +438,10 @@ import { AnimateOnScrollModule } from 'primeng/animateonscroll';
     </div>
   `,
 })
-export class ExperienceComponent implements OnInit {
+export class ExperienceComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly languageService = inject(LanguageService);
+  private syncSub?: Subscription;
 
   public readonly experiences = signal<Experience[]>([]);
   public readonly isLoading = signal<boolean>(true);
@@ -523,6 +525,27 @@ export class ExperienceComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadExperiences();
+    if (this.portfolioService?.dataMutated$) {
+      this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
+        if (
+          !mutation.type ||
+          mutation.type === 'experience' ||
+          mutation.type === 'settings' ||
+          mutation.type === 'cv'
+        ) {
+          this.loadExperiences();
+        }
+      });
+    }
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadExperiences();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public loadExperiences(): void {

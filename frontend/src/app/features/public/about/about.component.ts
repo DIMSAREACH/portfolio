@@ -1,7 +1,7 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { forkJoin, of, catchError } from 'rxjs';
+import { forkJoin, of, catchError, Subscription } from 'rxjs';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { Profile, Education, Settings } from '../../../core/models';
@@ -362,9 +362,10 @@ import { AnimateOnScrollModule } from 'primeng/animateonscroll';
     </div>
   `,
 })
-export class AboutComponent implements OnInit {
+export class AboutComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly languageService = inject(LanguageService);
+  private syncSub?: Subscription;
 
   public readonly isKhmer = this.languageService.isKhmer;
   public readonly isLoading = signal<boolean>(true);
@@ -396,6 +397,26 @@ export class AboutComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadData();
+    this.syncSub = this.portfolioService?.dataMutated$?.subscribe((mutation) => {
+      if (
+        !mutation.type ||
+        mutation.type === 'profile' ||
+        mutation.type === 'education' ||
+        mutation.type === 'settings' ||
+        mutation.type === 'cv'
+      ) {
+        this.loadData();
+      }
+    });
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadData();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public loadData(): void {

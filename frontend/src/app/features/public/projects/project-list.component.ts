@@ -1,8 +1,8 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-import { of, catchError } from 'rxjs';
+import { of, catchError, Subscription } from 'rxjs';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
@@ -420,11 +420,12 @@ export interface ProjectCascadeItem {
     </div>
   `,
 })
-export class ProjectListComponent implements OnInit {
+export class ProjectListComponent implements OnInit, OnDestroy {
   private readonly portfolioService = inject(PortfolioService);
   private readonly languageService = inject(LanguageService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private syncSub?: Subscription;
 
   public readonly projects = signal<Project[]>([]);
   public readonly categories = signal<Category[]>([]);
@@ -507,6 +508,23 @@ export class ProjectListComponent implements OnInit {
     });
 
     this.loadCategories();
+
+    this.syncSub = this.portfolioService?.dataMutated$?.subscribe((mutation) => {
+      if (!mutation.type || mutation.type === 'project' || mutation.type === 'category') {
+        this.loadProjects();
+        this.loadCategories();
+      }
+    });
+  }
+
+  @HostListener('window:focus')
+  public onWindowFocus(): void {
+    this.loadProjects();
+    this.loadCategories();
+  }
+
+  public ngOnDestroy(): void {
+    this.syncSub?.unsubscribe();
   }
 
   public setViewMode(mode: ProjectViewMode): void {
