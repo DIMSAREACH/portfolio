@@ -157,6 +157,20 @@ export const routes: Routes = [
     },
   },
 
+  // Admin password reset page (unauthenticated guest only)
+  {
+    path: 'admin/reset-password',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import(
+        './features/admin/reset-password/reset-password.component'
+      ).then((m) => m.ResetPasswordComponent),
+    title: 'Reset Password | Portfolio CMS',
+    data: {
+      robots: 'noindex, nofollow',
+    },
+  },
+
   // Admin protected management routes
   {
     path: 'admin',

@@ -420,23 +420,25 @@ export class LoginComponent {
     this.notificationService.showInfo('Demo admin credentials applied.', 'Autofill');
   }
 
-  public onForgotPassword(): void {
-    if (this.isFirebaseConfigured()) {
-      const email = this.loginForm.get('email')?.value?.trim();
-      if (!email || this.loginForm.get('email')?.invalid) {
-        this.setAlert(
-          'Please enter your admin email address above, then click Forgot Password to receive a reset link.',
-          'info',
-          'Email Required',
-        );
-        this.notificationService.showWarning(
-          'Please enter a valid email address in the field above.',
-          'Email Required',
-        );
-        return;
-      }
+  public sendPasswordReset(): void {
+    const email = this.loginForm.get('email')?.value?.trim();
+    if (!email || this.loginForm.get('email')?.invalid) {
+      this.setAlert(
+        'Please enter a valid administrator email address to receive reset instructions.',
+        'info',
+        'Email Required',
+      );
+      this.notificationService.showWarning(
+        'Please enter a valid email address in the field above.',
+        'Email Required',
+      );
+      return;
+    }
 
-      this.isLoading.set(true);
+    this.isLoading.set(true);
+    this.clearAlert();
+
+    if (this.isFirebaseConfigured()) {
       this.firebaseAuthService
         .sendPasswordReset(email)
         .then(() => {
@@ -460,9 +462,57 @@ export class LoginComponent {
       return;
     }
 
+    this.authService.forgotPassword(email).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        const msg =
+          res?.message ||
+          'Password reset instructions have been dispatched to your email address.';
+        this.setAlert(msg, 'success', 'Reset Link Dispatched');
+        this.notificationService.showSuccess(
+          'Password reset email sent successfully.',
+          'Reset Link Sent',
+        );
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        const msg =
+          err?.error?.message ||
+          'Failed to dispatch password reset instructions. Please try again.';
+        this.setAlert(msg, 'error', 'Reset Failed');
+        this.notificationService.showError(msg, 'Reset Failed');
+      },
+    });
+  }
+
+  public onForgotPassword(): void {
+    const email = this.loginForm.get('email')?.value?.trim();
+
+    if (this.isFirebaseConfigured()) {
+      if (!email || this.loginForm.get('email')?.invalid) {
+        this.setAlert(
+          'Please enter your admin email address above, then click Forgot Password to receive a reset link.',
+          'info',
+          'Email Required',
+        );
+        this.notificationService.showWarning(
+          'Please enter a valid email address in the field above.',
+          'Email Required',
+        );
+        return;
+      }
+      this.sendPasswordReset();
+      return;
+    }
+
+    if (email && !this.loginForm.get('email')?.invalid) {
+      this.sendPasswordReset();
+      return;
+    }
+
     if (this.isProduction) {
       this.setAlert(
-        'For account recovery and credentials management in production, please contact your systems administrator or review your server environment settings.',
+        'Please enter your admin email address above, then click Forgot Password to receive a reset link.',
         'info',
         'Account Recovery',
       );

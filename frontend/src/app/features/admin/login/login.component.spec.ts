@@ -15,6 +15,7 @@ describe('Admin LoginComponent', () => {
   let authServiceMock: {
     login: ReturnType<typeof vi.fn>;
     loginWithFirebase: ReturnType<typeof vi.fn>;
+    forgotPassword: ReturnType<typeof vi.fn>;
   };
 
   let firebaseAuthServiceMock: {
@@ -53,6 +54,13 @@ describe('Admin LoginComponent', () => {
     authServiceMock = {
       login: vi.fn().mockReturnValue(of(mockAuthResponse)),
       loginWithFirebase: vi.fn().mockReturnValue(of(mockAuthResponse)),
+      forgotPassword: vi.fn().mockReturnValue(
+        of({
+          success: true,
+          message: 'Password reset email sent',
+          data: { message: 'Password reset email sent' },
+        }),
+      ),
     };
 
     firebaseAuthServiceMock = {
@@ -279,6 +287,19 @@ describe('Admin LoginComponent', () => {
     expect(notificationServiceMock.showWarning).toHaveBeenCalledWith(
       'Please enter a valid email address in the field above.',
       'Email Required',
+    );
+  });
+
+  it('should send password reset instructions via backend AuthService when email is entered and Firebase is not configured', () => {
+    firebaseAuthServiceMock.isConfigured.mockReturnValue(false);
+    component.loginForm.patchValue({ email: 'admin@portfolio.dev' });
+
+    component.onForgotPassword();
+
+    expect(authServiceMock.forgotPassword).toHaveBeenCalledWith('admin@portfolio.dev');
+    expect(notificationServiceMock.showSuccess).toHaveBeenCalledWith(
+      'Password reset email sent successfully.',
+      'Reset Link Sent',
     );
   });
 

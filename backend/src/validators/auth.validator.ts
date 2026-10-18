@@ -40,9 +40,39 @@ export const firebaseLoginValidator: ValidationChain[] = [
     .withMessage('Firebase ID token is required'),
 ];
 
+/**
+ * Validation rules for POST /api/v1/auth/forgot-password
+ */
+export const forgotPasswordValidator: ValidationChain[] = [
+  body('email')
+    .trim()
+    .notEmpty()
+    .withMessage('Email is required')
+    .isEmail()
+    .withMessage('Please provide a valid email address')
+    .normalizeEmail(),
+];
+
+/**
+ * Validation rules for POST /api/v1/auth/reset-password
+ */
+export const resetPasswordValidator: ValidationChain[] = [
+  body('token')
+    .trim()
+    .notEmpty()
+    .withMessage('Password reset token is required'),
+  body('password')
+    .notEmpty()
+    .withMessage('New password is required')
+    .isLength({ min: 8 })
+    .withMessage('New password must be at least 8 characters long'),
+];
+
 export default {
   loginValidator,
   changePasswordValidator,
   firebaseLoginValidator,
+  forgotPasswordValidator,
+  resetPasswordValidator,
 };
 

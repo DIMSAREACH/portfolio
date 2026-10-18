@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals
 import app from '../../src/app';
 import User from '../../src/models/User';
 import { generateAccessToken, generateRefreshToken } from '../../src/utils/jwt';
+import emailService from '../../src/services/email.service';
 
 describe('Auth Endpoints Integration Tests (/api/v1/auth)', () => {
   const dummyUserId = '654321654321654321654321';
@@ -260,6 +261,93 @@ describe('Auth Endpoints Integration Tests (/api/v1/auth)', () => {
 
       expect(res.status).toBe(401);
       expect(res.body.success).toBe(false);
+    });
+  });
+
+  describe('POST /api/v1/auth/forgot-password', () => {
+    it('should return 200 and success message for valid email', async () => {
+      jest.spyOn(User, 'findOne').mockResolvedValue(mockUserInstance as any);
+      jest.spyOn(emailService, 'sendPasswordResetEmail').mockResolvedValue({
+        success: true,
+        messageId: 'msg-forgot-1',
+      });
+
+      const res = await request(app)
+        .post('/api/v1/auth/forgot-password')
+        .send({ email: 'admin@portfolio.dev' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.message).toContain('password reset instructions have been sent');
+    });
+
+    it('should return 400 when email format is invalid', async () => {
+      const res = await request(app)
+        .post('/api/v1/auth/forgot-password')
+        .send({ email: 'invalid-email-address' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toBe('Validation failed');
+    });
+  });
+
+  describe('POST /api/v1/auth/reset-password', () => {
+    it('should return 200 when token is valid and password meets criteria', async () => {
+      jest.spyOn(User, 'findOne').mockResolvedValue(mockUserInstance as any);
+
+      const res = await request(app)
+        .post('/api/v1/auth/reset-password')
+        .send({
+          token: 'valid-reset-token-12345',
+          password: 'NewSuperPassword@123',
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.message).toContain('Password has been reset successfully');
+      expect(mockUserInstance.password).toBe('NewSuperPassword@123');
+      expect(mockUserInstance.save).toHaveBeenCalled();
+    });
+
+    it('should return 400 when token is missing', async () => {
+      const res = await request(app)
+        .post('/api/v1/auth/reset-password')
+        .send({
+          password: 'NewSuperPassword@123',
+        });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toBe('Validation failed');
+    });
+
+    it('should return 400 when password is too short', async () => {
+      const res = await request(app)
+        .post('/api/v1/auth/reset-password')
+        .send({
+          token: 'valid-reset-token-12345',
+          password: 'short',
+        });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toBe('Validation failed');
+    });
+
+    it('should return 400 when token is invalid or expired', async () => {
+      jest.spyOn(User, 'findOne').mockResolvedValue(null);
+
+      const res = await request(app)
+        .post('/api/v1/auth/reset-password')
+        .send({
+          token: 'expired-or-invalid-token',
+          password: 'NewSuperPassword@123',
+        });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toContain('Password reset token is invalid or has expired');
     });
   });
 });

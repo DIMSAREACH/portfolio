@@ -334,6 +334,104 @@ Developer Portfolio
       };
     }
   }
+
+  /**
+   * Send password reset email containing a secure one-time link.
+   * Catches errors gracefully and returns an EmailResult.
+   */
+  async sendPasswordResetEmail(
+    to: string,
+    resetUrl: string,
+    userName = 'Administrator',
+  ): Promise<EmailResult> {
+    try {
+      const safeName = escapeHtml(userName);
+      const safeUrl = resetUrl;
+      const subject = 'Password Reset Request - Dim Sareach Portfolio CMS';
+
+      const textBody = `
+Hello ${userName},
+
+A password reset was requested for your Portfolio CMS administrator account (${to}).
+
+To reset your password, please open the following link in your browser:
+${resetUrl}
+
+This link is valid for 1 hour from the time it was requested.
+
+If you did not request a password reset, you can safely ignore this email. Your current password will remain unchanged.
+
+Best regards,
+Portfolio Security
+`.trim();
+
+      const htmlBody = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Your Password</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1e293b; background-color: #f8fafc; margin: 0; padding: 24px; }
+    .container { max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .header { background: #4f46e5; color: #ffffff; padding: 28px 24px; text-align: center; }
+    .header h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+    .content { padding: 32px 24px; }
+    .button-wrap { text-align: center; margin: 32px 0; }
+    .btn { display: inline-block; background: #4f46e5; color: #ffffff !important; font-weight: 600; font-size: 15px; text-decoration: none; padding: 14px 32px; border-radius: 8px; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3); }
+    .url-fallback { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; font-family: monospace; font-size: 12px; word-break: break-all; color: #64748b; margin-top: 16px; }
+    .notice { font-size: 13px; color: #64748b; border-left: 3px solid #f59e0b; padding-left: 12px; margin: 24px 0; }
+    .footer { padding: 20px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Portfolio CMS Security</h1>
+    </div>
+    <div class="content">
+      <p style="font-size: 16px; margin-top: 0;">Hello <strong>${safeName}</strong>,</p>
+      <p>We received a request to reset the password for your administrator account (<strong style="color: #4f46e5;">${to}</strong>).</p>
+      <p>Click the button below to set a new password:</p>
+      
+      <div class="button-wrap">
+        <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="btn">Reset Password</a>
+      </div>
+
+      <div class="notice">
+        <strong>Security Notice:</strong> This link is single-use and will expire in <strong>1 hour</strong>. If you did not request this change, please ignore this email or review your account activity.
+      </div>
+
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Having trouble with the button? Copy and paste this URL into your browser:</p>
+      <div class="url-fallback">${safeUrl}</div>
+    </div>
+    <div class="footer">
+      Developer Portfolio &bull; Automated Security Service
+    </div>
+  </div>
+</body>
+</html>
+`.trim();
+
+      return await this.sendEmail({
+        to,
+        subject,
+        text: textBody,
+        html: htmlBody,
+      });
+    } catch (unexpectedError) {
+      const errorMessage = (unexpectedError as Error).message;
+      logger.error('Unexpected error in sendPasswordResetEmail', {
+        error: errorMessage,
+        to,
+      });
+      return {
+        success: false,
+        error: errorMessage,
+      };
+    }
+  }
 }
 
 export const emailService = new EmailService();

@@ -1,12 +1,18 @@
 import { Router } from 'express';
 import authController from '../controllers/auth.controller';
 import { authenticate } from '../middleware/auth.middleware';
-import { loginLimiter } from '../middleware/rateLimiter.middleware';
+import {
+  loginLimiter,
+  forgotPasswordLimiter,
+  resetPasswordLimiter,
+} from '../middleware/rateLimiter.middleware';
 import { validate } from '../middleware/validate.middleware';
 import {
   loginValidator,
   changePasswordValidator,
   firebaseLoginValidator,
+  forgotPasswordValidator,
+  resetPasswordValidator,
 } from '../validators/auth.validator';
 
 const router = Router();
@@ -165,6 +171,79 @@ router.patch(
   authenticate,
   validate(changePasswordValidator),
   authController.changePassword,
+);
+
+/**
+ * @swagger
+ * /auth/forgot-password:
+ *   post:
+ *     summary: Request password reset link
+ *     description: Generates a secure single-use password reset token and dispatches an email to the user.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: admin@portfolio.dev
+ *     responses:
+ *       200:
+ *         description: Reset instructions sent (if account exists)
+ *       400:
+ *         description: Validation error
+ *       429:
+ *         description: Too many requests
+ */
+router.post(
+  '/forgot-password',
+  forgotPasswordLimiter,
+  validate(forgotPasswordValidator),
+  authController.forgotPassword,
+);
+
+/**
+ * @swagger
+ * /auth/reset-password:
+ *   post:
+ *     summary: Reset password with token
+ *     description: Verifies single-use reset token and updates the user's password.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *               - password
+ *             properties:
+ *               token:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: NewAdmin@123456
+ *     responses:
+ *       200:
+ *         description: Password reset successful
+ *       400:
+ *         description: Invalid or expired token / validation error
+ *       429:
+ *         description: Too many requests
+ */
+router.post(
+  '/reset-password',
+  resetPasswordLimiter,
+  validate(resetPasswordValidator),
+  authController.resetPassword,
 );
 
 export default router;

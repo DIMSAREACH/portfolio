@@ -79,6 +79,21 @@ export class AuthController {
     await authService.changePassword(req.user!.userId, currentPassword, newPassword);
     sendSuccess(res, null, 'Password changed successfully');
   });
+
+  forgotPassword = catchAsync(async (req: Request, res: Response): Promise<void> => {
+    const { email } = req.body;
+    const origin =
+      (req.headers.origin as string) ||
+      (req.headers.host ? `${req.protocol}://${req.headers.host}` : undefined);
+    const result = await authService.forgotPassword(email, origin);
+    sendSuccess(res, result, result.message);
+  });
+
+  resetPassword = catchAsync(async (req: Request, res: Response): Promise<void> => {
+    const { token, password } = req.body;
+    await authService.resetPassword(token, password);
+    sendSuccess(res, null, 'Password has been reset successfully. You may now log in.');
+  });
 }
 
 export const authController = new AuthController();

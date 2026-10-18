@@ -5,6 +5,7 @@ import authService from '../../../src/services/auth.service';
 import { UnauthorizedError, NotFoundError, BadRequestError } from '../../../src/utils/AppError';
 import * as jwtUtils from '../../../src/utils/jwt';
 import * as firebaseConfig from '../../../src/config/firebase';
+import emailService from '../../../src/services/email.service';
 
 describe('AuthService', () => {
   const dummyUserId = new mongoose.Types.ObjectId();
@@ -240,5 +241,73 @@ describe('AuthService', () => {
       expect(result.accessToken).toBeDefined();
     });
   });
+
+  describe('forgotPassword', () => {
+    it('should generate reset token, update user, and send reset email when user exists', async () => {
+      jest.spyOn(User, 'findOne').mockResolvedValue(mockUserInstance as any);
+      const emailSpy = jest
+        .spyOn(emailService, 'sendPasswordResetEmail')
+        .mockResolvedValue({ success: true, messageId: 'msg-123' });
+
+      const result = await authService.forgotPassword('ADMIN@PORTFOLIO.DEV', 'http://localhost:4200');
+
+      expect(User.findOne).toHaveBeenCalledWith({ email: 'admin@portfolio.dev', isActive: true });
+      expect(mockUserInstance.save).toHaveBeenCalled();
+      expect(mockUserInstance.resetPasswordToken).toBeDefined();
+      expect(mockUserInstance.resetPasswordExpires).toBeDefined();
+      expect(emailSpy).toHaveBeenCalledWith(
+        'admin@portfolio.dev',
+        expect.stringContaining('/admin/reset-password?token='),
+        'Admin Developer',
+      );
+      expect(result.message).toContain('password reset instructions have been sent');
+    });
+
+    it('should return generic success message without sending email if user does not exist', async () => {
+      jest.spyOn(User, 'findOne').mockResolvedValue(null);
+      const emailSpy = jest.spyOn(emailService, 'sendPasswordResetEmail');
+
+      const result = await authService.forgotPassword('nonexistent@portfolio.dev');
+
+      expect(emailSpy).not.toHaveBeenCalled();
+      expect(result.message).toContain('password reset instructions have been sent');
+    });
+  });
+
+  describe('resetPassword', () => {
+    it('should update password and clear reset token when token is valid and active', async () => {
+      jest.spyOn(User, 'findOne').mockResolvedValue(mockUserInstance as any);
+
+      await authService.resetPassword('valid-raw-token', 'BrandNewPassword@123');
+
+      expect(User.findOne).toHaveBeenCalledWith({
+        resetPasswordToken: expect.any(String),
+        resetPasswordExpires: { $gt: expect.any(Date) },
+      });
+      expect(mockUserInstance.password).toBe('BrandNewPassword@123');
+      expect(mockUserInstance.resetPasswordToken).toBeUndefined();
+      expect(mockUserInstance.resetPasswordExpires).toBeUndefined();
+      expect(mockUserInstance.save).toHaveBeenCalled();
+    });
+
+    it('should throw BadRequestError if token is missing', async () => {
+      await expect(authService.resetPassword('', 'NewPass@123')).rejects.toThrow(BadRequestError);
+    });
+
+    it('should throw BadRequestError if new password is too short', async () => {
+      await expect(authService.resetPassword('valid-token', 'short')).rejects.toThrow(
+        BadRequestError,
+      );
+    });
+
+    it('should throw BadRequestError if token is invalid or expired', async () => {
+      jest.spyOn(User, 'findOne').mockResolvedValue(null);
+
+      await expect(
+        authService.resetPassword('expired-token', 'BrandNewPassword@123'),
+      ).rejects.toThrow(BadRequestError);
+    });
+  });
 });
+
 

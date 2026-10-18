@@ -76,9 +76,36 @@ export const contactLimiter = createRateLimiter({
   skip: () => config.NODE_ENV === 'development',
 });
 
+/**
+ * Strict rate limiter for forgot password requests.
+ * Limit: 5 requests per 15 minutes per IP.
+ */
+export const forgotPasswordLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: 'Too many password reset requests, please try again after 15 minutes.',
+  skip: () => config.NODE_ENV === 'development',
+});
+
+/**
+ * Strict rate limiter for reset password verification/updates.
+ * Limit: 5 requests per 15 minutes per IP.
+ */
+export const resetPasswordLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: 'Too many password reset attempts, please try again after 15 minutes.',
+  skip: () => config.NODE_ENV === 'development',
+});
+
+export const passwordResetLimiter = resetPasswordLimiter;
+
 export default {
   createRateLimiter,
   globalLimiter,
   loginLimiter,
   contactLimiter,
+  forgotPasswordLimiter,
+  resetPasswordLimiter,
+  passwordResetLimiter,
 };

@@ -1,6 +1,10 @@
+import crypto from 'crypto';
 import mongoose from 'mongoose';
 import User, { IUser } from '../models/User';
 import Profile from '../models/Profile';
+import config from '../config/environment';
+import logger from '../utils/logger';
+import emailService from './email.service';
 import { UnauthorizedError, NotFoundError, BadRequestError } from '../utils/AppError';
 import { verifyFirebaseIdToken } from '../config/firebase';
 import {
@@ -200,6 +204,92 @@ export class AuthService {
 
     user.password = newPassword;
     await user.save();
+  }
+
+  /**
+   * Request password reset token for given email.
+   * Always resolves with success message to protect against user enumeration.
+   */
+  async forgotPassword(
+    email: string,
+    hostOrOrigin?: string,
+  ): Promise<{ message: string; resetUrl?: string }> {
+    const normalizedEmail = email ? email.toLowerCase().trim() : '';
+    const user = await User.findOne({ email: normalizedEmail, isActive: true });
+
+    // Always prepare a generic success response to prevent email harvesting
+    const successMessage =
+      'If an account with that email exists, password reset instructions have been sent.';
+
+    if (!user) {
+      return { message: successMessage };
+    }
+
+    // Generate cryptographically secure random token (32 bytes = 64 hex characters)
+    const rawResetToken = crypto.randomBytes(32).toString('hex');
+
+    // Hash the token before storing in MongoDB
+    const hashedToken = crypto.createHash('sha256').update(rawResetToken).digest('hex');
+
+    // Token expires in 1 hour
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000);
+    await user.save();
+
+    // Determine frontend origin for the reset link
+    let frontendOrigin = config.CORS_ORIGIN.split(',')[0].trim() || 'http://localhost:4200';
+    if (
+      hostOrOrigin &&
+      (hostOrOrigin.startsWith('http://') || hostOrOrigin.startsWith('https://'))
+    ) {
+      frontendOrigin = hostOrOrigin.replace(/\/$/, '');
+    }
+
+    const resetUrl = `${frontendOrigin}/admin/reset-password?token=${rawResetToken}`;
+
+    // Dispatch email
+    await emailService.sendPasswordResetEmail(user.email, resetUrl, user.fullName);
+
+    // In non-production environments, log the reset URL for developer convenience
+    if (config.NODE_ENV !== 'production') {
+      logger.info(`[Dev Password Reset Link]: ${resetUrl}`);
+    }
+
+    return {
+      message: successMessage,
+      ...(config.NODE_ENV !== 'production' ? { resetUrl } : {}),
+    };
+  }
+
+  /**
+   * Reset user password using token
+   */
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    if (!token) {
+      throw new BadRequestError('Password reset token is required');
+    }
+
+    if (!newPassword || newPassword.length < 8) {
+      throw new BadRequestError('New password must be at least 8 characters long');
+    }
+
+    const hashedToken = crypto.createHash('sha256').update(token.trim()).digest('hex');
+
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: new Date() },
+    });
+
+    if (!user || !user.isActive) {
+      throw new BadRequestError('Password reset token is invalid or has expired');
+    }
+
+    user.password = newPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    logger.info(`Password reset successfully for user: ${user.email}`);
   }
 }
 

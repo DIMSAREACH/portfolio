@@ -141,6 +141,28 @@ export class AuthService {
   }
 
   /**
+   * Request password reset instructions
+   */
+  public forgotPassword(
+    email: string,
+  ): Observable<ApiResponse<{ message: string; resetUrl?: string }>> {
+    return this.apiService.post<ApiResponse<{ message: string; resetUrl?: string }>>(
+      '/auth/forgot-password',
+      { email },
+    );
+  }
+
+  /**
+   * Complete password reset with token
+   */
+  public resetPassword(token: string, password: string): Observable<ApiResponse<null>> {
+    return this.apiService.post<ApiResponse<null>>('/auth/reset-password', {
+      token,
+      password,
+    });
+  }
+
+  /**
    * Internal session setters
    */
   public setSession(user: User, token: string): void {
