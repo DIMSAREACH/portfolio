@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, Subject, tap } from 'rxjs';
+import { Observable, Subject, of, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import {
   Profile,
@@ -27,6 +27,29 @@ export class PortfolioService {
   private readonly apiService = inject(ApiService);
 
   /**
+   * In-memory cache for public queries with TTL to guarantee instant navigation
+   */
+  private readonly cache = new Map<string, { data: any; expiry: number }>();
+  private readonly CACHE_TTL_MS = 3 * 60 * 1000; // 3 minutes
+
+  private getCachedOrFetch<T>(key: string, fetchFn: () => Observable<T>): Observable<T> {
+    const cached = this.cache.get(key);
+    const now = Date.now();
+    if (cached && cached.expiry > now) {
+      return of(cached.data);
+    }
+    return fetchFn().pipe(
+      tap((data) => {
+        this.cache.set(key, { data, expiry: Date.now() + this.CACHE_TTL_MS });
+      }),
+    );
+  }
+
+  public clearCache(): void {
+    this.cache.clear();
+  }
+
+  /**
    * Reactive stream fired on every CMS mutation (create/update/delete)
    * Synchronized across components and browser tabs via BroadcastChannel.
    */
@@ -34,11 +57,16 @@ export class PortfolioService {
   private syncChannel?: BroadcastChannel;
 
   constructor() {
+    this.dataMutated$.subscribe(() => {
+      this.clearCache();
+    });
+
     if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
       try {
         this.syncChannel = new BroadcastChannel('portfolio_sync_channel');
         this.syncChannel.onmessage = (event) => {
           if (event?.data && event.data.type) {
+            this.clearCache();
             this.dataMutated$.next({ type: event.data.type, id: event.data.id });
           }
         };
@@ -49,6 +77,7 @@ export class PortfolioService {
   }
 
   public notifyMutation(type: string, id?: string): void {
+    this.clearCache();
     this.dataMutated$.next({ type, id });
     try {
       if (this.syncChannel) {
@@ -63,16 +92,21 @@ export class PortfolioService {
    * Fetch developer public profile details
    */
   public getProfile(): Observable<ApiResponse<Profile>> {
-    return this.apiService.get<ApiResponse<Profile>>('/profile');
+    return this.getCachedOrFetch('profile', () =>
+      this.apiService.get<ApiResponse<Profile>>('/profile')
+    );
   }
 
   /**
    * Fetch categories with optional type filter ('project' | 'blog' | 'both')
    */
   public getCategories(type?: string): Observable<ApiResponse<Category[]>> {
-    return this.apiService.get<ApiResponse<Category[]>>(
-      '/categories',
-      type ? { type } : undefined,
+    const key = `categories_${type || 'all'}`;
+    return this.getCachedOrFetch(key, () =>
+      this.apiService.get<ApiResponse<Category[]>>(
+        '/categories',
+        type ? { type } : undefined,
+      )
     );
   }
 
@@ -95,7 +129,9 @@ export class PortfolioService {
    * Fetch featured published projects for home page
    */
   public getFeaturedProjects(limit = 3): Observable<PaginatedResponse<Project>> {
-    return this.getProjects({ featured: 'true', limit });
+    return this.getCachedOrFetch(`featured_projects_${limit}`, () =>
+      this.getProjects({ featured: 'true', limit })
+    );
   }
 
   /**
@@ -109,9 +145,12 @@ export class PortfolioService {
    * Fetch all visible skills
    */
   public getSkills(category?: string): Observable<ApiResponse<Skill[]>> {
-    return this.apiService.get<ApiResponse<Skill[]>>(
-      '/skills',
-      category ? { category } : undefined,
+    const key = `skills_${category || 'all'}`;
+    return this.getCachedOrFetch(key, () =>
+      this.apiService.get<ApiResponse<Skill[]>>(
+        '/skills',
+        category ? { category } : undefined,
+      )
     );
   }
 
@@ -119,21 +158,27 @@ export class PortfolioService {
    * Fetch experiences sorted by order & start date
    */
   public getExperiences(): Observable<ApiResponse<Experience[]>> {
-    return this.apiService.get<ApiResponse<Experience[]>>('/experiences');
+    return this.getCachedOrFetch('experiences', () =>
+      this.apiService.get<ApiResponse<Experience[]>>('/experiences')
+    );
   }
 
   /**
    * Fetch education history
    */
   public getEducation(): Observable<ApiResponse<Education[]>> {
-    return this.apiService.get<ApiResponse<Education[]>>('/education');
+    return this.getCachedOrFetch('education', () =>
+      this.apiService.get<ApiResponse<Education[]>>('/education')
+    );
   }
 
   /**
    * Fetch professional certifications
    */
   public getCertifications(): Observable<ApiResponse<Certification[]>> {
-    return this.apiService.get<ApiResponse<Certification[]>>('/certifications');
+    return this.getCachedOrFetch('certifications', () =>
+      this.apiService.get<ApiResponse<Certification[]>>('/certifications')
+    );
   }
 
   /**
@@ -161,14 +206,18 @@ export class PortfolioService {
    * Fetch visible social links
    */
   public getSocialLinks(): Observable<ApiResponse<SocialLink[]>> {
-    return this.apiService.get<ApiResponse<SocialLink[]>>('/social-links');
+    return this.getCachedOrFetch('social_links', () =>
+      this.apiService.get<ApiResponse<SocialLink[]>>('/social-links')
+    );
   }
 
   /**
    * Fetch public site settings (CV download, contact toggle, etc.)
    */
   public getSettings(): Observable<ApiResponse<Settings>> {
-    return this.apiService.get<ApiResponse<Settings>>('/settings/public');
+    return this.getCachedOrFetch('settings_public', () =>
+      this.apiService.get<ApiResponse<Settings>>('/settings/public')
+    );
   }
 
   /**

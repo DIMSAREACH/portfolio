@@ -321,9 +321,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  private lastLoadedTimestamp = 0;
+
   @HostListener('window:focus')
   public onWindowFocus(): void {
-    this.loadHomeData();
+    const now = Date.now();
+    // Only refresh in background if user was away for more than 5 minutes
+    if (now - this.lastLoadedTimestamp > 5 * 60 * 1000) {
+      this.loadHomeData(false);
+    }
   }
 
   private updateSlidesPerPage(): void {
@@ -338,8 +344,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  public loadHomeData(): void {
-    this.isLoading.set(true);
+  public loadHomeData(forceLoading = false): void {
+    // Only show skeleton cards on initial load when no data exists yet
+    if (forceLoading || !this.profile()) {
+      this.isLoading.set(true);
+    }
 
     forkJoin({
       profile: this.portfolioService.getProfile().pipe(catchError(() => of(null))),
@@ -397,9 +406,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (results.settings?.data) {
           this.settings.set(results.settings.data);
         }
+        this.lastLoadedTimestamp = Date.now();
         this.isLoading.set(false);
       },
       error: () => {
+        this.lastLoadedTimestamp = Date.now();
         this.isLoading.set(false);
       },
     });

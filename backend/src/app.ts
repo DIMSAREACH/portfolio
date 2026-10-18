@@ -52,11 +52,22 @@ app.use(
   }),
 );
 
-// 6. Disable client caching for real-time API routes (ensures immediate updates without page refresh)
-app.use('/api', (_req: Request, res: Response, next: NextFunction) => {
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
+// 6. Intelligent Caching Headers (fast edge & CDN delivery for public data, zero cache for admin/auth)
+app.use('/api', (req: Request, res: Response, next: NextFunction) => {
+  if (
+    req.method !== 'GET' ||
+    req.originalUrl.includes('/admin') ||
+    req.originalUrl.includes('/auth')
+  ) {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  } else {
+    res.setHeader(
+      'Cache-Control',
+      'public, max-age=60, s-maxage=120, stale-while-revalidate=300',
+    );
+  }
   next();
 });
 

@@ -19,6 +19,24 @@ export const startServer = async (): Promise<Server> => {
       logger.info(
         `Server running in ${config.NODE_ENV} mode on port ${config.PORT}`,
       );
+
+      // In production, keep Render free tier awake by pinging health endpoint every 10 mins
+      if (config.NODE_ENV === 'production') {
+        const pingInterval = 10 * 60 * 1000;
+        const externalUrl =
+          process.env.RENDER_EXTERNAL_URL ||
+          'https://portfolio-backend-8e3l.onrender.com';
+        const healthUrl = `${externalUrl}/api/v1/health`;
+
+        setInterval(async () => {
+          try {
+            const res = await fetch(healthUrl);
+            logger.info(`[KeepAlive] Pinged ${healthUrl} (status: ${res.status})`);
+          } catch (err) {
+            logger.warn(`[KeepAlive] Ping failed:`, err);
+          }
+        }, pingInterval).unref();
+      }
     });
 
     return server;
