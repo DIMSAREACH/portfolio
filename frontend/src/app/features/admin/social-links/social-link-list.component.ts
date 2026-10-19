@@ -78,11 +78,66 @@ import { ConfirmDialogComponent } from '../../../shared';
               } @else {
                 @for (link of socialLinks(); track link._id) {
                   <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition-colors">
-                    <td class="px-6 py-4 font-bold text-slate-900 dark:text-white capitalize flex items-center gap-2.5">
-                      <span class="w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-xs">
-                        {{ link.platform.slice(0, 2).toUpperCase() }}
-                      </span>
-                      <span>{{ link.platform }}</span>
+                    <td class="px-6 py-4 font-bold text-slate-900 dark:text-white capitalize flex items-center gap-3">
+                      @switch (getPlatformKey(link)) {
+                        @case ('telegram') {
+                          <div class="w-8 h-8 rounded-xl bg-[#229ED9]/15 text-[#229ED9] border border-[#229ED9]/30 flex items-center justify-center shadow-2xs">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.458c.538-.196 1.006.128.832.939z"/>
+                            </svg>
+                          </div>
+                        }
+                        @case ('github') {
+                          <div class="w-8 h-8 rounded-xl bg-slate-900 dark:bg-slate-700 text-white flex items-center justify-center shadow-2xs">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                            </svg>
+                          </div>
+                        }
+                        @case ('linkedin') {
+                          <div class="w-8 h-8 rounded-xl bg-[#0A66C2]/15 text-[#0A66C2] dark:text-[#388bfd] border border-[#0A66C2]/30 flex items-center justify-center shadow-2xs">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            </svg>
+                          </div>
+                        }
+                        @case ('facebook') {
+                          <div class="w-8 h-8 rounded-xl bg-[#1877F2]/15 text-[#1877F2] border border-[#1877F2]/30 flex items-center justify-center shadow-2xs">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                          </div>
+                        }
+                        @case ('twitter') {
+                          <div class="w-8 h-8 rounded-xl bg-slate-900 text-white dark:bg-slate-700 flex items-center justify-center shadow-2xs">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                          </div>
+                        }
+                        @case ('youtube') {
+                          <div class="w-8 h-8 rounded-xl bg-[#FF0000]/15 text-[#FF0000] border border-[#FF0000]/30 flex items-center justify-center shadow-2xs">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                          </div>
+                        }
+                        @case ('email') {
+                          <div class="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-600 border border-amber-500/30 flex items-center justify-center shadow-2xs">
+                            <svg class="w-4 h-4 fill-none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                          </div>
+                        }
+                        @default {
+                          <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60 flex items-center justify-center shadow-2xs">
+                            <svg class="w-4 h-4 fill-none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                            </svg>
+                          </div>
+                        }
+                      }
+                      <span>{{ getPlatformDisplay(link) }}</span>
                     </td>
 
                     <td class="px-6 py-4 font-medium text-slate-800 dark:text-slate-200">
@@ -379,7 +434,13 @@ export class SocialLinkListComponent implements OnInit, OnDestroy {
 
   public openEditModal(link: SocialLink): void {
     this.editingLinkId = link._id;
-    const platformVal = (link.platform || 'other').toString().toLowerCase().trim() as SocialPlatform;
+    let platformVal = (link.platform || 'other').toString().toLowerCase().trim() as SocialPlatform;
+    if (platformVal === 'other') {
+      const detected = this.getPlatformKey(link);
+      if (detected !== 'other') {
+        platformVal = detected as SocialPlatform;
+      }
+    }
     this.linkForm.patchValue({
       platform: platformVal,
       label: link.label,
@@ -389,6 +450,34 @@ export class SocialLinkListComponent implements OnInit, OnDestroy {
       isVisible: link.isVisible !== false,
     });
     this.showModal.set(true);
+  }
+
+  public getPlatformKey(link: SocialLink): string {
+    const p = (link.platform || '').toLowerCase();
+    const l = (link.label || '').toLowerCase();
+    const u = (link.url || '').toLowerCase();
+    if (p === 'telegram' || p.includes('tele') || l.includes('telegram') || u.includes('t.me')) return 'telegram';
+    if (p === 'github' || p.includes('git') || l.includes('github') || u.includes('github.com')) return 'github';
+    if (p === 'linkedin' || p.includes('link') || l.includes('linkedin') || u.includes('linkedin.com')) return 'linkedin';
+    if (p === 'facebook' || p.includes('face') || l.includes('facebook') || u.includes('facebook.com')) return 'facebook';
+    if (p === 'twitter' || p === 'x' || p.includes('twit') || l.includes('twitter') || u.includes('x.com') || u.includes('twitter.com')) return 'twitter';
+    if (p === 'youtube' || p.includes('yout') || l.includes('youtube') || u.includes('youtube.com')) return 'youtube';
+    if (p === 'email' || p.includes('mail') || l.includes('email') || u.includes('mailto:')) return 'email';
+    return p || 'other';
+  }
+
+  public getPlatformDisplay(link: SocialLink): string {
+    const key = this.getPlatformKey(link);
+    const names: Record<string, string> = {
+      telegram: 'Telegram',
+      github: 'GitHub',
+      linkedin: 'LinkedIn',
+      facebook: 'Facebook',
+      twitter: 'Twitter / X',
+      youtube: 'YouTube',
+      email: 'Email',
+    };
+    return names[key] || link.label || link.platform || 'Other';
   }
 
   public closeModal(): void {

@@ -383,6 +383,41 @@
   box-shadow: 0 10px 22px -4px rgba(34, 158, 217, 0.45) !important;
 }
 
+/* Facebook Signature Hover */
+.social-icon-btn.btn-social-facebook:hover {
+  background: #1877f2 !important;
+  border-color: #1877f2 !important;
+  box-shadow: 0 10px 22px -4px rgba(24, 119, 242, 0.45) !important;
+}
+
+/* Twitter Signature Hover */
+.social-icon-btn.btn-social-twitter:hover {
+  background: #0f172a !important;
+  border-color: #0f172a !important;
+  box-shadow: 0 10px 22px -4px rgba(15, 23, 42, 0.45) !important;
+}
+
+/* YouTube Signature Hover */
+.social-icon-btn.btn-social-youtube:hover {
+  background: #ff0000 !important;
+  border-color: #ff0000 !important;
+  box-shadow: 0 10px 22px -4px rgba(255, 0, 0, 0.45) !important;
+}
+
+/* Email Signature Hover */
+.social-icon-btn.btn-social-email:hover {
+  background: #d97706 !important;
+  border-color: #d97706 !important;
+  box-shadow: 0 10px 22px -4px rgba(217, 119, 6, 0.45) !important;
+}
+
+/* Other / Web Signature Hover */
+.social-icon-btn.btn-social-other:hover {
+  background: #4f46e5 !important;
+  border-color: #4f46e5 !important;
+  box-shadow: 0 10px 22px -4px rgba(79, 70, 229, 0.45) !important;
+}
+
 /* Universal Text White Protection on Hover */
 :host ::ng-deep a.text-white:hover,
 :host ::ng-deep a.text-white:hover * {

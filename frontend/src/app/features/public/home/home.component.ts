@@ -189,52 +189,43 @@ export class HomeComponent implements OnInit, OnDestroy {
   public readonly settings = signal<Settings | null>(null);
 
   /**
-   * Filtered social links restricted to GitHub, LinkedIn, and Telegram
+   * Social links synchronized directly from Admin CMS (with fallbacks if empty)
    */
   public readonly filteredSocialLinks = computed<SocialLink[]>(() => {
-    const allowed = ['github', 'linkedin', 'telegram'];
     const links = this.socialLinks();
-    const filtered = links.filter((link) =>
-      allowed.some((a) => (link.platform || '').toLowerCase().includes(a))
-    );
+    if (links && links.length > 0) {
+      return [...links]
+        .filter((l) => l.isVisible !== false)
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
+    }
 
-    const result: SocialLink[] = [...filtered];
-    const hasGithub = result.some((r) => (r.platform || '').toLowerCase().includes('git'));
-    const hasLinkedin = result.some((r) => (r.platform || '').toLowerCase().includes('link'));
-    const hasTelegram = result.some((r) => (r.platform || '').toLowerCase().includes('tele'));
-
-    if (!hasGithub) {
-      result.push({
+    // Default fallback if database has no social links yet
+    return [
+      {
         _id: 'default-github',
         platform: 'github',
         label: 'GitHub',
-        url: 'https://github.com/dimsareach',
+        url: 'https://github.com/DIMSAREACH',
         order: 1,
         isVisible: true,
-      });
-    }
-    if (!hasLinkedin) {
-      result.push({
+      },
+      {
         _id: 'default-linkedin',
         platform: 'linkedin',
         label: 'LinkedIn',
-        url: 'https://linkedin.com/in/dimsareach',
+        url: 'https://linkedin.com/in/dim-sareach-3aa6892b6',
         order: 2,
         isVisible: true,
-      });
-    }
-    if (!hasTelegram) {
-      result.push({
+      },
+      {
         _id: 'default-telegram',
         platform: 'telegram',
         label: 'Telegram',
-        url: 'https://t.me/dimsareach',
+        url: 'https://t.me/sareach_dim',
         order: 3,
         isVisible: true,
-      });
-    }
-
-    return result.sort((a, b) => (a.order || 0) - (b.order || 0));
+      },
+    ];
   });
 
   /**
@@ -477,6 +468,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (shortDesc) return shortDesc;
     const fullDesc = project.fullDescription?.[lang] || project.fullDescription?.en || '';
     return fullDesc.length > 120 ? fullDesc.substring(0, 120) + '...' : fullDesc;
+  }
+
+  public getPlatformKey(social: SocialLink): string {
+    const p = (social.platform || '').toLowerCase();
+    const l = (social.label || '').toLowerCase();
+    const u = (social.url || '').toLowerCase();
+    if (p === 'telegram' || p.includes('tele') || l.includes('telegram') || u.includes('t.me')) return 'telegram';
+    if (p === 'github' || p.includes('git') || l.includes('github') || u.includes('github.com')) return 'github';
+    if (p === 'linkedin' || p.includes('link') || l.includes('linkedin') || u.includes('linkedin.com')) return 'linkedin';
+    if (p === 'facebook' || p.includes('face') || l.includes('facebook') || u.includes('facebook.com')) return 'facebook';
+    if (p === 'twitter' || p === 'x' || p.includes('twit') || l.includes('twitter') || u.includes('x.com') || u.includes('twitter.com')) return 'twitter';
+    if (p === 'youtube' || p.includes('yout') || l.includes('youtube') || u.includes('youtube.com')) return 'youtube';
+    if (p === 'email' || p.includes('mail') || l.includes('email') || u.includes('mailto:')) return 'email';
+    return 'other';
   }
 
   public scrollToSection(elementId: string): void {
