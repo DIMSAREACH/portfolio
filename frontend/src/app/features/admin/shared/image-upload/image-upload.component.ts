@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -221,7 +221,7 @@ import { CommonModule } from '@angular/common';
     </div>
   `,
 })
-export class ImageUploadComponent {
+export class ImageUploadComponent implements OnChanges {
   @ViewChild('fileInput') fileInputRef?: ElementRef<HTMLInputElement>;
 
   @Input() label?: string;
@@ -243,6 +243,17 @@ export class ImageUploadComponent {
   public errorMessage: string | null = null;
   public isDragging = false;
   public isLightboxOpen = false;
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['value']) {
+      // If external value changes (preset avatar chosen, URL typed, or form reset),
+      // clear local file preview so external value renders properly
+      this.previewUrl = null;
+      if (this.fileInputRef?.nativeElement) {
+        this.fileInputRef.nativeElement.value = '';
+      }
+    }
+  }
 
   public get acceptString(): string {
     return this.acceptedTypes.join(',');
@@ -276,6 +287,9 @@ export class ImageUploadComponent {
 
   public triggerFileInput(): void {
     if (this.disabled) return;
+    if (this.fileInputRef?.nativeElement) {
+      this.fileInputRef.nativeElement.value = '';
+    }
     this.fileInputRef?.nativeElement.click();
   }
 
@@ -346,6 +360,9 @@ export class ImageUploadComponent {
     this.value = undefined;
     this.errorMessage = null;
     this.isLightboxOpen = false;
+    if (this.fileInputRef?.nativeElement) {
+      this.fileInputRef.nativeElement.value = '';
+    }
     this.imageRemoved.emit();
   }
 }

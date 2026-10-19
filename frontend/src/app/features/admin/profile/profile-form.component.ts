@@ -137,7 +137,7 @@ import { AvatarModule } from 'primeng/avatar';
                 label="Primary Avatar / Profile Headshot"
                 aspectRatio="square"
                 helperText="Square portrait for hero, navigation, and author cards."
-                [value]="profileForm.get('profileImage')?.value"
+                [value]="profileImagePreview()"
                 (fileSelected)="onProfileImageSelected($event)"
                 (imageRemoved)="onProfileImageRemoved()"
               ></app-image-upload>
@@ -148,7 +148,8 @@ import { AvatarModule } from 'primeng/avatar';
                 </label>
                 <input
                   id="profile-image-url-input"
-                  type="url"
+                  type="text"
+                  inputmode="url"
                   formControlName="profileImage"
                   (input)="onDirectProfileUrlInput()"
                   placeholder="https://..."
@@ -157,11 +158,11 @@ import { AvatarModule } from 'primeng/avatar';
               </div>
 
               <!-- Live Circular Avatar Preview Badge -->
-              @if (profileForm.get('profileImage')?.value) {
+              @if (profileImagePreview()) {
                 <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/80 flex items-center gap-3.5">
                   <div class="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-indigo-500/40 shrink-0 shadow-sm bg-slate-100 dark:bg-slate-700">
                     <img
-                      [src]="profileForm.get('profileImage')?.value"
+                      [src]="profileImagePreview()"
                       alt="Avatar Circular Preview"
                       class="w-full h-full object-cover object-top"
                     />
@@ -209,7 +210,7 @@ import { AvatarModule } from 'primeng/avatar';
                 label="About Section Action Photo"
                 aspectRatio="landscape"
                 helperText="Landscape photo for about narrative or working setup."
-                [value]="profileForm.get('aboutImage')?.value"
+                [value]="aboutImagePreview()"
                 (fileSelected)="onAboutImageSelected($event)"
                 (imageRemoved)="onAboutImageRemoved()"
               ></app-image-upload>
@@ -220,7 +221,8 @@ import { AvatarModule } from 'primeng/avatar';
                 </label>
                 <input
                   id="about-image-url-input"
-                  type="url"
+                  type="text"
+                  inputmode="url"
                   formControlName="aboutImage"
                   (input)="onDirectAboutUrlInput()"
                   placeholder="https://..."
@@ -229,11 +231,11 @@ import { AvatarModule } from 'primeng/avatar';
               </div>
 
               <!-- Live About Section Card Preview Badge -->
-              @if (profileForm.get('aboutImage')?.value) {
+              @if (aboutImagePreview()) {
                 <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/80 flex items-center gap-3.5">
                   <div class="relative w-12 h-12 rounded-xl overflow-hidden ring-2 ring-emerald-500/40 shrink-0 shadow-sm bg-slate-100 dark:bg-slate-700">
                     <img
-                      [src]="profileForm.get('aboutImage')?.value"
+                      [src]="aboutImagePreview()"
                       alt="About Photo Preview"
                       class="w-full h-full object-cover object-top"
                     />
@@ -248,7 +250,7 @@ import { AvatarModule } from 'primeng/avatar';
                       </span>
                     </div>
                     <span class="block text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
-                      Showcase photo displayed on the personal narrative card
+                      Featured wide visual displayed in the narrative section
                     </span>
                   </div>
                 </div>
@@ -355,6 +357,9 @@ export class ProfileFormComponent implements OnInit {
   public readonly isSubmitting = signal<boolean>(false);
   public readonly activeAboutLang = signal<'en' | 'kh'>('en');
 
+  public readonly profileImagePreview = signal<string>('');
+  public readonly aboutImagePreview = signal<string>('');
+
   public selectedProfileFile: File | null = null;
   public selectedAboutFile: File | null = null;
 
@@ -366,17 +371,22 @@ export class ProfileFormComponent implements OnInit {
 
   public selectPresetAvatar(url: string): void {
     this.selectedProfileFile = null;
+    this.profileImagePreview.set(url);
     this.profileForm.patchValue({ profileImage: url });
     this.profileForm.markAsDirty();
   }
 
   public onDirectProfileUrlInput(): void {
     this.selectedProfileFile = null;
+    const val = this.profileForm.get('profileImage')?.value || '';
+    this.profileImagePreview.set(val);
     this.profileForm.markAsDirty();
   }
 
   public onDirectAboutUrlInput(): void {
     this.selectedAboutFile = null;
+    const val = this.profileForm.get('aboutImage')?.value || '';
+    this.aboutImagePreview.set(val);
     this.profileForm.markAsDirty();
   }
 
@@ -427,6 +437,13 @@ export class ProfileFormComponent implements OnInit {
           background: p.background || { en: '', kh: '' },
           goals: p.goals || { en: '', kh: '' },
         });
+
+        if (p.profileImage) {
+          this.profileImagePreview.set(p.profileImage);
+        }
+        if (p.aboutImage) {
+          this.aboutImagePreview.set(p.aboutImage);
+        }
       },
       error: () => {
         this.notificationService.showError('Failed to load profile data.');
@@ -436,22 +453,34 @@ export class ProfileFormComponent implements OnInit {
 
   public onProfileImageSelected(file: File): void {
     this.selectedProfileFile = file;
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.profileImagePreview.set(reader.result as string);
+    };
+    reader.readAsDataURL(file);
     this.profileForm.markAsDirty();
   }
 
   public onProfileImageRemoved(): void {
     this.selectedProfileFile = null;
+    this.profileImagePreview.set('');
     this.profileForm.patchValue({ profileImage: '' });
     this.profileForm.markAsDirty();
   }
 
   public onAboutImageSelected(file: File): void {
     this.selectedAboutFile = file;
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.aboutImagePreview.set(reader.result as string);
+    };
+    reader.readAsDataURL(file);
     this.profileForm.markAsDirty();
   }
 
   public onAboutImageRemoved(): void {
     this.selectedAboutFile = null;
+    this.aboutImagePreview.set('');
     this.profileForm.patchValue({ aboutImage: '' });
     this.profileForm.markAsDirty();
   }
@@ -500,13 +529,13 @@ export class ProfileFormComponent implements OnInit {
 
       if (this.selectedProfileFile) {
         formData.append('profileImage', this.selectedProfileFile);
-      } else if (formVal.profileImage && !formVal.profileImage.startsWith('file://')) {
+      } else if (formVal.profileImage && !formVal.profileImage.startsWith('file://') && !formVal.profileImage.startsWith('blob:') && !formVal.profileImage.startsWith('data:')) {
         formData.append('profileImage', formVal.profileImage);
       }
 
       if (this.selectedAboutFile) {
         formData.append('aboutImage', this.selectedAboutFile);
-      } else if (formVal.aboutImage && !formVal.aboutImage.startsWith('file://')) {
+      } else if (formVal.aboutImage && !formVal.aboutImage.startsWith('file://') && !formVal.aboutImage.startsWith('blob:') && !formVal.aboutImage.startsWith('data:')) {
         formData.append('aboutImage', formVal.aboutImage);
       }
 
@@ -521,6 +550,8 @@ export class ProfileFormComponent implements OnInit {
               profileImage: res.data.profileImage || '',
               aboutImage: res.data.aboutImage || '',
             });
+            this.profileImagePreview.set(res.data.profileImage || '');
+            this.aboutImagePreview.set(res.data.aboutImage || '');
             if (this.authService) {
               const newAvatar = res.data.profileImage || formVal.profileImage;
               const newName = formVal.fullName?.en;
@@ -560,8 +591,14 @@ export class ProfileFormComponent implements OnInit {
       email: formVal.email || undefined,
       phone: formVal.phone || undefined,
       location: formVal.location,
-      profileImage: formVal.profileImage || undefined,
-      aboutImage: formVal.aboutImage || undefined,
+      profileImage:
+        formVal.profileImage && !formVal.profileImage.startsWith('blob:') && !formVal.profileImage.startsWith('data:')
+          ? formVal.profileImage
+          : undefined,
+      aboutImage:
+        formVal.aboutImage && !formVal.aboutImage.startsWith('blob:') && !formVal.aboutImage.startsWith('data:')
+          ? formVal.aboutImage
+          : undefined,
       about: {
         en: formVal.about.en,
         kh: formVal.about.kh || formVal.about.en,
@@ -581,6 +618,8 @@ export class ProfileFormComponent implements OnInit {
             profileImage: res.data.profileImage || this.profileForm.get('profileImage')?.value,
             aboutImage: res.data.aboutImage || this.profileForm.get('aboutImage')?.value,
           });
+          this.profileImagePreview.set(res.data.profileImage || this.profileForm.get('profileImage')?.value || '');
+          this.aboutImagePreview.set(res.data.aboutImage || this.profileForm.get('aboutImage')?.value || '');
           if (this.authService) {
             const newAvatar = res.data.profileImage || formVal.profileImage;
             const newName = formVal.fullName?.en;

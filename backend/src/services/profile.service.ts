@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
+import path from 'path';
 import Profile, { IProfile } from '../models/Profile';
 import User from '../models/User';
 import cloudinaryService from './cloudinary.service';
+import r2Service from './r2.service';
 import logger from '../utils/logger';
 import { BilingualField, BilingualArrayField } from '../types';
 
@@ -48,6 +50,43 @@ async function safeDeleteCloudinaryFile(url: string): Promise<void> {
   }
 }
 
+async function safeDeleteProfileImage(url?: string): Promise<void> {
+  if (!url) return;
+  if (
+    r2Service.isAvailable() &&
+    (url.includes('.r2.dev') || url.includes('r2.cloudflarestorage.com'))
+  ) {
+    try {
+      await r2Service.deleteFile(url);
+    } catch (err) {
+      logger.warn(`Could not delete R2 profile file (${url}):`, err);
+    }
+    return;
+  }
+  await safeDeleteCloudinaryFile(url);
+}
+
+async function uploadProfileImageBuffer(
+  file: Express.Multer.File,
+  prefix: string,
+): Promise<string> {
+  if (r2Service.isAvailable()) {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const uploadRes = await r2Service.uploadBuffer(
+      file.buffer,
+      'portfolio/profile',
+      `${prefix}${ext}`,
+      file.mimetype,
+    );
+    return uploadRes.url;
+  }
+  const uploadResult = await cloudinaryService.uploadImage(
+    file.buffer,
+    'portfolio/profile',
+  );
+  return uploadResult.secureUrl;
+}
+
 function parseBilingualField(val: unknown): BilingualField | undefined {
   if (!val) return undefined;
   if (typeof val === 'string') {
@@ -79,26 +118,20 @@ export class ProfileService {
 
     // Handle profileImage upload
     if (files?.profileImage?.[0]) {
-      const uploadResult = await cloudinaryService.uploadImage(
-        files.profileImage[0].buffer,
-        'portfolio/profile',
-      );
-      if (profile?.profileImage) {
-        await safeDeleteCloudinaryFile(profile.profileImage);
+      const newUrl = await uploadProfileImageBuffer(files.profileImage[0], 'avatar');
+      if (profile?.profileImage && profile.profileImage !== newUrl) {
+        await safeDeleteProfileImage(profile.profileImage);
       }
-      data.profileImage = uploadResult.secureUrl;
+      data.profileImage = newUrl;
     }
 
     // Handle aboutImage upload
     if (files?.aboutImage?.[0]) {
-      const uploadResult = await cloudinaryService.uploadImage(
-        files.aboutImage[0].buffer,
-        'portfolio/profile',
-      );
-      if (profile?.aboutImage) {
-        await safeDeleteCloudinaryFile(profile.aboutImage);
+      const newUrl = await uploadProfileImageBuffer(files.aboutImage[0], 'about');
+      if (profile?.aboutImage && profile.aboutImage !== newUrl) {
+        await safeDeleteProfileImage(profile.aboutImage);
       }
-      data.aboutImage = uploadResult.secureUrl;
+      data.aboutImage = newUrl;
     }
 
     const fullName = parseBilingualField(data.fullName);
@@ -162,9 +195,15 @@ export class ProfileService {
         profile.phone = data.phone;
       }
       if (data.profileImage !== undefined) {
+        if (profile.profileImage && profile.profileImage !== data.profileImage) {
+          await safeDeleteProfileImage(profile.profileImage);
+        }
         profile.profileImage = data.profileImage;
       }
       if (data.aboutImage !== undefined) {
+        if (profile.aboutImage && profile.aboutImage !== data.aboutImage) {
+          await safeDeleteProfileImage(profile.aboutImage);
+        }
         profile.aboutImage = data.aboutImage;
       }
 

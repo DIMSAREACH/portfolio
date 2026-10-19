@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <rect width="512" height="512" rx="102" fill="#0B1014"/>
+  <!-- Left Bracket < (Cyan) -->
+  <path d="M 190 141 L 113 256 L 190 371" fill="none" stroke="#5DD3DD" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Center Slash / (Electric Blue) -->
+  <line x1="279" y1="123" x2="232" y2="389" stroke="#82AAFF" stroke-width="26" stroke-linecap="round"/>
+  <!-- Right Bracket > (Purple) -->
+  <path d="M 322 141 L 399 256 L 322 371" fill="none" stroke="#C994EE" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
