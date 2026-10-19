@@ -8,6 +8,7 @@ import { Experience, ExperienceType } from '../../../../core/models';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { BilingualFieldComponent } from '../../shared';
+import { toPickerDate, toPayloadDate } from '../../../../core/utils/date-utils';
 
 @Component({
   selector: 'app-admin-experience-form',
@@ -362,8 +363,8 @@ export class ExperienceFormComponent implements OnInit {
           organization: e.organization || { en: '', kh: '' },
           location: e.location || { en: '', kh: '' },
           type: e.type || 'work',
-          startDate: e.startDate ? new Date(e.startDate).toISOString().substring(0, 10) : '',
-          endDate: e.endDate ? new Date(e.endDate).toISOString().substring(0, 10) : '',
+          startDate: toPickerDate(e.startDate),
+          endDate: toPickerDate(e.endDate),
           isCurrent: e.isCurrent ?? false,
           description: e.description || { en: '', kh: '' },
           order: e.order ?? 0,
@@ -450,8 +451,9 @@ export class ExperienceFormComponent implements OnInit {
 
     const payload: Partial<Experience> = {
       ...formVal,
+      startDate: toPayloadDate(formVal.startDate) as unknown as Date,
+      endDate: formVal.isCurrent ? undefined : (toPayloadDate(formVal.endDate) as unknown as Date),
       technologies: this.techTags(),
-      endDate: formVal.isCurrent ? undefined : formVal.endDate || undefined,
     };
 
     if (this.isEditMode() && this.experienceId()) {

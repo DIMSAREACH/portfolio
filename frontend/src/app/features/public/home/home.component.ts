@@ -15,6 +15,7 @@ import {
   Category,
   BilingualField,
 } from '../../../core/models';
+import { formatCalendarDate } from '../../../core/utils/date-utils';
 import {
   SkeletonLoaderComponent,
   LocalizePipe,
@@ -429,9 +430,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public formatDate(date: string | Date | undefined): string {
     if (!date) return '';
-    const d = new Date(date);
-    if (isNaN(d.getTime())) return String(date);
-    return d.toLocaleDateString(this.isKhmer() ? 'km-KH' : 'en-US', {
+    return formatCalendarDate(date, this.isKhmer() ? 'km-KH' : 'en-US', {
       month: 'short',
       year: 'numeric',
     });

@@ -192,6 +192,8 @@ describe('CertificationFormComponent', () => {
         'cert-123',
         expect.objectContaining({
           credentialId: 'GCP-PCA-1000',
+          issueDate: '2024-03-01',
+          expirationDate: '2026-03-01',
         }),
       );
       expect(notificationServiceMock.showSuccess).toHaveBeenCalledWith('Certification updated successfully!');

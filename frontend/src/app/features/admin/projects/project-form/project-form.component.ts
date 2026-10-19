@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Category, Project } from '../../../../core/models';
+import { toPickerDate, toPayloadDate } from '../../../../core/utils/date-utils';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import {
@@ -539,8 +540,8 @@ export class ProjectFormComponent implements OnInit {
           githubUrl: p.githubUrl || '',
           liveUrl: p.liveUrl || '',
           videoUrl: p.videoUrl || '',
-          startDate: p.startDate ? new Date(p.startDate).toISOString().substring(0, 10) : '',
-          completionDate: p.completionDate ? new Date(p.completionDate).toISOString().substring(0, 10) : '',
+          startDate: toPickerDate(p.startDate),
+          completionDate: toPickerDate(p.completionDate),
           fullDescription: p.fullDescription || { en: '', kh: '' },
           problem: p.problem || { en: '', kh: '' },
           solution: p.solution || { en: '', kh: '' },
@@ -630,8 +631,11 @@ export class ProjectFormComponent implements OnInit {
 
     this.isSubmitting.set(true);
 
+    const formVal = this.projectForm.value;
     const payload: Partial<Project> = {
-      ...this.projectForm.value,
+      ...formVal,
+      startDate: toPayloadDate(formVal.startDate) as unknown as Date,
+      completionDate: (toPayloadDate(formVal.completionDate) as unknown as Date) || null,
       technologies: this.techTags(),
     };
 

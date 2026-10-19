@@ -7,6 +7,7 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { Experience, ExperienceType, Settings } from '../../../core/models';
+import { toPickerDate } from '../../../core/utils/date-utils';
 import {
   SkeletonLoaderComponent,
   EmptyStateComponent,
@@ -722,8 +723,8 @@ export class ExperienceComponent implements OnInit, OnDestroy {
     endDate?: string | Date,
     isCurrent?: boolean,
   ): string {
-    const start = new Date(startDate);
-    const end = isCurrent || !endDate ? new Date() : new Date(endDate);
+    const start = toPickerDate(startDate) || new Date(startDate);
+    const end = isCurrent || !endDate ? new Date() : (toPickerDate(endDate) || new Date(endDate));
 
     let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
     if (months <= 0) months = 1;

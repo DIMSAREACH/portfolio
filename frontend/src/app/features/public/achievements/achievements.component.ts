@@ -11,6 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { Certification, CertificationType } from '../../../core/models';
+import { formatCalendarDate } from '../../../core/utils/date-utils';
 import {
   SkeletonLoaderComponent,
   EmptyStateComponent,
@@ -831,8 +832,7 @@ export class AchievementsComponent implements OnInit, OnDestroy {
 
   public formatDate(date?: string | Date): string {
     if (!date) return '';
-    const d = new Date(date);
-    return d.toLocaleDateString(this.isKhmer() ? 'km-KH' : 'en-US', {
+    return formatCalendarDate(date, this.isKhmer() ? 'km-KH' : 'en-US', {
       year: 'numeric',
       month: 'short',
     });

@@ -8,6 +8,7 @@ import { PortfolioService } from '../../../core/services/portfolio.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { SeoService } from '../../../core/services/seo.service';
 import { Project, Category } from '../../../core/models';
+import { formatCalendarDate } from '../../../core/utils/date-utils';
 import {
   ProjectCardComponent,
   EmptyStateComponent,
@@ -752,8 +753,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   public formatDate(date?: string | Date): string {
     if (!date) return '';
-    const d = new Date(date);
-    return d.toLocaleDateString(this.isKhmer() ? 'km-KH' : 'en-US', {
+    return formatCalendarDate(date, this.isKhmer() ? 'km-KH' : 'en-US', {
       year: 'numeric',
       month: 'short',
     });

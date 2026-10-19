@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, inject, computed } from '@angul
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LanguageService } from '../../../../core/services/language.service';
+import { formatCalendarDate } from '../../../../core/utils/date-utils';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 export interface TableColumn<T = Record<string, unknown>> {
@@ -511,8 +512,7 @@ export class AdminDataTableComponent {
 
   public formatDate(dateVal: unknown): string {
     if (!dateVal) return '—';
-    const date = new Date(String(dateVal));
-    return date.toLocaleDateString(undefined, {
+    return formatCalendarDate(dateVal as string | Date, undefined, {
       year: 'numeric',
       month: 'short',
       day: 'numeric',

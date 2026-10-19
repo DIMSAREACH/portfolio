@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Certification, CertificationType } from '../../../../core/models';
+import { toPickerDate, toPayloadDate } from '../../../../core/utils/date-utils';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { BilingualFieldComponent, ImageUploadComponent } from '../../shared';
@@ -343,8 +344,8 @@ export class CertificationFormComponent implements OnInit {
           name: c.name || { en: '', kh: '' },
           organization: c.organization || { en: '', kh: '' },
           type: c.type || 'certification',
-          issueDate: c.issueDate ? new Date(c.issueDate).toISOString().substring(0, 10) : '',
-          expirationDate: c.expirationDate ? new Date(c.expirationDate).toISOString().substring(0, 10) : '',
+          issueDate: toPickerDate(c.issueDate),
+          expirationDate: toPickerDate(c.expirationDate),
           credentialId: c.credentialId || '',
           credentialUrl: c.credentialUrl || '',
           image: c.image || '',
@@ -410,7 +411,8 @@ export class CertificationFormComponent implements OnInit {
 
     const payload: Partial<Certification> = {
       ...formVal,
-      expirationDate: formVal.expirationDate ? formVal.expirationDate : undefined,
+      issueDate: toPayloadDate(formVal.issueDate) as unknown as Date,
+      expirationDate: (toPayloadDate(formVal.expirationDate) as unknown as Date) || null,
     };
 
     if (this.isEditMode() && this.certId()) {

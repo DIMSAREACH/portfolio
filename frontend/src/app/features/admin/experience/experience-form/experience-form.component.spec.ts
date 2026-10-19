@@ -205,6 +205,7 @@ describe('ExperienceFormComponent', () => {
       expect(portfolioServiceMock.updateAdminExperience).toHaveBeenCalledWith(
         'exp-123',
         expect.objectContaining({
+          startDate: '2024-01-01',
           technologies: ['Kubernetes', 'Go', 'GCP'],
         }),
       );

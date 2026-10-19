@@ -7,6 +7,7 @@ import { PortfolioService } from '../../../../core/services/portfolio.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { LanguageService } from '../../../../core/services/language.service';
 import { Experience } from '../../../../core/models';
+import { formatCalendarDate } from '../../../../core/utils/date-utils';
 import { AdminDataTableComponent, TableColumn, SortEvent } from '../../shared';
 import { ConfirmDialogComponent } from '../../../../shared';
 
@@ -142,12 +143,12 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
       width: '180px',
       nowrap: true,
       formatter: (_val, row: Record<string, unknown>) => {
-        const start = row['startDate'] ? new Date(String(row['startDate'])).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : '—';
+        const start = row['startDate'] ? formatCalendarDate(row['startDate'] as string | Date, undefined, { year: 'numeric', month: 'short' }) : '—';
         const isCurrent = row['isCurrent'] === true;
         const end = isCurrent
           ? 'Present'
           : row['endDate']
-            ? new Date(String(row['endDate'])).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
+            ? formatCalendarDate(row['endDate'] as string | Date, undefined, { year: 'numeric', month: 'short' })
             : '—';
         return `${start} – ${end}`;
       },

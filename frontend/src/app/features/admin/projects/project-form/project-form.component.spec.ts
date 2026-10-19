@@ -252,6 +252,8 @@ describe('ProjectFormComponent', () => {
         'proj-123',
         expect.objectContaining({
           slug: 'enterprise-platform',
+          startDate: '2025-01-01',
+          completionDate: '2025-06-01',
           technologies: ['Angular', 'Node.js', 'MongoDB'],
         }),
       );
