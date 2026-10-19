@@ -284,6 +284,7 @@ export class SocialLinkListComponent implements OnInit, OnDestroy {
   public readonly platformOptions = [
     { label: 'GitHub', value: 'github' },
     { label: 'LinkedIn', value: 'linkedin' },
+    { label: 'Telegram', value: 'telegram' },
     { label: 'Facebook', value: 'facebook' },
     { label: 'Email', value: 'email' },
     { label: 'Twitter / X', value: 'twitter' },
@@ -301,6 +302,15 @@ export class SocialLinkListComponent implements OnInit, OnDestroy {
   });
 
   public ngOnInit(): void {
+    let previousPlatform = this.linkForm.get('platform')?.value;
+    this.linkForm.get('platform')?.valueChanges.subscribe((val) => {
+      if (val === null && previousPlatform) {
+        this.linkForm.get('platform')?.setValue(previousPlatform, { emitEvent: false });
+      } else if (val !== null) {
+        previousPlatform = val;
+      }
+    });
+
     this.loadSocialLinks();
     if (this.portfolioService?.dataMutated$) {
       this.syncSub = this.portfolioService.dataMutated$.subscribe((mutation) => {
@@ -340,6 +350,7 @@ export class SocialLinkListComponent implements OnInit, OnDestroy {
       const labels: Record<string, string> = {
         github: 'GitHub',
         linkedin: 'LinkedIn',
+        telegram: 'Telegram',
         facebook: 'Facebook',
         email: 'Email Contact',
         twitter: 'Twitter / X',
@@ -368,11 +379,12 @@ export class SocialLinkListComponent implements OnInit, OnDestroy {
 
   public openEditModal(link: SocialLink): void {
     this.editingLinkId = link._id;
+    const platformVal = (link.platform || 'other').toString().toLowerCase().trim() as SocialPlatform;
     this.linkForm.patchValue({
-      platform: link.platform,
+      platform: platformVal,
       label: link.label,
       url: link.url,
-      icon: link.icon || link.platform,
+      icon: link.icon || platformVal,
       order: link.order ?? 0,
       isVisible: link.isVisible !== false,
     });

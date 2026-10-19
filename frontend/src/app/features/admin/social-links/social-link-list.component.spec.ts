@@ -138,6 +138,38 @@ describe('SocialLinkListComponent', () => {
     expect(notificationServiceMock.showSuccess).toHaveBeenCalledWith('Social link deleted successfully.');
   });
 
+  it('should support Telegram platform in edit and create modal', () => {
+    const telegramOption = component.platformOptions.find((p) => p.value === 'telegram');
+    expect(telegramOption).toBeDefined();
+    expect(telegramOption?.label).toBe('Telegram');
+
+    const telegramLink: SocialLink = {
+      _id: 'link-tg',
+      platform: 'telegram',
+      label: 'Telegram',
+      url: 'https://t.me/sareach_dim',
+      icon: 'telegram',
+      order: 3,
+      isVisible: true,
+    };
+
+    component.openEditModal(telegramLink);
+    expect(component.editingLinkId).toBe('link-tg');
+    expect(component.linkForm.get('platform')?.value).toBe('telegram');
+    expect(component.linkForm.valid).toBe(true);
+
+    component.saveLink();
+    expect(portfolioServiceMock.updateAdminSocialLink).toHaveBeenCalledWith(
+      'link-tg',
+      expect.objectContaining({
+        platform: 'telegram',
+        label: 'Telegram',
+        url: 'https://t.me/sareach_dim',
+      }),
+    );
+    expect(notificationServiceMock.showSuccess).toHaveBeenCalledWith('Social link updated successfully!');
+  });
+
   it('should handle error when loading fails', () => {
     portfolioServiceMock.getAdminSocialLinks.mockReturnValue(throwError(() => new Error('Error')));
     component.loadSocialLinks();
