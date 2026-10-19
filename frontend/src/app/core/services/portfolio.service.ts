@@ -29,14 +29,14 @@ export class PortfolioService {
   /**
    * In-memory cache for public queries with TTL to guarantee instant navigation
    */
-  private readonly cache = new Map<string, { data: any; expiry: number }>();
+  private readonly cache = new Map<string, { data: unknown; expiry: number }>();
   private readonly CACHE_TTL_MS = 3 * 60 * 1000; // 3 minutes
 
   private getCachedOrFetch<T>(key: string, fetchFn: () => Observable<T>): Observable<T> {
     const cached = this.cache.get(key);
     const now = Date.now();
     if (cached && cached.expiry > now) {
-      return of(cached.data);
+      return of(cached.data as T);
     }
     return fetchFn().pipe(
       tap((data) => {
