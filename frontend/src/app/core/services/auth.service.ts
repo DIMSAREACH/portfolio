@@ -43,7 +43,11 @@ export class AuthService {
       .pipe(
         tap((response) => {
           if (response?.data?.accessToken && response?.data?.user) {
-            this.setSession(response.data.user, response.data.accessToken);
+            this.setSession(
+              response.data.user,
+              response.data.accessToken,
+              response.data.refreshToken,
+            );
           }
         }),
         finalize(() => this.isLoading.set(false)),
@@ -60,7 +64,11 @@ export class AuthService {
       .pipe(
         tap((response) => {
           if (response?.data?.accessToken && response?.data?.user) {
-            this.setSession(response.data.user, response.data.accessToken);
+            this.setSession(
+              response.data.user,
+              response.data.accessToken,
+              response.data.refreshToken,
+            );
           }
         }),
         finalize(() => this.isLoading.set(false)),
@@ -100,15 +108,45 @@ export class AuthService {
   }
 
   /**
-   * Silent refresh token using HTTP-only cookie
+   * Retrieve cached refresh token from client storage
+   */
+  public getStoredRefreshToken(): string | null {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        return localStorage.getItem('portfolio_refresh_token');
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  public setStoredRefreshToken(token: string): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        localStorage.setItem('portfolio_refresh_token', token);
+      } catch {
+        // Silently continue
+      }
+    }
+  }
+
+  /**
+   * Silent refresh token using HTTP-only cookie or body payload fallback
    */
   public refreshToken(): Observable<ApiResponse<AuthResponse>> {
-    return this.apiService.post<ApiResponse<AuthResponse>>('/auth/refresh', {}).pipe(
+    const storedToken = this.getStoredRefreshToken();
+    const payload = storedToken ? { refreshToken: storedToken } : {};
+
+    return this.apiService.post<ApiResponse<AuthResponse>>('/auth/refresh', payload).pipe(
       tap((response) => {
         if (response?.data?.accessToken) {
           this.accessToken.set(response.data.accessToken);
           if (response.data.user) {
             this.currentUser.set(response.data.user);
+          }
+          if (response.data.refreshToken) {
+            this.setStoredRefreshToken(response.data.refreshToken);
           }
           this.isExplicitlyLoggedOut.set(false);
         }
@@ -168,7 +206,10 @@ export class AuthService {
   public hasSessionHint(): boolean {
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
-        return localStorage.getItem('portfolio_has_session') === '1';
+        return (
+          localStorage.getItem('portfolio_has_session') === '1' ||
+          !!localStorage.getItem('portfolio_refresh_token')
+        );
       } catch {
         return false;
       }
@@ -179,13 +220,16 @@ export class AuthService {
   /**
    * Internal session setters
    */
-  public setSession(user: User, token: string): void {
+  public setSession(user: User, token: string, refreshToken?: string): void {
     this.isExplicitlyLoggedOut.set(false);
     this.currentUser.set(user);
     this.accessToken.set(token);
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
         localStorage.setItem('portfolio_has_session', '1');
+        if (refreshToken) {
+          localStorage.setItem('portfolio_refresh_token', refreshToken);
+        }
       } catch {
         // Silently continue in environments without localStorage
       }
@@ -198,6 +242,7 @@ export class AuthService {
     if (typeof window !== 'undefined' && window.localStorage) {
       try {
         localStorage.removeItem('portfolio_has_session');
+        localStorage.removeItem('portfolio_refresh_token');
       } catch {
         // Silently continue in environments without localStorage
       }

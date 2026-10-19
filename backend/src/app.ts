@@ -15,6 +15,9 @@ import swaggerSpec from './config/swagger';
 
 const app: Application = express();
 
+// Trust reverse proxy (Render, Vercel, Cloudflare) for accurate req.ip and rate limiting
+app.set('trust proxy', 1);
+
 // 1. Security HTTP Headers (CSP disabled to allow Swagger UI inline assets)
 app.use(
   helmet({

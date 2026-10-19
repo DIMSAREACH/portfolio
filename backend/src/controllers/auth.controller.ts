@@ -1,26 +1,38 @@
-import { Request, Response } from 'express';
+import { Request, Response, CookieOptions } from 'express';
 import config from '../config/environment';
 import authService from '../services/auth.service';
 import { sendSuccess } from '../utils/apiResponse';
 import catchAsync from '../utils/catchAsync';
 import { UnauthorizedError } from '../utils/AppError';
 
+/**
+ * Cookie options tailored for cross-site hosting (e.g. Vercel frontend <-> Render backend)
+ */
+const getRefreshCookieOptions = (): CookieOptions => {
+  const isProd = config.NODE_ENV === 'production';
+  return {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
+    path: '/',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  };
+};
+
 export class AuthController {
   login = catchAsync(async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
     const result = await authService.login(email, password);
 
-    res.cookie('refreshToken', result.refreshToken, {
-      httpOnly: true,
-      secure: config.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/api/v1/auth',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    res.cookie('refreshToken', result.refreshToken, getRefreshCookieOptions());
 
     sendSuccess(
       res,
-      { user: result.user, accessToken: result.accessToken },
+      {
+        user: result.user,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      },
       'Login successful',
     );
   });
@@ -29,42 +41,43 @@ export class AuthController {
     const { idToken } = req.body;
     const result = await authService.loginWithFirebase(idToken);
 
-    res.cookie('refreshToken', result.refreshToken, {
-      httpOnly: true,
-      secure: config.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/api/v1/auth',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    res.cookie('refreshToken', result.refreshToken, getRefreshCookieOptions());
 
     sendSuccess(
       res,
-      { user: result.user, accessToken: result.accessToken },
+      {
+        user: result.user,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      },
       'Firebase login successful',
     );
   });
 
   logout = catchAsync(async (_req: Request, res: Response): Promise<void> => {
-    res.clearCookie('refreshToken', {
-      httpOnly: true,
-      secure: config.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/api/v1/auth',
-    });
-
+    res.clearCookie('refreshToken', getRefreshCookieOptions());
     sendSuccess(res, null, 'Logged out successfully');
   });
 
   refresh = catchAsync(async (req: Request, res: Response): Promise<void> => {
-    const refreshToken = req.cookies?.refreshToken;
+    const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
     if (!refreshToken) {
       throw new UnauthorizedError('Refresh token is required');
     }
 
     const result = await authService.refreshAccessToken(refreshToken);
+
+    if (result.refreshToken) {
+      res.cookie('refreshToken', result.refreshToken, getRefreshCookieOptions());
+    }
+
     sendSuccess(
       res,
-      { accessToken: result.accessToken, user: result.user },
+      {
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken || refreshToken,
+        user: result.user,
+      },
       'Token refreshed successfully',
     );
   });

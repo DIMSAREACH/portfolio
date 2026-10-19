@@ -141,14 +141,30 @@ export class CategoryService {
       throw new NotFoundError(`Category with ID ${id} not found`);
     }
 
-    const [projectCount, blogCount] = await Promise.all([
-      Project.countDocuments({ category: id }),
-      BlogPost.countDocuments({ category: id }),
+    const [referencingProjects, referencingBlogs] = await Promise.all([
+      Project.find({ category: id }).select('title slug').lean(),
+      BlogPost.find({ category: id }).select('title slug').lean(),
     ]);
 
-    if (projectCount > 0 || blogCount > 0) {
+    if (referencingProjects.length > 0 || referencingBlogs.length > 0) {
+      const projTitles = referencingProjects
+        .map((p) => p.title?.en || p.slug)
+        .slice(0, 3)
+        .join(', ');
+      const moreProj = referencingProjects.length > 3 ? ` (+${referencingProjects.length - 3} more)` : '';
+      const blogTitles = referencingBlogs
+        .map((b) => b.title?.en || b.slug)
+        .slice(0, 3)
+        .join(', ');
+      const moreBlog = referencingBlogs.length > 3 ? ` (+${referencingBlogs.length - 3} more)` : '';
+
+      const items = [
+        referencingProjects.length > 0 ? `Projects: "${projTitles}${moreProj}"` : '',
+        referencingBlogs.length > 0 ? `Blog Posts: "${blogTitles}${moreBlog}"` : '',
+      ].filter(Boolean).join(' and ');
+
       throw new ConflictError(
-        `Cannot delete category. It is referenced by ${projectCount} project(s) and ${blogCount} blog post(s).`,
+        `Cannot delete category "${category.name.en}". It is assigned to ${items}. Please reassign or delete these items first.`,
       );
     }
 

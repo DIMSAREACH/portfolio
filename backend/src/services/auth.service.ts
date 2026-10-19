@@ -21,6 +21,7 @@ export interface LoginResult {
 
 export interface RefreshResult {
   accessToken: string;
+  refreshToken?: string;
   user?: Record<string, unknown>;
 }
 
@@ -166,8 +167,9 @@ export class AuthService {
     await this.ensureUserAvatar(user);
 
     const accessToken = generateAccessToken(user._id.toString(), user.role);
+    const newRefreshToken = generateRefreshToken(user._id.toString());
 
-    return { accessToken, user: sanitizeUser(user) };
+    return { accessToken, refreshToken: newRefreshToken, user: sanitizeUser(user) };
   }
 
   /**
