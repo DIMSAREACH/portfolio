@@ -175,8 +175,10 @@ export class EducationListComponent implements OnInit, OnDestroy {
       })
       .subscribe({
         next: (res) => {
-          this.educationList.set(res.data.items);
-          this.totalItems.set(res.data.pagination.total);
+          const items = Array.isArray(res.data) ? res.data : (res.data?.items ?? []);
+          const total = Array.isArray(res.data) ? res.data.length : (res.data?.pagination?.total ?? items.length);
+          this.educationList.set(items);
+          this.totalItems.set(total);
           this.isLoading.set(false);
         },
         error: () => {
@@ -214,13 +216,20 @@ export class EducationListComponent implements OnInit, OnDestroy {
   }
 
   public onEditClick(row: Record<string, unknown>): void {
-    const id = (row['_id'] || row['id']) as string;
+    const rawId = row['_id'] || row['id'];
+    const id = typeof rawId === 'object' && rawId !== null && '$oid' in (rawId as Record<string, unknown>)
+      ? String((rawId as { $oid: unknown }).$oid)
+      : String(rawId || '');
     if (id) {
       this.router.navigate(['/admin/education', id, 'edit']);
     }
   }
 
   public onDeleteClick(row: Record<string, unknown>): void {
+    const rawId = row['_id'] || row['id'];
+    const id = typeof rawId === 'object' && rawId !== null && '$oid' in (rawId as Record<string, unknown>)
+      ? String((rawId as { $oid: unknown }).$oid)
+      : String(rawId || '');
     const edu = row as unknown as Education;
     const inst = edu.institution?.en || 'this education record';
 
@@ -234,9 +243,9 @@ export class EducationListComponent implements OnInit, OnDestroy {
       },
     });
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.confirmDelete(edu._id);
+    dialogRef?.afterClosed()?.subscribe((confirmed: boolean) => {
+      if (confirmed && id) {
+        this.confirmDelete(id);
       }
     });
   }

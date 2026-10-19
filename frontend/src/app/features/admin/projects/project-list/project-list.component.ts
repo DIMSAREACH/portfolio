@@ -57,6 +57,7 @@ import { ConfirmDialogComponent } from '../../../../shared';
         [searchPlaceholder]="isKhmer() ? 'ស្វែងរកគម្រោងតាមចំណងជើង, បច្ចេកវិទ្យា...' : 'Search projects by title, stack...'"
         [createButtonLabel]="isKhmer() ? 'គម្រោងថ្មី' : 'New Project'"
         [emptyMessage]="isKhmer() ? 'មិនមានគម្រោងផលប័ត្រត្រូវបានរកឃើញទេ។' : 'No portfolio projects found.'"
+        [showViewButton]="true"
         (searchChange)="onSearchChange($event)"
         (filterChange)="onFilterChange($event)"
         (sortChange)="onSortChange($event)"
@@ -185,8 +186,10 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
     this.portfolioService.getAdminProjects(params).subscribe({
       next: (res) => {
-        this.projects.set(res.data.items);
-        this.totalItems.set(res.data.pagination.total);
+        const items = Array.isArray(res.data) ? res.data : (res.data?.items ?? []);
+        const total = Array.isArray(res.data) ? res.data.length : (res.data?.pagination?.total ?? items.length);
+        this.projects.set(items);
+        this.totalItems.set(total);
         this.isLoading.set(false);
       },
       error: () => {
@@ -230,7 +233,10 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   }
 
   public onEditClick(row: Record<string, unknown>): void {
-    const id = (row['_id'] || row['id']) as string;
+    const rawId = row['_id'] || row['id'];
+    const id = typeof rawId === 'object' && rawId !== null && '$oid' in (rawId as Record<string, unknown>)
+      ? String((rawId as { $oid: unknown }).$oid)
+      : String(rawId || '');
     if (id) {
       this.router.navigate(['/admin/projects', id, 'edit']);
     }
@@ -244,6 +250,10 @@ export class ProjectListComponent implements OnInit, OnDestroy {
   }
 
   public onDeleteClick(row: Record<string, unknown>): void {
+    const rawId = row['_id'] || row['id'];
+    const id = typeof rawId === 'object' && rawId !== null && '$oid' in (rawId as Record<string, unknown>)
+      ? String((rawId as { $oid: unknown }).$oid)
+      : String(rawId || '');
     const proj = row as unknown as Project;
     const title = proj.title?.en || 'this project';
 
@@ -257,9 +267,9 @@ export class ProjectListComponent implements OnInit, OnDestroy {
       },
     });
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.confirmDelete(proj._id);
+    dialogRef?.afterClosed()?.subscribe((confirmed: boolean) => {
+      if (confirmed && id) {
+        this.confirmDelete(id);
       }
     });
   }

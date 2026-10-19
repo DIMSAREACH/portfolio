@@ -156,4 +156,24 @@ describe('CategoryListComponent', () => {
     component.loadCategories();
     expect(notificationServiceMock.showError).toHaveBeenCalledWith('Failed to load categories.');
   });
+
+  it('should trigger openEditModal when clicking edit action button in table', () => {
+    const editSpy = vi.spyOn(component, 'openEditModal');
+    const editBtns = fixture.nativeElement.querySelectorAll('button[aria-label="Edit category"]');
+    expect(editBtns.length).toBe(2);
+    editBtns[0].click();
+    expect(editSpy).toHaveBeenCalledWith(mockCategories[0]);
+    expect(component.showModal()).toBe(true);
+  });
+
+  it('should trigger onDeleteCategory when clicking delete action button in table', () => {
+    dialogMock.open.mockReturnValue({
+      afterClosed: () => of(false),
+    });
+    const deleteSpy = vi.spyOn(component, 'onDeleteCategory');
+    const deleteBtns = fixture.nativeElement.querySelectorAll('button[aria-label="Delete category"]');
+    expect(deleteBtns.length).toBe(2);
+    deleteBtns[0].click();
+    expect(deleteSpy).toHaveBeenCalledWith(mockCategories[0]);
+  });
 });

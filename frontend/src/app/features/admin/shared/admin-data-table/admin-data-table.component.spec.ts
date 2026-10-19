@@ -142,5 +142,38 @@ describe('AdminDataTableComponent', () => {
     const animatedSkeletons = fixture.nativeElement.querySelectorAll('.animate-pulse');
     expect(animatedSkeletons.length).toBeGreaterThan(0);
   });
+
+  it('should not render view button by default and render it when showViewButton is true', () => {
+    // By default showViewButton is false
+    let viewBtns = fixture.nativeElement.querySelectorAll('button[aria-label="View item"]');
+    expect(viewBtns.length).toBe(0);
+
+    fixture.componentRef.setInput('showViewButton', true);
+    fixture.detectChanges();
+
+    viewBtns = fixture.nativeElement.querySelectorAll('button[aria-label="View item"]');
+    expect(viewBtns.length).toBe(2);
+
+    const viewSpy = vi.spyOn(component.viewClick, 'emit');
+    viewBtns[0].click();
+    expect(viewSpy).toHaveBeenCalledWith(mockData[0]);
+  });
+
+  it('should emit editClick and deleteClick when clicking the action buttons in the DOM', () => {
+    const editSpy = vi.spyOn(component.editClick, 'emit');
+    const deleteSpy = vi.spyOn(component.deleteClick, 'emit');
+
+    const editBtns = fixture.nativeElement.querySelectorAll('button[aria-label="Edit item"]');
+    const deleteBtns = fixture.nativeElement.querySelectorAll('button[aria-label="Delete item"]');
+
+    expect(editBtns.length).toBe(2);
+    expect(deleteBtns.length).toBe(2);
+
+    editBtns[0].click();
+    expect(editSpy).toHaveBeenCalledWith(mockData[0]);
+
+    deleteBtns[1].click();
+    expect(deleteSpy).toHaveBeenCalledWith(mockData[1]);
+  });
 });
 

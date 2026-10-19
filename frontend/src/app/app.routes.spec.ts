@@ -44,4 +44,14 @@ describe('App Routes', () => {
     expect(wildcardRoute).toBeDefined();
     expect(routes[routes.length - 1].path).toBe('**');
   });
+
+  it('should resolve admin experience edit route', async () => {
+    const adminRoute = routes.find((r) => r.path === 'admin');
+    const adminChildren = await (adminRoute?.loadChildren as () => Promise<any>)();
+    const adminLayout = adminChildren.find((r: any) => r.path === '');
+    const expEdit = adminLayout.children.find((r: any) => r.path === 'experience/:id/edit');
+    expect(expEdit).toBeDefined();
+    const comp = await expEdit.loadComponent();
+    expect(comp).toBeDefined();
+  });
 });

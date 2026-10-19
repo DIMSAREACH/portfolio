@@ -178,23 +178,23 @@ import { ConfirmDialogComponent } from '../../../shared';
                       <div class="inline-flex items-center gap-1.5">
                         <button
                           type="button"
-                          (click)="openEditModal(link)"
+                          (click)="onEditClick($event, link)"
                           class="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-50 text-indigo-600 border border-indigo-200/80 hover:bg-indigo-100 hover:text-indigo-700 hover:border-indigo-300 dark:bg-indigo-950/40 dark:text-indigo-400 dark:border-indigo-800/60 dark:hover:bg-indigo-900/60 dark:hover:text-indigo-300 transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs hover:scale-105 active:scale-95"
                           title="Edit"
                           aria-label="Edit link"
                         >
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                           </svg>
                         </button>
                         <button
                           type="button"
-                          (click)="onDelete(link)"
+                          (click)="onDeleteClick($event, link)"
                           class="w-8 h-8 rounded-lg flex items-center justify-center bg-rose-50 text-rose-600 border border-rose-200/80 hover:bg-rose-100 hover:text-rose-700 hover:border-rose-300 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800/60 dark:hover:bg-rose-900/60 dark:hover:text-rose-300 transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs hover:scale-105 active:scale-95"
                           title="Delete"
                           aria-label="Delete link"
                         >
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
                         </button>
@@ -232,20 +232,24 @@ import { ConfirmDialogComponent } from '../../../shared';
                 <label for="link-platform-select" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                   Platform <span class="text-rose-500 font-bold ml-0.5">*</span>
                 </label>
-                <p-cascadeselect
-                  id="link-platform-select"
-                  inputId="link-platform-select"
-                  formControlName="platform"
-                  [options]="platformOptions"
-                  optionLabel="label"
-                  optionValue="value"
-                  placeholder="Select Platform"
-                  appendTo="body"
-                  styleClass="w-full portfolio-cascadeselect portfolio-cascadeselect-admin"
-                  [style]="{ width: '100%' }"
-                  ariaLabel="Social Platform"
-                  (onChange)="onPlatformChange()"
-                />
+                <div class="relative">
+                  <select
+                    id="link-platform-select"
+                    formControlName="platform"
+                    (change)="onPlatformChange()"
+                    class="w-full px-4 py-2.5 text-sm rounded-xl min-h-[42px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 appearance-none cursor-pointer pr-10"
+                    aria-label="Social Platform"
+                  >
+                    @for (opt of platformOptions; track opt.value) {
+                      <option [value]="opt.value">{{ opt.label }}</option>
+                    }
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-400">
+                    <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
               </div>
 
               <!-- Label -->
@@ -389,7 +393,11 @@ export class SocialLinkListComponent implements OnInit, OnDestroy {
     this.isLoading.set(true);
     this.portfolioService.getAdminSocialLinks().subscribe({
       next: (res) => {
-        this.socialLinks.set(res.data || []);
+        const raw = res.data as unknown;
+        const items: SocialLink[] = Array.isArray(raw)
+          ? (raw as SocialLink[])
+          : ((raw as { items?: SocialLink[] })?.items ?? []);
+        this.socialLinks.set(items);
         this.isLoading.set(false);
       },
       error: () => {
@@ -432,8 +440,16 @@ export class SocialLinkListComponent implements OnInit, OnDestroy {
     this.showModal.set(true);
   }
 
+  public onEditClick(event: Event, link: SocialLink): void {
+    event.stopPropagation();
+    this.openEditModal(link);
+  }
+
   public openEditModal(link: SocialLink): void {
-    this.editingLinkId = link._id;
+    const rawId = link._id || (link as unknown as { id?: string }).id;
+    this.editingLinkId = typeof rawId === 'object' && rawId !== null && '$oid' in (rawId as Record<string, unknown>)
+      ? String((rawId as { $oid: unknown }).$oid)
+      : String(rawId || '');
     let platformVal = (link.platform || 'other').toString().toLowerCase().trim() as SocialPlatform;
     if (platformVal === 'other') {
       const detected = this.getPlatformKey(link);
@@ -543,7 +559,17 @@ export class SocialLinkListComponent implements OnInit, OnDestroy {
     }
   }
 
+  public onDeleteClick(event: Event, link: SocialLink): void {
+    event.stopPropagation();
+    this.onDelete(link);
+  }
+
   public onDelete(link: SocialLink): void {
+    const rawId = link._id || (link as unknown as { id?: string }).id;
+    const linkId = typeof rawId === 'object' && rawId !== null && '$oid' in (rawId as Record<string, unknown>)
+      ? String((rawId as { $oid: unknown }).$oid)
+      : String(rawId || '');
+
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'Delete Social Link',
@@ -554,9 +580,9 @@ export class SocialLinkListComponent implements OnInit, OnDestroy {
       },
     });
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.portfolioService.deleteAdminSocialLink(link._id).subscribe({
+    dialogRef?.afterClosed()?.subscribe((confirmed: boolean) => {
+      if (confirmed && linkId) {
+        this.portfolioService.deleteAdminSocialLink(linkId).subscribe({
           next: () => {
             this.notificationService.showSuccess('Social link deleted successfully.');
             this.loadSocialLinks();

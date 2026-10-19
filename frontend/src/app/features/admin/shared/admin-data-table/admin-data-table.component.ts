@@ -227,7 +227,7 @@ export interface SortEvent {
                         @if (showPublishToggle) {
                           <button
                             type="button"
-                            (click)="togglePublishClick.emit(item)"
+                            (click)="onTogglePublish($event, item)"
                             class="w-8 h-8 rounded-lg flex items-center justify-center border transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs hover:scale-105 active:scale-95"
                             [class.bg-emerald-50]="getItemValue(item, 'status') === 'published'"
                             [class.text-emerald-600]="getItemValue(item, 'status') === 'published'"
@@ -253,47 +253,49 @@ export interface SortEvent {
                             [attr.aria-label]="getItemValue(item, 'status') === 'published' ? 'Unpublish' : 'Publish'"
                           >
                             @if (getItemValue(item, 'status') === 'published') {
-                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                               </svg>
                             } @else {
-                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                               </svg>
                             }
                           </button>
                         }
+                        @if (showViewButton) {
+                          <button
+                            type="button"
+                            (click)="onView($event, item)"
+                            class="w-8 h-8 rounded-lg flex items-center justify-center bg-sky-50 text-sky-600 border border-sky-200/80 hover:bg-sky-100 hover:text-sky-700 hover:border-sky-300 dark:bg-sky-950/40 dark:text-sky-400 dark:border-sky-800/60 dark:hover:bg-sky-900/60 dark:hover:text-sky-300 transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs hover:scale-105 active:scale-95"
+                            [title]="isKhmer() ? 'មើល' : 'View'"
+                            aria-label="View item"
+                          >
+                            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                          </button>
+                        }
                         <button
                           type="button"
-                          (click)="viewClick.emit(item)"
-                          class="w-8 h-8 rounded-lg flex items-center justify-center bg-sky-50 text-sky-600 border border-sky-200/80 hover:bg-sky-100 hover:text-sky-700 hover:border-sky-300 dark:bg-sky-950/40 dark:text-sky-400 dark:border-sky-800/60 dark:hover:bg-sky-900/60 dark:hover:text-sky-300 transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs hover:scale-105 active:scale-95"
-                          [title]="isKhmer() ? 'មើល' : 'View'"
-                          aria-label="View item"
-                        >
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
-                        </button>
-                        <button
-                          type="button"
-                          (click)="editClick.emit(item)"
+                          (click)="onEdit($event, item)"
                           class="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-50 text-indigo-600 border border-indigo-200/80 hover:bg-indigo-100 hover:text-indigo-700 hover:border-indigo-300 dark:bg-indigo-950/40 dark:text-indigo-400 dark:border-indigo-800/60 dark:hover:bg-indigo-900/60 dark:hover:text-indigo-300 transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs hover:scale-105 active:scale-95"
                           [title]="isKhmer() ? 'កែសម្រួល' : 'Edit'"
                           aria-label="Edit item"
                         >
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                           </svg>
                         </button>
                         <button
                           type="button"
-                          (click)="deleteClick.emit(item)"
+                          (click)="onDelete($event, item)"
                           class="w-8 h-8 rounded-lg flex items-center justify-center bg-rose-50 text-rose-600 border border-rose-200/80 hover:bg-rose-100 hover:text-rose-700 hover:border-rose-300 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800/60 dark:hover:bg-rose-900/60 dark:hover:text-rose-300 transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs hover:scale-105 active:scale-95"
                           [title]="isKhmer() ? 'លុប' : 'Delete'"
                           aria-label="Delete item"
                         >
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
                         </button>
@@ -419,6 +421,7 @@ export class AdminDataTableComponent {
   @Input() showActions = true;
   @Input() showCreateButton = true;
   @Input() showPublishToggle = false;
+  @Input() showViewButton = false;
 
   @Output() searchChange = new EventEmitter<string>();
   @Output() filterChange = new EventEmitter<string>();
@@ -540,5 +543,25 @@ export class AdminDataTableComponent {
 
   public getItemString(item: Record<string, unknown>, key: string): string {
     return String(item[key] ?? '');
+  }
+
+  public onView(event: Event, item: Record<string, unknown>): void {
+    event.stopPropagation();
+    this.viewClick.emit(item);
+  }
+
+  public onEdit(event: Event, item: Record<string, unknown>): void {
+    event.stopPropagation();
+    this.editClick.emit(item);
+  }
+
+  public onDelete(event: Event, item: Record<string, unknown>): void {
+    event.stopPropagation();
+    this.deleteClick.emit(item);
+  }
+
+  public onTogglePublish(event: Event, item: Record<string, unknown>): void {
+    event.stopPropagation();
+    this.togglePublishClick.emit(item);
   }
 }

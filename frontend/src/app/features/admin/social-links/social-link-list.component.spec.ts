@@ -175,4 +175,24 @@ describe('SocialLinkListComponent', () => {
     component.loadSocialLinks();
     expect(notificationServiceMock.showError).toHaveBeenCalledWith('Failed to load social links.');
   });
+
+  it('should trigger openEditModal when clicking edit action button in table', () => {
+    const editSpy = vi.spyOn(component, 'openEditModal');
+    const editBtns = fixture.nativeElement.querySelectorAll('button[aria-label="Edit link"]');
+    expect(editBtns.length).toBe(2);
+    editBtns[0].click();
+    expect(editSpy).toHaveBeenCalledWith(mockLinks[0]);
+    expect(component.showModal()).toBe(true);
+  });
+
+  it('should trigger onDelete when clicking delete action button in table', () => {
+    dialogMock.open.mockReturnValue({
+      afterClosed: () => of(false),
+    });
+    const deleteSpy = vi.spyOn(component, 'onDelete');
+    const deleteBtns = fixture.nativeElement.querySelectorAll('button[aria-label="Delete link"]');
+    expect(deleteBtns.length).toBe(2);
+    deleteBtns[0].click();
+    expect(deleteSpy).toHaveBeenCalledWith(mockLinks[0]);
+  });
 });

@@ -161,4 +161,12 @@ describe('ExperienceListComponent', () => {
     expect(dialogMock.open).toHaveBeenCalled();
     expect(portfolioServiceMock.deleteAdminExperience).not.toHaveBeenCalled();
   });
+
+  it('should click the Edit button in app-admin-data-table DOM and navigate to edit route', () => {
+    const navSpy = vi.spyOn(router, 'navigate');
+    const editBtn = fixture.nativeElement.querySelector('button[aria-label="Edit item"]') as HTMLButtonElement;
+    expect(editBtn).toBeTruthy();
+    editBtn.click();
+    expect(navSpy).toHaveBeenCalledWith(['/admin/experience', 'exp-1', 'edit']);
+  });
 });
