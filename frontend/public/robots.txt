@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /api
 
-Sitemap: https://portfolio.example.com/sitemap.xml
+Sitemap: https://camtraffic.store/sitemap.xml

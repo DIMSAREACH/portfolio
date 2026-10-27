@@ -21,8 +21,8 @@ import process from 'process';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const API_BASE = 'http://localhost:3000/api/v1';
-const FRONTEND_BASE = 'http://localhost:4200';
+const API_BASE = process.env.API_BASE || 'http://localhost:3000/api/v1';
+const FRONTEND_BASE = process.env.FRONTEND_BASE || 'http://localhost:4200';
 
 interface TestResult {
   workflow: string;
@@ -40,8 +40,13 @@ async function recordTest(
   fn: () => Promise<string | void>,
 ) {
   const start = Date.now();
+  let timer: NodeJS.Timeout | undefined;
   try {
-    const detail = await fn();
+    const timeoutPromise = new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error('Test timed out after 15000ms')), 15000);
+    });
+    const detail = (await Promise.race([fn(), timeoutPromise])) as string | void;
+    clearTimeout(timer);
     const duration = Date.now() - start;
     results.push({
       workflow,
@@ -52,6 +57,7 @@ async function recordTest(
     });
     console.log(`  [PASS] ${workflow} -> ${testCase} (${duration}ms)`);
   } catch (err: any) {
+    if (timer) clearTimeout(timer);
     const duration = Date.now() - start;
     results.push({
       workflow,
