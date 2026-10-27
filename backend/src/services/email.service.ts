@@ -68,6 +68,44 @@ export class EmailService {
    */
   async sendEmail(options: SendEmailOptions): Promise<EmailResult> {
     try {
+      if (config.RESEND_API_KEY) {
+        const fromAddress = options.from && !options.from.includes('localhost') && !options.from.includes('example.com')
+          ? options.from
+          : 'Portfolio Notification <onboarding@resend.dev>';
+
+        const response = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${config.RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: fromAddress,
+            to: options.to,
+            subject: options.subject,
+            html: options.html || options.text,
+            reply_to: options.replyTo,
+          }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.text();
+          throw new Error(`Resend API error (${response.status}): ${errData}`);
+        }
+
+        const resData = (await response.json()) as { id?: string };
+        logger.info('Email sent successfully via Resend HTTP API', {
+          messageId: resData.id,
+          to: options.to,
+          subject: options.subject,
+        });
+
+        return {
+          success: true,
+          messageId: resData.id,
+        };
+      }
+
       const mailOptions = {
         from: options.from || config.EMAIL_FROM,
         to: options.to,
@@ -113,7 +151,7 @@ export class EmailService {
     message: IMessage | ContactMessagePayload,
   ): Promise<EmailResult> {
     try {
-      let recipientEmail = config.EMAIL_USER || 'admin@portfolio.dev';
+      let recipientEmail = config.EMAIL_USER || 'dimsareach009@gmail.com';
       let notificationsEnabled = true;
 
       try {

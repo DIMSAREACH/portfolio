@@ -30,6 +30,7 @@ export interface Config {
   R2_BUCKET_NAME?: string;
   R2_PUBLIC_URL?: string;
   R2_ENDPOINT?: string;
+  RESEND_API_KEY?: string;
 }
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
@@ -97,6 +98,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     R2_BUCKET_NAME: env.R2_BUCKET_NAME || 'portfolio-media',
     R2_PUBLIC_URL: env.R2_PUBLIC_URL || '',
     R2_ENDPOINT: env.R2_ENDPOINT || '',
+    RESEND_API_KEY: env.RESEND_API_KEY || '',
   };
 }
 
