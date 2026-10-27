@@ -222,11 +222,14 @@ async function runAllTests() {
   // -------------------------------------------------------------------------
   console.log('\n--- Workflow 3: Admin Login & Token Management ---');
 
+  const validAdminEmail = process.env.ADMIN_EMAIL || 'admin@portfolio.dev';
+  const validAdminPassword = process.env.ADMIN_PASSWORD || 'Admin@123456';
+
   await recordTest('Workflow 3', 'Login rejects invalid credentials with 401', async () => {
     const res = await fetch(`${API_BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'admin@portfolio.dev', password: 'WrongPassword999!' }),
+      body: JSON.stringify({ email: validAdminEmail, password: 'WrongPassword999!' }),
     });
     if (res.status !== 401) throw new Error(`Expected 401, got ${res.status}`);
     return '401 Unauthorized correctly rejected';
@@ -236,7 +239,7 @@ async function runAllTests() {
     const res = await fetch(`${API_BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'admin@portfolio.dev', password: 'Admin@123456' }),
+      body: JSON.stringify({ email: validAdminEmail, password: validAdminPassword }),
     });
     if (res.status !== 200) {
       const errText = await res.text();
@@ -262,7 +265,7 @@ async function runAllTests() {
     });
     if (res.status !== 200) throw new Error(`Expected 200, got ${res.status}`);
     const body = await res.json();
-    if (body.data?.email !== 'admin@portfolio.dev' || body.data?.role !== 'admin') {
+    if (body.data?.email?.toLowerCase() !== validAdminEmail.toLowerCase() || body.data?.role !== 'admin') {
       throw new Error(`Unexpected user profile: ${JSON.stringify(body.data)}`);
     }
     return `Authenticated user: ${body.data.email} (${body.data.role})`;

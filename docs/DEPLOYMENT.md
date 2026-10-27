@@ -130,6 +130,7 @@ Before deploying to production, secure the following third-party provider accoun
 | `R2_BUCKET_NAME` | `portfolio-media` |
 | `R2_PUBLIC_URL` | `https://pub-xxxxxxxx.r2.dev` |
 | `R2_ENDPOINT` | `https://<account-id>.r2.cloudflarestorage.com` |
+| `RESEND_API_KEY` | *(Recommended for Render Free)* Resend API Key (`re_...`) for HTTPS email delivery |
 | `EMAIL_HOST` | `smtp.gmail.com` |
 | `EMAIL_PORT` | `587` |
 | `EMAIL_USER` | `your-email@gmail.com` |
