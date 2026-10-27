@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, ErrorHandler, provideBrowserGlobalErrorListeners } from '@angular/core';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -14,10 +14,12 @@ import Aura from '@primeng/themes/aura';
 import { MessageService } from 'primeng/api';
 import { routes } from './app.routes';
 import { authInterceptor, errorInterceptor } from './core/interceptors';
+import { GlobalErrorHandler } from './core/error-handler';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     MessageService,
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,
@@ -38,7 +40,7 @@ export const appConfig: ApplicationConfig = {
       loader: provideTranslateLoader(TranslateHttpLoader),
     }),
     provideTranslateHttpLoader({
-      prefix: './assets/i18n/',
+      prefix: '/assets/i18n/',
       suffix: '.json',
     }),
     providePrimeNG({
