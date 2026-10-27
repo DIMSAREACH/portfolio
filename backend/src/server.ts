@@ -25,7 +25,7 @@ export const startServer = async (): Promise<Server> => {
         const pingInterval = 10 * 60 * 1000;
         const externalUrl =
           process.env.RENDER_EXTERNAL_URL ||
-          'https://portfolio-backend-8e3l.onrender.com';
+          'https://portfolio-backend-caz1.onrender.com';
         const healthUrl = `${externalUrl}/api/v1/health`;
 
         setInterval(async () => {
