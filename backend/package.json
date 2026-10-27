@@ -14,7 +14,9 @@
     "seed:sync": "ts-node seeds/sync-db.ts",
     "set-admin": "ts-node scripts/set-admin.ts",
     "test-email": "ts-node scripts/test-email.ts",
-    "test:e2e": "ts-node scripts/qa-e2e-test.ts"
+    "test:e2e": "ts-node scripts/qa-e2e-test.ts",
+    "db:backup": "ts-node scripts/backup-db.ts",
+    "db:restore": "ts-node scripts/restore-db.ts"
   },
   "keywords": [
     "portfolio",
