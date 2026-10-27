@@ -129,7 +129,7 @@ import { BilingualFieldComponent } from '../../shared';
               </label>
               <p-datepicker
                 inputId="education-start-year"
-                [ngModel]="startYearDate"
+                [ngModel]="startYearDateValue"
                 (ngModelChange)="onStartYearChange($event)"
                 [ngModelOptions]="{ standalone: true }"
                 view="year"
@@ -154,7 +154,7 @@ import { BilingualFieldComponent } from '../../shared';
               </label>
               <p-datepicker
                 inputId="education-end-year"
-                [ngModel]="endYearDate"
+                [ngModel]="endYearDateValue"
                 (ngModelChange)="onEndYearChange($event)"
                 [ngModelOptions]="{ standalone: true }"
                 view="year"
@@ -265,42 +265,25 @@ export class EducationFormComponent implements OnInit {
     order: [0],
   });
 
-  public get startYearDate(): Date | null {
-    const y = this.educationForm.get('startYear')?.value;
-    if (!y) return null;
-    if (y instanceof Date) return y;
-    const num = Number(y);
-    return isNaN(num) || num < 1000 ? null : new Date(num, 0, 1);
-  }
+  public startYearDateValue: Date | null = new Date(new Date().getFullYear() - 4, 0, 1);
+  public endYearDateValue: Date | null = null;
 
   public onStartYearChange(val: Date | null): void {
-    if (!val) {
-      this.educationForm.get('startYear')?.setValue(null);
+    this.startYearDateValue = val instanceof Date ? val : (val ? new Date(Number(val), 0, 1) : null);
+    const year = this.startYearDateValue ? this.startYearDateValue.getFullYear() : null;
+    if (this.educationForm.get('startYear')?.value !== year) {
+      this.educationForm.get('startYear')?.setValue(year);
       this.educationForm.get('startYear')?.markAsTouched();
-      return;
     }
-    const year = val instanceof Date ? val.getFullYear() : Number(val);
-    this.educationForm.get('startYear')?.setValue(year);
-    this.educationForm.get('startYear')?.markAsTouched();
-  }
-
-  public get endYearDate(): Date | null {
-    const y = this.educationForm.get('endYear')?.value;
-    if (!y) return null;
-    if (y instanceof Date) return y;
-    const num = Number(y);
-    return isNaN(num) || num < 1000 ? null : new Date(num, 0, 1);
   }
 
   public onEndYearChange(val: Date | null): void {
-    if (!val) {
-      this.educationForm.get('endYear')?.setValue(null);
+    this.endYearDateValue = val instanceof Date ? val : (val ? new Date(Number(val), 0, 1) : null);
+    const year = this.endYearDateValue ? this.endYearDateValue.getFullYear() : null;
+    if (this.educationForm.get('endYear')?.value !== year) {
+      this.educationForm.get('endYear')?.setValue(year);
       this.educationForm.get('endYear')?.markAsTouched();
-      return;
     }
-    const year = val instanceof Date ? val.getFullYear() : Number(val);
-    this.educationForm.get('endYear')?.setValue(year);
-    this.educationForm.get('endYear')?.markAsTouched();
   }
 
   public ngOnInit(): void {
@@ -316,6 +299,12 @@ export class EducationFormComponent implements OnInit {
     this.portfolioService.getAdminEducationById(id).subscribe({
       next: (res) => {
         const edu = res.data;
+        const startNum = Number(edu.startYear);
+        this.startYearDateValue = !isNaN(startNum) && startNum >= 1000 ? new Date(startNum, 0, 1) : null;
+
+        const endNum = edu.endYear ? Number(edu.endYear) : NaN;
+        this.endYearDateValue = !isNaN(endNum) && endNum >= 1000 ? new Date(endNum, 0, 1) : null;
+
         this.educationForm.patchValue({
           institution: edu.institution || { en: '', kh: '' },
           degree: edu.degree || { en: '', kh: '' },
