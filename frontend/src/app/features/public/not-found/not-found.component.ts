@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { LanguageService } from '../../../core/services/language.service';
 
 @Component({
   selector: 'app-not-found',
@@ -18,18 +19,25 @@ import { RouterLink } from '@angular/router';
           404
         </span>
 
-        <h1 class="mt-4 text-2xl font-bold text-slate-900 dark:text-white">
-          Page Not Found
+        <h1
+          class="mt-4 text-2xl font-bold text-slate-900 dark:text-white"
+          [class.font-khmer]="isKhmer()"
+        >
+          {{ isKhmer() ? 'រកមិនឃើញទំព័រទេ' : 'Page Not Found' }}
         </h1>
 
-        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-          The page you are looking for doesn't exist, has been removed, or is temporarily unavailable.
+        <p
+          class="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed"
+          [class.font-khmer]="isKhmer()"
+        >
+          {{ isKhmer() ? 'ទំព័រដែលអ្នកកំពុងស្វែងរកមិនមាន ត្រូវបានលុប ឬមិនដំណើរការជាបណ្ដោះអាសន្ន។' : "The page you are looking for doesn't exist, has been removed, or is temporarily unavailable." }}
         </p>
 
         <div class="mt-8">
           <a
             routerLink="/"
             class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+            [class.font-khmer]="isKhmer()"
             id="back-home-btn"
           >
             <svg
@@ -45,11 +53,14 @@ import { RouterLink } from '@angular/router';
                 d="M10 19l-7-7m0 0l7-7m-7 7h18"
               />
             </svg>
-            <span>Return to Home</span>
+            <span>{{ isKhmer() ? 'ត្រឡប់ទៅទំព័រដើម' : 'Return to Home' }}</span>
           </a>
         </div>
       </div>
     </div>
   `,
 })
-export class NotFoundComponent {}
+export class NotFoundComponent {
+  private readonly languageService = inject(LanguageService);
+  public readonly isKhmer = this.languageService.isKhmer;
+}

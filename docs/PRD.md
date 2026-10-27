@@ -108,7 +108,7 @@ A two-part application:
 | G1 | Present a professional developer identity | Homepage loads in < 3s; all sections populated with real content |
 | G2 | Showcase technical projects | ≥ 3 projects with full case-study detail pages |
 | G3 | Demonstrate full-stack engineering ability | Angular frontend, Node/Express backend, MongoDB, JWT auth, REST API, Docker, CI/CD all implemented |
-| G4 | Allow content management via admin dashboard | All dynamic content (projects, skills, experience, education, blog, etc.) manageable through admin CRUD |
+| G4 | Allow content management via admin dashboard | All dynamic content (projects, skills, experience, education, etc.) manageable through admin CRUD |
 | G5 | Responsive across devices | Usable at 360px, 768px, 1024px, and 1440px+ |
 | G6 | Support English and Khmer | Language switcher; all public content available in both languages |
 | G7 | Support dark/light mode | Theme toggle persists; respects system preference on first visit |
@@ -126,6 +126,7 @@ A two-part application:
 
 The following are explicitly **OUT OF SCOPE** for the first version:
 
+- Blog functionality (articles, blog posts, markdown blog editor, reading time, blog endpoints) — strictly excluded per user specification
 - Native mobile application (iOS/Android)
 - Social media features (likes, comments, follows, shares)
 - Multi-tenant CMS (only one admin/portfolio owner)

@@ -11,7 +11,6 @@ import {
   Certification,
   SocialLink,
   Settings,
-  BlogPost,
   ApiResponse,
   PaginatedResponse,
   Message,
@@ -98,7 +97,7 @@ export class PortfolioService {
   }
 
   /**
-   * Fetch categories with optional type filter ('project' | 'blog' | 'both')
+   * Fetch categories with optional type filter ('project' | 'both')
    */
   public getCategories(type?: string): Observable<ApiResponse<Category[]>> {
     const key = `categories_${type || 'all'}`;
@@ -179,27 +178,6 @@ export class PortfolioService {
     return this.getCachedOrFetch('certifications', () =>
       this.apiService.get<ApiResponse<Certification[]>>('/certifications')
     );
-  }
-
-  /**
-   * Fetch published blog posts
-   */
-  public getBlogPosts(params?: {
-    page?: number;
-    limit?: number;
-    category?: string;
-    tag?: string;
-    search?: string;
-    featured?: boolean | string;
-  }): Observable<PaginatedResponse<BlogPost>> {
-    return this.apiService.get<PaginatedResponse<BlogPost>>('/blog', params);
-  }
-
-  /**
-   * Fetch single blog post by slug
-   */
-  public getBlogPostBySlug(slug: string): Observable<ApiResponse<BlogPost>> {
-    return this.apiService.get<ApiResponse<BlogPost>>(`/blog/${slug}`);
   }
 
   /**
@@ -482,73 +460,6 @@ export class PortfolioService {
     return this.apiService
       .delete<ApiResponse<null>>(`/admin/certifications/${id}`)
       .pipe(tap(() => this.notifyMutation('certification', id)));
-  }
-
-  /**
-   * Admin: List all blog posts with pagination and filters (PRD 9.9, API-010)
-   */
-  public getAdminBlogPosts(params?: {
-    page?: number;
-    limit?: number;
-    search?: string;
-    status?: string;
-    category?: string;
-    tag?: string;
-    featured?: boolean | string;
-  }): Observable<PaginatedResponse<BlogPost>> {
-    return this.apiService.get<PaginatedResponse<BlogPost>>('/admin/blog', params);
-  }
-
-  /**
-   * Admin: Get blog post by ID (PRD 9.9, API-010)
-   */
-  public getAdminBlogPostById(id: string): Observable<ApiResponse<BlogPost>> {
-    return this.apiService.get<ApiResponse<BlogPost>>(`/admin/blog/${id}`);
-  }
-
-  /**
-   * Admin: Create blog post (PRD 9.9, API-010)
-   */
-  public createAdminBlogPost(post: Partial<BlogPost> | FormData): Observable<ApiResponse<BlogPost>> {
-    return this.apiService
-      .post<ApiResponse<BlogPost>>('/admin/blog', post)
-      .pipe(tap((res) => this.notifyMutation('blog', res?.data?._id)));
-  }
-
-  /**
-   * Admin: Update blog post by ID (PRD 9.9, API-010)
-   */
-  public updateAdminBlogPost(id: string, post: Partial<BlogPost> | FormData): Observable<ApiResponse<BlogPost>> {
-    return this.apiService
-      .patch<ApiResponse<BlogPost>>(`/admin/blog/${id}`, post)
-      .pipe(tap((res) => this.notifyMutation('blog', res?.data?._id || id)));
-  }
-
-  /**
-   * Admin: Delete blog post by ID (PRD 9.9, API-010)
-   */
-  public deleteAdminBlogPost(id: string): Observable<ApiResponse<null>> {
-    return this.apiService
-      .delete<ApiResponse<null>>(`/admin/blog/${id}`)
-      .pipe(tap(() => this.notifyMutation('blog', id)));
-  }
-
-  /**
-   * Admin: Publish blog post by ID (PRD 9.9, API-010)
-   */
-  public publishAdminBlogPost(id: string): Observable<ApiResponse<BlogPost>> {
-    return this.apiService
-      .patch<ApiResponse<BlogPost>>(`/admin/blog/${id}/publish`, {})
-      .pipe(tap(() => this.notifyMutation('blog', id)));
-  }
-
-  /**
-   * Admin: Unpublish blog post by ID (PRD 9.9, API-010)
-   */
-  public unpublishAdminBlogPost(id: string): Observable<ApiResponse<BlogPost>> {
-    return this.apiService
-      .patch<ApiResponse<BlogPost>>(`/admin/blog/${id}/unpublish`, {})
-      .pipe(tap(() => this.notifyMutation('blog', id)));
   }
 
   // ==========================================

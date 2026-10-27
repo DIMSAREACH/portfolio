@@ -1,5 +1,6 @@
 import { CorsOptions } from 'cors';
 import config from './environment';
+import { isOriginAllowed } from '../utils/sanitize';
 
 /**
  * CORS configuration matching PRD Section 18.3
@@ -12,14 +13,7 @@ export const corsOptions: CorsOptions = {
       return callback(null, true);
     }
 
-    const configured = config.CORS_ORIGIN.split(',').map((s) => s.trim());
-    if (
-      configured.includes('*') ||
-      configured.includes(requestOrigin) ||
-      requestOrigin.endsWith('.vercel.app') ||
-      requestOrigin.includes('localhost') ||
-      requestOrigin.includes('127.0.0.1')
-    ) {
+    if (isOriginAllowed(requestOrigin, config.CORS_ORIGIN, config.NODE_ENV === 'production')) {
       return callback(null, true);
     }
 

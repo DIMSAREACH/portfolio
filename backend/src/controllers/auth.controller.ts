@@ -14,7 +14,7 @@ const getRefreshCookieOptions = (): CookieOptions => {
     httpOnly: true,
     secure: isProd,
     sameSite: isProd ? 'none' : 'lax',
-    path: '/',
+    path: '/api/v1/auth',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   };
 };

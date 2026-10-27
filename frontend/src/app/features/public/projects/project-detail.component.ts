@@ -237,6 +237,7 @@ import {
               (error)="onImageError()"
               class="w-full h-full object-cover object-center"
               loading="eager"
+              decoding="async"
             />
             <!-- Subtle top floating badge overlay -->
             <div class="absolute inset-x-4 top-4 flex items-center justify-between pointer-events-none z-10">
@@ -423,7 +424,7 @@ import {
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                   @for (shot of project()!.screenshots; track shot) {
                     <div class="relative h-56 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-sm hover:scale-[1.02] transition-transform">
-                      <img [src]="shot" alt="Screenshot" class="w-full h-full object-cover object-top" loading="lazy" />
+                      <img [src]="shot" alt="Screenshot" class="w-full h-full object-cover object-top" loading="lazy" decoding="async" />
                     </div>
                   }
                 </div>

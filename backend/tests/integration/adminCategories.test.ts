@@ -4,7 +4,6 @@ import mongoose from 'mongoose';
 import app from '../../src/app';
 import Category from '../../src/models/Category';
 import Project from '../../src/models/Project';
-import BlogPost from '../../src/models/BlogPost';
 import { generateAccessToken } from '../../src/utils/jwt';
 
 describe('Admin Categories API Integration Tests (/api/v1/admin/categories)', () => {
@@ -166,7 +165,6 @@ describe('Admin Categories API Integration Tests (/api/v1/admin/categories)', ()
     it('should return 200 when category is deleted successfully', async () => {
       jest.spyOn(Category, 'findById').mockResolvedValue(mockCategory as any);
       jest.spyOn(Project, 'countDocuments').mockResolvedValue(0 as any);
-      jest.spyOn(BlogPost, 'countDocuments').mockResolvedValue(0 as any);
       jest.spyOn(Category, 'findByIdAndDelete').mockResolvedValue(mockCategory as any);
 
       const res = await request(app)
@@ -181,7 +179,6 @@ describe('Admin Categories API Integration Tests (/api/v1/admin/categories)', ()
     it('should return 409 Conflict when category is referenced by projects', async () => {
       jest.spyOn(Category, 'findById').mockResolvedValue(mockCategory as any);
       jest.spyOn(Project, 'countDocuments').mockResolvedValue(2 as any);
-      jest.spyOn(BlogPost, 'countDocuments').mockResolvedValue(0 as any);
 
       const res = await request(app)
         .delete(`/api/v1/admin/categories/${validMongoId}`)

@@ -73,8 +73,6 @@ Public endpoints return only published and visible portfolio content.
 | `GET` | `/api/v1/public/profile` | Public developer profile info and bio |
 | `GET` | `/api/v1/public/projects` | List published projects (supports `?page=`, `?category=`, `?featured=`) |
 | `GET` | `/api/v1/public/projects/:slug` | Retrieve single project by unique slug (increments view counter) |
-| `GET` | `/api/v1/public/blog` | List published articles (supports `?page=`, `?category=`, `?tag=`, `?search=`) |
-| `GET` | `/api/v1/public/blog/:slug` | Retrieve single article by slug (increments view counter) |
 | `GET` | `/api/v1/public/skills` | List skills grouped by category |
 | `GET` | `/api/v1/public/experience` | List career experience entries |
 | `GET` | `/api/v1/public/education` | List academic background and credentials |
@@ -98,14 +96,6 @@ All admin endpoints require an active `Authorization: Bearer <token>` header wit
 - `POST /api/v1/admin/projects`: Create project (supports multipart/form-data image uploads).
 - `PATCH /api/v1/admin/projects/:id`: Update project.
 - `DELETE /api/v1/admin/projects/:id`: Delete project.
-
-### Blog Management
-- `GET /api/v1/admin/blog`: List all articles.
-- `GET /api/v1/admin/blog/:id`: Get article by ID.
-- `POST /api/v1/admin/blog`: Create article (supports cover image upload).
-- `PATCH /api/v1/admin/blog/:id`: Update article.
-- `DELETE /api/v1/admin/blog/:id`: Delete article.
-- `PATCH /api/v1/admin/blog/:id/publish`: Toggle publish status.
 
 ### Experience, Education & Certifications
 - `GET|POST /api/v1/admin/experiences`

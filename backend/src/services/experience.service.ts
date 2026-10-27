@@ -2,6 +2,7 @@ import Experience, { IExperience, ExperienceType } from '../models/Experience';
 import { NotFoundError } from '../utils/AppError';
 import { getPaginationParams, buildPaginationMetadata } from '../utils/pagination';
 import { PaginatedData } from '../utils/apiResponse';
+import { escapeRegex } from '../utils/sanitize';
 
 export interface ExperienceListQuery {
   type?: ExperienceType;
@@ -43,7 +44,7 @@ export class ExperienceService {
     }
 
     if (query.search) {
-      const searchRegex = new RegExp(query.search, 'i');
+      const searchRegex = new RegExp(escapeRegex(query.search), 'i');
       filter.$or = [
         { 'title.en': searchRegex },
         { 'title.kh': searchRegex },

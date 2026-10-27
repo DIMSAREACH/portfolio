@@ -272,6 +272,21 @@ describe('AuthService', () => {
       expect(emailSpy).not.toHaveBeenCalled();
       expect(result.message).toContain('password reset instructions have been sent');
     });
+
+    it('should ignore untrusted host/origin header to prevent password reset poisoning', async () => {
+      jest.spyOn(User, 'findOne').mockResolvedValue(mockUserInstance as any);
+      const emailSpy = jest
+        .spyOn(emailService, 'sendPasswordResetEmail')
+        .mockResolvedValue({ success: true, messageId: 'msg-123' });
+
+      await authService.forgotPassword('admin@portfolio.dev', 'https://attacker.com');
+
+      expect(emailSpy).toHaveBeenCalledWith(
+        'admin@portfolio.dev',
+        expect.not.stringContaining('attacker.com'),
+        'Admin Developer',
+      );
+    });
   });
 
   describe('resetPassword', () => {

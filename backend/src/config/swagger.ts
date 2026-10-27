@@ -10,7 +10,7 @@ const options: swaggerJsdoc.Options = {
       title: 'Developer Portfolio & Content Management API',
       version: '1.0.0',
       description:
-        'Production-grade RESTful API for personal portfolio website, CMS, and blog platform. Supports bilingual content (English & Khmer), authentication, media uploads, and public endpoints.',
+        'Production-grade RESTful API for personal portfolio website and CMS platform. Supports bilingual content (English & Khmer), authentication, media uploads, and public endpoints.',
       contact: {
         name: 'Portfolio Admin',
         email: 'admin@example.com',
@@ -45,7 +45,6 @@ const options: swaggerJsdoc.Options = {
       { name: 'Admin - Experiences', description: 'Work and volunteer experience' },
       { name: 'Admin - Education', description: 'Education history' },
       { name: 'Admin - Certifications', description: 'Certifications and awards' },
-      { name: 'Admin - Blog', description: 'Blog publishing and drafting' },
       { name: 'Admin - Messages', description: 'Contact form messages' },
       { name: 'Admin - Profile', description: 'Personal biography and profile' },
       { name: 'Admin - Social Links', description: 'Social media links' },

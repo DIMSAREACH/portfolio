@@ -324,8 +324,7 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   public editingCategoryId: string | null = null;
   public readonly typeOptions = [
     { label: 'Project Category', value: 'project' },
-    { label: 'Blog Category', value: 'blog' },
-    { label: 'Both (Project & Blog)', value: 'both' },
+    { label: 'General Category', value: 'both' },
   ];
 
   public readonly categoryForm: FormGroup = this.fb.group({

@@ -900,7 +900,10 @@ Used on project list page and homepage featured projects.
 
 ---
 
-# 12. Blog Design
+# 12. Blog Design (EXCLUDED)
+
+> [!NOTE]
+> **EXCLUDED FROM SCOPE:** Blog-related features are strictly excluded from implementation per user requirements. This section is retained for reference only.
 
 ## 12.1 Blog Card
 

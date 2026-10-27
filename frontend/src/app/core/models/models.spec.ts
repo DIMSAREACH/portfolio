@@ -7,7 +7,6 @@ import {
   Education,
   Certification,
   Project,
-  BlogPost,
   SocialLink,
   Settings,
   Message,
@@ -133,24 +132,6 @@ describe('Core Models and Type Definitions', () => {
     expect(project.status).toBe('published');
   });
 
-  it('should instantiate and validate BlogPost model', () => {
-    const post: BlogPost = {
-      _id: 'post_1',
-      title: { en: 'Angular Signals', kh: 'Angular Signals' },
-      slug: 'angular-signals',
-      excerpt: { en: 'Signals guide', kh: 'ការណែនាំ Signals' },
-      content: { en: 'Full content', kh: 'មាតិកាពេញលេញ' },
-      category: 'cat_1',
-      tags: ['Angular'],
-      status: 'published',
-      featured: true,
-      readingTime: 3,
-      viewCount: 15,
-      author: 'user_123',
-    };
-    expect(post.readingTime).toBe(3);
-  });
-
   it('should instantiate and validate SocialLink model', () => {
     const social: SocialLink = {
       _id: 'social_1',
@@ -236,9 +217,6 @@ describe('Core Models and Type Definitions', () => {
       totalProjects: 10,
       publishedProjects: 8,
       draftProjects: 2,
-      totalBlogPosts: 5,
-      publishedBlogPosts: 4,
-      draftBlogPosts: 1,
       unreadMessages: 2,
       totalMessages: 10,
       totalSkills: 15,

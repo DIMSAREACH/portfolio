@@ -2,7 +2,6 @@ import request from 'supertest';
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import app from '../../src/app';
 import Project from '../../src/models/Project';
-import BlogPost from '../../src/models/BlogPost';
 import Message from '../../src/models/Message';
 import Skill from '../../src/models/Skill';
 import Experience from '../../src/models/Experience';
@@ -24,7 +23,6 @@ describe('Admin Dashboard Stats API Integration Tests (/api/v1/admin/dashboard/s
   describe('GET /api/v1/admin/dashboard/stats', () => {
     it('should return 200 and stats object for admin', async () => {
       jest.spyOn(Project, 'countDocuments').mockResolvedValue(12 as any);
-      jest.spyOn(BlogPost, 'countDocuments').mockResolvedValue(8 as any);
       jest.spyOn(Message, 'countDocuments').mockResolvedValue(4 as any);
       jest.spyOn(Skill, 'countDocuments').mockResolvedValue(15 as any);
       jest.spyOn(Experience, 'countDocuments').mockResolvedValue(3 as any);
@@ -71,7 +69,6 @@ describe('Admin Dashboard Stats API Integration Tests (/api/v1/admin/dashboard/s
   describe('GET /api/v1/admin/stats (alias)', () => {
     it('should return 200 and stats object through /stats alias', async () => {
       jest.spyOn(Project, 'countDocuments').mockResolvedValue(5 as any);
-      jest.spyOn(BlogPost, 'countDocuments').mockResolvedValue(5 as any);
       jest.spyOn(Message, 'countDocuments').mockResolvedValue(5 as any);
       jest.spyOn(Skill, 'countDocuments').mockResolvedValue(5 as any);
       jest.spyOn(Experience, 'countDocuments').mockResolvedValue(5 as any);

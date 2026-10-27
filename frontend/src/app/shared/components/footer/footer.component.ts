@@ -174,7 +174,6 @@ interface SocialLink {
                     <svg
                       class="w-4 h-4 fill-currentColor"
                       viewBox="0 0 24 24"
-                      [attr.d]="social.iconPath"
                     >
                       <path [attr.d]="social.iconPath" />
                     </svg>

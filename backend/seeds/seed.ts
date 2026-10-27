@@ -10,7 +10,6 @@ import Certification from '../src/models/Certification';
 import SocialLink from '../src/models/SocialLink';
 import Settings from '../src/models/Settings';
 import Project from '../src/models/Project';
-import BlogPost from '../src/models/BlogPost';
 import Message from '../src/models/Message';
 import Media from '../src/models/Media';
 import logger from '../src/utils/logger';
@@ -26,7 +25,6 @@ export interface SeedSummary {
   socialLinks: number;
   settings: number;
   projects: number;
-  blogPosts: number;
   messages: number;
   media: number;
 }
@@ -146,23 +144,23 @@ export const CATEGORIES_SEED = [
     order: 4,
   },
   {
-    name: { en: 'Tutorial', kh: 'មេរៀន និងការណែនាំ' },
-    slug: 'tutorial',
+    name: { en: 'Cloud & DevOps', kh: 'ពពក និង DevOps' },
+    slug: 'cloud-devops',
     description: {
-      en: 'Step-by-step guides and technical walkthroughs',
-      kh: 'ការណែនាំជាជំហានៗ និងការអនុវត្តបច្ចេកទេស',
+      en: 'CI/CD, containerization, and cloud infrastructure engineering',
+      kh: 'ប្រព័ន្ធស្វ័យប្រវត្តិកម្ម និងវិស្វកម្មហេដ្ឋារចនាសម្ព័ន្ធពពក',
     },
-    type: 'blog' as const,
+    type: 'project' as const,
     order: 5,
   },
   {
-    name: { en: 'Technical', kh: 'បច្ចេកទេសទូទៅ' },
-    slug: 'technical',
+    name: { en: 'Open Source Tools', kh: 'ឧបករណ៍កូដចំហ' },
+    slug: 'open-source-tools',
     description: {
-      en: 'In-depth engineering analysis and best practices',
-      kh: 'ការវិភាគវិស្វកម្មស៊ីជម្រៅ និងការអនុវត្តល្អបំផុត',
+      en: 'Developer tooling, libraries, and open-source contributions',
+      kh: 'ឧបករណ៍អភិវឌ្ឍន៍ បណ្ណាល័យ និងការរួមចំណែកកូដចំហ',
     },
-    type: 'blog' as const,
+    type: 'project' as const,
     order: 6,
   },
 ];
@@ -646,8 +644,8 @@ export const getProjectsSeed = (categoryMap: Map<string, Types.ObjectId>) => [
       kh: 'គេហទំព័រផលប័ត្រផ្ទាល់ខ្លួន និងប្រព័ន្ធ CMS ជាមួយការគាំទ្រពីរភាសា និងផ្ទាំងគ្រប់គ្រងរដ្ឋបាលប្រកបដោយសុវត្ថិភាព។',
     },
     fullDescription: {
-      en: 'A modern full-stack developer portfolio and content management system built with Angular 19, Express.js, TypeScript, and MongoDB. Includes case-study project presentations, Markdown blog engine, CV management, JWT auth with refresh tokens, dark/light themes, and bilingual English/Khmer support.',
-      kh: 'គេហទំព័រផលប័ត្រ និងប្រព័ន្ធគ្រប់គ្រងមាតិកាពេញលេញដែលត្រូវបានបង្កើតឡើងដោយ Angular 19, Express.js, TypeScript និង MongoDB។ រួមបញ្ចូលទាំងការបង្ហាញគម្រោងបែប Case Study, ម៉ាស៊ីនប្លុក Markdown, ការគ្រប់គ្រង CV, សុវត្ថិភាព JWT ជាមួយ Refresh Token, ស្បែក Dark/Light និងការគាំទ្រពីរភាសា (អង់គ្លេស/ខ្មែរ)។',
+      en: 'A modern full-stack developer portfolio and content management system built with Angular 19, Express.js, TypeScript, and MongoDB. Includes case-study project presentations, dynamic content management engine, CV management, JWT auth with refresh tokens, dark/light themes, and bilingual English/Khmer support.',
+      kh: 'គេហទំព័រផលប័ត្រ និងប្រព័ន្ធគ្រប់គ្រងមាតិកាពេញលេញដែលត្រូវបានបង្កើតឡើងដោយ Angular 19, Express.js, TypeScript និង MongoDB។ រួមបញ្ចូលទាំងការបង្ហាញគម្រោងបែប Case Study, ម៉ាស៊ីនគ្រប់គ្រងមាតិកាអន្តរកម្ម, ការគ្រប់គ្រង CV, សុវត្ថិភាព JWT ជាមួយ Refresh Token, ស្បែក Dark/Light និងការគាំទ្រពីរភាសា (អង់គ្លេស/ខ្មែរ)។',
     },
     problem: {
       en: 'Traditional developer portfolios are either static HTML files that are hard to update or generic CMS platforms with bloated dependencies and poor UX.',
@@ -660,13 +658,13 @@ export const getProjectsSeed = (categoryMap: Map<string, Types.ObjectId>) => [
     features: {
       en: [
         'Case study project showcase',
-        'Markdown blog with syntax highlighting',
+        'Interactive skill and certification showcase',
         'Bilingual English/Khmer localization',
         'Secured admin CMS with role-based auth',
       ],
       kh: [
         'ការបង្ហាញគម្រោងលម្អិតបែប Case Study',
-        'ប្លុក Markdown ជាមួយការរំលេចកូដ',
+        'ការបង្ហាញជំនាញ និងវិញ្ញាបនបត្រអន្តរកម្ម',
         'ការបកប្រែពីរភាសា អង់គ្លេស និងខ្មែរ',
         'ប្រព័ន្ធគ្រប់គ្រង CMS ប្រកបដោយសុវត្ថិភាព',
       ],
@@ -837,232 +835,6 @@ export const getProjectsSeed = (categoryMap: Map<string, Types.ObjectId>) => [
   },
 ];
 
-export const getBlogPostsSeed = (
-  categoryMap: Map<string, Types.ObjectId>,
-  authorId: Types.ObjectId,
-) => [
-  {
-    title: {
-      en: 'Getting Started with Angular Signals',
-      kh: 'ការចាប់ផ្តើមជាមួយ Angular Signals',
-    },
-    slug: 'getting-started-with-angular-signals',
-    excerpt: {
-      en: 'Learn how Angular Signals transform reactivity, state management, and performance in modern Angular applications.',
-      kh: 'ស្វែងយល់ពីរបៀបដែល Angular Signals ផ្លាស់ប្តូរការគ្រប់គ្រង State និងបង្កើនល្បឿនកម្មវិធី Angular ទំនើប។',
-    },
-    content: {
-      en: `## Introduction to Angular Signals
-
-Angular Signals introduce a fine-grained reactive model to the Angular ecosystem, eliminating unnecessary change detection cycles and boosting runtime performance.
-
-### Why Signals?
-
-Before Signals, Angular relied heavily on **Zone.js** to detect when any asynchronous event occurred. Zone.js monkey-patches browser APIs, leading to whole-tree dirty checking.
-
-With Signals, Angular knows **precisely** which parts of the DOM depend on which state:
-
-\`\`\`typescript
-import { Component, signal, computed } from '@angular/core';
-
-@Component({
-  selector: 'app-counter',
-  template: \`
-    <div class="counter-card">
-      <h2>Count: {{ count() }}</h2>
-      <p>Double: {{ doubleCount() }}</p>
-      <button (click)="increment()">Increment</button>
-    </div>
-  \`
-})
-export class CounterComponent {
-  count = signal(0);
-  doubleCount = computed(() => this.count() * 2);
-
-  increment() {
-    this.count.update(n => n + 1);
-  }
-}
-\`\`\`
-
-### Key Benefits
-- **Zero Zone.js overhead**: Paves the path for zoneless Angular apps.
-- **Predictable Glitch-Free Reactivity**: Computed values evaluate lazily and consistently.
-- **Simpler Mental Model**: No need to manually manage RxJS subscriptions for synchronous UI state.
-
-### Conclusion
-
-Signals are the future of Angular reactivity. Start adopting them in your modern components today!`,
-      kh: `## ការណែនាំអំពី Angular Signals
-
-Angular Signals នាំមកនូវគំរូ Reactive ដ៏មានប្រសិទ្ធភាពខ្ពស់ ដែលជួយកាត់បន្ថយការត្រួតពិនិត្យការផ្លាស់ប្តូរ (Change Detection) មិនចាំបាច់ និងបង្កើនល្បឿនដំណើរការ។
-
-### ហេតុអ្វីត្រូវប្រើ Signals?
-
-កាលពីមុន Angular ពឹងផ្អែកលើ **Zone.js** ដើម្បីតាមដានរាល់ព្រឹត្តិការណ៍ Async។ ឥឡូវនេះ Signals អនុញ្ញាតឱ្យ Angular ដឹងច្បាស់ថាផ្នែកណានៃ DOM ត្រូវធ្វើបច្ចុប្បន្នភាព៖
-
-\`\`\`typescript
-import { Component, signal, computed } from '@angular/core';
-
-@Component({
-  selector: 'app-counter',
-  template: \`
-    <div class="counter-card">
-      <h2>ចំនួន: {{ count() }}</h2>
-      <p>គុណនឹងពីរ: {{ doubleCount() }}</p>
-      <button (click)="increment()">បន្ថែម</button>
-    </div>
-  \`
-})
-export class CounterComponent {
-  count = signal(0);
-  doubleCount = computed(() => this.count() * 2);
-
-  increment() {
-    this.count.update(n => n + 1);
-  }
-}
-\`\`\`
-
-### អត្ថប្រយោជន៍ចម្បង
-- **ល្បឿនលឿន**: ត្រៀមខ្លួនសម្រាប់ Zoneless Architecture
-- **ភាពងាយស្រួល**: មិនចាំបាច់ដោះស្រាយ Unsubscribe ដូច RxJS
-- **កូដច្បាស់លាស់**: ងាយស្រួលយល់ និងថែទាំ`,
-    },
-    coverImage:
-      'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop',
-    category: categoryMap.get('tutorial') || new Types.ObjectId(),
-    tags: ['Angular', 'TypeScript', 'Frontend', 'Reactivity'],
-    status: 'published' as const,
-    featured: true,
-    publishedAt: new Date('2024-01-15T09:00:00Z'),
-    viewCount: 320,
-    author: authorId,
-  },
-  {
-    title: {
-      en: 'Building Robust REST APIs with Express and TypeScript',
-      kh: 'ការបង្កើត REST APIs ដ៏រឹងមាំជាមួយ Express និង TypeScript',
-    },
-    slug: 'building-rest-apis-with-express-and-typescript',
-    excerpt: {
-      en: 'A comprehensive guide to structuring production-grade Express.js applications with TypeScript, validation, and error handling.',
-      kh: 'ការណែនាំពេញលេញក្នុងការរៀបចំរចនាសម្ព័ន្ធ Express.js ជាមួយ TypeScript ការផ្ទៀងផ្ទាត់ទិន្នន័យ និងការដោះស្រាយកំហុស។',
-    },
-    content: {
-      en: `## Architecture for Scalable Express APIs
-
-When building backends with Express and TypeScript, having a structured architecture is key to long-term maintainability.
-
-### The Controller-Service-Model Pattern
-
-Separating business logic from transport logic keeps your controllers lean and testable:
-
-1. **Routes**: Define URL paths and apply middleware (auth, validation, rate limiting).
-2. **Controllers**: Parse requests, extract parameters, and call services.
-3. **Services**: Contain pure business logic and orchestrate database queries.
-4. **Models**: Define database schema and relationships using Mongoose.
-
-\`\`\`typescript
-// Example Express Controller with async wrapper
-export const getProfile = asyncHandler(async (req: Request, res: Response) => {
-  const profile = await profileService.getProfile();
-  if (!profile) {
-    throw new NotFoundError('Profile not found');
-  }
-  sendSuccess(res, profile, 'Profile retrieved successfully');
-});
-\`\`\`
-
-### Key Best Practices
-- **Strict Validation**: Always validate user input using \`express-validator\` or \`zod\`.
-- **Centralized Error Handling**: Use an operational error hierarchy and centralized error middleware.
-- **Security Headers**: Always enable \`helmet\`, \`cors\`, and appropriate rate limiters.`,
-      kh: `## ស្ថាបត្យកម្មសម្រាប់ Express APIs ខ្នាតធំ
-
-នៅពេលបង្កើតប្រព័ន្ធខាងក្រោយជាមួយ Express និង TypeScript ការមានរចនាសម្ព័ន្ធស្អាតគឺជាគន្លឹះសំខាន់សម្រាប់ការថែទាំយូរអង្វែង។
-
-### គំរូ Controller-Service-Model
-
-ការបែងចែកកូដជំនួញ (Business Logic) ចេញពីកូដបញ្ជូនទិន្នន័យជួយឱ្យកូដងាយស្រួលធ្វើតេស្ត៖
-
-1. **Routes**: កំណត់ផ្លូវ URL និង Middleware (Auth, Validation, Rate Limiter)
-2. **Controllers**: ទទួល Request និងហៅ Service
-3. **Services**: មាន Business Logic និងទាញទិន្នន័យពី DB
-4. **Models**: កំណត់ Schema ទិន្នន័យតាមរយៈ Mongoose
-
-\`\`\`typescript
-export const getProfile = asyncHandler(async (req: Request, res: Response) => {
-  const profile = await profileService.getProfile();
-  if (!profile) {
-    throw new NotFoundError('រកមិនឃើញព័ត៌មានប្រវត្តិរូប');
-  }
-  sendSuccess(res, profile, 'ទាញយកព័ត៌មានដោយជោគជ័យ');
-});
-\`\`\`
-
-### គោលការណ៍ល្អៗ
-- **ការផ្ទៀងផ្ទាត់ទិន្នន័យ**: ត្រូវផ្ទៀងផ្ទាត់ជានិច្ចមុននឹងបញ្ជូនទៅ Service
-- **ការគ្រប់គ្រងកំហុសកណ្តាល**: ប្រើប្រាស់ Global Error Middleware
-- **សុវត្ថិភាព**: ប្រើ Helmet, CORS និង Rate Limiting ជានិច្ច`,
-    },
-    coverImage:
-      'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&auto=format&fit=crop',
-    category: categoryMap.get('technical') || new Types.ObjectId(),
-    tags: ['Node.js', 'Express', 'TypeScript', 'Backend', 'API'],
-    status: 'published' as const,
-    featured: true,
-    publishedAt: new Date('2024-02-10T10:30:00Z'),
-    viewCount: 245,
-    author: authorId,
-  },
-  {
-    title: {
-      en: 'My Journey into AI and Computer Vision',
-      kh: 'ដំណើរនៃការរៀនសូត្រ AI និង Computer Vision របស់ខ្ញុំ',
-    },
-    slug: 'my-journey-into-ai-and-computer-vision',
-    excerpt: {
-      en: 'Reflections and practical lessons from building the CamTraffic AI project using YOLO, OpenCV, and Python.',
-      kh: 'ការចែករំលែកបទពិសោធន៍ជាក់ស្តែងពីការបង្កើតគម្រោង CamTraffic AI ដោយប្រើ YOLO, OpenCV និង Python។',
-    },
-    content: {
-      en: `## Exploring Computer Vision in Cambodia
-
-Developing the CamTraffic AI system gave me deep insights into practical AI engineering beyond theoretical models.
-
-### Challenges Encountered
-1. **Data Collection**: Traffic conditions in Phnom Penh are dynamic and dense. Standard open datasets did not reflect local motorcycle traffic patterns and signage.
-2. **Model Training**: Fine-tuning YOLOv8 on custom-annotated local images required careful balancing to avoid false positives in low-light conditions.
-3. **Inference Latency**: Real-time traffic analysis demands high FPS, requiring model quantization and GPU optimization.
-
-### Key Takeaways
-- Real-world AI is 80% data cleaning, labeling, and pipeline engineering.
-- Combining classical computer vision (OpenCV pre-processing) with modern deep learning yields the most reliable results.`,
-      kh: `## ការរុករកពិភព Computer Vision នៅកម្ពុជា
-
-ការអភិវឌ្ឍប្រព័ន្ធ CamTraffic AI បានផ្តល់ឱ្យខ្ញុំនូវការយល់ដឹងស៊ីជម្រៅអំពីវិស្វកម្ម AI ជាក់ស្តែងលើសពីទ្រឹស្តីក្នុងសៀវភៅ។
-
-### បញ្ហាប្រឈមដែលបានជួបប្រទះ
-1. **ការប្រមូលទិន្នន័យ**: ចរាចរណ៍នៅភ្នំពេញមានភាពចម្រុះ និងមមាញឹក ដែលទាមទារការប្រមូលរូបភាពជាក់ស្តែងក្នុងស្រុក។
-2. **ការបង្វឹកម៉ូដែល**: ការ Fine-tune YOLOv8 ត្រូវការការផ្ទៀងផ្ទាត់យ៉ាងហ្មត់ចត់ដើម្បីកាត់បន្ថយកំហុសនៅពេលយប់។
-3. **ល្បឿនដំណើរការ**: ការវិភាគទិន្នន័យផ្ទាល់ទាមទារ FPS ខ្ពស់ និងការបង្កើនល្បឿន GPU។
-
-### មេរៀនសំខាន់ៗ
-- ការងារ AI ជាក់ស្តែង ៨០% គឺការរៀបចំ និងកែច្នៃទិន្នន័យ (Data Engineering)
-- ការរួមបញ្ចូលគ្នារវាង OpenCV និង Deep Learning ផ្តល់នូវលទ្ធផលល្អបំផុត`,
-    },
-    coverImage:
-      'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format&fit=crop',
-    category: categoryMap.get('ai-ml') || new Types.ObjectId(),
-    tags: ['AI', 'Computer Vision', 'YOLO', 'Python'],
-    status: 'published' as const,
-    featured: false,
-    publishedAt: new Date('2024-03-01T14:00:00Z'),
-    viewCount: 180,
-    author: authorId,
-  },
-];
 
 export const MESSAGES_SEED = [
   {
@@ -1137,7 +909,6 @@ export async function clearDatabase(force = false): Promise<void> {
     SocialLink.deleteMany({}),
     Settings.deleteMany({}),
     Project.deleteMany({}),
-    BlogPost.deleteMany({}),
     Message.deleteMany({}),
     Media.deleteMany({}),
   ]);
@@ -1219,16 +990,11 @@ export async function seedDatabase(options: SeedOptions = {}): Promise<SeedSumma
     await Project.create(projectsData);
     logger.info(`Projects seeded (${projectsData.length} items).`);
 
-    // 11. Blog Posts (dependent on categories and author)
-    const blogPostsData = getBlogPostsSeed(categoryMap, adminUser._id as Types.ObjectId);
-    await BlogPost.create(blogPostsData);
-    logger.info(`Blog posts seeded (${blogPostsData.length} items).`);
-
-    // 12. Messages
+    // 11. Messages
     await Message.create(MESSAGES_SEED);
     logger.info(`Messages seeded (${MESSAGES_SEED.length} items).`);
 
-    // 13. Media
+    // 12. Media
     await Media.create(MEDIA_SEED);
     logger.info(`Media seeded (${MEDIA_SEED.length} items).`);
 
@@ -1243,7 +1009,6 @@ export async function seedDatabase(options: SeedOptions = {}): Promise<SeedSumma
       socialLinks: SOCIAL_LINKS_SEED.length,
       settings: 1,
       projects: projectsData.length,
-      blogPosts: blogPostsData.length,
       messages: MESSAGES_SEED.length,
       media: MEDIA_SEED.length,
     };

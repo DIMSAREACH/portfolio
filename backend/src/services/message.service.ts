@@ -2,6 +2,7 @@ import Message, { IMessage } from '../models/Message';
 import { NotFoundError } from '../utils/AppError';
 import { getPaginationParams, buildPaginationMetadata } from '../utils/pagination';
 import { PaginatedData } from '../utils/apiResponse';
+import { escapeRegex } from '../utils/sanitize';
 
 export interface MessageListQuery {
   isRead?: boolean | string;
@@ -36,7 +37,7 @@ export class MessageService {
     }
 
     if (query.search) {
-      const searchRegex = new RegExp(query.search, 'i');
+      const searchRegex = new RegExp(escapeRegex(query.search), 'i');
       filter.$or = [
         { name: searchRegex },
         { email: searchRegex },

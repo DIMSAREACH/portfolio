@@ -60,7 +60,7 @@ export const globalLimiter = createRateLimiter({
  */
 export const loginLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
-  max: 30,
+  max: 5,
   message: 'Too many login attempts, please try again after 15 minutes.',
   skip: () => config.NODE_ENV === 'development',
 });

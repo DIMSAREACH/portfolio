@@ -379,6 +379,7 @@ export interface AchievementCascadeItem {
                           (error)="onImageError(item._id)"
                           [alt]="(item.name | localize) || 'Badge'"
                           loading="lazy"
+                          decoding="async"
                         />
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none"></div>
                       } @else {
@@ -456,6 +457,7 @@ export interface AchievementCascadeItem {
                             (error)="onImageError(item._id)"
                             [alt]="item.name | localize"
                             loading="lazy"
+                            decoding="async"
                           />
                           <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none"></div>
                         } @else {

@@ -11,7 +11,6 @@ import Certification from '../../../src/models/Certification';
 import SocialLink from '../../../src/models/SocialLink';
 import Settings from '../../../src/models/Settings';
 import Project from '../../../src/models/Project';
-import BlogPost from '../../../src/models/BlogPost';
 import Message from '../../../src/models/Message';
 import Media from '../../../src/models/Media';
 import logger from '../../../src/utils/logger';
@@ -53,7 +52,6 @@ describe('Database Seed Script (backend/seeds/seed.ts)', () => {
     jest.spyOn(SocialLink, 'deleteMany').mockResolvedValue({} as any);
     jest.spyOn(Settings, 'deleteMany').mockResolvedValue({} as any);
     jest.spyOn(Project, 'deleteMany').mockResolvedValue({} as any);
-    jest.spyOn(BlogPost, 'deleteMany').mockResolvedValue({} as any);
     jest.spyOn(Message, 'deleteMany').mockResolvedValue({} as any);
     jest.spyOn(Media, 'deleteMany').mockResolvedValue({} as any);
   });
@@ -64,7 +62,7 @@ describe('Database Seed Script (backend/seeds/seed.ts)', () => {
   });
 
   describe('clearDatabase', () => {
-    it('should clear all 13 collections in non-production environments', async () => {
+    it('should clear all 12 collections in non-production environments', async () => {
       process.env.NODE_ENV = 'development';
 
       await clearDatabase();
@@ -79,7 +77,6 @@ describe('Database Seed Script (backend/seeds/seed.ts)', () => {
       expect(SocialLink.deleteMany).toHaveBeenCalledWith({});
       expect(Settings.deleteMany).toHaveBeenCalledWith({});
       expect(Project.deleteMany).toHaveBeenCalledWith({});
-      expect(BlogPost.deleteMany).toHaveBeenCalledWith({});
       expect(Message.deleteMany).toHaveBeenCalledWith({});
       expect(Media.deleteMany).toHaveBeenCalledWith({});
     });
@@ -154,12 +151,11 @@ describe('Database Seed Script (backend/seeds/seed.ts)', () => {
       jest.spyOn(SocialLink, 'create').mockResolvedValue([] as any);
       jest.spyOn(Settings, 'create').mockResolvedValue({} as any);
       jest.spyOn(Project, 'create').mockResolvedValue([] as any);
-      jest.spyOn(BlogPost, 'create').mockResolvedValue([] as any);
       jest.spyOn(Message, 'create').mockResolvedValue([] as any);
       jest.spyOn(Media, 'create').mockResolvedValue([] as any);
     });
 
-    it('should seed all 13 collections and return accurate summary', async () => {
+    it('should seed all 12 collections and return accurate summary', async () => {
       const summary = await seedDatabase({ clear: true, disconnectOnFinish: true });
 
       expect(dbModule.connectDatabase).toHaveBeenCalledTimes(1);
@@ -206,16 +202,6 @@ describe('Database Seed Script (backend/seeds/seed.ts)', () => {
         ]),
       );
 
-      // Verify BlogPosts
-      expect(BlogPost.create).toHaveBeenCalledWith(
-        expect.arrayContaining([
-          expect.objectContaining({
-            slug: 'getting-started-with-angular-signals',
-            author: mockAdminId,
-          }),
-        ]),
-      );
-
       // Verify Messages & Media
       expect(Message.create).toHaveBeenCalled();
       expect(Media.create).toHaveBeenCalled();
@@ -232,7 +218,6 @@ describe('Database Seed Script (backend/seeds/seed.ts)', () => {
         socialLinks: 3,
         settings: 1,
         projects: 6,
-        blogPosts: 3,
         messages: 2,
         media: 2,
       });
@@ -250,9 +235,6 @@ describe('Database Seed Script (backend/seeds/seed.ts)', () => {
 
       expect(User.create).not.toHaveBeenCalled();
       expect(Project.create).toHaveBeenCalled();
-      expect(BlogPost.create).toHaveBeenCalledWith(
-        expect.arrayContaining([expect.objectContaining({ author: mockAdminId })]),
-      );
     });
 
     it('should handle errors cleanly and ensure database disconnect occurs', async () => {

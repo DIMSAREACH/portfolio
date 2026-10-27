@@ -12,6 +12,7 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from '../utils/jwt';
+import { isOriginAllowed } from '../utils/sanitize';
 
 export interface LoginResult {
   user: Record<string, unknown>;
@@ -238,11 +239,11 @@ export class AuthService {
     user.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000);
     await user.save();
 
-    // Determine frontend origin for the reset link
+    // Determine frontend origin for the reset link securely
     let frontendOrigin = config.CORS_ORIGIN.split(',')[0].trim() || 'http://localhost:4200';
     if (
       hostOrOrigin &&
-      (hostOrOrigin.startsWith('http://') || hostOrOrigin.startsWith('https://'))
+      isOriginAllowed(hostOrOrigin, config.CORS_ORIGIN, config.NODE_ENV === 'production')
     ) {
       frontendOrigin = hostOrOrigin.replace(/\/$/, '');
     }

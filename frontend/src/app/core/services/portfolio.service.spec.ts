@@ -10,7 +10,6 @@ import {
   Education,
   SocialLink,
   Settings,
-  BlogPost,
   ApiResponse,
   PaginatedResponse,
 } from '../models';
@@ -197,9 +196,6 @@ describe('PortfolioService', () => {
         totalProjects: 10,
         publishedProjects: 8,
         draftProjects: 2,
-        totalBlogPosts: 5,
-        publishedBlogPosts: 4,
-        draftBlogPosts: 1,
         unreadMessages: 3,
         totalMessages: 12,
         totalSkills: 20,
@@ -390,55 +386,6 @@ describe('PortfolioService', () => {
     apiServiceMock.delete.mockReturnValue(of({ success: true, data: null }));
     service.deleteAdminCertification('cert-1').subscribe();
     expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/certifications/cert-1');
-  });
-
-  it('should get admin blog posts with pagination/filters', () => {
-    apiServiceMock.get.mockReturnValue(of({ success: true, data: [], pagination: {} }));
-    service.getAdminBlogPosts({ page: 1, limit: 10, status: 'published', search: 'angular' }).subscribe();
-    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/blog', {
-      page: 1,
-      limit: 10,
-      status: 'published',
-      search: 'angular',
-    });
-  });
-
-  it('should get admin blog post by id', () => {
-    apiServiceMock.get.mockReturnValue(of({ success: true, data: { _id: 'post-1' } }));
-    service.getAdminBlogPostById('post-1').subscribe();
-    expect(apiServiceMock.get).toHaveBeenCalledWith('/admin/blog/post-1');
-  });
-
-  it('should create admin blog post', () => {
-    const payload = { title: { en: 'Test', kh: 'តេស្ត' } } as unknown as Partial<BlogPost>;
-    apiServiceMock.post.mockReturnValue(of({ success: true, data: { _id: 'post-1', ...payload } }));
-    service.createAdminBlogPost(payload).subscribe();
-    expect(apiServiceMock.post).toHaveBeenCalledWith('/admin/blog', payload);
-  });
-
-  it('should update admin blog post', () => {
-    const payload = { title: { en: 'Updated', kh: 'បច្ចុប្បន្នភាព' } } as unknown as Partial<BlogPost>;
-    apiServiceMock.patch.mockReturnValue(of({ success: true, data: { _id: 'post-1', ...payload } }));
-    service.updateAdminBlogPost('post-1', payload).subscribe();
-    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/blog/post-1', payload);
-  });
-
-  it('should delete admin blog post', () => {
-    apiServiceMock.delete.mockReturnValue(of({ success: true, data: null }));
-    service.deleteAdminBlogPost('post-1').subscribe();
-    expect(apiServiceMock.delete).toHaveBeenCalledWith('/admin/blog/post-1');
-  });
-
-  it('should publish admin blog post', () => {
-    apiServiceMock.patch.mockReturnValue(of({ success: true, data: { _id: 'post-1', status: 'published' } }));
-    service.publishAdminBlogPost('post-1').subscribe();
-    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/blog/post-1/publish', {});
-  });
-
-  it('should unpublish admin blog post', () => {
-    apiServiceMock.patch.mockReturnValue(of({ success: true, data: { _id: 'post-1', status: 'draft' } }));
-    service.unpublishAdminBlogPost('post-1').subscribe();
-    expect(apiServiceMock.patch).toHaveBeenCalledWith('/admin/blog/post-1/unpublish', {});
   });
 
   // Admin Categories

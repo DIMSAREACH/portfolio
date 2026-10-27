@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals
 import mongoose from 'mongoose';
 import Category from '../../../src/models/Category';
 import Project from '../../../src/models/Project';
-import BlogPost from '../../../src/models/BlogPost';
 import categoryService from '../../../src/services/category.service';
 import { NotFoundError, ConflictError } from '../../../src/utils/AppError';
 
@@ -144,28 +143,17 @@ describe('CategoryService', () => {
     it('should delete category when not referenced', async () => {
       jest.spyOn(Category, 'findById').mockResolvedValue(mockCategoryInstance as any);
       jest.spyOn(Project, 'countDocuments').mockResolvedValue(0 as any);
-      jest.spyOn(BlogPost, 'countDocuments').mockResolvedValue(0 as any);
       const deleteSpy = jest.spyOn(Category, 'findByIdAndDelete').mockResolvedValue(mockCategoryInstance as any);
 
       await categoryService.delete(dummyId);
 
       expect(Project.countDocuments).toHaveBeenCalledWith({ category: dummyId });
-      expect(BlogPost.countDocuments).toHaveBeenCalledWith({ category: dummyId });
       expect(deleteSpy).toHaveBeenCalledWith(dummyId);
     });
 
     it('should throw ConflictError if category is referenced by projects', async () => {
       jest.spyOn(Category, 'findById').mockResolvedValue(mockCategoryInstance as any);
       jest.spyOn(Project, 'countDocuments').mockResolvedValue(3 as any);
-      jest.spyOn(BlogPost, 'countDocuments').mockResolvedValue(0 as any);
-
-      await expect(categoryService.delete(dummyId)).rejects.toThrow(ConflictError);
-    });
-
-    it('should throw ConflictError if category is referenced by blog posts', async () => {
-      jest.spyOn(Category, 'findById').mockResolvedValue(mockCategoryInstance as any);
-      jest.spyOn(Project, 'countDocuments').mockResolvedValue(0 as any);
-      jest.spyOn(BlogPost, 'countDocuments').mockResolvedValue(2 as any);
 
       await expect(categoryService.delete(dummyId)).rejects.toThrow(ConflictError);
     });

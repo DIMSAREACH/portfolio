@@ -7,7 +7,6 @@ import skillService from '../../src/services/skill.service';
 import experienceService from '../../src/services/experience.service';
 import educationService from '../../src/services/education.service';
 import certificationService from '../../src/services/certification.service';
-import blogService from '../../src/services/blog.service';
 import categoryService from '../../src/services/category.service';
 import socialLinkService from '../../src/services/socialLink.service';
 import settingsService from '../../src/services/settings.service';
@@ -230,83 +229,7 @@ describe('Public API Integration Tests (/api/v1/*)', () => {
     });
   });
 
-  describe('8. GET /api/v1/blog', () => {
-    it('should return 200 and published blog posts with pagination', async () => {
-      const mockBlogData: any = {
-        items: [
-          {
-            _id: '6abc2f77ed5966aa1b87e208',
-            title: { en: 'Getting Started with Angular', kh: 'ចាប់ផ្តើមជាមួយ Angular' },
-            slug: 'getting-started-with-angular',
-            status: 'published',
-          },
-        ],
-        pagination: {
-          page: 1,
-          limit: 6,
-          total: 1,
-          totalPages: 1,
-          hasNextPage: false,
-          hasPrevPage: false,
-        },
-      };
-
-      jest.spyOn(blogService, 'getAll').mockResolvedValue(mockBlogData);
-
-      const res = await request(app)
-        .get('/api/v1/blog')
-        .query({ page: 1, limit: 6, tag: 'Angular', search: 'Getting Started' });
-
-      expect(res.status).toBe(200);
-      expect(res.body.success).toBe(true);
-      expect(res.body.data.items).toHaveLength(1);
-      expect(blogService.getAll).toHaveBeenCalledWith(
-        expect.objectContaining({
-          status: 'published',
-          tag: 'Angular',
-          search: 'Getting Started',
-          limit: 6,
-        }),
-      );
-    });
-  });
-
-  describe('9. GET /api/v1/blog/:slug', () => {
-    it('should return 200 and published blog post with incremented viewCount', async () => {
-      const mockBlogPost: any = {
-        _id: '6abc2f77ed5966aa1b87e209',
-        title: { en: 'Angular Best Practices', kh: 'ការអនុវត្តល្អបំផុតក្នុង Angular' },
-        slug: 'angular-best-practices',
-        viewCount: 42,
-        status: 'published',
-      };
-
-      jest.spyOn(blogService, 'getBySlug').mockResolvedValue(mockBlogPost);
-
-      const res = await request(app).get('/api/v1/blog/angular-best-practices');
-
-      expect(res.status).toBe(200);
-      expect(res.body.success).toBe(true);
-      expect(res.body.data.slug).toBe('angular-best-practices');
-      expect(blogService.getBySlug).toHaveBeenCalledWith('angular-best-practices', {
-        incrementViews: true,
-        publishedOnly: true,
-      });
-    });
-
-    it('should return 404 when blog post is not found or not published', async () => {
-      jest
-        .spyOn(blogService, 'getBySlug')
-        .mockRejectedValue(new NotFoundError("Blog post with slug 'unknown' not found"));
-
-      const res = await request(app).get('/api/v1/blog/unknown');
-
-      expect(res.status).toBe(404);
-      expect(res.body.success).toBe(false);
-    });
-  });
-
-  describe('10. GET /api/v1/categories', () => {
+  describe('8. GET /api/v1/categories', () => {
     it('should return 200 and categories with optional type filter', async () => {
       const mockCategories: any = [
         {

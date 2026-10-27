@@ -7,6 +7,7 @@ import { getPaginationParams, buildPaginationMetadata } from '../utils/paginatio
 import { PaginatedData } from '../utils/apiResponse';
 import slugify from '../utils/slugify';
 import logger from '../utils/logger';
+import { escapeRegex } from '../utils/sanitize';
 
 export interface ProjectListQuery {
   page?: string | number;
@@ -100,11 +101,11 @@ export class ProjectService {
     }
 
     if (query.tech) {
-      filter.technologies = { $in: [new RegExp(query.tech, 'i')] };
+      filter.technologies = { $in: [new RegExp(escapeRegex(query.tech), 'i')] };
     }
 
     if (query.search) {
-      const searchRegex = new RegExp(query.search, 'i');
+      const searchRegex = new RegExp(escapeRegex(query.search), 'i');
       filter.$or = [
         { 'title.en': searchRegex },
         { 'title.kh': searchRegex },

@@ -127,7 +127,7 @@ docker compose -f docker-compose.dev.yml up --build
 
 ## 5. Seeding the Database
 
-Populate your database with the complete initial portfolio dataset (admin account, projects, blog posts, skills, experience, education, profile):
+Populate your database with the complete initial portfolio dataset (admin account, projects, skills, experience, education, profile):
 
 ```bash
 cd backend

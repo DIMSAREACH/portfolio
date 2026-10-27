@@ -8,7 +8,6 @@ import skillService from '../services/skill.service';
 import experienceService from '../services/experience.service';
 import educationService from '../services/education.service';
 import certificationService from '../services/certification.service';
-import blogService from '../services/blog.service';
 import categoryService from '../services/category.service';
 import socialLinkService from '../services/socialLink.service';
 import settingsService from '../services/settings.service';
@@ -140,40 +139,6 @@ export const getCertifications = catchAsync(async (req: Request, res: Response) 
   }
 
   return sendPaginated(res, result.items, result.pagination, 'Certifications retrieved successfully');
-});
-
-/**
- * 8. GET /api/v1/blog
- * List published blog posts with pagination, filters, and search
- */
-export const getBlogPosts = catchAsync(async (req: Request, res: Response) => {
-  const { page, limit, category, tag, search, featured } = req.query;
-
-  const data = await blogService.getAll({
-    page: page ? Number(page) : undefined,
-    limit: limit ? Number(limit) : 6,
-    status: 'published',
-    category: category ? String(category) : undefined,
-    tag: tag ? String(tag) : undefined,
-    search: search ? String(search) : undefined,
-    featured: featured !== undefined ? String(featured) : undefined,
-  });
-
-  return sendPaginated(res, data.items, data.pagination, 'Blog posts retrieved successfully');
-});
-
-/**
- * 9. GET /api/v1/blog/:slug
- * Get published blog post by slug and atomically increment viewCount
- */
-export const getBlogPostBySlug = catchAsync(async (req: Request, res: Response) => {
-  const slug = req.params.slug as string;
-  const post = await blogService.getBySlug(slug, {
-    incrementViews: true,
-    publishedOnly: true,
-  });
-
-  return sendSuccess(res, post, 'Blog post retrieved successfully');
 });
 
 /**

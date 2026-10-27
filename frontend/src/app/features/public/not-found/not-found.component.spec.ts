@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { NotFoundComponent } from './not-found.component';
+import { LanguageService } from '../../../core/services/language.service';
 
 describe('NotFoundComponent', () => {
   let component: NotFoundComponent;
@@ -33,4 +34,13 @@ describe('NotFoundComponent', () => {
     expect(link).toBeTruthy();
     expect(link.getAttribute('href')).toBe('/');
   });
+
+  it('should display Khmer text when language is set to kh', () => {
+    const langService = TestBed.inject(LanguageService);
+    langService.setLanguage('kh');
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h1')?.textContent).toContain('រកមិនឃើញទំព័រទេ');
+  });
 });
+

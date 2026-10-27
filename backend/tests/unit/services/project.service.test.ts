@@ -111,6 +111,28 @@ describe('ProjectService', () => {
         expect.objectContaining({ category: dummyCategoryId }),
       );
     });
+
+    it('should safely handle search query with special regex characters without throwing', async () => {
+      const mockQueryChain: any = {
+        populate: jest.fn().mockReturnThis(),
+        sort: jest.fn().mockReturnThis(),
+        skip: jest.fn().mockReturnThis(),
+        limit: (jest.fn() as any).mockResolvedValue([mockProjectInstance]),
+      };
+
+      jest.spyOn(Project, 'find').mockReturnValue(mockQueryChain as any);
+      jest.spyOn(Project, 'countDocuments').mockResolvedValue(1 as any);
+
+      const dangerousSearch = '(node.js)+[testing]*?\\';
+
+      const result = await projectService.getAll({
+        search: dangerousSearch,
+        tech: 'C++ (v11)',
+      });
+
+      expect(Project.find).toHaveBeenCalled();
+      expect(result.items).toHaveLength(1);
+    });
   });
 
   describe('getById', () => {

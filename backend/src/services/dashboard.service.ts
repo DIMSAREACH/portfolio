@@ -1,5 +1,4 @@
 import Project from '../models/Project';
-import BlogPost from '../models/BlogPost';
 import Message, { IMessage } from '../models/Message';
 import Skill from '../models/Skill';
 import Experience from '../models/Experience';
@@ -9,9 +8,6 @@ export interface DashboardStats {
   totalProjects: number;
   publishedProjects: number;
   draftProjects: number;
-  totalBlogPosts: number;
-  publishedBlogPosts: number;
-  draftBlogPosts: number;
   unreadMessages: number;
   totalMessages: number;
   totalSkills: number;
@@ -29,9 +25,6 @@ export class DashboardService {
       totalProjects,
       publishedProjects,
       draftProjects,
-      totalBlogPosts,
-      publishedBlogPosts,
-      draftBlogPosts,
       unreadMessages,
       totalMessages,
       totalSkills,
@@ -42,9 +35,6 @@ export class DashboardService {
       Project.countDocuments(),
       Project.countDocuments({ status: 'published' }),
       Project.countDocuments({ status: 'draft' }),
-      BlogPost.countDocuments(),
-      BlogPost.countDocuments({ status: 'published' }),
-      BlogPost.countDocuments({ status: 'draft' }),
       Message.countDocuments({ isRead: false }),
       Message.countDocuments(),
       Skill.countDocuments(),
@@ -57,9 +47,6 @@ export class DashboardService {
       totalProjects,
       publishedProjects,
       draftProjects,
-      totalBlogPosts,
-      publishedBlogPosts,
-      draftBlogPosts,
       unreadMessages,
       totalMessages,
       totalSkills,

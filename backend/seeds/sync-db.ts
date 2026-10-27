@@ -10,7 +10,6 @@ import Certification from '../src/models/Certification';
 import SocialLink from '../src/models/SocialLink';
 import Settings from '../src/models/Settings';
 import Project from '../src/models/Project';
-import BlogPost from '../src/models/BlogPost';
 import Message from '../src/models/Message';
 import Media from '../src/models/Media';
 import logger from '../src/utils/logger';
@@ -26,7 +25,6 @@ import {
   SOCIAL_LINKS_SEED,
   SETTINGS_SEED,
   getProjectsSeed,
-  getBlogPostsSeed,
   MESSAGES_SEED,
   MEDIA_SEED,
 } from './seed';
@@ -140,20 +138,14 @@ async function syncDatabase(): Promise<void> {
     await Project.create(projectsData);
     logger.info(`Projects synced (${projectsData.length} items).`);
 
-    // 11. Blog Posts
-    await BlogPost.deleteMany({});
-    const blogPostsData = getBlogPostsSeed(categoryMap, adminUser._id as Types.ObjectId);
-    await BlogPost.create(blogPostsData);
-    logger.info(`Blog posts synced (${blogPostsData.length} items).`);
-
-    // 12. Messages
+    // 11. Messages
     const messageCount = await Message.countDocuments();
     if (messageCount === 0) {
       await Message.create(MESSAGES_SEED);
       logger.info(`Messages seeded (${MESSAGES_SEED.length} items).`);
     }
 
-    // 13. Media
+    // 12. Media
     const mediaCount = await Media.countDocuments();
     if (mediaCount === 0) {
       await Media.create(MEDIA_SEED);

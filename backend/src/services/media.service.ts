@@ -7,6 +7,7 @@ import { getPaginationParams, buildPaginationMetadata } from '../utils/paginatio
 import { PaginatedData } from '../utils/apiResponse';
 import logger from '../utils/logger';
 import { BilingualField } from '../types';
+import { escapeRegex } from '../utils/sanitize';
 
 export interface MediaListQuery {
   page?: string | number;
@@ -28,7 +29,7 @@ export class MediaService {
     }
 
     if (query.mimeType) {
-      filter.mimeType = new RegExp(query.mimeType, 'i');
+      filter.mimeType = new RegExp(escapeRegex(query.mimeType), 'i');
     }
 
     const [items, total] = await Promise.all([

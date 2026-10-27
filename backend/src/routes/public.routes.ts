@@ -7,8 +7,6 @@ import {
   getExperiences,
   getEducation,
   getCertifications,
-  getBlogPosts,
-  getBlogPostBySlug,
   getCategories,
   getSocialLinks,
   getPublicSettings,
@@ -40,10 +38,6 @@ router.get('/education', getEducation);
 
 // Certifications
 router.get('/certifications', getCertifications);
-
-// Blog Posts
-router.get('/blog', getBlogPosts);
-router.get('/blog/:slug', getBlogPostBySlug);
 
 // Categories
 router.get('/categories', getCategories);

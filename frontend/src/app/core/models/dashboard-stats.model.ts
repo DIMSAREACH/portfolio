@@ -8,9 +8,6 @@ export interface DashboardStats {
   totalProjects: number;
   publishedProjects: number;
   draftProjects: number;
-  totalBlogPosts: number;
-  publishedBlogPosts: number;
-  draftBlogPosts: number;
   unreadMessages: number;
   totalMessages: number;
   totalSkills: number;

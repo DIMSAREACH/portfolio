@@ -2,6 +2,7 @@ import Skill, { ISkill } from '../models/Skill';
 import { NotFoundError } from '../utils/AppError';
 import { getPaginationParams, buildPaginationMetadata } from '../utils/pagination';
 import { PaginatedData } from '../utils/apiResponse';
+import { escapeRegex } from '../utils/sanitize';
 
 export interface SkillListQuery {
   category?: string;
@@ -33,7 +34,7 @@ export class SkillService {
     }
 
     if (query.category) {
-      const categoryRegex = new RegExp(query.category, 'i');
+      const categoryRegex = new RegExp(escapeRegex(query.category), 'i');
       filter.$or = [
         { 'category.en': categoryRegex },
         { 'category.kh': categoryRegex },
@@ -41,7 +42,7 @@ export class SkillService {
     }
 
     if (query.search) {
-      const searchRegex = new RegExp(query.search, 'i');
+      const searchRegex = new RegExp(escapeRegex(query.search), 'i');
       filter.$or = [
         { name: searchRegex },
         { 'category.en': searchRegex },

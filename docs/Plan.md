@@ -30,7 +30,7 @@
   - [Phase 8 — Public Portfolio Pages](#phase-8--public-portfolio-pages)
   - [Phase 9 — Admin Dashboard — Layout & Auth](#phase-9--admin-dashboard--layout--auth)
   - [Phase 10 — Admin Dashboard — CRUD Sections](#phase-10--admin-dashboard--crud-sections)
-  - [Phase 11 — Blog System (Full Stack)](#phase-11--blog-system-full-stack)
+  - [Phase 11 — Blog System (EXCLUDED)](#phase-11--blog-system-excluded)
   - [Phase 12 — Media & CV Management](#phase-12--media--cv-management)
   - [Phase 13 — Contact System](#phase-13--contact-system)
   - [Phase 14 — Multilingual Support (i18n)](#phase-14--multilingual-support-i18n)
@@ -123,7 +123,7 @@ Phase 9: Admin Dashboard (Layout, Auth UI)
         ↓
 Phase 10: Admin Dashboard (CRUD Sections)
         ↓
-Phase 11: Blog System (Full Stack)
+Phase 11: Blog System (EXCLUDED — No Blog Feature)
         ↓
 Phase 12: Media & CV Management
         ↓
@@ -1371,40 +1371,20 @@ Implement all admin CRUD UI sections following the reusable patterns established
 
 ---
 
-### Phase 11 — Blog System (Full Stack)
+### Phase 11 — Blog System (EXCLUDED)
 
-#### Objective
-
-Polish the blog system: Markdown editor in admin, Markdown rendering on public pages with code syntax highlighting, reading time, related posts.
-
-#### Dependencies
-
-- Phase 10 (ADMIN-019 blog list/form, ADMIN-020 Markdown editor)
-- Phase 8 (PAGE-008, PAGE-009 blog pages)
+> [!NOTE]
+> **EXCLUDED FROM SCOPE:** Per explicit user requirements, all blog-related features (BlogPost model, blog API endpoints, public blog pages, admin blog CRUD, and markdown blog editor) have been strictly excluded from the platform implementation.
 
 #### Deliverables
 
-- Blog admin with Markdown editing and preview
-- Blog public with rendered Markdown and code highlighting
-- Reading time display
-- Related posts section
+- None (Blog feature excluded from the Developer Portfolio Platform)
 
 #### Tasks
 
-| ID | Task | Priority | Dependencies |
-|----|------|----------|--------------|
-| BLOG-001 | Ensure blog Markdown editor has syntax highlighting in the textarea | P2 | ADMIN-020 |
-| BLOG-002 | Add reading time display to blog cards and detail page | P1 | PAGE-008, PAGE-009 |
-| BLOG-003 | Add related posts section to blog detail (2-3 from same category) | P1 | PAGE-009, PUB-013 |
-| BLOG-004 | Add related projects section to project detail (2-3 from same category) | P1 | PAGE-007, PUB-007 |
-| BLOG-005 | Add publish/unpublish quick action on blog list | P1 | ADMIN-019, API-011 |
-
-#### Acceptance Criteria
-
-- [ ] Blog Markdown preview renders correctly alongside editor
-- [ ] Code blocks in blog posts have syntax highlighting
-- [ ] Reading time shown on blog cards and detail page
-- [ ] Related posts section shows 2-3 relevant posts
+| ID | Task | Priority | Status |
+|----|------|----------|--------|
+| BLOG-001 | Blog system excluded per project requirements | P0 | EXCLUDED |
 
 ---
 
@@ -2833,13 +2813,9 @@ Trigger: Push to main
 - [ ] ADMIN-028 Add unsaved changes warning
 - [ ] ADMIN-029 Wire unread message count badge
 
-### Phase 11 — Blog System
+### Phase 11 — Blog System (EXCLUDED)
 
-- [ ] BLOG-001 Add syntax highlighting in Markdown editor
-- [ ] BLOG-002 Add reading time display
-- [ ] BLOG-003 Add related posts to blog detail
-- [ ] BLOG-004 Add related projects to project detail
-- [ ] BLOG-005 Add publish/unpublish quick action
+- [—] BLOG-001 Blog system excluded per project requirements (No Blog)
 
 ### Phase 12 — Media & CV Management
 

@@ -249,7 +249,7 @@ export interface SortEvent {
                             [class.dark:text-amber-400]="getItemValue(item, 'status') !== 'published'"
                             [class.dark:border-amber-800/60]="getItemValue(item, 'status') !== 'published'"
                             [class.dark:hover:bg-amber-900/60]="getItemValue(item, 'status') !== 'published'"
-                            [title]="getItemValue(item, 'status') === 'published' ? (isKhmer() ? 'ដកការផ្សាយ' : 'Unpublish post') : (isKhmer() ? 'ផ្សព្វផ្សាយ' : 'Publish post')"
+                            [title]="getItemValue(item, 'status') === 'published' ? (isKhmer() ? 'ដកការផ្សាយ' : 'Unpublish') : (isKhmer() ? 'ផ្សព្វផ្សាយ' : 'Publish')"
                             [attr.aria-label]="getItemValue(item, 'status') === 'published' ? 'Unpublish' : 'Publish'"
                           >
                             @if (getItemValue(item, 'status') === 'published') {

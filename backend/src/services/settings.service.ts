@@ -19,8 +19,8 @@ export const DEFAULT_SETTINGS = {
     kh: 'គេហទំព័រផ្ទាល់ខ្លួនរបស់អ្នកអភិវឌ្ឍន៍',
   },
   siteDescription: {
-    en: 'Full stack developer portfolio and blog',
-    kh: 'គេហទំព័របង្ហាញស្នាដៃ និងប្លុករបស់អ្នកអភិវឌ្ឍន៍',
+    en: 'Full stack developer portfolio',
+    kh: 'គេហទំព័របង្ហាញស្នាដៃ និងព័ត៌មានរបស់អ្នកអភិវឌ្ឍន៍',
   },
   enableCvDownload: true,
   enableContactForm: true,

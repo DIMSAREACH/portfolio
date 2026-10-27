@@ -2,6 +2,7 @@ import Education, { IEducation } from '../models/Education';
 import { NotFoundError } from '../utils/AppError';
 import { getPaginationParams, buildPaginationMetadata } from '../utils/pagination';
 import { PaginatedData } from '../utils/apiResponse';
+import { escapeRegex } from '../utils/sanitize';
 
 export interface EducationListQuery {
   search?: string;
@@ -31,7 +32,7 @@ export class EducationService {
     const filter: Record<string, unknown> = {};
 
     if (query.search) {
-      const searchRegex = new RegExp(query.search, 'i');
+      const searchRegex = new RegExp(escapeRegex(query.search), 'i');
       filter.$or = [
         { 'institution.en': searchRegex },
         { 'institution.kh': searchRegex },

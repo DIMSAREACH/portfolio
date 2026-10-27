@@ -50,13 +50,13 @@ describe('SeoService', () => {
     expect(metaService.getTag("name='twitter:title'")?.content).toBe('My Awesome Project | Dim Sareach');
   });
 
-  it('should update full SEO and Open Graph metadata for article/blog post', () => {
+  it('should update full SEO and Open Graph metadata for project detail page', () => {
     service.updateMetaTags({
       title: 'Building Modern Web Apps',
       description: 'A deep dive into architecture and performance.',
       keywords: 'angular, typescript, performance',
       image: 'https://example.com/cover.jpg',
-      url: 'https://example.com/blog/modern-web',
+      url: 'https://example.com/projects/modern-web',
       type: 'article',
       author: 'Dim Sareach',
       publishedTime: '2026-10-01T00:00:00Z',
@@ -78,7 +78,7 @@ describe('SeoService', () => {
       'https://example.com/cover.jpg',
     );
     expect(metaService.getTag("property='og:url'")?.content).toBe(
-      'https://example.com/blog/modern-web',
+      'https://example.com/projects/modern-web',
     );
     expect(metaService.getTag("property='og:type'")?.content).toBe('article');
     expect(metaService.getTag("property='article:published_time'")?.content).toBe(

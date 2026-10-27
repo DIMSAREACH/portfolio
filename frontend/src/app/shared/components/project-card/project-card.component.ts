@@ -31,6 +31,7 @@ import { LocalizePipe } from '../../pipes';
                 [alt]="(project.title | localize) || 'Project thumbnail'"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 loading="lazy"
+                decoding="async"
               />
             } @else {
               <div class="w-full h-full flex flex-col items-center justify-center text-indigo-400 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-900">
@@ -165,6 +166,7 @@ import { LocalizePipe } from '../../pipes';
                 [alt]="(project.title | localize) || 'Project thumbnail'"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 loading="lazy"
+                decoding="async"
               />
             } @else {
               <div class="w-full h-full flex flex-col items-center justify-center text-indigo-400 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-900">

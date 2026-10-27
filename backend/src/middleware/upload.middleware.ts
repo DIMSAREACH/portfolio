@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import multer, { FileFilterCallback } from 'multer';
 import { ValidationError } from '../utils/AppError';
+import { validateFileMagicBytes } from '../utils/sanitize';
+import config from '../config/environment';
 
 export const IMAGE_MIME_TYPES = [
   'image/jpeg',
@@ -132,6 +134,46 @@ const wrapMulter = (
 
       if (err) {
         return next(err);
+      }
+
+      // Defense-in-depth: Verify buffer magic bytes for uploaded files in production/dev
+      if (config.NODE_ENV !== 'test') {
+        const checkFile = (f?: Express.Multer.File): ValidationError | null => {
+          if (!f || !f.buffer || f.buffer.length === 0) return null;
+          if (!validateFileMagicBytes(f.buffer, f.mimetype)) {
+            return new ValidationError(
+              `File content does not match its declared type (${f.mimetype}). Suspicious or invalid file format rejected.`,
+              [
+                {
+                  field: f.fieldname,
+                  message: `File content signature does not match declared type ${f.mimetype}.`,
+                },
+              ],
+            );
+          }
+          return null;
+        };
+
+        if (req.file) {
+          const magicErr = checkFile(req.file);
+          if (magicErr) return next(magicErr);
+        }
+
+        if (req.files) {
+          if (Array.isArray(req.files)) {
+            for (const f of req.files) {
+              const magicErr = checkFile(f);
+              if (magicErr) return next(magicErr);
+            }
+          } else {
+            for (const key of Object.keys(req.files)) {
+              for (const f of req.files[key]) {
+                const magicErr = checkFile(f);
+                if (magicErr) return next(magicErr);
+              }
+            }
+          }
+        }
       }
 
       next();

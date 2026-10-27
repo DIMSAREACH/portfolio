@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import Project from '../../../src/models/Project';
-import BlogPost from '../../../src/models/BlogPost';
 import Message from '../../../src/models/Message';
 import Skill from '../../../src/models/Skill';
 import Experience from '../../../src/models/Experience';
@@ -22,13 +21,6 @@ describe('DashboardService', () => {
         if (!filter || Object.keys(filter).length === 0) return Promise.resolve(10);
         if (filter.status === 'published') return Promise.resolve(8);
         if (filter.status === 'draft') return Promise.resolve(2);
-        return Promise.resolve(0);
-      }) as any);
-
-      jest.spyOn(BlogPost, 'countDocuments').mockImplementation(((filter?: any) => {
-        if (!filter || Object.keys(filter).length === 0) return Promise.resolve(15);
-        if (filter.status === 'published') return Promise.resolve(12);
-        if (filter.status === 'draft') return Promise.resolve(3);
         return Promise.resolve(0);
       }) as any);
 
@@ -67,9 +59,6 @@ describe('DashboardService', () => {
       expect(stats.totalProjects).toBe(10);
       expect(stats.publishedProjects).toBe(8);
       expect(stats.draftProjects).toBe(2);
-      expect(stats.totalBlogPosts).toBe(15);
-      expect(stats.publishedBlogPosts).toBe(12);
-      expect(stats.draftBlogPosts).toBe(3);
       expect(stats.totalMessages).toBe(25);
       expect(stats.unreadMessages).toBe(5);
       expect(stats.totalSkills).toBe(20);
@@ -80,7 +69,6 @@ describe('DashboardService', () => {
 
     it('should default cvDownloads to 0 when settings document is not found', async () => {
       jest.spyOn(Project, 'countDocuments').mockResolvedValue(0 as any);
-      jest.spyOn(BlogPost, 'countDocuments').mockResolvedValue(0 as any);
       jest.spyOn(Message, 'countDocuments').mockResolvedValue(0 as any);
       jest.spyOn(Skill, 'countDocuments').mockResolvedValue(0 as any);
       jest.spyOn(Experience, 'countDocuments').mockResolvedValue(0 as any);
