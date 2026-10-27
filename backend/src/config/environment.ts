@@ -35,7 +35,7 @@ export interface Config {
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   const missingVars: string[] = [];
 
-  const databaseUrl = env.DATABASE_URL;
+  const databaseUrl = env.DATABASE_URL || env.MONGODB_URI;
   const jwtSecret = env.JWT_SECRET;
   const jwtRefreshSecret = env.JWT_REFRESH_SECRET;
 

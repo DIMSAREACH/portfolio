@@ -96,4 +96,15 @@ describe('Environment Configuration Module', () => {
     expect(config.NODE_ENV).toBe('production');
     expect(config.JWT_SECRET).toBe('c679a0293db27a81389c9213bc5412cf88c7d853e3518a2d');
   });
+
+  it('should accept MONGODB_URI when DATABASE_URL is not provided', () => {
+    const envWithMongoDbUri: NodeJS.ProcessEnv = {
+      ...validMockEnv,
+      MONGODB_URI: 'mongodb+srv://atlas-cluster/portfolio',
+    };
+    delete envWithMongoDbUri.DATABASE_URL;
+
+    const config = loadConfig(envWithMongoDbUri);
+    expect(config.DATABASE_URL).toBe('mongodb+srv://atlas-cluster/portfolio');
+  });
 });

@@ -15,6 +15,8 @@ services:
         value: 10000
       - key: DATABASE_URL
         sync: false
+      - key: MONGODB_URI
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
@@ -34,6 +36,18 @@ services:
       - key: CLOUDINARY_API_KEY
         sync: false
       - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: R2_ACCOUNT_ID
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET_NAME
+        value: portfolio-media
+      - key: R2_PUBLIC_URL
+        sync: false
+      - key: R2_ENDPOINT
         sync: false
       - key: EMAIL_HOST
         value: smtp.gmail.com
