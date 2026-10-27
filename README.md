@@ -102,9 +102,21 @@ The repository is governed and documented by the following specifications:
 
 ---
 
-### Option 2: Running Locally (Manual)
+### Option 2: Running Locally (Native Node + Angular)
 
-#### 1. Backend Setup
+#### 1. Start MongoDB
+If running MongoDB via Docker Desktop:
+```bash
+# Ensure Docker Desktop is active (on Windows, ensure context is default if needed)
+docker context use default
+docker compose -f docker-compose.dev.yml up -d mongo
+```
+Or start local native MongoDB:
+```bash
+mongod --dbpath <path-to-data-directory>
+```
+
+#### 2. Backend Setup & Database Seeding
 
 ```bash
 cd backend
@@ -115,19 +127,27 @@ npm install
 # Setup local environment
 cp .env.example .env
 
+# Populate initial admin account, categories, skills, projects, and profile
+npm run seed
+
 # Start development server with hot-reload
 npm run dev
 ```
 
+Default Administrative Credentials:
+- **Email:** `admin@portfolio.dev`
+- **Password:** `Admin@123456`
+
 Available Backend Scripts:
 - `npm run dev`: Starts the server with `ts-node-dev` on port 3000
+- `npm run seed`: Seeds complete initial database dataset
 - `npm run build`: Compiles TypeScript to `dist/`
 - `npm run start`: Runs compiled production code (`node dist/server.js`)
 - `npm run test`: Runs test suite via Jest
 - `npm run lint`: Runs ESLint checks
 - `npm run lint:fix`: Automatically fixes lint issues
 
-#### 2. Frontend Setup
+#### 3. Frontend Setup
 
 In a separate terminal:
 
@@ -149,21 +169,37 @@ Available Frontend Scripts:
 
 ---
 
+## Local Application Addresses
+
+| Service | URL | Description |
+|---|---|---|
+| **Frontend Web App** | [http://localhost:4200](http://localhost:4200) | Public portfolio & Admin CMS |
+| **Admin Login** | [http://localhost:4200/admin/login](http://localhost:4200/admin/login) | Administrative authentication |
+| **Backend API** | [http://localhost:3000/api/v1](http://localhost:3000/api/v1) | RESTful API base route |
+| **API Health Check** | [http://localhost:3000/api/v1/health](http://localhost:3000/api/v1/health) | Health status & timestamp |
+| **Interactive Swagger Docs** | [http://localhost:3000/api/docs](http://localhost:3000/api/docs) | OpenAPI 3.0 specification & UI |
+| **MongoDB** | `localhost:27017` | Database instance |
+
+---
+
 ## Environment Variables
 
 The backend requires environment variables defined in `backend/.env`. Refer to [backend/.env.example](backend/.env.example) for the complete list:
 
-| Variable | Description | Default |
+| Variable | Description | Default / Example |
 |---|---|---|
 | `PORT` | API server port | `3000` |
 | `NODE_ENV` | Environment mode | `development` |
 | `DATABASE_URL` | MongoDB connection string | `mongodb://localhost:27017/portfolio` |
 | `CORS_ORIGIN` | Allowed client URL | `http://localhost:4200` |
-| `JWT_SECRET` | Secret key for access token signing | — |
-| `JWT_REFRESH_SECRET` | Secret key for refresh token signing | — |
-| `CLOUDINARY_*` | Cloudinary credentials for media upload | — |
-| `EMAIL_*` | SMTP credentials for contact notifications | — |
-| `RATE_LIMIT_*` | Rate limiting threshold settings | — |
+| `JWT_SECRET` | Secret key for access token signing | 32+ char secret string |
+| `JWT_REFRESH_SECRET` | Secret key for refresh token signing | 32+ char secret string |
+| `JWT_ACCESS_EXPIRATION` | Access token lifespan | `15m` |
+| `JWT_REFRESH_EXPIRATION`| Refresh token lifespan | `7d` |
+| `R2_*` | Cloudflare R2 credentials (Primary media storage) | See `.env.example` |
+| `CLOUDINARY_*` | Cloudinary credentials (Fallback media storage) | Optional dev mock |
+| `EMAIL_*` | SMTP credentials for contact & reset emails | `smtp.gmail.com` |
+| `RATE_LIMIT_*` | Rate limiting settings | `15m` window / `100` max requests |
 
 ---
 
